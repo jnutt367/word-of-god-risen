@@ -27,17 +27,26 @@ export function parseVerses(raw: string): Verse[] {
   if (candidates.length === 0) return [{ n: 0, text }];
 
   // NIV-style text omits the "1": "In the beginning... 2 Now the earth..."
-  // If there's no explicit verse 1 but the text leads into a "2",
-  // the prologue IS verse 1.
+  // If there's no explicit verse 1 but the text leads into verse 2,
+  // the prologue IS verse 1. Same when verse 1 lives in the chapter
+  // title and the text leads into verse 3 (e.g. John 8) — the prologue
+  // is verse 2. Anything later than that is too ambiguous to trust.
   let expected: number;
   let startIdx = 0;
   const firstOne = candidates.findIndex((c) => c.n === 1);
   if (firstOne >= 0) {
     expected = 1;
     startIdx = firstOne;
-  } else if (candidates[0].n === 2) {
-    boundaries.push({ n: 1, numStart: 0, textStart: 0 });
-    expected = 2;
+  } else if (
+    (candidates[0].n === 2 || candidates[0].n === 3) &&
+    candidates[0].numStart > 0
+  ) {
+    boundaries.push({
+      n: candidates[0].n - 1,
+      numStart: 0,
+      textStart: 0,
+    });
+    expected = candidates[0].n;
   } else {
     return [{ n: 0, text }];
   }
