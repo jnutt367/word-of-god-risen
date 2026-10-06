@@ -50,44 +50,62 @@ export default function AboutPage() {
         <span>✦</span>
       </div>
 
-      <div className="flex flex-col items-start gap-4 rounded-2xl border border-gold-500/15 bg-vineyard-900 p-6 sm:flex-row sm:items-center">
-        <Image
-          src="/images/truvine-emblem.png"
-          alt="TruVINE emblem"
-          width={56}
-          height={56}
-          className="h-14 w-14 object-contain"
-        />
-        <div>
-          <p className="font-display text-xl text-cream-100">
-            Made by Jason Nutt
-          </p>
-          <p className="mt-1 text-sm text-sage-400">
-            Creator of{" "}
-            <a
-              href="https://www.youtube.com/@TruVINE365"
-              className="text-gold-300 underline"
-            >
-              TruVINE
-            </a>{" "}
-            — centered on the King, not the crowds.
-          </p>
-          <div className="mt-3 flex gap-4 text-sm">
-            <a
-              href="mailto:jnutt367@gmail.com"
-              className="text-sage-300 hover:text-gold-300"
-            >
-              Email
-            </a>
-            <a
-              href="https://github.com/jnutt367"
-              className="text-sage-300 hover:text-gold-300"
-            >
-              GitHub
-            </a>
-            <Link href="/" className="text-sage-300 hover:text-gold-300">
-              Start reading →
-            </Link>
+      <div className="rounded-2xl border border-gold-500/15 bg-vineyard-900 p-6">
+        <div className="flex gap-4">
+          <Image
+            src="/images/jason.jpg"
+            alt="Jason Nutt"
+            width={344}
+            height={192}
+            className="h-44 w-1/2 rounded-xl object-cover object-top sm:h-56"
+          />
+          <Image
+            src="/images/jason-pixar.jpg"
+            alt="Jason Nutt, Pixar-style portrait"
+            width={616}
+            height={192}
+            className="h-44 w-1/2 rounded-xl object-cover object-top sm:h-56"
+          />
+        </div>
+        <div className="mt-5 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+          <Image
+            src="/images/truvine-emblem.png"
+            alt="TruVINE emblem"
+            width={56}
+            height={56}
+            className="h-14 w-14 object-contain"
+          />
+          <div>
+            <p className="font-display text-xl text-cream-100">
+              Made by Jason Nutt
+            </p>
+            <p className="mt-1 text-sm text-sage-400">
+              Creator of{" "}
+              <a
+                href="https://www.youtube.com/@TruVINE365"
+                className="text-gold-300 underline"
+              >
+                TruVINE
+              </a>{" "}
+              — centered on the King, not the crowds.
+            </p>
+            <div className="mt-3 flex gap-4 text-sm">
+              <a
+                href="mailto:jnutt367@gmail.com"
+                className="text-sage-300 hover:text-gold-300"
+              >
+                Email
+              </a>
+              <a
+                href="https://github.com/jnutt367"
+                className="text-sage-300 hover:text-gold-300"
+              >
+                GitHub
+              </a>
+              <Link href="/" className="text-sage-300 hover:text-gold-300">
+                Start reading →
+              </Link>
+            </div>
           </div>
         </div>
       </div>
