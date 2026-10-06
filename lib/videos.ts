@@ -24,7 +24,3 @@ export function getVideosForChapter(
 export function shortsUrl(id: string): string {
   return `https://www.youtube.com/shorts/${id}`;
 }
-
-export function thumbnailUrl(id: string): string {
-  return `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
-}

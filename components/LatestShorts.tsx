@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
+import YouTubeThumb from "./YouTubeThumb";
 
 interface ShortItem {
   id: string;
@@ -57,13 +57,7 @@ export default function LatestShorts() {
               className="group w-40 shrink-0"
             >
               <div className="relative aspect-[9/16] overflow-hidden rounded-xl border border-gold-500/15 bg-vineyard-900">
-                <Image
-                  src={`https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`}
-                  alt=""
-                  fill
-                  sizes="160px"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                />
+                <YouTubeThumb id={v.id} />
                 <div className="absolute inset-0 bg-gradient-to-t from-vineyard-950/80 via-transparent to-transparent" />
                 <span
                   className="absolute inset-0 flex items-center justify-center text-3xl text-white opacity-80 drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)] transition-opacity group-hover:opacity-100"

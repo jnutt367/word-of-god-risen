@@ -1,5 +1,5 @@
-import Image from "next/image";
-import { shortsUrl, thumbnailUrl, type ChapterVideo } from "@/lib/videos";
+import YouTubeThumb from "./YouTubeThumb";
+import { shortsUrl, type ChapterVideo } from "@/lib/videos";
 
 /**
  * "Watch from TruVINE" — chapter-specific Shorts from Jason's channel,
@@ -29,13 +29,7 @@ export default function WatchCard({ videos }: { videos: ChapterVideo[] }) {
             className="group flex gap-4 overflow-hidden rounded-xl border border-[var(--reader-line)] bg-[var(--reader-card)] p-3 transition-colors hover:border-[var(--reader-verse-num)]/50"
           >
             <div className="relative h-24 w-16 shrink-0 overflow-hidden rounded-lg">
-              <Image
-                src={thumbnailUrl(v.id)}
-                alt=""
-                fill
-                sizes="64px"
-                className="object-cover"
-              />
+              <YouTubeThumb id={v.id} />
               <span
                 className="absolute inset-0 flex items-center justify-center text-xl text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
                 aria-hidden="true"
