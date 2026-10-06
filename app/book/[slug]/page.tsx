@@ -66,7 +66,7 @@ export default async function BookPage({
               alt=""
               fill
               sizes="(max-width: 1024px) 100vw, 1024px"
-              className="object-cover"
+              className="object-cover object-top"
               priority
             />
             <div className="absolute inset-0 bg-gradient-to-t from-vineyard-950 via-vineyard-950/30 to-transparent" />
@@ -109,7 +109,7 @@ export default async function BookPage({
       <h2 className="mb-5 mt-10 font-display text-2xl text-cream-100">
         Chapters
       </h2>
-      <ChapterGrid slug={slug} chapters={chapters} />
+      <ChapterGrid slug={slug} chapters={chapters} coverImage={book.image} />
     </div>
   );
 }

@@ -8,9 +8,11 @@ import type { Chapter } from "@/lib/bible";
 interface Props {
   slug: string;
   chapters: Chapter[];
+  /** Book cover shown on every chapter card (replaces per-chapter images). */
+  coverImage?: string;
 }
 
-export default function ChapterGrid({ slug, chapters }: Props) {
+export default function ChapterGrid({ slug, chapters, coverImage }: Props) {
   const { isRead } = useProgress();
 
   return (
@@ -23,10 +25,10 @@ export default function ChapterGrid({ slug, chapters }: Props) {
             href={`/book/${slug}/${i}`}
             className="group relative overflow-hidden rounded-xl border border-gold-500/15 bg-vineyard-900 transition-all hover:-translate-y-1 hover:border-gold-500/40"
           >
-            {ch.image && (
-              <div className="relative aspect-[16/8] overflow-hidden">
+            {coverImage && (
+              <div className="relative aspect-video overflow-hidden">
                 <Image
-                  src={ch.image}
+                  src={coverImage}
                   alt=""
                   fill
                   sizes="(max-width: 640px) 100vw, 33vw"

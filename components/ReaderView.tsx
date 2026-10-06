@@ -141,7 +141,7 @@ export default function ReaderView({
               alt=""
               fill
               sizes="(max-width: 768px) 100vw, 768px"
-              className="object-cover"
+              className="object-cover object-top"
               priority
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
