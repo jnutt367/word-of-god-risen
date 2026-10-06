@@ -10,6 +10,8 @@ const NAV = [
   { href: "/shorts", label: "Shorts" },
   { href: "/search", label: "Search" },
   { href: "/#books", label: "Books" },
+  { href: "/#more", label: "Apocrypha" },
+  { href: "/book/enoch-1", label: "Enoch" },
   { href: "/#more", label: "More to Explore" },
   { href: "/about", label: "About" },
 ];
@@ -47,7 +49,7 @@ export default function SiteHeader() {
         </Link>
 
         {/* Desktop nav */}
-        <nav aria-label="Main" className="hidden md:block">
+        <nav aria-label="Main" className="hidden lg:block">
           <ul className="flex items-center gap-1 sm:gap-2">
             {NAV.map((item) => (
               <li key={item.label}>
@@ -65,7 +67,7 @@ export default function SiteHeader() {
         {/* Mobile hamburger */}
         <button
           type="button"
-          className="rounded-lg p-2 text-cream-100 hover:bg-vineyard-800 md:hidden"
+          className="rounded-lg p-2 text-cream-100 hover:bg-vineyard-800 lg:hidden"
           aria-expanded={open}
           aria-controls="mobile-nav"
           aria-label={open ? "Close menu" : "Open menu"}
@@ -88,7 +90,7 @@ export default function SiteHeader() {
         <nav
           id="mobile-nav"
           aria-label="Mobile"
-          className="border-t border-gold-500/15 bg-vineyard-950/95 px-4 pb-4 pt-2 backdrop-blur md:hidden"
+          className="border-t border-gold-500/15 bg-vineyard-950/95 px-4 pb-4 pt-2 backdrop-blur lg:hidden"
         >
           <ul className="space-y-1">
             {NAV.map((item) => (

@@ -57,6 +57,16 @@ export default function Home() {
               Search the Word
             </Link>
           </div>
+          <p className="mt-6 text-sm text-sage-300">
+            <Link
+              href="/#more"
+              className="transition-colors hover:text-gold-300"
+            >
+              <span className="mr-1.5 text-gold-300">✦</span>
+              Featuring the lost books — Enoch, Jasher, Jubilees &amp; the
+              Apocrypha
+            </Link>
+          </p>
         </div>
       </section>
 
