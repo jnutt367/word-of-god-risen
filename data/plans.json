@@ -102,11 +102,11 @@
       "description": "All four Gospels in a month — the life, teaching, death, and resurrection of Jesus, two chapters at a time.",
       "image": "/images/plan-gospels.jpg",
       "totalDays": 30,
-      "totalChapters": 54,
+      "totalChapters": 70,
       "days": [
         {
           "day": 1,
-          "title": "Matthew 1–2",
+          "title": "Matthew 1–3",
           "readings": [
             {
               "slug": "matthew",
@@ -119,31 +119,25 @@
               "chapter": 1,
               "label": "Matthew 2",
               "title": "Chapter II: After Jesus was born in Bethlehem"
-            }
-          ]
-        },
-        {
-          "day": 2,
-          "title": "Matthew 3–4",
-          "readings": [
+            },
             {
               "slug": "matthew",
               "chapter": 2,
               "label": "Matthew 3",
               "title": "Chapter III:  In those days John the Baptist came"
-            },
+            }
+          ]
+        },
+        {
+          "day": 2,
+          "title": "Matthew 4–6",
+          "readings": [
             {
               "slug": "matthew",
               "chapter": 3,
               "label": "Matthew 4",
               "title": "Chapter IV: Then Jesus was led by the Spirit"
-            }
-          ]
-        },
-        {
-          "day": 3,
-          "title": "Matthew 5–6",
-          "readings": [
+            },
             {
               "slug": "matthew",
               "chapter": 4,
@@ -159,8 +153,8 @@
           ]
         },
         {
-          "day": 4,
-          "title": "Matthew 7–8",
+          "day": 3,
+          "title": "Matthew 7–9",
           "readings": [
             {
               "slug": "matthew",
@@ -173,31 +167,25 @@
               "chapter": 7,
               "label": "Matthew 8",
               "title": "Chapter VIII: A man with leprosy came and knelt"
-            }
-          ]
-        },
-        {
-          "day": 5,
-          "title": "Matthew 9–10",
-          "readings": [
+            },
             {
               "slug": "matthew",
               "chapter": 8,
               "label": "Matthew 9",
               "title": "Chapter IX: Take heart, son; your sins are forgiven."
-            },
+            }
+          ]
+        },
+        {
+          "day": 4,
+          "title": "Matthew 10–12",
+          "readings": [
             {
               "slug": "matthew",
               "chapter": 9,
               "label": "Matthew 10",
               "title": "Chapter X: Jesus called his twelve disciples to him"
-            }
-          ]
-        },
-        {
-          "day": 6,
-          "title": "Matthew 11–12",
-          "readings": [
+            },
             {
               "slug": "matthew",
               "chapter": 10,
@@ -213,8 +201,8 @@
           ]
         },
         {
-          "day": 7,
-          "title": "Matthew 13–14",
+          "day": 5,
+          "title": "Matthew 13–15",
           "readings": [
             {
               "slug": "matthew",
@@ -227,31 +215,25 @@
               "chapter": 13,
               "label": "Matthew 14",
               "title": "Chapter XIV: When he saw the wind, he was afraid and, beginning to sink"
-            }
-          ]
-        },
-        {
-          "day": 8,
-          "title": "Matthew 15–16",
-          "readings": [
+            },
             {
               "slug": "matthew",
               "chapter": 14,
               "label": "Matthew 15",
               "title": "Chapter XV: Why do your disciples break the tradition of the elders?"
-            },
+            }
+          ]
+        },
+        {
+          "day": 6,
+          "title": "Matthew 16–18",
+          "readings": [
             {
               "slug": "matthew",
               "chapter": 15,
               "label": "Matthew 16",
               "title": "Chapter XVI: A wicked and adulterous generation looks for a sign"
-            }
-          ]
-        },
-        {
-          "day": 9,
-          "title": "Matthew 17–18",
-          "readings": [
+            },
             {
               "slug": "matthew",
               "chapter": 16,
@@ -267,8 +249,8 @@
           ]
         },
         {
-          "day": 10,
-          "title": "Matthew 19–20",
+          "day": 7,
+          "title": "Matthew 19–21",
           "readings": [
             {
               "slug": "matthew",
@@ -281,31 +263,25 @@
               "chapter": 19,
               "label": "Matthew 20",
               "title": "Chapter XX: For the kingdom of heaven is like a landowner"
-            }
-          ]
-        },
-        {
-          "day": 11,
-          "title": "Matthew 21–22",
-          "readings": [
+            },
             {
               "slug": "matthew",
               "chapter": 20,
               "label": "Matthew 21",
               "title": "Chapter XXI: See, your king comes to you, gentle and riding on a donkey"
-            },
+            }
+          ]
+        },
+        {
+          "day": 8,
+          "title": "Matthew 22–24",
+          "readings": [
             {
               "slug": "matthew",
               "chapter": 21,
               "label": "Matthew 22",
               "title": "Chapter XXII: Jesus spoke to them again in parables"
-            }
-          ]
-        },
-        {
-          "day": 12,
-          "title": "Matthew 23–24",
-          "readings": [
+            },
             {
               "slug": "matthew",
               "chapter": 22,
@@ -321,8 +297,8 @@
           ]
         },
         {
-          "day": 13,
-          "title": "Matthew 25–26",
+          "day": 9,
+          "title": "Matthew 25–27",
           "readings": [
             {
               "slug": "matthew",
@@ -335,31 +311,25 @@
               "chapter": 25,
               "label": "Matthew 26",
               "title": "Chapter XXVI:  Son of Man will be handed over to be crucified."
-            }
-          ]
-        },
-        {
-          "day": 14,
-          "title": "Matthew 27–28",
-          "readings": [
+            },
             {
               "slug": "matthew",
               "chapter": 26,
               "label": "Matthew 27",
               "title": "Chapter XXVII: The bodies of many holy people who had died were raised to life."
-            },
+            }
+          ]
+        },
+        {
+          "day": 10,
+          "title": "Matthew 28, Mark 2",
+          "readings": [
             {
               "slug": "matthew",
               "chapter": 27,
               "label": "Matthew 28",
               "title": "Chapter XXVIII: After the Sabbath, at dawn"
-            }
-          ]
-        },
-        {
-          "day": 15,
-          "title": "Mark 1–2",
-          "readings": [
+            },
             {
               "slug": "mark",
               "chapter": 0,
@@ -375,7 +345,7 @@
           ]
         },
         {
-          "day": 16,
+          "day": 11,
           "title": "Mark 3–4",
           "readings": [
             {
@@ -393,7 +363,7 @@
           ]
         },
         {
-          "day": 17,
+          "day": 12,
           "title": "Mark 5–6",
           "readings": [
             {
@@ -411,7 +381,7 @@
           ]
         },
         {
-          "day": 18,
+          "day": 13,
           "title": "Mark 7–8",
           "readings": [
             {
@@ -429,7 +399,79 @@
           ]
         },
         {
-          "day": 19,
+          "day": 14,
+          "title": "Mark 9–10",
+          "readings": [
+            {
+              "slug": "mark",
+              "chapter": 8,
+              "label": "Mark 9",
+              "title": "Chapter IX: Trans -figuration ... After six days"
+            },
+            {
+              "slug": "mark",
+              "chapter": 9,
+              "label": "Mark 10",
+              "title": "Chapter X: and as was his custom, he taught them"
+            }
+          ]
+        },
+        {
+          "day": 15,
+          "title": "Mark 11–12",
+          "readings": [
+            {
+              "slug": "mark",
+              "chapter": 10,
+              "label": "Mark 11",
+              "title": "Chapter XI: Jesus Comes to Jerusalem as King"
+            },
+            {
+              "slug": "mark",
+              "chapter": 11,
+              "label": "Mark 12",
+              "title": "Chapter XII: The Parable of the Tenants"
+            }
+          ]
+        },
+        {
+          "day": 16,
+          "title": "Mark 13–14",
+          "readings": [
+            {
+              "slug": "mark",
+              "chapter": 12,
+              "label": "Mark 13",
+              "title": "Chapter XIII: Signs of the End Times"
+            },
+            {
+              "slug": "mark",
+              "chapter": 13,
+              "label": "Mark 14",
+              "title": "Chapter XIV: Jesus Anointed at Bethany"
+            }
+          ]
+        },
+        {
+          "day": 17,
+          "title": "Mark 15–16",
+          "readings": [
+            {
+              "slug": "mark",
+              "chapter": 14,
+              "label": "Mark 15",
+              "title": "Chapter XV: Jesus Before Pilate"
+            },
+            {
+              "slug": "mark",
+              "chapter": 15,
+              "label": "Mark 16",
+              "title": "Chapter XVI: Jesus Has Risen"
+            }
+          ]
+        },
+        {
+          "day": 18,
           "title": "Luke 1–2",
           "readings": [
             {
@@ -447,7 +489,7 @@
           ]
         },
         {
-          "day": 20,
+          "day": 19,
           "title": "Luke 3–4",
           "readings": [
             {
@@ -465,7 +507,7 @@
           ]
         },
         {
-          "day": 21,
+          "day": 20,
           "title": "Luke 5–6",
           "readings": [
             {
@@ -483,7 +525,7 @@
           ]
         },
         {
-          "day": 22,
+          "day": 21,
           "title": "Luke 7–8",
           "readings": [
             {
@@ -501,7 +543,79 @@
           ]
         },
         {
+          "day": 22,
+          "title": "Luke 9–10",
+          "readings": [
+            {
+              "slug": "luke",
+              "chapter": 8,
+              "label": "Luke 9",
+              "title": "Chapter IX: Trans -figuration ... After six days"
+            },
+            {
+              "slug": "luke",
+              "chapter": 9,
+              "label": "Luke 10",
+              "title": "Chapter X: and as was his custom, he taught them"
+            }
+          ]
+        },
+        {
           "day": 23,
+          "title": "Luke 11–12",
+          "readings": [
+            {
+              "slug": "luke",
+              "chapter": 10,
+              "label": "Luke 11",
+              "title": "Chapter XI: Jesus Comes to Jerusalem as King"
+            },
+            {
+              "slug": "luke",
+              "chapter": 11,
+              "label": "Luke 12",
+              "title": "Chapter XII: The Parable of the Tenants"
+            }
+          ]
+        },
+        {
+          "day": 24,
+          "title": "Luke 13–14",
+          "readings": [
+            {
+              "slug": "luke",
+              "chapter": 12,
+              "label": "Luke 13",
+              "title": "Chapter XIII: Signs of the End Times"
+            },
+            {
+              "slug": "luke",
+              "chapter": 13,
+              "label": "Luke 14",
+              "title": "Chapter XIV: Jesus Anointed at Bethany"
+            }
+          ]
+        },
+        {
+          "day": 25,
+          "title": "Luke 15–16",
+          "readings": [
+            {
+              "slug": "luke",
+              "chapter": 14,
+              "label": "Luke 15",
+              "title": "Chapter XV: Jesus Before Pilate"
+            },
+            {
+              "slug": "luke",
+              "chapter": 15,
+              "label": "Luke 16",
+              "title": "Chapter XVI: Jesus Has Risen"
+            }
+          ]
+        },
+        {
+          "day": 26,
           "title": "John 1–2",
           "readings": [
             {
@@ -519,7 +633,7 @@
           ]
         },
         {
-          "day": 24,
+          "day": 27,
           "title": "John 3–4",
           "readings": [
             {
@@ -537,21 +651,15 @@
           ]
         },
         {
-          "day": 25,
-          "title": "John 5",
+          "day": 28,
+          "title": "John 5–6",
           "readings": [
             {
               "slug": "john",
               "chapter": 4,
               "label": "John 5",
               "title": "Chapter V:  The Healing at the Pool"
-            }
-          ]
-        },
-        {
-          "day": 26,
-          "title": "John 6",
-          "readings": [
+            },
             {
               "slug": "john",
               "chapter": 5,
@@ -561,21 +669,15 @@
           ]
         },
         {
-          "day": 27,
-          "title": "John 7",
+          "day": 29,
+          "title": "John 7–8",
           "readings": [
             {
               "slug": "john",
               "chapter": 6,
               "label": "John 7",
               "title": "Chapter VII: Jesus Goes to the Festival"
-            }
-          ]
-        },
-        {
-          "day": 28,
-          "title": "John 8",
-          "readings": [
+            },
             {
               "slug": "john",
               "chapter": 7,
@@ -585,21 +687,15 @@
           ]
         },
         {
-          "day": 29,
-          "title": "John 9",
+          "day": 30,
+          "title": "John 9–10",
           "readings": [
             {
               "slug": "john",
               "chapter": 8,
               "label": "John 9",
               "title": "Chapter IX: Jesus Heals a Man Born Blind"
-            }
-          ]
-        },
-        {
-          "day": 30,
-          "title": "John 10",
-          "readings": [
+            },
             {
               "slug": "john",
               "chapter": 9,
@@ -1078,24 +1174,18 @@
       "description": "One chapter a day through Acts and Romans — the birth of the church and the very heart of the gospel.",
       "image": "/images/plan-acts-romans.jpg",
       "totalDays": 28,
-      "totalChapters": 28,
+      "totalChapters": 29,
       "days": [
         {
           "day": 1,
-          "title": "Acts 1",
+          "title": "Acts 1–2",
           "readings": [
             {
               "slug": "acts",
               "chapter": 0,
               "label": "Acts 1",
               "title": "Chapter I: Jesus Taken Up"
-            }
-          ]
-        },
-        {
-          "day": 2,
-          "title": "Acts 2",
-          "readings": [
+            },
             {
               "slug": "acts",
               "chapter": 1,
@@ -1105,7 +1195,7 @@
           ]
         },
         {
-          "day": 3,
+          "day": 2,
           "title": "Acts 3",
           "readings": [
             {
@@ -1117,7 +1207,7 @@
           ]
         },
         {
-          "day": 4,
+          "day": 3,
           "title": "Acts 4",
           "readings": [
             {
@@ -1129,7 +1219,7 @@
           ]
         },
         {
-          "day": 5,
+          "day": 4,
           "title": "Acts 5",
           "readings": [
             {
@@ -1141,7 +1231,7 @@
           ]
         },
         {
-          "day": 6,
+          "day": 5,
           "title": "Acts 6",
           "readings": [
             {
@@ -1153,7 +1243,7 @@
           ]
         },
         {
-          "day": 7,
+          "day": 6,
           "title": "Acts 7",
           "readings": [
             {
@@ -1165,7 +1255,7 @@
           ]
         },
         {
-          "day": 8,
+          "day": 7,
           "title": "Acts 8",
           "readings": [
             {
@@ -1177,7 +1267,7 @@
           ]
         },
         {
-          "day": 9,
+          "day": 8,
           "title": "Acts 9",
           "readings": [
             {
@@ -1189,7 +1279,7 @@
           ]
         },
         {
-          "day": 10,
+          "day": 9,
           "title": "Acts 10",
           "readings": [
             {
@@ -1201,7 +1291,7 @@
           ]
         },
         {
-          "day": 11,
+          "day": 10,
           "title": "Acts 11",
           "readings": [
             {
@@ -1213,7 +1303,7 @@
           ]
         },
         {
-          "day": 12,
+          "day": 11,
           "title": "Acts 12",
           "readings": [
             {
@@ -1221,6 +1311,18 @@
               "chapter": 11,
               "label": "Acts 12",
               "title": "Chapter XII: Peter’s Miraculous Escape"
+            }
+          ]
+        },
+        {
+          "day": 12,
+          "title": "Acts 13",
+          "readings": [
+            {
+              "slug": "acts",
+              "chapter": 12,
+              "label": "Acts 13",
+              "title": "Chapter XXI:"
             }
           ]
         },

@@ -1,22 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import VerseText from "@/components/VerseText";
 import CrossRefPanel from "@/components/CrossRefPanel";
 import WatchCard from "@/components/WatchCard";
 import { useProgress } from "@/components/ProgressProvider";
+import { VERSION_STORAGE_KEY } from "@/lib/versions";
 import type { Verse } from "@/lib/verses";
 import type { ChapterVideo } from "@/lib/videos";
+
+interface VersionInfo {
+  id: string;
+  label: string;
+  name: string;
+}
 
 interface Props {
   slug: string;
   bookTitle: string;
   chapterIdx: number;
+  chapterNum: number;
   chapterTitle: string;
   image: string;
-  verses: Verse[];
+  versesByVersion: Record<string, Verse[]>;
+  versions: VersionInfo[];
+  defaultVersion: string;
   crossRefs: Record<number, string[]>;
   videos: ChapterVideo[];
   prevIdx: number | null;
@@ -27,15 +37,19 @@ export default function ReaderView({
   slug,
   bookTitle,
   chapterIdx,
+  chapterNum,
   chapterTitle,
   image,
-  verses,
+  versesByVersion,
+  versions,
+  defaultVersion,
   crossRefs,
   videos,
   prevIdx,
   nextIdx,
 }: Props) {
   const [lamp, setLamp] = useState(false);
+  const [version, setVersion] = useState(defaultVersion);
   const [openRef, setOpenRef] = useState<{
     verseN: number;
     ref: string;
@@ -44,25 +58,72 @@ export default function ReaderView({
   const { isRead, toggle } = useProgress();
   const read = isRead(slug, chapterIdx);
 
+  // Restore the reader's preferred translation.
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(VERSION_STORAGE_KEY);
+      if (saved && versesByVersion[saved]) setVersion(saved);
+    } catch {
+      /* storage unavailable — stay on default */
+    }
+  }, [versesByVersion]);
+
+  const changeVersion = (id: string) => {
+    setVersion(id);
+    try {
+      localStorage.setItem(VERSION_STORAGE_KEY, id);
+    } catch {
+      /* ignore */
+    }
+  };
+
+  const verses = versesByVersion[version] ?? versesByVersion[defaultVersion];
+
   return (
     <div className={`reader-theme ${lamp ? "lamp" : ""} min-h-screen bg-[var(--reader-bg)] transition-colors`}>
       <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-12">
         {/* Top bar */}
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-8 flex items-center justify-between gap-3">
           <Link
             href={`/book/${slug}`}
             className="text-sm font-medium text-[var(--reader-muted)] hover:text-[var(--reader-verse-num)]"
           >
             ← {bookTitle}
           </Link>
-          <button
-            type="button"
-            onClick={() => setLamp((v) => !v)}
-            className="rounded-full border border-[var(--reader-line)] px-4 py-1.5 text-sm font-medium text-[var(--reader-muted)] transition-colors hover:text-[var(--reader-verse-num)]"
-            aria-pressed={lamp}
-          >
-            {lamp ? "☾ Night" : "☀ Lamp"}
-          </button>
+          <div className="flex items-center gap-2">
+            {versions.length > 1 && (
+              <div
+                role="group"
+                aria-label="Bible translation"
+                className="flex rounded-full border border-[var(--reader-line)] p-0.5"
+              >
+                {versions.map((v) => (
+                  <button
+                    key={v.id}
+                    type="button"
+                    onClick={() => changeVersion(v.id)}
+                    aria-pressed={version === v.id}
+                    title={v.name}
+                    className={`rounded-full px-3 py-1 text-xs font-semibold transition-colors ${
+                      version === v.id
+                        ? "bg-[var(--reader-verse-num)] text-[var(--reader-bg)]"
+                        : "text-[var(--reader-muted)] hover:text-[var(--reader-verse-num)]"
+                    }`}
+                  >
+                    {v.label}
+                  </button>
+                ))}
+              </div>
+            )}
+            <button
+              type="button"
+              onClick={() => setLamp((v) => !v)}
+              className="rounded-full border border-[var(--reader-line)] px-4 py-1.5 text-sm font-medium text-[var(--reader-muted)] transition-colors hover:text-[var(--reader-verse-num)]"
+              aria-pressed={lamp}
+            >
+              {lamp ? "☾ Night" : "☀ Lamp"}
+            </button>
+          </div>
         </div>
 
         {/* Chapter heading */}
@@ -83,7 +144,7 @@ export default function ReaderView({
           {bookTitle}
         </p>
         <h1 className="mt-2 font-scripture text-3xl text-[var(--reader-ink)] sm:text-4xl">
-          {chapterTitle || `Chapter ${chapterIdx + 1}`}
+          {chapterTitle || `Chapter ${chapterNum}`}
         </h1>
         <div className="vine-divider my-8" aria-hidden="true">
           <span>✦</span>
@@ -94,7 +155,7 @@ export default function ReaderView({
           <VerseText
             verses={verses}
             bookTitle={bookTitle}
-            chapterIdx={chapterIdx}
+            chapterNum={chapterNum}
             crossRefs={crossRefs}
             onOpenRefs={(verseN, ref, targets) =>
               setOpenRef({ verseN, ref, targets })

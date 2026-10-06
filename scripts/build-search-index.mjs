@@ -9,8 +9,13 @@ const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const chaptersDir = path.join(root, "data", "chapters");
 const outFile = path.join(root, "public", "search-index.json");
 
-const files = (await fs.readdir(chaptersDir)).filter((f) =>
-  f.endsWith("_data.json")
+const files = (await fs.readdir(chaptersDir)).filter(
+  (f) =>
+    f.endsWith("_data.json") &&
+    // Version files (matthew_kjv_data.json) hold alternate translations of
+    // the same chapters — index only the default text. Book slugs never
+    // contain underscores, so any underscore means "version file".
+    !f.slice(0, -"_data.json".length).includes("_")
 );
 
 const index = [];

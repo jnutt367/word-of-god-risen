@@ -80,7 +80,7 @@ export function parseVerses(raw: string): Verse[] {
   return verses;
 }
 
-/** "Genesis 3:16" style reference for a verse. */
-export function verseRef(bookTitle: string, chapterIdx: number, verseN: number): string {
-  return `${bookTitle} ${chapterIdx + 1}:${verseN}`;
+/** "Genesis 3:16" style reference for a verse. chapterNum is the real chapter. */
+export function verseRef(bookTitle: string, chapterNum: number, verseN: number): string {
+  return `${bookTitle} ${chapterNum}:${verseN}`;
 }
