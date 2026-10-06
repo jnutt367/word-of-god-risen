@@ -5,8 +5,10 @@ import Link from "next/link";
 import Image from "next/image";
 import VerseText from "@/components/VerseText";
 import CrossRefPanel from "@/components/CrossRefPanel";
+import WatchCard from "@/components/WatchCard";
 import { useProgress } from "@/components/ProgressProvider";
 import type { Verse } from "@/lib/verses";
+import type { ChapterVideo } from "@/lib/videos";
 
 interface Props {
   slug: string;
@@ -16,6 +18,7 @@ interface Props {
   image: string;
   verses: Verse[];
   crossRefs: Record<number, string[]>;
+  videos: ChapterVideo[];
   prevIdx: number | null;
   nextIdx: number | null;
 }
@@ -28,6 +31,7 @@ export default function ReaderView({
   image,
   verses,
   crossRefs,
+  videos,
   prevIdx,
   nextIdx,
 }: Props) {
@@ -137,6 +141,8 @@ export default function ReaderView({
             )}
           </nav>
         </div>
+
+        <WatchCard videos={videos} />
       </div>
 
       <CrossRefPanel openRef={openRef} onClose={() => setOpenRef(null)} />

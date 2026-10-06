@@ -5,6 +5,7 @@ import BookCard from "@/components/BookCard";
 import VerseOfDay from "@/components/VerseOfDay";
 import ContinueReading from "@/components/ContinueReading";
 import PlanContinue from "@/components/PlanContinue";
+import LatestShorts from "@/components/LatestShorts";
 
 export default function Home() {
   const books = getAllBooks();
@@ -102,6 +103,8 @@ export default function Home() {
             </div>
           </>
         )}
+
+        <LatestShorts />
       </section>
     </div>
   );

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { getAllSlugs, getBook, getChapters } from "@/lib/bible";
 import { parseVerses } from "@/lib/verses";
 import { getCrossRefs, refsForChapter } from "@/lib/crossrefs";
+import { getVideosForChapter } from "@/lib/videos";
 import ReaderView from "@/components/ReaderView";
 
 export function generateStaticParams() {
@@ -46,6 +47,7 @@ export default async function ReaderPage({
   const verses = parseVerses(ch.text);
   const allRefs = await getCrossRefs();
   const crossRefs = refsForChapter(allRefs, book.title, idx + 1);
+  const videos = getVideosForChapter(slug, idx);
 
   return (
     <ReaderView
@@ -56,6 +58,7 @@ export default async function ReaderPage({
       image={ch.image}
       verses={verses}
       crossRefs={crossRefs}
+      videos={videos}
       prevIdx={idx > 0 ? idx - 1 : null}
       nextIdx={idx < chapters.length - 1 ? idx + 1 : null}
     />
