@@ -7,7 +7,7 @@ export interface BookMeta {
 }
 
 export const BOOKS: BookMeta[] = [
-  { slug: 'genesis', title: 'Genesis', testament: 'old', description: 'In the beginning, God created the Heavens and the Earth. ... and the Spirit of God was hovering over the waters.', image: '/images/cover-genesis.jpg', videoId: 'TJlan-pJzfQ', chapters: 50 },
+  { slug: 'genesis', title: 'Genesis', testament: 'old', description: 'In the beginning, God created the Heavens and the Earth. ... and the Spirit of God was hovering over the waters.', image: '/images/cover-genesis.jpg', videoId: 'QgLPm0sxAlw', chapters: 50 },
   { slug: 'exodus', title: 'Exodus', testament: 'old', description: 'Honor your father and your mother, so that you may live long in the land the Lord your God is giving you.', image: '/images/cover-exodus.jpg', videoId: 'jH_aojNJM3E', chapters: 41 },
   { slug: 'leviticus', title: 'Leviticus', testament: 'old', description: 'Don\'t seek revenge | bear a grudge against anyone among your people, love your neighbor as yourself. I am the Lord.', image: '/images/cover-leviticus.jpg', videoId: 'IJ-FekWUZzE', chapters: 27 },
   { slug: 'numbers', title: 'Numbers', testament: 'old', description: 'The Lord is slow to anger, abounding in love and forgiving sin and rebellion. Yet he does not leave the guilty unpunished', image: '/images/cover-numbers.jpg', videoId: 'tp5MIrMZFqo', chapters: 36 },
