@@ -26,7 +26,6 @@ export const BOOKS: BookMeta[] = [
   { slug: 'mark', title: 'Mark', testament: 'new', description: 'For even the Son of Man did not come to be served, but to serve, and to give his life as a ransom for many.', image: '/images/live-love-cartoon.png', videoId: 'HGHqu9-DtXk', chapters: 17 },
   { slug: 'luke', title: 'Luke', testament: 'new', description: 'For the Son of Man came to seek and to save the lost ... Do to others as you would have them do to you.', image: '/images/live-love-cartoon.png', videoId: 'XIb_dCIxzr0', chapters: 17 },
   { slug: 'john', title: 'John', testament: 'new', description: 'I am the way and the truth and the life. No one comes to the Father except through me.', image: '/images/live-love-cartoon.png', videoId: 'G-2e9mMf7E8', chapters: 11 },
-  { slug: 'developer', title: 'My Testimony', testament: 'extra', description: '', image: '/images/cover-testimony.jpg', videoId: 'jhcmzjwbvyk', chapters: 4 },
   { slug: 'parables', title: 'Parables of Jesus', testament: 'extra', description: '', image: '/images/cover-parables.jpg', videoId: 'XX-aAg4_U2Q', chapters: 43 },
   { slug: 'enoch-1', title: 'The Book of Enoch', testament: 'extra', description: 'The five lost (hidden) books of Enoch and the Watchers', image: '/images/live-love-cartoon.png', videoId: 'DfXE_ChHTJw', chapters: 37 },
   { slug: 'jasher', title: 'The Book of Jasher', testament: 'extra', description: 'The ancient record of the upright, named in Joshua and Samuel', image: '/images/cover-jasher.jpg', videoId: undefined, chapters: 91 },
@@ -38,6 +37,7 @@ export const BOOKS: BookMeta[] = [
   { slug: 'baruch', title: 'Baruch', testament: 'extra', description: 'Repentance and hope from the exile in Babylon', image: '/images/cover-apocrypha.jpg', videoId: undefined, chapters: 6 },
   { slug: 'maccabees-1', title: '1 Maccabees', testament: 'extra', description: 'The Maccabean revolt and the rededication of the temple', image: '/images/cover-apocrypha.jpg', videoId: undefined, chapters: 16 },
   { slug: 'maccabees-2', title: '2 Maccabees', testament: 'extra', description: 'Faith under persecution — martyrs, miracles, and mercy', image: '/images/cover-apocrypha.jpg', videoId: undefined, chapters: 15 },
+  { slug: 'developer', title: 'My Testimony', testament: 'extra', description: '', image: '/images/cover-testimony.jpg', videoId: 'jhcmzjwbvyk', chapters: 4 },
   { slug: 'acts', title: 'Acts', testament: 'new', description: '', image: '/images/cover-acts.jpg', videoId: 'oiVAbkINtRU', chapters: 13 },
   { slug: 'romans', title: 'Romans', testament: 'new', description: '', image: '/images/cover-romans.jpg', videoId: 'ej_6dVdJSIU', chapters: 17 },
 ];
