@@ -92,7 +92,7 @@ export default function Home() {
         </div>
 
         {extra.length > 0 && (
-          <>
+          <div id="more" className="scroll-mt-20">
             <h2 className="mt-14 font-display text-2xl text-cream-100 sm:text-3xl">
               More to explore
             </h2>
@@ -101,7 +101,7 @@ export default function Home() {
                 <BookCard key={b.slug} book={b} />
               ))}
             </div>
-          </>
+          </div>
         )}
 
         <LatestShorts />
