@@ -22,6 +22,8 @@ interface ProgressCtx {
   map: ProgressMap;
   isRead: (slug: string, idx: number) => boolean;
   toggle: (slug: string, idx: number, title: string) => boolean;
+  /** Mark read (no-op if already read). Used by reading plans. */
+  markRead: (slug: string, idx: number, title: string) => void;
   readOnPage: (slug: string) => number[];
   totalRead: number;
   last: { slug: string; idx: number; title: string; at: number } | null;
@@ -69,11 +71,16 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
       map,
       isRead,
       toggle,
+      markRead: (slug: string, idx: number, title: string) => {
+        const key = chapterKey(slug, idx);
+        if (map[key]) return;
+        persist({ ...map, [key]: { title, at: Date.now() } });
+      },
       readOnPage: (slug: string) => readOnPage(map, slug),
       totalRead: Object.keys(map).length,
       last: lastRead(map),
     }),
-    [map, isRead, toggle]
+    [map, isRead, toggle, persist]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

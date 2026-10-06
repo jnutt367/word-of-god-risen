@@ -15,6 +15,9 @@ A beautiful Bible reader with a unique feel — built as an extension of the
 - **Reading progress** — mark chapters as read, watch your progress grow per
   book, and pick up where you left off
 - **Lamp / Night modes** — warm parchment glow or the deep vineyard dark
+- **Reading plans** — curated plans (Walk with Jesus, the Gospels in 30
+  days, Genesis, Acts & Romans) with day-by-day checklists; finishing a
+  day marks its chapters read
 - **Full-text search** — across all 613 chapters
 - **Verse of the day** — a fresh verse every day
 - **Overview videos** — a BibleProject explainer for every book

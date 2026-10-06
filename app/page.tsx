@@ -4,6 +4,7 @@ import { getAllBooks } from "@/lib/bible";
 import BookCard from "@/components/BookCard";
 import VerseOfDay from "@/components/VerseOfDay";
 import ContinueReading from "@/components/ContinueReading";
+import PlanContinue from "@/components/PlanContinue";
 
 export default function Home() {
   const books = getAllBooks();
@@ -61,6 +62,7 @@ export default function Home() {
       {/* Widgets */}
       <div className="mx-auto max-w-4xl space-y-5 px-4 py-10 sm:px-6">
         <VerseOfDay />
+        <PlanContinue />
         <ContinueReading />
       </div>
 

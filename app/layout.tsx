@@ -4,6 +4,7 @@ import "./globals.css";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { ProgressProvider } from "@/components/ProgressProvider";
+import { PlanProvider } from "@/components/PlanProvider";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -44,9 +45,11 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-vineyard-950 text-cream-100 font-body">
         <ProgressProvider>
-          <SiteHeader />
-          <main className="flex-1">{children}</main>
-          <SiteFooter />
+          <PlanProvider>
+            <SiteHeader />
+            <main className="flex-1">{children}</main>
+            <SiteFooter />
+          </PlanProvider>
         </ProgressProvider>
       </body>
     </html>

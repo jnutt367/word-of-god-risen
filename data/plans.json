@@ -1,0 +1,1422 @@
+{
+  "plans": [
+    {
+      "id": "walk-with-jesus",
+      "title": "Walk with Jesus",
+      "tagline": "7 days · 1 chapter a day",
+      "description": "Meet Jesus in seven unforgettable chapters — who He is, what He taught, the mercy He showed, and what He did for you.",
+      "image": "/images/plan-walk-with-jesus.jpg",
+      "totalDays": 7,
+      "totalChapters": 7,
+      "days": [
+        {
+          "day": 1,
+          "title": "The Word Became Flesh",
+          "readings": [
+            {
+              "slug": "john",
+              "chapter": 0,
+              "label": "John 1",
+              "title": "Chapter I: The Word Became Flesh!"
+            }
+          ]
+        },
+        {
+          "day": 2,
+          "title": "You Must Be Born Again",
+          "readings": [
+            {
+              "slug": "john",
+              "chapter": 2,
+              "label": "John 3",
+              "title": "Chapter III: Jesus Teaches Nicodemus"
+            }
+          ]
+        },
+        {
+          "day": 3,
+          "title": "The Sermon on the Mount",
+          "readings": [
+            {
+              "slug": "matthew",
+              "chapter": 4,
+              "label": "Matthew 5",
+              "title": "Chapter V: Blessed are those who mourn, for they will be comforted"
+            }
+          ]
+        },
+        {
+          "day": 4,
+          "title": "Neither Do I Condemn You",
+          "readings": [
+            {
+              "slug": "john",
+              "chapter": 7,
+              "label": "John 8",
+              "title": "Chapter VIII: Jesus went to the Mount"
+            }
+          ]
+        },
+        {
+          "day": 5,
+          "title": "Teach Us to Pray",
+          "readings": [
+            {
+              "slug": "matthew",
+              "chapter": 5,
+              "label": "Matthew 6",
+              "title": "Chapter VI: If you do, you will have no reward"
+            }
+          ]
+        },
+        {
+          "day": 6,
+          "title": "The Cross",
+          "readings": [
+            {
+              "slug": "matthew",
+              "chapter": 26,
+              "label": "Matthew 27",
+              "title": "Chapter XXVII: The bodies of many holy people who had died were raised to life."
+            }
+          ]
+        },
+        {
+          "day": 7,
+          "title": "He Is Risen",
+          "readings": [
+            {
+              "slug": "matthew",
+              "chapter": 27,
+              "label": "Matthew 28",
+              "title": "Chapter XXVIII: After the Sabbath, at dawn"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gospels-30",
+      "title": "The Gospels in 30 Days",
+      "tagline": "30 days · about 2 chapters a day",
+      "description": "All four Gospels in a month — the life, teaching, death, and resurrection of Jesus, two chapters at a time.",
+      "image": "/images/plan-gospels.jpg",
+      "totalDays": 30,
+      "totalChapters": 54,
+      "days": [
+        {
+          "day": 1,
+          "title": "Matthew 1–2",
+          "readings": [
+            {
+              "slug": "matthew",
+              "chapter": 0,
+              "label": "Matthew 1",
+              "title": "Chapter I: This is the genealogy of Jesus"
+            },
+            {
+              "slug": "matthew",
+              "chapter": 1,
+              "label": "Matthew 2",
+              "title": "Chapter II: After Jesus was born in Bethlehem"
+            }
+          ]
+        },
+        {
+          "day": 2,
+          "title": "Matthew 3–4",
+          "readings": [
+            {
+              "slug": "matthew",
+              "chapter": 2,
+              "label": "Matthew 3",
+              "title": "Chapter III:  In those days John the Baptist came"
+            },
+            {
+              "slug": "matthew",
+              "chapter": 3,
+              "label": "Matthew 4",
+              "title": "Chapter IV: Then Jesus was led by the Spirit"
+            }
+          ]
+        },
+        {
+          "day": 3,
+          "title": "Matthew 5–6",
+          "readings": [
+            {
+              "slug": "matthew",
+              "chapter": 4,
+              "label": "Matthew 5",
+              "title": "Chapter V: Blessed are those who mourn, for they will be comforted"
+            },
+            {
+              "slug": "matthew",
+              "chapter": 5,
+              "label": "Matthew 6",
+              "title": "Chapter VI: If you do, you will have no reward"
+            }
+          ]
+        },
+        {
+          "day": 4,
+          "title": "Matthew 7–8",
+          "readings": [
+            {
+              "slug": "matthew",
+              "chapter": 6,
+              "label": "Matthew 7",
+              "title": "Chapter VII: Do not judge, or you too will be judged"
+            },
+            {
+              "slug": "matthew",
+              "chapter": 7,
+              "label": "Matthew 8",
+              "title": "Chapter VIII: A man with leprosy came and knelt"
+            }
+          ]
+        },
+        {
+          "day": 5,
+          "title": "Matthew 9–10",
+          "readings": [
+            {
+              "slug": "matthew",
+              "chapter": 8,
+              "label": "Matthew 9",
+              "title": "Chapter IX: Take heart, son; your sins are forgiven."
+            },
+            {
+              "slug": "matthew",
+              "chapter": 9,
+              "label": "Matthew 10",
+              "title": "Chapter X: Jesus called his twelve disciples to him"
+            }
+          ]
+        },
+        {
+          "day": 6,
+          "title": "Matthew 11–12",
+          "readings": [
+            {
+              "slug": "matthew",
+              "chapter": 10,
+              "label": "Matthew 11",
+              "title": "Chapter XI: Are you the one who is to come, or should we expect someone else?"
+            },
+            {
+              "slug": "matthew",
+              "chapter": 11,
+              "label": "Matthew 12",
+              "title": "Chapter XII: I tell you that something greater than the temple is here"
+            }
+          ]
+        },
+        {
+          "day": 7,
+          "title": "Matthew 13–14",
+          "readings": [
+            {
+              "slug": "matthew",
+              "chapter": 12,
+              "label": "Matthew 13",
+              "title": "Chapter XIII: A farmer went out to sow his seed"
+            },
+            {
+              "slug": "matthew",
+              "chapter": 13,
+              "label": "Matthew 14",
+              "title": "Chapter XIV: When he saw the wind, he was afraid and, beginning to sink"
+            }
+          ]
+        },
+        {
+          "day": 8,
+          "title": "Matthew 15–16",
+          "readings": [
+            {
+              "slug": "matthew",
+              "chapter": 14,
+              "label": "Matthew 15",
+              "title": "Chapter XV: Why do your disciples break the tradition of the elders?"
+            },
+            {
+              "slug": "matthew",
+              "chapter": 15,
+              "label": "Matthew 16",
+              "title": "Chapter XVI: A wicked and adulterous generation looks for a sign"
+            }
+          ]
+        },
+        {
+          "day": 9,
+          "title": "Matthew 17–18",
+          "readings": [
+            {
+              "slug": "matthew",
+              "chapter": 16,
+              "label": "Matthew 17",
+              "title": "Chapter XVII: There he was transfigured before them. His face shone like the sun"
+            },
+            {
+              "slug": "matthew",
+              "chapter": 17,
+              "label": "Matthew 18",
+              "title": "Chapter XVIII: Who, then, is the greatest in the kingdom of heaven?"
+            }
+          ]
+        },
+        {
+          "day": 10,
+          "title": "Matthew 19–20",
+          "readings": [
+            {
+              "slug": "matthew",
+              "chapter": 18,
+              "label": "Matthew 19",
+              "title": "Chapter XIX: Large crowds followed him, and he healed them there"
+            },
+            {
+              "slug": "matthew",
+              "chapter": 19,
+              "label": "Matthew 20",
+              "title": "Chapter XX: For the kingdom of heaven is like a landowner"
+            }
+          ]
+        },
+        {
+          "day": 11,
+          "title": "Matthew 21–22",
+          "readings": [
+            {
+              "slug": "matthew",
+              "chapter": 20,
+              "label": "Matthew 21",
+              "title": "Chapter XXI: See, your king comes to you, gentle and riding on a donkey"
+            },
+            {
+              "slug": "matthew",
+              "chapter": 21,
+              "label": "Matthew 22",
+              "title": "Chapter XXII: Jesus spoke to them again in parables"
+            }
+          ]
+        },
+        {
+          "day": 12,
+          "title": "Matthew 23–24",
+          "readings": [
+            {
+              "slug": "matthew",
+              "chapter": 22,
+              "label": "Matthew 23",
+              "title": "Chapter XXIII:  for they do not practice what they preach"
+            },
+            {
+              "slug": "matthew",
+              "chapter": 23,
+              "label": "Matthew 24",
+              "title": "Chapter XXIV:  Destruction of the Temple, Signs of the End Times"
+            }
+          ]
+        },
+        {
+          "day": 13,
+          "title": "Matthew 25–26",
+          "readings": [
+            {
+              "slug": "matthew",
+              "chapter": 24,
+              "label": "Matthew 25",
+              "title": "Chapter XXV: The wise ones, however, took oil in jars along with their lamps."
+            },
+            {
+              "slug": "matthew",
+              "chapter": 25,
+              "label": "Matthew 26",
+              "title": "Chapter XXVI:  Son of Man will be handed over to be crucified."
+            }
+          ]
+        },
+        {
+          "day": 14,
+          "title": "Matthew 27–28",
+          "readings": [
+            {
+              "slug": "matthew",
+              "chapter": 26,
+              "label": "Matthew 27",
+              "title": "Chapter XXVII: The bodies of many holy people who had died were raised to life."
+            },
+            {
+              "slug": "matthew",
+              "chapter": 27,
+              "label": "Matthew 28",
+              "title": "Chapter XXVIII: After the Sabbath, at dawn"
+            }
+          ]
+        },
+        {
+          "day": 15,
+          "title": "Mark 1–2",
+          "readings": [
+            {
+              "slug": "mark",
+              "chapter": 0,
+              "label": "Mark 1",
+              "title": "Chapter I: The beginning of the good news about Jesus"
+            },
+            {
+              "slug": "mark",
+              "chapter": 1,
+              "label": "Mark 2",
+              "title": "Chapter II:  Jesus again entered Capernaum"
+            }
+          ]
+        },
+        {
+          "day": 16,
+          "title": "Mark 3–4",
+          "readings": [
+            {
+              "slug": "mark",
+              "chapter": 2,
+              "label": "Mark 3",
+              "title": "Chapter III:  Jesus went into the synagogue"
+            },
+            {
+              "slug": "mark",
+              "chapter": 3,
+              "label": "Mark 4",
+              "title": "Chapter IV: Jesus began to teach by the lake"
+            }
+          ]
+        },
+        {
+          "day": 17,
+          "title": "Mark 5–6",
+          "readings": [
+            {
+              "slug": "mark",
+              "chapter": 4,
+              "label": "Mark 5",
+              "title": "Chapter V: When Jesus got out of the boat"
+            },
+            {
+              "slug": "mark",
+              "chapter": 5,
+              "label": "Mark 6",
+              "title": "Chapter VI: Jesus left there, to his hometown"
+            }
+          ]
+        },
+        {
+          "day": 18,
+          "title": "Mark 7–8",
+          "readings": [
+            {
+              "slug": "mark",
+              "chapter": 6,
+              "label": "Mark 7",
+              "title": "Chapter VII:  The Pharisees and some of the teachers"
+            },
+            {
+              "slug": "mark",
+              "chapter": 7,
+              "label": "Mark 8",
+              "title": "Chapter VIII: “The Little Children and Jesus"
+            }
+          ]
+        },
+        {
+          "day": 19,
+          "title": "Luke 1–2",
+          "readings": [
+            {
+              "slug": "luke",
+              "chapter": 0,
+              "label": "Luke 1",
+              "title": "Chapter I:  I too decided to write an orderly account"
+            },
+            {
+              "slug": "luke",
+              "chapter": 1,
+              "label": "Luke 2",
+              "title": "Chapter II:  The Birth of Jesus"
+            }
+          ]
+        },
+        {
+          "day": 20,
+          "title": "Luke 3–4",
+          "readings": [
+            {
+              "slug": "luke",
+              "chapter": 2,
+              "label": "Luke 3",
+              "title": "Chapter III:  Jesus went into the synagogue"
+            },
+            {
+              "slug": "luke",
+              "chapter": 3,
+              "label": "Luke 4",
+              "title": "Chapter IV: Jesus began to teach by the lake"
+            }
+          ]
+        },
+        {
+          "day": 21,
+          "title": "Luke 5–6",
+          "readings": [
+            {
+              "slug": "luke",
+              "chapter": 4,
+              "label": "Luke 5",
+              "title": "Chapter V: When Jesus got out of the boat"
+            },
+            {
+              "slug": "luke",
+              "chapter": 5,
+              "label": "Luke 6",
+              "title": "Chapter VI: Jesus left there, to his hometown"
+            }
+          ]
+        },
+        {
+          "day": 22,
+          "title": "Luke 7–8",
+          "readings": [
+            {
+              "slug": "luke",
+              "chapter": 6,
+              "label": "Luke 7",
+              "title": "Chapter VII:  The Pharisees and some of the teachers"
+            },
+            {
+              "slug": "luke",
+              "chapter": 7,
+              "label": "Luke 8",
+              "title": "Chapter VIII: “The Little Children and Jesus"
+            }
+          ]
+        },
+        {
+          "day": 23,
+          "title": "John 1–2",
+          "readings": [
+            {
+              "slug": "john",
+              "chapter": 0,
+              "label": "John 1",
+              "title": "Chapter I: The Word Became Flesh!"
+            },
+            {
+              "slug": "john",
+              "chapter": 1,
+              "label": "John 2",
+              "title": "Chapter II: Water Into Wine"
+            }
+          ]
+        },
+        {
+          "day": 24,
+          "title": "John 3–4",
+          "readings": [
+            {
+              "slug": "john",
+              "chapter": 2,
+              "label": "John 3",
+              "title": "Chapter III: Jesus Teaches Nicodemus"
+            },
+            {
+              "slug": "john",
+              "chapter": 3,
+              "label": "John 4",
+              "title": "Chapter IV: Jesus Talks With a Samaritan"
+            }
+          ]
+        },
+        {
+          "day": 25,
+          "title": "John 5",
+          "readings": [
+            {
+              "slug": "john",
+              "chapter": 4,
+              "label": "John 5",
+              "title": "Chapter V:  The Healing at the Pool"
+            }
+          ]
+        },
+        {
+          "day": 26,
+          "title": "John 6",
+          "readings": [
+            {
+              "slug": "john",
+              "chapter": 5,
+              "label": "John 6",
+              "title": "Chapter VI: Jesus Feeds the Five Thousand"
+            }
+          ]
+        },
+        {
+          "day": 27,
+          "title": "John 7",
+          "readings": [
+            {
+              "slug": "john",
+              "chapter": 6,
+              "label": "John 7",
+              "title": "Chapter VII: Jesus Goes to the Festival"
+            }
+          ]
+        },
+        {
+          "day": 28,
+          "title": "John 8",
+          "readings": [
+            {
+              "slug": "john",
+              "chapter": 7,
+              "label": "John 8",
+              "title": "Chapter VIII: Jesus went to the Mount"
+            }
+          ]
+        },
+        {
+          "day": 29,
+          "title": "John 9",
+          "readings": [
+            {
+              "slug": "john",
+              "chapter": 8,
+              "label": "John 9",
+              "title": "Chapter IX: Jesus Heals a Man Born Blind"
+            }
+          ]
+        },
+        {
+          "day": 30,
+          "title": "John 10",
+          "readings": [
+            {
+              "slug": "john",
+              "chapter": 9,
+              "label": "John 10",
+              "title": "Chapter X: The Good Shepherd"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "genesis-25",
+      "title": "Genesis: The Beginning",
+      "tagline": "25 days · 2 chapters a day",
+      "description": "Two chapters a day through Genesis — creation, the fall, the flood, and the birth of a nation.",
+      "image": "/images/plan-genesis.jpg",
+      "totalDays": 25,
+      "totalChapters": 50,
+      "days": [
+        {
+          "day": 1,
+          "title": "Genesis 1–2",
+          "readings": [
+            {
+              "slug": "genesis",
+              "chapter": 0,
+              "label": "Genesis 1",
+              "title": "Chapter I: In the beginning..."
+            },
+            {
+              "slug": "genesis",
+              "chapter": 1,
+              "label": "Genesis 2",
+              "title": "Chapter II: Thus the heavens..."
+            }
+          ]
+        },
+        {
+          "day": 2,
+          "title": "Genesis 3–4",
+          "readings": [
+            {
+              "slug": "genesis",
+              "chapter": 2,
+              "label": "Genesis 3",
+              "title": "Chapter III: The Fall of mankind"
+            },
+            {
+              "slug": "genesis",
+              "chapter": 3,
+              "label": "Genesis 4",
+              "title": "Chapter IV: Cain and Abel, am I my brothers keeper"
+            }
+          ]
+        },
+        {
+          "day": 3,
+          "title": "Genesis 5–6",
+          "readings": [
+            {
+              "slug": "genesis",
+              "chapter": 4,
+              "label": "Genesis 5",
+              "title": "Chapter V: From Adam to Noah"
+            },
+            {
+              "slug": "genesis",
+              "chapter": 5,
+              "label": "Genesis 6",
+              "title": "Chapter VI: Wickedness in the World"
+            }
+          ]
+        },
+        {
+          "day": 4,
+          "title": "Genesis 7–8",
+          "readings": [
+            {
+              "slug": "genesis",
+              "chapter": 6,
+              "label": "Genesis 7",
+              "title": "Chapter VII: The Lord then said to Noah"
+            },
+            {
+              "slug": "genesis",
+              "chapter": 7,
+              "label": "Genesis 8",
+              "title": "Chapter VIII: But God remembered Noah"
+            }
+          ]
+        },
+        {
+          "day": 5,
+          "title": "Genesis 9–10",
+          "readings": [
+            {
+              "slug": "genesis",
+              "chapter": 8,
+              "label": "Genesis 9",
+              "title": "Chapter IX: God’s Covenant With Noah"
+            },
+            {
+              "slug": "genesis",
+              "chapter": 9,
+              "label": "Genesis 10",
+              "title": "Chapter X: The Table of Nations"
+            }
+          ]
+        },
+        {
+          "day": 6,
+          "title": "Genesis 11–12",
+          "readings": [
+            {
+              "slug": "genesis",
+              "chapter": 10,
+              "label": "Genesis 11",
+              "title": "Chapter XI: The Tower of Babel"
+            },
+            {
+              "slug": "genesis",
+              "chapter": 11,
+              "label": "Genesis 12",
+              "title": "Chapter XII: The Call of Abram"
+            }
+          ]
+        },
+        {
+          "day": 7,
+          "title": "Genesis 13–14",
+          "readings": [
+            {
+              "slug": "genesis",
+              "chapter": 12,
+              "label": "Genesis 13",
+              "title": "Chapter XIII: Abram and Lot Separate"
+            },
+            {
+              "slug": "genesis",
+              "chapter": 13,
+              "label": "Genesis 14",
+              "title": "Chapter XIV: Abram Rescues Lot"
+            }
+          ]
+        },
+        {
+          "day": 8,
+          "title": "Genesis 15–16",
+          "readings": [
+            {
+              "slug": "genesis",
+              "chapter": 14,
+              "label": "Genesis 15",
+              "title": "Chapter XV: The Lord’s Covenant With Abram"
+            },
+            {
+              "slug": "genesis",
+              "chapter": 15,
+              "label": "Genesis 16",
+              "title": "Chapter XVI: Hagar and Ishmael"
+            }
+          ]
+        },
+        {
+          "day": 9,
+          "title": "Genesis 17–18",
+          "readings": [
+            {
+              "slug": "genesis",
+              "chapter": 16,
+              "label": "Genesis 17",
+              "title": "Chapter XVII: The Covenant of Circumcision"
+            },
+            {
+              "slug": "genesis",
+              "chapter": 17,
+              "label": "Genesis 18",
+              "title": "Chapter XVIII: The Three Visitors"
+            }
+          ]
+        },
+        {
+          "day": 10,
+          "title": "Genesis 19–20",
+          "readings": [
+            {
+              "slug": "genesis",
+              "chapter": 18,
+              "label": "Genesis 19",
+              "title": "Chapter XIX: Sodom and Gomorrah Destroyed"
+            },
+            {
+              "slug": "genesis",
+              "chapter": 19,
+              "label": "Genesis 20",
+              "title": "Chapter XX: Abraham and Abimelek"
+            }
+          ]
+        },
+        {
+          "day": 11,
+          "title": "Genesis 21–22",
+          "readings": [
+            {
+              "slug": "genesis",
+              "chapter": 20,
+              "label": "Genesis 21",
+              "title": "Chapter XXI: The Birth of Isaac"
+            },
+            {
+              "slug": "genesis",
+              "chapter": 21,
+              "label": "Genesis 22",
+              "title": "Chapter XXII: Abraham Tested"
+            }
+          ]
+        },
+        {
+          "day": 12,
+          "title": "Genesis 23–24",
+          "readings": [
+            {
+              "slug": "genesis",
+              "chapter": 22,
+              "label": "Genesis 23",
+              "title": "Chapter XXIII: The Death of Sarah"
+            },
+            {
+              "slug": "genesis",
+              "chapter": 23,
+              "label": "Genesis 24",
+              "title": "Chapter XXIV: Isaac and Rebekah"
+            }
+          ]
+        },
+        {
+          "day": 13,
+          "title": "Genesis 25–26",
+          "readings": [
+            {
+              "slug": "genesis",
+              "chapter": 24,
+              "label": "Genesis 25",
+              "title": "Chapter XXV: The Death of Abraham"
+            },
+            {
+              "slug": "genesis",
+              "chapter": 25,
+              "label": "Genesis 26",
+              "title": "Chapter XXVI: Isaac and Abimelek"
+            }
+          ]
+        },
+        {
+          "day": 14,
+          "title": "Genesis 27–28",
+          "readings": [
+            {
+              "slug": "genesis",
+              "chapter": 26,
+              "label": "Genesis 27",
+              "title": "Chapter XXVII: When Isaac was old"
+            },
+            {
+              "slug": "genesis",
+              "chapter": 27,
+              "label": "Genesis 28",
+              "title": "Chapter XXVIII: So Isaac called for Jacob"
+            }
+          ]
+        },
+        {
+          "day": 15,
+          "title": "Genesis 29–30",
+          "readings": [
+            {
+              "slug": "genesis",
+              "chapter": 28,
+              "label": "Genesis 29",
+              "title": "Chapter XXIX: Jacob Arrives in Paddan Aram"
+            },
+            {
+              "slug": "genesis",
+              "chapter": 29,
+              "label": "Genesis 30",
+              "title": "Chapter XXX: Give me children!"
+            }
+          ]
+        },
+        {
+          "day": 16,
+          "title": "Genesis 31–32",
+          "readings": [
+            {
+              "slug": "genesis",
+              "chapter": 30,
+              "label": "Genesis 31",
+              "title": "Chapter XXXI: Jacob Flees From Laban"
+            },
+            {
+              "slug": "genesis",
+              "chapter": 31,
+              "label": "Genesis 32",
+              "title": "Chapter XXXII: Jacob Prepares to Meet Esau"
+            }
+          ]
+        },
+        {
+          "day": 17,
+          "title": "Genesis 33–34",
+          "readings": [
+            {
+              "slug": "genesis",
+              "chapter": 32,
+              "label": "Genesis 33",
+              "title": "Chapter XXXIII: Jacob Meets Esau"
+            },
+            {
+              "slug": "genesis",
+              "chapter": 33,
+              "label": "Genesis 34",
+              "title": "Chapter XXXIV: Dinah and the Shechemites"
+            }
+          ]
+        },
+        {
+          "day": 18,
+          "title": "Genesis 35–36",
+          "readings": [
+            {
+              "slug": "genesis",
+              "chapter": 34,
+              "label": "Genesis 35",
+              "title": "Chapter XXXV: Jacob Returns to Bethel"
+            },
+            {
+              "slug": "genesis",
+              "chapter": 35,
+              "label": "Genesis 36",
+              "title": "Chapter XXXVI: Esau’s Descendants"
+            }
+          ]
+        },
+        {
+          "day": 19,
+          "title": "Genesis 37–38",
+          "readings": [
+            {
+              "slug": "genesis",
+              "chapter": 36,
+              "label": "Genesis 37",
+              "title": "Chapter XXXVII: Joseph’s Dreams"
+            },
+            {
+              "slug": "genesis",
+              "chapter": 37,
+              "label": "Genesis 38",
+              "title": "Chapter XXXVIII: Judah and Tamar"
+            }
+          ]
+        },
+        {
+          "day": 20,
+          "title": "Genesis 39–40",
+          "readings": [
+            {
+              "slug": "genesis",
+              "chapter": 38,
+              "label": "Genesis 39",
+              "title": "Chapter XXXIX: Joseph and Potiphar’s Wife"
+            },
+            {
+              "slug": "genesis",
+              "chapter": 39,
+              "label": "Genesis 40",
+              "title": "Chapter XL: The Cupbearer and the Baker"
+            }
+          ]
+        },
+        {
+          "day": 21,
+          "title": "Genesis 41–42",
+          "readings": [
+            {
+              "slug": "genesis",
+              "chapter": 40,
+              "label": "Genesis 41",
+              "title": "Chapter XLI: Pharaoh’s Dreams"
+            },
+            {
+              "slug": "genesis",
+              "chapter": 41,
+              "label": "Genesis 42",
+              "title": "Chapter XLII: Joseph’s Brothers Go to Egypt"
+            }
+          ]
+        },
+        {
+          "day": 22,
+          "title": "Genesis 43–44",
+          "readings": [
+            {
+              "slug": "genesis",
+              "chapter": 42,
+              "label": "Genesis 43",
+              "title": "Chapter XLIII: The Second Journey to Egypt"
+            },
+            {
+              "slug": "genesis",
+              "chapter": 43,
+              "label": "Genesis 44",
+              "title": "Chapter  XLIV: A Silver Cup in a Sack"
+            }
+          ]
+        },
+        {
+          "day": 23,
+          "title": "Genesis 45–46",
+          "readings": [
+            {
+              "slug": "genesis",
+              "chapter": 44,
+              "label": "Genesis 45",
+              "title": "Chapter XLV: Joseph Makes Himself Known"
+            },
+            {
+              "slug": "genesis",
+              "chapter": 45,
+              "label": "Genesis 46",
+              "title": "Chapter XLVI: Jacob Goes to Egypt"
+            }
+          ]
+        },
+        {
+          "day": 24,
+          "title": "Genesis 47–48",
+          "readings": [
+            {
+              "slug": "genesis",
+              "chapter": 46,
+              "label": "Genesis 47",
+              "title": "Chapter XLVII: Joseph went and told Pharaoh"
+            },
+            {
+              "slug": "genesis",
+              "chapter": 47,
+              "label": "Genesis 48",
+              "title": "Chapter XLVIII: Manasseh and Ephraim"
+            }
+          ]
+        },
+        {
+          "day": 25,
+          "title": "Genesis 49–50",
+          "readings": [
+            {
+              "slug": "genesis",
+              "chapter": 48,
+              "label": "Genesis 49",
+              "title": "Chapter XLIX: Jacob Blesses His Sons"
+            },
+            {
+              "slug": "genesis",
+              "chapter": 49,
+              "label": "Genesis 50",
+              "title": "Chapter L: Joseph threw himself on his father"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "acts-romans-28",
+      "title": "Acts & Romans",
+      "tagline": "28 days · 1 chapter a day",
+      "description": "One chapter a day through Acts and Romans — the birth of the church and the very heart of the gospel.",
+      "image": "/images/plan-acts-romans.jpg",
+      "totalDays": 28,
+      "totalChapters": 28,
+      "days": [
+        {
+          "day": 1,
+          "title": "Acts 1",
+          "readings": [
+            {
+              "slug": "acts",
+              "chapter": 0,
+              "label": "Acts 1",
+              "title": "Chapter I: Jesus Taken Up"
+            }
+          ]
+        },
+        {
+          "day": 2,
+          "title": "Acts 2",
+          "readings": [
+            {
+              "slug": "acts",
+              "chapter": 1,
+              "label": "Acts 2",
+              "title": "Chapter II: Holy Spirit at Pentecost"
+            }
+          ]
+        },
+        {
+          "day": 3,
+          "title": "Acts 3",
+          "readings": [
+            {
+              "slug": "acts",
+              "chapter": 2,
+              "label": "Acts 3",
+              "title": "Chapter III: Peter Heals a Beggar"
+            }
+          ]
+        },
+        {
+          "day": 4,
+          "title": "Acts 4",
+          "readings": [
+            {
+              "slug": "acts",
+              "chapter": 3,
+              "label": "Acts 4",
+              "title": "Chapter IV: Peter and John & the Sanhedrin"
+            }
+          ]
+        },
+        {
+          "day": 5,
+          "title": "Acts 5",
+          "readings": [
+            {
+              "slug": "acts",
+              "chapter": 4,
+              "label": "Acts 5",
+              "title": "Chapter V: Ananias and Sapphira"
+            }
+          ]
+        },
+        {
+          "day": 6,
+          "title": "Acts 6",
+          "readings": [
+            {
+              "slug": "acts",
+              "chapter": 5,
+              "label": "Acts 6",
+              "title": "Chapter VI: Choosing of the Seven"
+            }
+          ]
+        },
+        {
+          "day": 7,
+          "title": "Acts 7",
+          "readings": [
+            {
+              "slug": "acts",
+              "chapter": 6,
+              "label": "Acts 7",
+              "title": "Chapter VII: Stephen’s Speech"
+            }
+          ]
+        },
+        {
+          "day": 8,
+          "title": "Acts 8",
+          "readings": [
+            {
+              "slug": "acts",
+              "chapter": 7,
+              "label": "Acts 8",
+              "title": "Chapter VIII: Paul approved of their killing him"
+            }
+          ]
+        },
+        {
+          "day": 9,
+          "title": "Acts 9",
+          "readings": [
+            {
+              "slug": "acts",
+              "chapter": 8,
+              "label": "Acts 9",
+              "title": "Chapter IX: Saul’s Conversion"
+            }
+          ]
+        },
+        {
+          "day": 10,
+          "title": "Acts 10",
+          "readings": [
+            {
+              "slug": "acts",
+              "chapter": 9,
+              "label": "Acts 10",
+              "title": "Chapter X: Cornelius Calls for Peter"
+            }
+          ]
+        },
+        {
+          "day": 11,
+          "title": "Acts 11",
+          "readings": [
+            {
+              "slug": "acts",
+              "chapter": 10,
+              "label": "Acts 11",
+              "title": "Chapter XI: Peter Explains Actions"
+            }
+          ]
+        },
+        {
+          "day": 12,
+          "title": "Acts 12",
+          "readings": [
+            {
+              "slug": "acts",
+              "chapter": 11,
+              "label": "Acts 12",
+              "title": "Chapter XII: Peter’s Miraculous Escape"
+            }
+          ]
+        },
+        {
+          "day": 13,
+          "title": "Romans 1",
+          "readings": [
+            {
+              "slug": "romans",
+              "chapter": 0,
+              "label": "Romans 1",
+              "title": "Chapter I: Called to be an apostle"
+            }
+          ]
+        },
+        {
+          "day": 14,
+          "title": "Romans 2",
+          "readings": [
+            {
+              "slug": "romans",
+              "chapter": 1,
+              "label": "Romans 2",
+              "title": "Chapter II:  God’s Righteous Judgment"
+            }
+          ]
+        },
+        {
+          "day": 15,
+          "title": "Romans 3",
+          "readings": [
+            {
+              "slug": "romans",
+              "chapter": 2,
+              "label": "Romans 3",
+              "title": "Chapter III: God’s Faithfulness"
+            }
+          ]
+        },
+        {
+          "day": 16,
+          "title": "Romans 4",
+          "readings": [
+            {
+              "slug": "romans",
+              "chapter": 3,
+              "label": "Romans 4",
+              "title": "Chapter IV:Abraham Justified by Faith"
+            }
+          ]
+        },
+        {
+          "day": 17,
+          "title": "Romans 5",
+          "readings": [
+            {
+              "slug": "romans",
+              "chapter": 4,
+              "label": "Romans 5",
+              "title": "Chapter V: Peace and Hope"
+            }
+          ]
+        },
+        {
+          "day": 18,
+          "title": "Romans 6",
+          "readings": [
+            {
+              "slug": "romans",
+              "chapter": 5,
+              "label": "Romans 6",
+              "title": "Chapter VI: Dead to Sin, Alive in Christ"
+            }
+          ]
+        },
+        {
+          "day": 19,
+          "title": "Romans 7",
+          "readings": [
+            {
+              "slug": "romans",
+              "chapter": 6,
+              "label": "Romans 7",
+              "title": "Chapter VII: Bound to Christ"
+            }
+          ]
+        },
+        {
+          "day": 20,
+          "title": "Romans 8",
+          "readings": [
+            {
+              "slug": "romans",
+              "chapter": 7,
+              "label": "Romans 8",
+              "title": "Chapter VIII: Life Through the Spirit"
+            }
+          ]
+        },
+        {
+          "day": 21,
+          "title": "Romans 9",
+          "readings": [
+            {
+              "slug": "romans",
+              "chapter": 8,
+              "label": "Romans 9",
+              "title": "Chapter IX: Paul’s Anguish Over Israel"
+            }
+          ]
+        },
+        {
+          "day": 22,
+          "title": "Romans 10",
+          "readings": [
+            {
+              "slug": "romans",
+              "chapter": 9,
+              "label": "Romans 10",
+              "title": "Chapter X: Brothers and sisters"
+            }
+          ]
+        },
+        {
+          "day": 23,
+          "title": "Romans 11",
+          "readings": [
+            {
+              "slug": "romans",
+              "chapter": 10,
+              "label": "Romans 11",
+              "title": "Chapter XI: The Remnant of Israel"
+            }
+          ]
+        },
+        {
+          "day": 24,
+          "title": "Romans 12",
+          "readings": [
+            {
+              "slug": "romans",
+              "chapter": 11,
+              "label": "Romans 12",
+              "title": "Chapter XII: A Living Sacrifice"
+            }
+          ]
+        },
+        {
+          "day": 25,
+          "title": "Romans 13",
+          "readings": [
+            {
+              "slug": "romans",
+              "chapter": 12,
+              "label": "Romans 13",
+              "title": "Chapter XIII: Submit to Governing Authorities"
+            }
+          ]
+        },
+        {
+          "day": 26,
+          "title": "Romans 14",
+          "readings": [
+            {
+              "slug": "romans",
+              "chapter": 13,
+              "label": "Romans 14",
+              "title": "Chapter XIV: Weak and the Strong"
+            }
+          ]
+        },
+        {
+          "day": 27,
+          "title": "Romans 15",
+          "readings": [
+            {
+              "slug": "romans",
+              "chapter": 14,
+              "label": "Romans 15",
+              "title": "Chapter XV: We who are strong"
+            }
+          ]
+        },
+        {
+          "day": 28,
+          "title": "Romans 16",
+          "readings": [
+            {
+              "slug": "romans",
+              "chapter": 15,
+              "label": "Romans 16",
+              "title": "Chapter XVI: Personal Greetings"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

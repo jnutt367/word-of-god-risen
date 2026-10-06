@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "prebuild": "node scripts/build-search-index.mjs"
+    "prebuild": "node scripts/build-search-index.mjs && node scripts/build-plans.mjs"
   },
   "dependencies": {
     "next": "16.3.8",
