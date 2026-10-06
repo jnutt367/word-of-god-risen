@@ -56,15 +56,15 @@ export default function AboutPage() {
             src="/images/jason.jpg"
             alt="Jason Nutt"
             width={344}
-            height={192}
-            className="h-44 w-1/2 rounded-xl object-cover object-top sm:h-56"
+            height={458}
+            className="aspect-[3/4] w-1/2 rounded-xl object-cover object-center"
           />
           <Image
             src="/images/jason-pixar.jpg"
             alt="Jason Nutt, Pixar-style portrait"
-            width={616}
-            height={192}
-            className="h-44 w-1/2 rounded-xl object-cover object-top sm:h-56"
+            width={344}
+            height={458}
+            className="aspect-[3/4] w-1/2 rounded-xl object-cover object-center"
           />
         </div>
         <div className="mt-5 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
