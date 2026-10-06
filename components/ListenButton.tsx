@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { Verse } from "@/lib/verses";
 
 interface Props {
+  bookSlug: string;
   bookTitle: string;
   chapterNum: number;
   verses: Verse[];
@@ -13,22 +14,51 @@ type Status = "idle" | "playing" | "paused";
 
 const VOICE_KEY = "wogr:tts-voice";
 const RATE_KEY = "wogr:tts-rate";
+const MANIFEST_URL = "/audio-manifest.json";
+
+/** Fetched once, then reused for every chapter. */
+let manifestPromise: Promise<Record<string, string>> | null = null;
+function loadManifest(): Promise<Record<string, string>> {
+  if (!manifestPromise) {
+    manifestPromise = fetch(MANIFEST_URL)
+      .then((r) => (r.ok ? r.json() : {}))
+      .catch(() => ({}));
+  }
+  return manifestPromise;
+}
+
+const fmt = (s: number) => {
+  if (!isFinite(s) || s < 0) return "0:00";
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60);
+  return `${m}:${String(sec).padStart(2, "0")}`;
+};
 
 /**
- * "Listen" — reads the chapter aloud with the device's built-in
- * text-to-speech (free, offline-capable, no backend). One utterance per
- * verse for natural cadence and reliable long-chapter playback.
- * The gear opens voice + speed settings (choice is remembered).
+ * "Listen" — plays the chapter aloud.
+ * If the chapter has an AI-narrated MP3 (see public/audio-manifest.json),
+ * it streams that with play/pause + a scrub bar. Otherwise it falls back
+ * to the device's built-in text-to-speech (free, offline-capable).
+ * The gear opens voice + speed settings for TTS (choice is remembered).
  */
-export default function ListenButton({ bookTitle, chapterNum, verses }: Props) {
+export default function ListenButton({
+  bookSlug,
+  bookTitle,
+  chapterNum,
+  verses,
+}: Props) {
   const [status, setStatus] = useState<Status>("idle");
   const [canListen, setCanListen] = useState(false);
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [voiceURI, setVoiceURI] = useState<string | null>(null);
   const [rate, setRate] = useState(1);
   const [showSettings, setShowSettings] = useState(false);
+  const [mp3Url, setMp3Url] = useState<string | null | undefined>(undefined);
+  const [progress, setProgress] = useState(0);
+  const [duration, setDuration] = useState(0);
   const session = useRef(0);
   const panelRef = useRef<HTMLDivElement>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const supported = () =>
     typeof window !== "undefined" && "speechSynthesis" in window;
@@ -52,13 +82,26 @@ export default function ListenButton({ bookTitle, chapterNum, verses }: Props) {
     };
   }, []);
 
-  // Stop playback when the text changes (e.g. version switch).
+  // Look up an MP3 for this chapter; reset playback when the chapter changes.
   useEffect(() => {
-    if (supported()) window.speechSynthesis.cancel();
-    session.current += 1;
-    setStatus("idle");
+    const key = `${bookSlug}:${chapterNum}`;
+    let live = true;
+    stopAll();
+    setMp3Url(undefined);
+    loadManifest().then((m) => {
+      if (live) setMp3Url(m[key] ?? null);
+    });
+    return () => {
+      live = false;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [verses]);
+  }, [bookSlug, chapterNum, verses]);
+
+  // Tear down audio on unmount.
+  useEffect(() => {
+    return () => stopAll();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Close settings on outside click / Escape.
   useEffect(() => {
@@ -79,7 +122,67 @@ export default function ListenButton({ bookTitle, chapterNum, verses }: Props) {
     };
   }, [showSettings]);
 
-  if (!canListen) return null;
+  const stopAll = () => {
+    session.current += 1;
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+    }
+    const a = audioRef.current;
+    if (a) {
+      a.pause();
+      a.removeAttribute("src");
+      a.load();
+    }
+    audioRef.current = null;
+    setStatus("idle");
+    setProgress(0);
+  };
+
+  /* ---------------- MP3 path ---------------- */
+
+  const getAudio = (url: string): HTMLAudioElement => {
+    let a = audioRef.current;
+    if (!a) {
+      a = new Audio();
+      a.preload = "metadata";
+      a.onloadedmetadata = () => setDuration(a!.duration || 0);
+      a.ontimeupdate = () => setProgress(a!.currentTime || 0);
+      a.onended = () => {
+        setStatus("idle");
+        setProgress(0);
+      };
+      audioRef.current = a;
+    }
+    if (a.src !== url) {
+      a.src = url;
+      setProgress(0);
+      setDuration(0);
+    }
+    return a;
+  };
+
+  const toggleMp3 = (url: string) => {
+    const a = getAudio(url);
+    if (status === "idle") {
+      a.play().catch(() => setStatus("idle"));
+      setStatus("playing");
+    } else if (status === "playing") {
+      a.pause();
+      setStatus("paused");
+    } else {
+      a.play().catch(() => {});
+      setStatus("playing");
+    }
+  };
+
+  const seekMp3 = (to: number) => {
+    const a = audioRef.current;
+    if (!a) return;
+    a.currentTime = Math.min(Math.max(0, to), a.duration || to);
+    setProgress(a.currentTime);
+  };
+
+  /* ---------------- TTS fallback path ---------------- */
 
   const english = voices.filter((v) => v.lang?.startsWith("en"));
 
@@ -134,7 +237,7 @@ export default function ListenButton({ bookTitle, chapterNum, verses }: Props) {
     }
   };
 
-  const start = () => {
+  const startTts = () => {
     const synth = window.speechSynthesis;
     synth.cancel();
     session.current += 1;
@@ -159,9 +262,9 @@ export default function ListenButton({ bookTitle, chapterNum, verses }: Props) {
     setStatus("playing");
   };
 
-  const toggle = () => {
+  const toggleTts = () => {
     const synth = window.speechSynthesis;
-    if (status === "idle") start();
+    if (status === "idle") startTts();
     else if (status === "playing") {
       synth.pause();
       setStatus("paused");
@@ -171,17 +274,21 @@ export default function ListenButton({ bookTitle, chapterNum, verses }: Props) {
     }
   };
 
-  const stop = () => {
-    session.current += 1;
-    window.speechSynthesis.cancel();
-    setStatus("idle");
-  };
+  /* ---------------- render ---------------- */
+
+  // MP3 mode only when the manifest actually has this chapter; while the
+  // manifest is still loading (undefined) we fall through to the TTS UI
+  // so the button is never missing. If TTS is unsupported and there's no
+  // MP3, render nothing (previous behavior).
+  const useMp3 = typeof mp3Url === "string";
+  if (!useMp3 && !canListen) return null;
 
   const btn =
     "rounded-full border border-[var(--reader-line)] px-4 py-1.5 text-sm font-medium text-[var(--reader-muted)] transition-colors hover:text-[var(--reader-verse-num)]";
   const label =
     status === "playing" ? "Pause" : status === "paused" ? "Resume" : "Listen";
   const icon = status === "playing" ? "⏸" : status === "paused" ? "▶" : "🔊";
+  const toggle = () => (useMp3 ? toggleMp3(mp3Url as string) : toggleTts());
 
   return (
     <span ref={panelRef} className="relative inline-flex items-center gap-1.5">
@@ -205,7 +312,7 @@ export default function ListenButton({ bookTitle, chapterNum, verses }: Props) {
       {status !== "idle" && (
         <button
           type="button"
-          onClick={stop}
+          onClick={stopAll}
           aria-label="Stop listening"
           title="Stop"
           className="rounded-full border border-[var(--reader-line)] px-3 py-1.5 text-sm text-[var(--reader-muted)] transition-colors hover:text-[var(--reader-verse-num)]"
@@ -213,17 +320,35 @@ export default function ListenButton({ bookTitle, chapterNum, verses }: Props) {
           ⏹
         </button>
       )}
-      <button
-        type="button"
-        onClick={() => setShowSettings((v) => !v)}
-        aria-expanded={showSettings}
-        aria-label="Voice settings"
-        title="Voice settings"
-        className="rounded-full border border-[var(--reader-line)] px-2.5 py-1.5 text-sm text-[var(--reader-muted)] transition-colors hover:text-[var(--reader-verse-num)]"
-      >
-        <span aria-hidden="true">⚙</span>
-      </button>
-      {showSettings && (
+      {useMp3 && status !== "idle" && duration > 0 && (
+        <span className="inline-flex items-center gap-2 text-xs text-[var(--reader-muted)]">
+          <span className="tabular-nums">{fmt(progress)}</span>
+          <input
+            type="range"
+            min={0}
+            max={duration}
+            step={0.5}
+            value={Math.min(progress, duration)}
+            onChange={(e) => seekMp3(parseFloat(e.target.value))}
+            aria-label="Seek"
+            className="h-1 w-28 cursor-pointer appearance-none rounded-full bg-[var(--reader-line)] accent-[var(--reader-verse-num)] sm:w-40"
+          />
+          <span className="tabular-nums">{fmt(duration)}</span>
+        </span>
+      )}
+      {!useMp3 && (
+        <button
+          type="button"
+          onClick={() => setShowSettings((v) => !v)}
+          aria-expanded={showSettings}
+          aria-label="Voice settings"
+          title="Voice settings"
+          className="rounded-full border border-[var(--reader-line)] px-2.5 py-1.5 text-sm text-[var(--reader-muted)] transition-colors hover:text-[var(--reader-verse-num)]"
+        >
+          <span aria-hidden="true">⚙</span>
+        </button>
+      )}
+      {showSettings && !useMp3 && (
         <div className="absolute right-0 top-full z-50 mt-2 w-64 rounded-xl border border-[var(--reader-line)] bg-[var(--reader-card)] p-4 shadow-xl">
           <label className="block">
             <span className="mb-1 block text-xs font-semibold uppercase tracking-wider text-[var(--reader-muted)]">

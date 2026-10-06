@@ -117,6 +117,7 @@ export default function ReaderView({
               </div>
             )}
             <ListenButton
+              bookSlug={slug}
               bookTitle={bookTitle}
               chapterNum={chapterNum}
               verses={verses}
