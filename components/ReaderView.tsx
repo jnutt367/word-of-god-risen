@@ -6,6 +6,7 @@ import Image from "next/image";
 import VerseText from "@/components/VerseText";
 import CrossRefPanel from "@/components/CrossRefPanel";
 import WatchCard from "@/components/WatchCard";
+import ListenButton from "@/components/ListenButton";
 import { useProgress } from "@/components/ProgressProvider";
 import { VERSION_STORAGE_KEY } from "@/lib/versions";
 import type { Verse } from "@/lib/verses";
@@ -115,6 +116,11 @@ export default function ReaderView({
                 ))}
               </div>
             )}
+            <ListenButton
+              bookTitle={bookTitle}
+              chapterNum={chapterNum}
+              verses={verses}
+            />
             <button
               type="button"
               onClick={() => setLamp((v) => !v)}
