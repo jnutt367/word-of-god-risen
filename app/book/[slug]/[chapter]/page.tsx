@@ -94,7 +94,7 @@ export default async function ReaderPage({
       chapterIdx={idx}
       chapterNum={chapterNum}
       chapterTitle={ch.title}
-      image={ch.image}
+      image={book.image}
       versesByVersion={versesByVersion}
       versions={versions}
       defaultVersion={DEFAULT_VERSION}
