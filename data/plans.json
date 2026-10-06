@@ -1519,6 +1519,2391 @@
           ]
         }
       ]
+    },
+    {
+      "id": "enoch-18",
+      "title": "The Book of Enoch",
+      "tagline": "18 days · 2 chapters a day",
+      "description": "The Watchers, the Son of Man, and the final judgment — the book Jude quoted, complete in eighteen days.",
+      "image": "/images/plan-enoch.jpg",
+      "totalDays": 18,
+      "totalChapters": 36,
+      "days": [
+        {
+          "day": 1,
+          "title": "Enoch 1–2",
+          "readings": [
+            {
+              "slug": "enoch-1",
+              "chapter": 0,
+              "label": "Enoch 1",
+              "title": "Chapter I: The Blessing of Enoch"
+            },
+            {
+              "slug": "enoch-1",
+              "chapter": 1,
+              "label": "Enoch 2",
+              "title": "Chapter II: Behold the Earth"
+            }
+          ]
+        },
+        {
+          "day": 2,
+          "title": "Enoch 3–4",
+          "readings": [
+            {
+              "slug": "enoch-1",
+              "chapter": 2,
+              "label": "Enoch 3",
+              "title": "Chapter III: Observe the Winter"
+            },
+            {
+              "slug": "enoch-1",
+              "chapter": 3,
+              "label": "Enoch 4",
+              "title": "Chapter IV: Observe the Summer"
+            }
+          ]
+        },
+        {
+          "day": 3,
+          "title": "Enoch 5–6",
+          "readings": [
+            {
+              "slug": "enoch-1",
+              "chapter": 4,
+              "label": "Enoch 5",
+              "title": "Chapter V: Observe the Fruit of the Trees"
+            },
+            {
+              "slug": "enoch-1",
+              "chapter": 5,
+              "label": "Enoch 6",
+              "title": "Chapter VI: The angels {...} lusted after them"
+            }
+          ]
+        },
+        {
+          "day": 4,
+          "title": "Enoch 7–8",
+          "readings": [
+            {
+              "slug": "enoch-1",
+              "chapter": 6,
+              "label": "Enoch 7",
+              "title": "Chapter VII: They Took Unto Themselves Wives"
+            },
+            {
+              "slug": "enoch-1",
+              "chapter": 7,
+              "label": "Enoch 8",
+              "title": "Chapter VIII: Azazel Taught Men to Make Swords"
+            }
+          ]
+        },
+        {
+          "day": 5,
+          "title": "Enoch 9–10",
+          "readings": [
+            {
+              "slug": "enoch-1",
+              "chapter": 8,
+              "label": "Enoch 9",
+              "title": "Chapter IX: The Archangels of God"
+            },
+            {
+              "slug": "enoch-1",
+              "chapter": 9,
+              "label": "Enoch 10",
+              "title": "Chapter X: Go to Noah and tell him"
+            }
+          ]
+        },
+        {
+          "day": 6,
+          "title": "Enoch 11–12",
+          "readings": [
+            {
+              "slug": "enoch-1",
+              "chapter": 10,
+              "label": "Enoch 11",
+              "title": "Chapter XI: Blessings from Heaven"
+            },
+            {
+              "slug": "enoch-1",
+              "chapter": 11,
+              "label": "Enoch 12",
+              "title": "Chapter XII: No Mercy for the fallen"
+            }
+          ]
+        },
+        {
+          "day": 7,
+          "title": "Enoch 13–14",
+          "readings": [
+            {
+              "slug": "enoch-1",
+              "chapter": 12,
+              "label": "Enoch 13",
+              "title": "Chapter XIII: Azazel, Thou Shalt Have No Peace"
+            },
+            {
+              "slug": "enoch-1",
+              "chapter": 13,
+              "label": "Enoch 14",
+              "title": "Chapter XIV: ...And I Bowed My Face Downwards"
+            }
+          ]
+        },
+        {
+          "day": 8,
+          "title": "Enoch 15–16",
+          "readings": [
+            {
+              "slug": "enoch-1",
+              "chapter": 14,
+              "label": "Enoch 15",
+              "title": "Chapter XV: Fear Not Enoch"
+            },
+            {
+              "slug": "enoch-1",
+              "chapter": 15,
+              "label": "Enoch 16",
+              "title": "Chapter XVI: Watchers and the godless"
+            }
+          ]
+        },
+        {
+          "day": 9,
+          "title": "Enoch 17–18",
+          "readings": [
+            {
+              "slug": "enoch-1",
+              "chapter": 16,
+              "label": "Enoch 17",
+              "title": "Chapter XVII: A River of Fire"
+            },
+            {
+              "slug": "enoch-1",
+              "chapter": 17,
+              "label": "Enoch 18",
+              "title": "Chapter XVIII: Treasuries of Heaven"
+            }
+          ]
+        },
+        {
+          "day": 10,
+          "title": "Enoch 19–20",
+          "readings": [
+            {
+              "slug": "enoch-1",
+              "chapter": 18,
+              "label": "Enoch 19",
+              "title": "Chapter XIX: The Fallen Angels"
+            },
+            {
+              "slug": "enoch-1",
+              "chapter": 19,
+              "label": "Enoch 20",
+              "title": "Chapter XX: The Holy Angels"
+            }
+          ]
+        },
+        {
+          "day": 11,
+          "title": "Enoch 21–22",
+          "readings": [
+            {
+              "slug": "enoch-1",
+              "chapter": 20,
+              "label": "Enoch 21",
+              "title": "Chapter XXI: Their Eternal Prison"
+            },
+            {
+              "slug": "enoch-1",
+              "chapter": 21,
+              "label": "Enoch 22",
+              "title": "Chapter XXII: He Shall Bind them Forever"
+            }
+          ]
+        },
+        {
+          "day": 12,
+          "title": "Enoch 23–24",
+          "readings": [
+            {
+              "slug": "enoch-1",
+              "chapter": 22,
+              "label": "Enoch 23",
+              "title": "Chapter XXIII: This Course of Fire"
+            },
+            {
+              "slug": "enoch-1",
+              "chapter": 23,
+              "label": "Enoch 24",
+              "title": "Chapter XXIV: How beautiful is this tree"
+            }
+          ]
+        },
+        {
+          "day": 13,
+          "title": "Enoch 25–26",
+          "readings": [
+            {
+              "slug": "enoch-1",
+              "chapter": 24,
+              "label": "Enoch 25",
+              "title": "Chapter XXV: Then blessed I the God of Glory"
+            },
+            {
+              "slug": "enoch-1",
+              "chapter": 25,
+              "label": "Enoch 26",
+              "title": "Chapter XXVI: I marveled very much"
+            }
+          ]
+        },
+        {
+          "day": 14,
+          "title": "Enoch 27–28",
+          "readings": [
+            {
+              "slug": "enoch-1",
+              "chapter": 26,
+              "label": "Enoch 27",
+              "title": "Chapter XXVII: For what object is this blessed land"
+            },
+            {
+              "slug": "enoch-1",
+              "chapter": 27,
+              "label": "Enoch 28",
+              "title": "Chapter XXVIII: Caused clouds & dew to ascend on every side."
+            }
+          ]
+        },
+        {
+          "day": 15,
+          "title": "Enoch 29–30",
+          "readings": [
+            {
+              "slug": "enoch-1",
+              "chapter": 28,
+              "label": "Enoch 29",
+              "title": "Chapter XXIX: I saw aromatic trees"
+            },
+            {
+              "slug": "enoch-1",
+              "chapter": 29,
+              "label": "Enoch 30",
+              "title": "Chapter XXX: And beyond these"
+            }
+          ]
+        },
+        {
+          "day": 16,
+          "title": "Enoch 31–32",
+          "readings": [
+            {
+              "slug": "enoch-1",
+              "chapter": 30,
+              "label": "Enoch 31",
+              "title": "Chapter XXXI: I saw other mountains"
+            },
+            {
+              "slug": "enoch-1",
+              "chapter": 31,
+              "label": "Enoch 32",
+              "title": "Chapter XXXII: And they knew that they were naked"
+            }
+          ]
+        },
+        {
+          "day": 17,
+          "title": "Enoch 33–34",
+          "readings": [
+            {
+              "slug": "enoch-1",
+              "chapter": 32,
+              "label": "Enoch 33",
+              "title": "Chapter XXXIII: The portals of the heaven open"
+            },
+            {
+              "slug": "enoch-1",
+              "chapter": 33,
+              "label": "Enoch 34",
+              "title": "Chapter XXXIV: There I saw a great and glorious device"
+            }
+          ]
+        },
+        {
+          "day": 18,
+          "title": "Enoch 35–36",
+          "readings": [
+            {
+              "slug": "enoch-1",
+              "chapter": 34,
+              "label": "Enoch 35",
+              "title": "Chapter XXXV: Three portals of the heaven"
+            },
+            {
+              "slug": "enoch-1",
+              "chapter": 35,
+              "label": "Enoch 36",
+              "title": "Chapter XXXVI: Thence there come dew, rain, and wind"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "apocrypha-30",
+      "title": "The Apocrypha",
+      "tagline": "30 days · about 5 chapters a day",
+      "description": "Tobit, Judith, Wisdom, Sirach, Baruch, and the Maccabees — the books between the Testaments, complete in a month.",
+      "image": "/images/plan-apocrypha.jpg",
+      "totalDays": 30,
+      "totalChapters": 137,
+      "days": [
+        {
+          "day": 1,
+          "title": "Tobit 1–5",
+          "readings": [
+            {
+              "slug": "tobit",
+              "chapter": 0,
+              "label": "Tobit 1",
+              "title": "Chapter I"
+            },
+            {
+              "slug": "tobit",
+              "chapter": 1,
+              "label": "Tobit 2",
+              "title": "Chapter II"
+            },
+            {
+              "slug": "tobit",
+              "chapter": 2,
+              "label": "Tobit 3",
+              "title": "Chapter III"
+            },
+            {
+              "slug": "tobit",
+              "chapter": 3,
+              "label": "Tobit 4",
+              "title": "Chapter IV"
+            },
+            {
+              "slug": "tobit",
+              "chapter": 4,
+              "label": "Tobit 5",
+              "title": "Chapter V"
+            }
+          ]
+        },
+        {
+          "day": 2,
+          "title": "Tobit 6–10",
+          "readings": [
+            {
+              "slug": "tobit",
+              "chapter": 5,
+              "label": "Tobit 6",
+              "title": "Chapter VI"
+            },
+            {
+              "slug": "tobit",
+              "chapter": 6,
+              "label": "Tobit 7",
+              "title": "Chapter VII"
+            },
+            {
+              "slug": "tobit",
+              "chapter": 7,
+              "label": "Tobit 8",
+              "title": "Chapter VIII"
+            },
+            {
+              "slug": "tobit",
+              "chapter": 8,
+              "label": "Tobit 9",
+              "title": "Chapter IX"
+            },
+            {
+              "slug": "tobit",
+              "chapter": 9,
+              "label": "Tobit 10",
+              "title": "Chapter X"
+            }
+          ]
+        },
+        {
+          "day": 3,
+          "title": "Tobit 11, Judith 1",
+          "readings": [
+            {
+              "slug": "tobit",
+              "chapter": 10,
+              "label": "Tobit 11",
+              "title": "Chapter XI"
+            },
+            {
+              "slug": "tobit",
+              "chapter": 11,
+              "label": "Tobit 12",
+              "title": "Chapter XII"
+            },
+            {
+              "slug": "tobit",
+              "chapter": 12,
+              "label": "Tobit 13",
+              "title": "Chapter XIII"
+            },
+            {
+              "slug": "tobit",
+              "chapter": 13,
+              "label": "Tobit 14",
+              "title": "Chapter XIV"
+            },
+            {
+              "slug": "judith",
+              "chapter": 0,
+              "label": "Judith 1",
+              "title": "Chapter I"
+            }
+          ]
+        },
+        {
+          "day": 4,
+          "title": "Judith 2–6",
+          "readings": [
+            {
+              "slug": "judith",
+              "chapter": 1,
+              "label": "Judith 2",
+              "title": "Chapter II"
+            },
+            {
+              "slug": "judith",
+              "chapter": 2,
+              "label": "Judith 3",
+              "title": "Chapter III"
+            },
+            {
+              "slug": "judith",
+              "chapter": 3,
+              "label": "Judith 4",
+              "title": "Chapter IV"
+            },
+            {
+              "slug": "judith",
+              "chapter": 4,
+              "label": "Judith 5",
+              "title": "Chapter V"
+            },
+            {
+              "slug": "judith",
+              "chapter": 5,
+              "label": "Judith 6",
+              "title": "Chapter VI"
+            }
+          ]
+        },
+        {
+          "day": 5,
+          "title": "Judith 7–11",
+          "readings": [
+            {
+              "slug": "judith",
+              "chapter": 6,
+              "label": "Judith 7",
+              "title": "Chapter VII"
+            },
+            {
+              "slug": "judith",
+              "chapter": 7,
+              "label": "Judith 8",
+              "title": "Chapter VIII"
+            },
+            {
+              "slug": "judith",
+              "chapter": 8,
+              "label": "Judith 9",
+              "title": "Chapter IX"
+            },
+            {
+              "slug": "judith",
+              "chapter": 9,
+              "label": "Judith 10",
+              "title": "Chapter X"
+            },
+            {
+              "slug": "judith",
+              "chapter": 10,
+              "label": "Judith 11",
+              "title": "Chapter XI"
+            }
+          ]
+        },
+        {
+          "day": 6,
+          "title": "Judith 12–16",
+          "readings": [
+            {
+              "slug": "judith",
+              "chapter": 11,
+              "label": "Judith 12",
+              "title": "Chapter XII"
+            },
+            {
+              "slug": "judith",
+              "chapter": 12,
+              "label": "Judith 13",
+              "title": "Chapter XIII"
+            },
+            {
+              "slug": "judith",
+              "chapter": 13,
+              "label": "Judith 14",
+              "title": "Chapter XIV"
+            },
+            {
+              "slug": "judith",
+              "chapter": 14,
+              "label": "Judith 15",
+              "title": "Chapter XV"
+            },
+            {
+              "slug": "judith",
+              "chapter": 15,
+              "label": "Judith 16",
+              "title": "Chapter XVI"
+            }
+          ]
+        },
+        {
+          "day": 7,
+          "title": "Wisdom 1–5",
+          "readings": [
+            {
+              "slug": "wisdom",
+              "chapter": 0,
+              "label": "Wisdom 1",
+              "title": "Chapter I"
+            },
+            {
+              "slug": "wisdom",
+              "chapter": 1,
+              "label": "Wisdom 2",
+              "title": "Chapter II"
+            },
+            {
+              "slug": "wisdom",
+              "chapter": 2,
+              "label": "Wisdom 3",
+              "title": "Chapter III"
+            },
+            {
+              "slug": "wisdom",
+              "chapter": 3,
+              "label": "Wisdom 4",
+              "title": "Chapter IV"
+            },
+            {
+              "slug": "wisdom",
+              "chapter": 4,
+              "label": "Wisdom 5",
+              "title": "Chapter V"
+            }
+          ]
+        },
+        {
+          "day": 8,
+          "title": "Wisdom 6–10",
+          "readings": [
+            {
+              "slug": "wisdom",
+              "chapter": 5,
+              "label": "Wisdom 6",
+              "title": "Chapter VI"
+            },
+            {
+              "slug": "wisdom",
+              "chapter": 6,
+              "label": "Wisdom 7",
+              "title": "Chapter VII"
+            },
+            {
+              "slug": "wisdom",
+              "chapter": 7,
+              "label": "Wisdom 8",
+              "title": "Chapter VIII"
+            },
+            {
+              "slug": "wisdom",
+              "chapter": 8,
+              "label": "Wisdom 9",
+              "title": "Chapter IX"
+            },
+            {
+              "slug": "wisdom",
+              "chapter": 9,
+              "label": "Wisdom 10",
+              "title": "Chapter X"
+            }
+          ]
+        },
+        {
+          "day": 9,
+          "title": "Wisdom 11–15",
+          "readings": [
+            {
+              "slug": "wisdom",
+              "chapter": 10,
+              "label": "Wisdom 11",
+              "title": "Chapter XI"
+            },
+            {
+              "slug": "wisdom",
+              "chapter": 11,
+              "label": "Wisdom 12",
+              "title": "Chapter XII"
+            },
+            {
+              "slug": "wisdom",
+              "chapter": 12,
+              "label": "Wisdom 13",
+              "title": "Chapter XIII"
+            },
+            {
+              "slug": "wisdom",
+              "chapter": 13,
+              "label": "Wisdom 14",
+              "title": "Chapter XIV"
+            },
+            {
+              "slug": "wisdom",
+              "chapter": 14,
+              "label": "Wisdom 15",
+              "title": "Chapter XV"
+            }
+          ]
+        },
+        {
+          "day": 10,
+          "title": "Wisdom 16, Sirach 1",
+          "readings": [
+            {
+              "slug": "wisdom",
+              "chapter": 15,
+              "label": "Wisdom 16",
+              "title": "Chapter XVI"
+            },
+            {
+              "slug": "wisdom",
+              "chapter": 16,
+              "label": "Wisdom 17",
+              "title": "Chapter XVII"
+            },
+            {
+              "slug": "wisdom",
+              "chapter": 17,
+              "label": "Wisdom 18",
+              "title": "Chapter XVIII"
+            },
+            {
+              "slug": "wisdom",
+              "chapter": 18,
+              "label": "Wisdom 19",
+              "title": "Chapter XIX"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 0,
+              "label": "Sirach 1",
+              "title": "Chapter I"
+            }
+          ]
+        },
+        {
+          "day": 11,
+          "title": "Sirach 2–6",
+          "readings": [
+            {
+              "slug": "sirach",
+              "chapter": 1,
+              "label": "Sirach 2",
+              "title": "Chapter II"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 2,
+              "label": "Sirach 3",
+              "title": "Chapter III"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 3,
+              "label": "Sirach 4",
+              "title": "Chapter IV"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 4,
+              "label": "Sirach 5",
+              "title": "Chapter V"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 5,
+              "label": "Sirach 6",
+              "title": "Chapter VI"
+            }
+          ]
+        },
+        {
+          "day": 12,
+          "title": "Sirach 7–11",
+          "readings": [
+            {
+              "slug": "sirach",
+              "chapter": 6,
+              "label": "Sirach 7",
+              "title": "Chapter VII"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 7,
+              "label": "Sirach 8",
+              "title": "Chapter VIII"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 8,
+              "label": "Sirach 9",
+              "title": "Chapter IX"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 9,
+              "label": "Sirach 10",
+              "title": "Chapter X"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 10,
+              "label": "Sirach 11",
+              "title": "Chapter XI"
+            }
+          ]
+        },
+        {
+          "day": 13,
+          "title": "Sirach 12–16",
+          "readings": [
+            {
+              "slug": "sirach",
+              "chapter": 11,
+              "label": "Sirach 12",
+              "title": "Chapter XII"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 12,
+              "label": "Sirach 13",
+              "title": "Chapter XIII"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 13,
+              "label": "Sirach 14",
+              "title": "Chapter XIV"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 14,
+              "label": "Sirach 15",
+              "title": "Chapter XV"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 15,
+              "label": "Sirach 16",
+              "title": "Chapter XVI"
+            }
+          ]
+        },
+        {
+          "day": 14,
+          "title": "Sirach 17–21",
+          "readings": [
+            {
+              "slug": "sirach",
+              "chapter": 16,
+              "label": "Sirach 17",
+              "title": "Chapter XVII"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 17,
+              "label": "Sirach 18",
+              "title": "Chapter XVIII"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 18,
+              "label": "Sirach 19",
+              "title": "Chapter XIX"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 19,
+              "label": "Sirach 20",
+              "title": "Chapter XX"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 20,
+              "label": "Sirach 21",
+              "title": "Chapter XXI"
+            }
+          ]
+        },
+        {
+          "day": 15,
+          "title": "Sirach 22–26",
+          "readings": [
+            {
+              "slug": "sirach",
+              "chapter": 21,
+              "label": "Sirach 22",
+              "title": "Chapter XXII"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 22,
+              "label": "Sirach 23",
+              "title": "Chapter XXIII"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 23,
+              "label": "Sirach 24",
+              "title": "Chapter XXIV"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 24,
+              "label": "Sirach 25",
+              "title": "Chapter XXV"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 25,
+              "label": "Sirach 26",
+              "title": "Chapter XXVI"
+            }
+          ]
+        },
+        {
+          "day": 16,
+          "title": "Sirach 27–31",
+          "readings": [
+            {
+              "slug": "sirach",
+              "chapter": 26,
+              "label": "Sirach 27",
+              "title": "Chapter XXVII"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 27,
+              "label": "Sirach 28",
+              "title": "Chapter XXVIII"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 28,
+              "label": "Sirach 29",
+              "title": "Chapter XXIX"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 29,
+              "label": "Sirach 30",
+              "title": "Chapter XXX"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 30,
+              "label": "Sirach 31",
+              "title": "Chapter XXXI"
+            }
+          ]
+        },
+        {
+          "day": 17,
+          "title": "Sirach 32–36",
+          "readings": [
+            {
+              "slug": "sirach",
+              "chapter": 31,
+              "label": "Sirach 32",
+              "title": "Chapter XXXII"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 32,
+              "label": "Sirach 33",
+              "title": "Chapter XXXIII"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 33,
+              "label": "Sirach 34",
+              "title": "Chapter XXXIV"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 34,
+              "label": "Sirach 35",
+              "title": "Chapter XXXV"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 35,
+              "label": "Sirach 36",
+              "title": "Chapter XXXVI"
+            }
+          ]
+        },
+        {
+          "day": 18,
+          "title": "Sirach 37–40",
+          "readings": [
+            {
+              "slug": "sirach",
+              "chapter": 36,
+              "label": "Sirach 37",
+              "title": "Chapter XXXVII"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 37,
+              "label": "Sirach 38",
+              "title": "Chapter XXXVIII"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 38,
+              "label": "Sirach 39",
+              "title": "Chapter XXXIX"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 39,
+              "label": "Sirach 40",
+              "title": "Chapter XL"
+            }
+          ]
+        },
+        {
+          "day": 19,
+          "title": "Sirach 41–44",
+          "readings": [
+            {
+              "slug": "sirach",
+              "chapter": 40,
+              "label": "Sirach 41",
+              "title": "Chapter XLI"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 41,
+              "label": "Sirach 42",
+              "title": "Chapter XLII"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 42,
+              "label": "Sirach 43",
+              "title": "Chapter XLIII"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 43,
+              "label": "Sirach 44",
+              "title": "Chapter XLIV"
+            }
+          ]
+        },
+        {
+          "day": 20,
+          "title": "Sirach 45–48",
+          "readings": [
+            {
+              "slug": "sirach",
+              "chapter": 44,
+              "label": "Sirach 45",
+              "title": "Chapter XLV"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 45,
+              "label": "Sirach 46",
+              "title": "Chapter XLVI"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 46,
+              "label": "Sirach 47",
+              "title": "Chapter XLVII"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 47,
+              "label": "Sirach 48",
+              "title": "Chapter XLVIII"
+            }
+          ]
+        },
+        {
+          "day": 21,
+          "title": "Sirach 49, Baruch 1",
+          "readings": [
+            {
+              "slug": "sirach",
+              "chapter": 48,
+              "label": "Sirach 49",
+              "title": "Chapter XLIX"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 49,
+              "label": "Sirach 50",
+              "title": "Chapter L"
+            },
+            {
+              "slug": "sirach",
+              "chapter": 50,
+              "label": "Sirach 51",
+              "title": "Chapter LI"
+            },
+            {
+              "slug": "baruch",
+              "chapter": 0,
+              "label": "Baruch 1",
+              "title": "Chapter I"
+            }
+          ]
+        },
+        {
+          "day": 22,
+          "title": "Baruch 2–5",
+          "readings": [
+            {
+              "slug": "baruch",
+              "chapter": 1,
+              "label": "Baruch 2",
+              "title": "Chapter II"
+            },
+            {
+              "slug": "baruch",
+              "chapter": 2,
+              "label": "Baruch 3",
+              "title": "Chapter III"
+            },
+            {
+              "slug": "baruch",
+              "chapter": 3,
+              "label": "Baruch 4",
+              "title": "Chapter IV"
+            },
+            {
+              "slug": "baruch",
+              "chapter": 4,
+              "label": "Baruch 5",
+              "title": "Chapter V"
+            }
+          ]
+        },
+        {
+          "day": 23,
+          "title": "Baruch 6, 1 Maccabees 3",
+          "readings": [
+            {
+              "slug": "baruch",
+              "chapter": 5,
+              "label": "Baruch 6",
+              "title": "Chapter VI"
+            },
+            {
+              "slug": "maccabees-1",
+              "chapter": 0,
+              "label": "1 Maccabees 1",
+              "title": "Chapter I"
+            },
+            {
+              "slug": "maccabees-1",
+              "chapter": 1,
+              "label": "1 Maccabees 2",
+              "title": "Chapter II"
+            },
+            {
+              "slug": "maccabees-1",
+              "chapter": 2,
+              "label": "1 Maccabees 3",
+              "title": "Chapter III"
+            }
+          ]
+        },
+        {
+          "day": 24,
+          "title": "1 Maccabees 4–7",
+          "readings": [
+            {
+              "slug": "maccabees-1",
+              "chapter": 3,
+              "label": "1 Maccabees 4",
+              "title": "Chapter IV"
+            },
+            {
+              "slug": "maccabees-1",
+              "chapter": 4,
+              "label": "1 Maccabees 5",
+              "title": "Chapter V"
+            },
+            {
+              "slug": "maccabees-1",
+              "chapter": 5,
+              "label": "1 Maccabees 6",
+              "title": "Chapter VI"
+            },
+            {
+              "slug": "maccabees-1",
+              "chapter": 6,
+              "label": "1 Maccabees 7",
+              "title": "Chapter VII"
+            }
+          ]
+        },
+        {
+          "day": 25,
+          "title": "1 Maccabees 8–11",
+          "readings": [
+            {
+              "slug": "maccabees-1",
+              "chapter": 7,
+              "label": "1 Maccabees 8",
+              "title": "Chapter VIII"
+            },
+            {
+              "slug": "maccabees-1",
+              "chapter": 8,
+              "label": "1 Maccabees 9",
+              "title": "Chapter IX"
+            },
+            {
+              "slug": "maccabees-1",
+              "chapter": 9,
+              "label": "1 Maccabees 10",
+              "title": "Chapter X"
+            },
+            {
+              "slug": "maccabees-1",
+              "chapter": 10,
+              "label": "1 Maccabees 11",
+              "title": "Chapter XI"
+            }
+          ]
+        },
+        {
+          "day": 26,
+          "title": "1 Maccabees 12–15",
+          "readings": [
+            {
+              "slug": "maccabees-1",
+              "chapter": 11,
+              "label": "1 Maccabees 12",
+              "title": "Chapter XII"
+            },
+            {
+              "slug": "maccabees-1",
+              "chapter": 12,
+              "label": "1 Maccabees 13",
+              "title": "Chapter XIII"
+            },
+            {
+              "slug": "maccabees-1",
+              "chapter": 13,
+              "label": "1 Maccabees 14",
+              "title": "Chapter XIV"
+            },
+            {
+              "slug": "maccabees-1",
+              "chapter": 14,
+              "label": "1 Maccabees 15",
+              "title": "Chapter XV"
+            }
+          ]
+        },
+        {
+          "day": 27,
+          "title": "1 Maccabees 16, 2 Maccabees 3",
+          "readings": [
+            {
+              "slug": "maccabees-1",
+              "chapter": 15,
+              "label": "1 Maccabees 16",
+              "title": "Chapter XVI"
+            },
+            {
+              "slug": "maccabees-2",
+              "chapter": 0,
+              "label": "2 Maccabees 1",
+              "title": "Chapter I"
+            },
+            {
+              "slug": "maccabees-2",
+              "chapter": 1,
+              "label": "2 Maccabees 2",
+              "title": "Chapter II"
+            },
+            {
+              "slug": "maccabees-2",
+              "chapter": 2,
+              "label": "2 Maccabees 3",
+              "title": "Chapter III"
+            }
+          ]
+        },
+        {
+          "day": 28,
+          "title": "2 Maccabees 4–7",
+          "readings": [
+            {
+              "slug": "maccabees-2",
+              "chapter": 3,
+              "label": "2 Maccabees 4",
+              "title": "Chapter IV"
+            },
+            {
+              "slug": "maccabees-2",
+              "chapter": 4,
+              "label": "2 Maccabees 5",
+              "title": "Chapter V"
+            },
+            {
+              "slug": "maccabees-2",
+              "chapter": 5,
+              "label": "2 Maccabees 6",
+              "title": "Chapter VI"
+            },
+            {
+              "slug": "maccabees-2",
+              "chapter": 6,
+              "label": "2 Maccabees 7",
+              "title": "Chapter VII"
+            }
+          ]
+        },
+        {
+          "day": 29,
+          "title": "2 Maccabees 8–11",
+          "readings": [
+            {
+              "slug": "maccabees-2",
+              "chapter": 7,
+              "label": "2 Maccabees 8",
+              "title": "Chapter VIII"
+            },
+            {
+              "slug": "maccabees-2",
+              "chapter": 8,
+              "label": "2 Maccabees 9",
+              "title": "Chapter IX"
+            },
+            {
+              "slug": "maccabees-2",
+              "chapter": 9,
+              "label": "2 Maccabees 10",
+              "title": "Chapter X"
+            },
+            {
+              "slug": "maccabees-2",
+              "chapter": 10,
+              "label": "2 Maccabees 11",
+              "title": "Chapter XI"
+            }
+          ]
+        },
+        {
+          "day": 30,
+          "title": "2 Maccabees 12–15",
+          "readings": [
+            {
+              "slug": "maccabees-2",
+              "chapter": 11,
+              "label": "2 Maccabees 12",
+              "title": "Chapter XII"
+            },
+            {
+              "slug": "maccabees-2",
+              "chapter": 12,
+              "label": "2 Maccabees 13",
+              "title": "Chapter XIII"
+            },
+            {
+              "slug": "maccabees-2",
+              "chapter": 13,
+              "label": "2 Maccabees 14",
+              "title": "Chapter XIV"
+            },
+            {
+              "slug": "maccabees-2",
+              "chapter": 14,
+              "label": "2 Maccabees 15",
+              "title": "Chapter XV"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "jasher-jubilees-30",
+      "title": "Jasher & Jubilees",
+      "tagline": "30 days · about 5 chapters a day",
+      "description": "The ancient record of the upright and the 'Little Genesis' — 141 chapters of the story behind the story.",
+      "image": "/images/plan-jasher-jubilees.jpg",
+      "totalDays": 30,
+      "totalChapters": 141,
+      "days": [
+        {
+          "day": 1,
+          "title": "Jasher 1–5",
+          "readings": [
+            {
+              "slug": "jasher",
+              "chapter": 0,
+              "label": "Jasher 1",
+              "title": "Chapter I"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 1,
+              "label": "Jasher 2",
+              "title": "Chapter II"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 2,
+              "label": "Jasher 3",
+              "title": "Chapter III"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 3,
+              "label": "Jasher 4",
+              "title": "Chapter IV"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 4,
+              "label": "Jasher 5",
+              "title": "Chapter V"
+            }
+          ]
+        },
+        {
+          "day": 2,
+          "title": "Jasher 6–10",
+          "readings": [
+            {
+              "slug": "jasher",
+              "chapter": 5,
+              "label": "Jasher 6",
+              "title": "Chapter VI"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 6,
+              "label": "Jasher 7",
+              "title": "Chapter VII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 7,
+              "label": "Jasher 8",
+              "title": "Chapter VIII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 8,
+              "label": "Jasher 9",
+              "title": "Chapter IX"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 9,
+              "label": "Jasher 10",
+              "title": "Chapter X"
+            }
+          ]
+        },
+        {
+          "day": 3,
+          "title": "Jasher 11–15",
+          "readings": [
+            {
+              "slug": "jasher",
+              "chapter": 10,
+              "label": "Jasher 11",
+              "title": "Chapter XI"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 11,
+              "label": "Jasher 12",
+              "title": "Chapter XII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 12,
+              "label": "Jasher 13",
+              "title": "Chapter XIII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 13,
+              "label": "Jasher 14",
+              "title": "Chapter XIV"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 14,
+              "label": "Jasher 15",
+              "title": "Chapter XV"
+            }
+          ]
+        },
+        {
+          "day": 4,
+          "title": "Jasher 16–20",
+          "readings": [
+            {
+              "slug": "jasher",
+              "chapter": 15,
+              "label": "Jasher 16",
+              "title": "Chapter XVI"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 16,
+              "label": "Jasher 17",
+              "title": "Chapter XVII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 17,
+              "label": "Jasher 18",
+              "title": "Chapter XVIII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 18,
+              "label": "Jasher 19",
+              "title": "Chapter XIX"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 19,
+              "label": "Jasher 20",
+              "title": "Chapter XX"
+            }
+          ]
+        },
+        {
+          "day": 5,
+          "title": "Jasher 21–25",
+          "readings": [
+            {
+              "slug": "jasher",
+              "chapter": 20,
+              "label": "Jasher 21",
+              "title": "Chapter XXI"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 21,
+              "label": "Jasher 22",
+              "title": "Chapter XXII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 22,
+              "label": "Jasher 23",
+              "title": "Chapter XXIII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 23,
+              "label": "Jasher 24",
+              "title": "Chapter XXIV"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 24,
+              "label": "Jasher 25",
+              "title": "Chapter XXV"
+            }
+          ]
+        },
+        {
+          "day": 6,
+          "title": "Jasher 26–30",
+          "readings": [
+            {
+              "slug": "jasher",
+              "chapter": 25,
+              "label": "Jasher 26",
+              "title": "Chapter XXVI"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 26,
+              "label": "Jasher 27",
+              "title": "Chapter XXVII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 27,
+              "label": "Jasher 28",
+              "title": "Chapter XXVIII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 28,
+              "label": "Jasher 29",
+              "title": "Chapter XXIX"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 29,
+              "label": "Jasher 30",
+              "title": "Chapter XXX"
+            }
+          ]
+        },
+        {
+          "day": 7,
+          "title": "Jasher 31–35",
+          "readings": [
+            {
+              "slug": "jasher",
+              "chapter": 30,
+              "label": "Jasher 31",
+              "title": "Chapter XXXI"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 31,
+              "label": "Jasher 32",
+              "title": "Chapter XXXII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 32,
+              "label": "Jasher 33",
+              "title": "Chapter XXXIII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 33,
+              "label": "Jasher 34",
+              "title": "Chapter XXXIV"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 34,
+              "label": "Jasher 35",
+              "title": "Chapter XXXV"
+            }
+          ]
+        },
+        {
+          "day": 8,
+          "title": "Jasher 36–40",
+          "readings": [
+            {
+              "slug": "jasher",
+              "chapter": 35,
+              "label": "Jasher 36",
+              "title": "Chapter XXXVI"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 36,
+              "label": "Jasher 37",
+              "title": "Chapter XXXVII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 37,
+              "label": "Jasher 38",
+              "title": "Chapter XXXVIII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 38,
+              "label": "Jasher 39",
+              "title": "Chapter XXXIX"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 39,
+              "label": "Jasher 40",
+              "title": "Chapter XL"
+            }
+          ]
+        },
+        {
+          "day": 9,
+          "title": "Jasher 41–45",
+          "readings": [
+            {
+              "slug": "jasher",
+              "chapter": 40,
+              "label": "Jasher 41",
+              "title": "Chapter XLI"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 41,
+              "label": "Jasher 42",
+              "title": "Chapter XLII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 42,
+              "label": "Jasher 43",
+              "title": "Chapter XLIII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 43,
+              "label": "Jasher 44",
+              "title": "Chapter XLIV"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 44,
+              "label": "Jasher 45",
+              "title": "Chapter XLV"
+            }
+          ]
+        },
+        {
+          "day": 10,
+          "title": "Jasher 46–50",
+          "readings": [
+            {
+              "slug": "jasher",
+              "chapter": 45,
+              "label": "Jasher 46",
+              "title": "Chapter XLVI"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 46,
+              "label": "Jasher 47",
+              "title": "Chapter XLVII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 47,
+              "label": "Jasher 48",
+              "title": "Chapter XLVIII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 48,
+              "label": "Jasher 49",
+              "title": "Chapter XLIX"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 49,
+              "label": "Jasher 50",
+              "title": "Chapter L"
+            }
+          ]
+        },
+        {
+          "day": 11,
+          "title": "Jasher 51–55",
+          "readings": [
+            {
+              "slug": "jasher",
+              "chapter": 50,
+              "label": "Jasher 51",
+              "title": "Chapter LI"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 51,
+              "label": "Jasher 52",
+              "title": "Chapter LII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 52,
+              "label": "Jasher 53",
+              "title": "Chapter LIII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 53,
+              "label": "Jasher 54",
+              "title": "Chapter LIV"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 54,
+              "label": "Jasher 55",
+              "title": "Chapter LV"
+            }
+          ]
+        },
+        {
+          "day": 12,
+          "title": "Jasher 56–60",
+          "readings": [
+            {
+              "slug": "jasher",
+              "chapter": 55,
+              "label": "Jasher 56",
+              "title": "Chapter LVI"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 56,
+              "label": "Jasher 57",
+              "title": "Chapter LVII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 57,
+              "label": "Jasher 58",
+              "title": "Chapter LVIII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 58,
+              "label": "Jasher 59",
+              "title": "Chapter LIX"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 59,
+              "label": "Jasher 60",
+              "title": "Chapter LX"
+            }
+          ]
+        },
+        {
+          "day": 13,
+          "title": "Jasher 61–65",
+          "readings": [
+            {
+              "slug": "jasher",
+              "chapter": 60,
+              "label": "Jasher 61",
+              "title": "Chapter LXI"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 61,
+              "label": "Jasher 62",
+              "title": "Chapter LXII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 62,
+              "label": "Jasher 63",
+              "title": "Chapter LXIII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 63,
+              "label": "Jasher 64",
+              "title": "Chapter LXIV"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 64,
+              "label": "Jasher 65",
+              "title": "Chapter LXV"
+            }
+          ]
+        },
+        {
+          "day": 14,
+          "title": "Jasher 66–70",
+          "readings": [
+            {
+              "slug": "jasher",
+              "chapter": 65,
+              "label": "Jasher 66",
+              "title": "Chapter LXVI"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 66,
+              "label": "Jasher 67",
+              "title": "Chapter LXVII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 67,
+              "label": "Jasher 68",
+              "title": "Chapter LXVIII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 68,
+              "label": "Jasher 69",
+              "title": "Chapter LXIX"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 69,
+              "label": "Jasher 70",
+              "title": "Chapter LXX"
+            }
+          ]
+        },
+        {
+          "day": 15,
+          "title": "Jasher 71–75",
+          "readings": [
+            {
+              "slug": "jasher",
+              "chapter": 70,
+              "label": "Jasher 71",
+              "title": "Chapter LXXI"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 71,
+              "label": "Jasher 72",
+              "title": "Chapter LXXII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 72,
+              "label": "Jasher 73",
+              "title": "Chapter LXXIII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 73,
+              "label": "Jasher 74",
+              "title": "Chapter LXXIV"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 74,
+              "label": "Jasher 75",
+              "title": "Chapter LXXV"
+            }
+          ]
+        },
+        {
+          "day": 16,
+          "title": "Jasher 76–80",
+          "readings": [
+            {
+              "slug": "jasher",
+              "chapter": 75,
+              "label": "Jasher 76",
+              "title": "Chapter LXXVI"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 76,
+              "label": "Jasher 77",
+              "title": "Chapter LXXVII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 77,
+              "label": "Jasher 78",
+              "title": "Chapter LXXVIII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 78,
+              "label": "Jasher 79",
+              "title": "Chapter LXXIX"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 79,
+              "label": "Jasher 80",
+              "title": "Chapter LXXX"
+            }
+          ]
+        },
+        {
+          "day": 17,
+          "title": "Jasher 81–85",
+          "readings": [
+            {
+              "slug": "jasher",
+              "chapter": 80,
+              "label": "Jasher 81",
+              "title": "Chapter LXXXI"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 81,
+              "label": "Jasher 82",
+              "title": "Chapter LXXXII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 82,
+              "label": "Jasher 83",
+              "title": "Chapter LXXXIII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 83,
+              "label": "Jasher 84",
+              "title": "Chapter LXXXIV"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 84,
+              "label": "Jasher 85",
+              "title": "Chapter LXXXV"
+            }
+          ]
+        },
+        {
+          "day": 18,
+          "title": "Jasher 86–90",
+          "readings": [
+            {
+              "slug": "jasher",
+              "chapter": 85,
+              "label": "Jasher 86",
+              "title": "Chapter LXXXVI"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 86,
+              "label": "Jasher 87",
+              "title": "Chapter LXXXVII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 87,
+              "label": "Jasher 88",
+              "title": "Chapter LXXXVIII"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 88,
+              "label": "Jasher 89",
+              "title": "Chapter LXXXIX"
+            },
+            {
+              "slug": "jasher",
+              "chapter": 89,
+              "label": "Jasher 90",
+              "title": "Chapter XC"
+            }
+          ]
+        },
+        {
+          "day": 19,
+          "title": "Jasher 91, Jubilees 4",
+          "readings": [
+            {
+              "slug": "jasher",
+              "chapter": 90,
+              "label": "Jasher 91",
+              "title": "Chapter XCI"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 0,
+              "label": "Jubilees 1",
+              "title": "Chapter I"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 1,
+              "label": "Jubilees 2",
+              "title": "Chapter II"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 2,
+              "label": "Jubilees 3",
+              "title": "Chapter III"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 3,
+              "label": "Jubilees 4",
+              "title": "Chapter IV"
+            }
+          ]
+        },
+        {
+          "day": 20,
+          "title": "Jubilees 5–9",
+          "readings": [
+            {
+              "slug": "jubilees",
+              "chapter": 4,
+              "label": "Jubilees 5",
+              "title": "Chapter V"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 5,
+              "label": "Jubilees 6",
+              "title": "Chapter VI"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 6,
+              "label": "Jubilees 7",
+              "title": "Chapter VII"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 7,
+              "label": "Jubilees 8",
+              "title": "Chapter VIII"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 8,
+              "label": "Jubilees 9",
+              "title": "Chapter IX"
+            }
+          ]
+        },
+        {
+          "day": 21,
+          "title": "Jubilees 10–14",
+          "readings": [
+            {
+              "slug": "jubilees",
+              "chapter": 9,
+              "label": "Jubilees 10",
+              "title": "Chapter X"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 10,
+              "label": "Jubilees 11",
+              "title": "Chapter XI"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 11,
+              "label": "Jubilees 12",
+              "title": "Chapter XII"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 12,
+              "label": "Jubilees 13",
+              "title": "Chapter XIII"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 13,
+              "label": "Jubilees 14",
+              "title": "Chapter XIV"
+            }
+          ]
+        },
+        {
+          "day": 22,
+          "title": "Jubilees 15–18",
+          "readings": [
+            {
+              "slug": "jubilees",
+              "chapter": 14,
+              "label": "Jubilees 15",
+              "title": "Chapter XV"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 15,
+              "label": "Jubilees 16",
+              "title": "Chapter XVI"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 16,
+              "label": "Jubilees 17",
+              "title": "Chapter XVII"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 17,
+              "label": "Jubilees 18",
+              "title": "Chapter XVIII"
+            }
+          ]
+        },
+        {
+          "day": 23,
+          "title": "Jubilees 19–22",
+          "readings": [
+            {
+              "slug": "jubilees",
+              "chapter": 18,
+              "label": "Jubilees 19",
+              "title": "Chapter XIX"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 19,
+              "label": "Jubilees 20",
+              "title": "Chapter XX"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 20,
+              "label": "Jubilees 21",
+              "title": "Chapter XXI"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 21,
+              "label": "Jubilees 22",
+              "title": "Chapter XXII"
+            }
+          ]
+        },
+        {
+          "day": 24,
+          "title": "Jubilees 23–26",
+          "readings": [
+            {
+              "slug": "jubilees",
+              "chapter": 22,
+              "label": "Jubilees 23",
+              "title": "Chapter XXIII"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 23,
+              "label": "Jubilees 24",
+              "title": "Chapter XXIV"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 24,
+              "label": "Jubilees 25",
+              "title": "Chapter XXV"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 25,
+              "label": "Jubilees 26",
+              "title": "Chapter XXVI"
+            }
+          ]
+        },
+        {
+          "day": 25,
+          "title": "Jubilees 27–30",
+          "readings": [
+            {
+              "slug": "jubilees",
+              "chapter": 26,
+              "label": "Jubilees 27",
+              "title": "Chapter XXVII"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 27,
+              "label": "Jubilees 28",
+              "title": "Chapter XXVIII"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 28,
+              "label": "Jubilees 29",
+              "title": "Chapter XXIX"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 29,
+              "label": "Jubilees 30",
+              "title": "Chapter XXX"
+            }
+          ]
+        },
+        {
+          "day": 26,
+          "title": "Jubilees 31–34",
+          "readings": [
+            {
+              "slug": "jubilees",
+              "chapter": 30,
+              "label": "Jubilees 31",
+              "title": "Chapter XXXI"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 31,
+              "label": "Jubilees 32",
+              "title": "Chapter XXXII"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 32,
+              "label": "Jubilees 33",
+              "title": "Chapter XXXIII"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 33,
+              "label": "Jubilees 34",
+              "title": "Chapter XXXIV"
+            }
+          ]
+        },
+        {
+          "day": 27,
+          "title": "Jubilees 35–38",
+          "readings": [
+            {
+              "slug": "jubilees",
+              "chapter": 34,
+              "label": "Jubilees 35",
+              "title": "Chapter XXXV"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 35,
+              "label": "Jubilees 36",
+              "title": "Chapter XXXVI"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 36,
+              "label": "Jubilees 37",
+              "title": "Chapter XXXVII"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 37,
+              "label": "Jubilees 38",
+              "title": "Chapter XXXVIII"
+            }
+          ]
+        },
+        {
+          "day": 28,
+          "title": "Jubilees 39–42",
+          "readings": [
+            {
+              "slug": "jubilees",
+              "chapter": 38,
+              "label": "Jubilees 39",
+              "title": "Chapter XXXIX"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 39,
+              "label": "Jubilees 40",
+              "title": "Chapter XL"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 40,
+              "label": "Jubilees 41",
+              "title": "Chapter XLI"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 41,
+              "label": "Jubilees 42",
+              "title": "Chapter XLII"
+            }
+          ]
+        },
+        {
+          "day": 29,
+          "title": "Jubilees 43–46",
+          "readings": [
+            {
+              "slug": "jubilees",
+              "chapter": 42,
+              "label": "Jubilees 43",
+              "title": "Chapter XLIII"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 43,
+              "label": "Jubilees 44",
+              "title": "Chapter XLIV"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 44,
+              "label": "Jubilees 45",
+              "title": "Chapter XLV"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 45,
+              "label": "Jubilees 46",
+              "title": "Chapter XLVI"
+            }
+          ]
+        },
+        {
+          "day": 30,
+          "title": "Jubilees 47–50",
+          "readings": [
+            {
+              "slug": "jubilees",
+              "chapter": 46,
+              "label": "Jubilees 47",
+              "title": "Chapter XLVII"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 47,
+              "label": "Jubilees 48",
+              "title": "Chapter XLVIII"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 48,
+              "label": "Jubilees 49",
+              "title": "Chapter XLIX"
+            },
+            {
+              "slug": "jubilees",
+              "chapter": 49,
+              "label": "Jubilees 50",
+              "title": "Chapter L"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

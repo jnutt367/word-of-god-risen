@@ -20,6 +20,16 @@ const BOOK_TITLES = {
   john: "John",
   acts: "Acts",
   romans: "Romans",
+  "enoch-1": "Enoch",
+  jasher: "Jasher",
+  jubilees: "Jubilees",
+  tobit: "Tobit",
+  judith: "Judith",
+  wisdom: "Wisdom",
+  sirach: "Sirach",
+  baruch: "Baruch",
+  "maccabees-1": "1 Maccabees",
+  "maccabees-2": "2 Maccabees",
 };
 
 /** Mirror of lib/verses.ts: count verses; readable = 3+. */
@@ -55,14 +65,14 @@ function countVerses(raw) {
   return count;
 }
 
-async function readableChapters(slug) {
+async function readableChapters(slug, includeAll = false) {
   const data = JSON.parse(
     await fs.readFile(path.join(chaptersDir, `${slug}_data.json`), "utf-8")
   );
   const out = [];
   (data.books || []).forEach((b, i) => {
     const text = (b.description || "").trim();
-    if (text && countVerses(text) >= 3) {
+    if (text && (includeAll || countVerses(text) >= 3)) {
       out.push({
         slug,
         chapter: i,
@@ -147,6 +157,37 @@ const PLAN_DEFS = [
     books: ["acts", "romans"],
     days: 28,
   },
+  {
+    id: "enoch-18",
+    title: "The Book of Enoch",
+    tagline: "18 days · 2 chapters a day",
+    description:
+      "The Watchers, the Son of Man, and the final judgment — the book Jude quoted, complete in eighteen days.",
+    image: "/images/plan-enoch.jpg",
+    books: ["enoch-1"],
+    days: 18,
+    includeAll: true,
+  },
+  {
+    id: "apocrypha-30",
+    title: "The Apocrypha",
+    tagline: "30 days · about 5 chapters a day",
+    description:
+      "Tobit, Judith, Wisdom, Sirach, Baruch, and the Maccabees — the books between the Testaments, complete in a month.",
+    image: "/images/plan-apocrypha.jpg",
+    books: ["tobit", "judith", "wisdom", "sirach", "baruch", "maccabees-1", "maccabees-2"],
+    days: 30,
+  },
+  {
+    id: "jasher-jubilees-30",
+    title: "Jasher & Jubilees",
+    tagline: "30 days · about 5 chapters a day",
+    description:
+      "The ancient record of the upright and the 'Little Genesis' — 141 chapters of the story behind the story.",
+    image: "/images/plan-jasher-jubilees.jpg",
+    books: ["jasher", "jubilees"],
+    days: 30,
+  },
 ];
 
 const chapterCache = {};
@@ -182,7 +223,7 @@ for (const def of PLAN_DEFS) {
   } else {
     let readings = [];
     for (const slug of def.books) {
-      readings = readings.concat(await readableChapters(slug));
+      readings = readings.concat(await readableChapters(slug, def.includeAll));
     }
     const groups = distribute(readings, def.days);
     days = groups.map((g, i) => ({
