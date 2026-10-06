@@ -18,7 +18,7 @@ const AMBIENT_KEY = "wogr:ambient";
 const MANIFEST_URL = "/audio-manifest.json";
 const AMBIENT_URL = "/audio/ambient-warm.mp3";
 /** Warm bed sits well under narration without fighting it. */
-const AMBIENT_VOL = 0.14;
+const AMBIENT_VOL = 0.1;
 
 /** Fetched once, then reused for every chapter. */
 let manifestPromise: Promise<Record<string, string>> | null = null;
