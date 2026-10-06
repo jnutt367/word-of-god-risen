@@ -14,7 +14,11 @@ type Status = "idle" | "playing" | "paused";
 
 const VOICE_KEY = "wogr:tts-voice";
 const RATE_KEY = "wogr:tts-rate";
+const AMBIENT_KEY = "wogr:ambient";
 const MANIFEST_URL = "/audio-manifest.json";
+const AMBIENT_URL = "/audio/ambient-warm.mp3";
+/** Warm bed sits well under narration without fighting it. */
+const AMBIENT_VOL = 0.14;
 
 /** Fetched once, then reused for every chapter. */
 let manifestPromise: Promise<Record<string, string>> | null = null;
@@ -56,9 +60,11 @@ export default function ListenButton({
   const [mp3Url, setMp3Url] = useState<string | null | undefined>(undefined);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [ambientOn, setAmbientOn] = useState(true);
   const session = useRef(0);
   const panelRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const ambientRef = useRef<HTMLAudioElement | null>(null);
 
   const supported = () =>
     typeof window !== "undefined" && "speechSynthesis" in window;
@@ -70,6 +76,8 @@ export default function ListenButton({
       setVoiceURI(localStorage.getItem(VOICE_KEY));
       const savedRate = parseFloat(localStorage.getItem(RATE_KEY) || "");
       if (savedRate >= 0.5 && savedRate <= 2) setRate(savedRate);
+      const amb = localStorage.getItem(AMBIENT_KEY);
+      if (amb === "off") setAmbientOn(false);
     } catch {
       /* ignore */
     }
@@ -134,8 +142,66 @@ export default function ListenButton({
       a.load();
     }
     audioRef.current = null;
+    stopAmbient();
     setStatus("idle");
     setProgress(0);
+  };
+
+  /* ---------------- warm ambient bed ---------------- */
+
+  /** A soft looping bed that plays under the narration. */
+  const getAmbient = (): HTMLAudioElement => {
+    let m = ambientRef.current;
+    if (!m) {
+      m = new Audio(AMBIENT_URL);
+      m.loop = true;
+      m.volume = AMBIENT_VOL;
+      m.preload = "auto";
+      ambientRef.current = m;
+    }
+    return m;
+  };
+
+  const ambientPlay = () => {
+    if (!ambientOn) return;
+    try {
+      const m = getAmbient();
+      if (m.paused) m.play().catch(() => {});
+    } catch {
+      /* ignore */
+    }
+  };
+
+  const ambientPause = () => {
+    try {
+      ambientRef.current?.pause();
+    } catch {
+      /* ignore */
+    }
+  };
+
+  const stopAmbient = () => {
+    const m = ambientRef.current;
+    if (m) {
+      try {
+        m.pause();
+        m.currentTime = 0;
+      } catch {
+        /* ignore */
+      }
+    }
+  };
+
+  const toggleAmbientPref = () => {
+    const next = !ambientOn;
+    setAmbientOn(next);
+    try {
+      localStorage.setItem(AMBIENT_KEY, next ? "on" : "off");
+    } catch {
+      /* ignore */
+    }
+    if (!next) ambientPause();
+    else if (status === "playing") ambientPlay();
   };
 
   /* ---------------- MP3 path ---------------- */
@@ -165,12 +231,15 @@ export default function ListenButton({
     const a = getAudio(url);
     if (status === "idle") {
       a.play().catch(() => setStatus("idle"));
+      ambientPlay();
       setStatus("playing");
     } else if (status === "playing") {
       a.pause();
+      ambientPause();
       setStatus("paused");
     } else {
       a.play().catch(() => {});
+      ambientPlay();
       setStatus("playing");
     }
   };
@@ -259,6 +328,7 @@ export default function ListenButton({
       }
       synth.speak(u);
     });
+    ambientPlay();
     setStatus("playing");
   };
 
@@ -267,9 +337,11 @@ export default function ListenButton({
     if (status === "idle") startTts();
     else if (status === "playing") {
       synth.pause();
+      ambientPause();
       setStatus("paused");
     } else {
       synth.resume();
+      ambientPlay();
       setStatus("playing");
     }
   };
@@ -318,6 +390,19 @@ export default function ListenButton({
           className="rounded-full border border-[var(--reader-line)] px-3 py-1.5 text-sm text-[var(--reader-muted)] transition-colors hover:text-[var(--reader-verse-num)]"
         >
           ⏹
+        </button>
+      )}
+      {status !== "idle" && (
+        <button
+          type="button"
+          onClick={toggleAmbientPref}
+          aria-pressed={ambientOn}
+          aria-label={ambientOn ? "Turn off warm background music" : "Turn on warm background music"}
+          title={ambientOn ? "Background music on" : "Background music off"}
+          className="rounded-full border border-[var(--reader-line)] px-2.5 py-1.5 text-sm text-[var(--reader-muted)] transition-colors hover:text-[var(--reader-verse-num)]"
+          style={ambientOn ? undefined : { opacity: 0.45 }}
+        >
+          <span aria-hidden="true">🎵</span>
         </button>
       )}
       {useMp3 && status !== "idle" && duration > 0 && (
