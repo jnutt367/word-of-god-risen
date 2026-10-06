@@ -14,7 +14,16 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { id } = await params;
   const plan = getPlan(id);
-  return { title: plan ? plan.title : "Reading plan" };
+  if (!plan) return { title: "Reading plan" };
+  return {
+    title: plan.title,
+    description: `${plan.tagline}. ${plan.description}`,
+    alternates: { canonical: `/plans/${plan.id}` },
+    openGraph: {
+      title: `${plan.title} · Word of God Risen`,
+      description: `${plan.tagline}. ${plan.description}`,
+    },
+  };
 }
 
 export default async function PlanPage({

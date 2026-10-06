@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-export const metadata: Metadata = { title: "About" };
+export const metadata: Metadata = {
+  title: "About",
+  description:
+    "Word of God Risen by Jason Nutt (TruVINE) — read the lost books of the Bible (Enoch, Jasher, Jubilees, Apocrypha) and the full Bible in WEB & KJV, with verse cross-references and reading plans. Centered on the King, not the crowds.",
+  alternates: { canonical: "/about" },
+};
 
 export default function AboutPage() {
   return (

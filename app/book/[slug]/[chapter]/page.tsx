@@ -33,8 +33,26 @@ export async function generateMetadata({
   const idx = parseInt(chapter, 10);
   const ch = chapters[idx];
   const chapterNum = ch ? ch.ch ?? idx + 1 : idx + 1;
+  if (!book || !ch) return { title: "Reading" };
+  const versions = await getAvailableVersions(slug);
+  const versionNote =
+    versions.length > 1 ? ` (${versions.map((v) => v.label).join(" & ")})` : "";
+  // Unique description per chapter: first verse as the excerpt.
+  const verses = parseVerses(ch.text);
+  const firstText = verses.find((v) => v.n > 0 && v.text.trim())?.text.trim() ?? "";
+  const excerpt = firstText.slice(0, 140);
+  const description =
+    `Read ${book.title} ${chapterNum}${versionNote} with verse-by-verse ` +
+    `cross-references and reading progress.` +
+    (excerpt ? ` "${excerpt}${firstText.length > 140 ? "…" : ""}"` : "");
   return {
-    title: book && ch ? `${book.title} ${chapterNum}` : "Reading",
+    title: `${book.title} ${chapterNum}`,
+    description,
+    alternates: { canonical: `/book/${slug}/${idx}` },
+    openGraph: {
+      title: `${book.title} ${chapterNum} · Word of God Risen`,
+      description,
+    },
   };
 }
 

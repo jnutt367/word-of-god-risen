@@ -26,12 +26,52 @@ const quicksand = Quicksand({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://word-of-god-risen.vercel.app"),
   title: {
-    default: "Word of God Risen — A Bible Reader",
+    default: "Word of God Risen — Read the Bible & the Lost Books",
     template: "%s · Word of God Risen",
   },
   description:
-    "Read and study the Word of God: full chapters, cross-references, reading progress, and explainer videos. Centered on the King, not the crowds.",
+    "Read the Book of Enoch, Jasher, Jubilees and the Apocrypha online free — plus the full Bible in WEB & KJV with verse-by-verse cross-references, reading plans and progress tracking. Centered on the King, not the crowds.",
+  keywords: [
+    "read book of enoch online",
+    "book of jasher online",
+    "book of jubilees online",
+    "apocrypha online free",
+    "lost books of the bible",
+    "pseudepigrapha",
+    "bible with cross references",
+    "treasury of scripture knowledge",
+    "kjv bible online",
+    "web bible online",
+    "bible reading plans",
+    "truvine",
+  ],
+  authors: [{ name: "Jason Nutt", url: "https://www.youtube.com/@TruVINE365" }],
+  creator: "Jason Nutt",
+  openGraph: {
+    type: "website",
+    siteName: "Word of God Risen",
+    title: "Word of God Risen — Read the Bible & the Lost Books",
+    description:
+      "Enoch, Jasher, Jubilees, the Apocrypha — plus the full Bible in WEB & KJV with verse cross-references and reading plans. Centered on the King, not the crowds.",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Word of God Risen — Read the Bible & the Lost Books",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Word of God Risen — Read the Bible & the Lost Books",
+    description:
+      "Enoch, Jasher, Jubilees, the Apocrypha — plus the full Bible in WEB & KJV with verse cross-references and reading plans.",
+    images: ["/opengraph-image"],
+  },
+  robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
@@ -45,11 +85,26 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Word of God Risen",
+    url: "https://word-of-god-risen.vercel.app",
+    description:
+      "Read the lost books of the Bible — Enoch, Jasher, Jubilees, the Apocrypha — plus the full Bible in WEB & KJV with verse cross-references, reading plans and progress tracking.",
+    inLanguage: "en",
+  };
   return (
     <html
       lang="en"
       className={`${fraunces.variable} ${inter.variable} ${quicksand.variable} h-full antialiased`}
     >
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
+      </head>
       <body className="min-h-full flex flex-col bg-vineyard-950 text-cream-100 font-body">
         <ProgressProvider>
           <PlanProvider>

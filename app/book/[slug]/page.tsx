@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { getAllSlugs, getBook, getChapters } from "@/lib/bible";
+import { getAllSlugs, getBook, getChapters, getAvailableVersions } from "@/lib/bible";
 import ChapterGrid from "@/components/ChapterGrid";
 import VideoEmbed from "@/components/VideoEmbed";
 import BookProgress from "@/components/BookProgress";
@@ -18,7 +18,25 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const book = getBook(slug);
-  return { title: book ? book.title : "Book" };
+  if (!book) return { title: "Book" };
+  const chapters = await getChapters(slug);
+  const versions = await getAvailableVersions(slug);
+  const versionNote =
+    versions.length > 1
+      ? ` in ${versions.map((v) => v.label).join(" and ")}`
+      : "";
+  const blurb =
+    book.description ||
+    `Read the ${book.title} chapter by chapter with verse cross-references.`;
+  return {
+    title: book.title,
+    description: `${blurb} ${chapters.length} chapters${versionNote}, with reading progress tracking.`,
+    alternates: { canonical: `/book/${slug}` },
+    openGraph: {
+      title: `${book.title} · Word of God Risen`,
+      description: blurb,
+    },
+  };
 }
 
 export default async function BookPage({
