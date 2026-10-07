@@ -139,7 +139,7 @@ export default function Home() {
         {extra.length > 0 && (
           <div id="more" className="scroll-mt-20">
             <h2 className="mt-14 font-display text-2xl text-cream-100 sm:text-3xl">
-              More to explore
+              Lost Books
             </h2>
             <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {extra.map((b) => (

@@ -8,12 +8,10 @@ const NAV = [
   { href: "/", label: "Home" },
   { href: "/#old-testament", label: "Old Testament" },
   { href: "/#new-testament", label: "New Testament" },
+  { href: "/#more", label: "Lost Books" },
   { href: "/plans", label: "Plans" },
   { href: "/shorts", label: "Shorts" },
   { href: "/search", label: "Search" },
-  { href: "/#more", label: "Apocrypha" },
-  { href: "/book/enoch-1", label: "Enoch" },
-  { href: "/#more", label: "More to Explore" },
   { href: "/about", label: "About" },
 ];
 
