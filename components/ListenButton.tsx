@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { Verse } from "@/lib/verses";
-import { getBook } from "@/lib/bible";
+import { getBook } from "@/lib/bible-client";
 
 interface Props {
   bookSlug: string;

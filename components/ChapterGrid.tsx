@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useProgress } from "@/components/ProgressProvider";
-import type { Chapter } from "@/lib/bible";
+import type { Chapter } from "@/lib/bible-client";
 
 interface Props {
   slug: string;

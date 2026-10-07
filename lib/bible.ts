@@ -1,22 +1,20 @@
+/**
+ * Server-only Bible chapter loading — reads chapter data files from disk.
+ *
+ * Client-safe helpers (getBook, getAllBooks, Chapter type, ...) live in
+ * ./bible-client and are re-exported here, so server components can keep
+ * importing from "@/lib/bible" while "use client" components import from
+ * "@/lib/bible-client" and never bundle Node's `fs`.
+ */
 import { promises as fs } from "fs";
 import path from "path";
-import { BOOKS, bookBySlug, type BookMeta } from "@/data/books";
 import {
   BIBLE_VERSIONS,
   DEFAULT_VERSION,
   type BibleVersion,
 } from "@/lib/versions";
 
-export type { BibleVersion };
-export { BIBLE_VERSIONS, DEFAULT_VERSION };
-
-export interface Chapter {
-  title: string;
-  image: string;
-  text: string;
-  /** Real chapter number in its book (usually idx+1; differs for odd entries). */
-  ch?: number;
-}
+export * from "./bible-client";
 
 interface RawChapter {
   title?: string;
@@ -32,14 +30,6 @@ function normalizeImage(src: string | undefined): string {
   return "/" + s;
 }
 
-export function getAllBooks(): BookMeta[] {
-  return BOOKS;
-}
-
-export function getBook(slug: string): BookMeta | undefined {
-  return bookBySlug(slug);
-}
-
 /* ---- Bible versions ----
  *
  * The default chapter files (data/chapters/${slug}_data.json) hold the
@@ -52,8 +42,8 @@ export function getBook(slug: string): BookMeta | undefined {
  * The search index script skips version files: any *_data.json whose name
  * contains an underscore is a version file (book slugs never do).
  *
- * Version metadata lives in lib/versions.ts (client-safe); this module
- * re-exports it for server components.
+ * Version metadata lives in lib/versions.ts (client-safe); the client
+ * module re-exports it for "use client" components.
  */
 function chapterFile(slug: string, version: string): string {
   const suffix = version === DEFAULT_VERSION ? "" : `_${version}`;
@@ -63,7 +53,7 @@ function chapterFile(slug: string, version: string): string {
 export async function getChapters(
   slug: string,
   version: string = DEFAULT_VERSION
-): Promise<Chapter[]> {
+): Promise<import("./bible-client").Chapter[]> {
   const file = chapterFile(slug, version);
   let raw: string;
   try {
@@ -98,14 +88,4 @@ export async function getAvailableVersions(
     }
   }
   return avail.length > 0 ? avail : [BIBLE_VERSIONS[0]];
-}
-
-/** Chapter number for display: derive from title ("Chapter V: ...") or index. */
-export function chapterLabel(chapter: Chapter, idx: number): string {
-  return chapter.title || `Chapter ${idx + 1}`;
-}
-
-/** All slugs, for generateStaticParams. */
-export function getAllSlugs(): string[] {
-  return BOOKS.map((b) => b.slug);
 }
