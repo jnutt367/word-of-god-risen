@@ -99,8 +99,11 @@ export default function ShareVerseButton({ verseText, reference }: Props) {
       // gentle shadow for legibility
       ctx.shadowColor = "rgba(0,0,0,0.55)";
       ctx.shadowBlur = 18;
-      for (const l of lines) {
-        ctx.fillText(`\u201C${lines.indexOf(l) === 0 ? "" : ""}${l}`, size / 2, y);
+      for (let li = 0; li < lines.length; li++) {
+        const l = lines[li];
+        const decorated =
+          (li === 0 ? "\u201C" : "") + l + (li === lines.length - 1 ? "\u201D" : "");
+        ctx.fillText(decorated, size / 2, y);
         y += lineHeight;
       }
       ctx.shadowBlur = 0;
