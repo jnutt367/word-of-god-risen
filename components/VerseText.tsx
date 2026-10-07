@@ -1,6 +1,7 @@
 "use client";
 
 import { verseRef, type Verse } from "@/lib/verses";
+import ShareVerseButton from "./ShareVerseButton";
 
 interface Props {
   verses: Verse[];
@@ -36,6 +37,9 @@ export default function VerseText({
               </sup>
             )}
             <span>{v.text}</span>
+            {ref && (
+              <ShareVerseButton verseText={v.text} reference={ref} />
+            )}
             {ref && targets && targets.length > 0 && (
               <button
                 type="button"
