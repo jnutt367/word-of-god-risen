@@ -9,6 +9,7 @@ const NAV = [
   { href: "/#old-testament", label: "Old Testament" },
   { href: "/#new-testament", label: "New Testament" },
   { href: "/#more", label: "Lost Books" },
+  { href: "/parables", label: "Parables" },
   { href: "/plans", label: "Plans" },
   { href: "/shorts", label: "Shorts" },
   { href: "/search", label: "Search" },
