@@ -16,7 +16,7 @@ const VOICE_KEY = "wogr:tts-voice";
 const RATE_KEY = "wogr:tts-rate";
 const AMBIENT_KEY = "wogr:ambient";
 const MANIFEST_URL = "/audio-manifest.json";
-const AMBIENT_URL = "/audio/ambient-warm.mp3";
+const AMBIENT_URL = "/audio/ambient-desert.mp3";
 /** Warm bed sits well under narration without fighting it. */
 const AMBIENT_VOL = 0.18;
 
