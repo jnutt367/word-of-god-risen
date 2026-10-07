@@ -64,7 +64,7 @@ export const BOOKS: BookMeta[] = [
   { slug: 'maccabees-2', title: '2 Maccabees', testament: 'extra', description: 'Read 2 Maccabees online — faith under persecution: martyrs, miracles, and mercy', image: '/images/cover-maccabees-2.jpg', videoId: undefined, mood: 'desert', chapters: 15 },
   { slug: 'developer', title: 'My Testimony', testament: 'extra', description: '', image: '/images/cover-developer.jpg', videoId: 'jhcmzjwbvyk', mood: 'desert', chapters: 4 },
   { slug: 'acts', title: 'Acts', testament: 'new', description: '', image: '/images/cover-acts.jpg', videoId: 'HKwdR9BsOJA', mood: 'warm', chapters: 28 },
-  { slug: 'romans', title: 'Romans', testament: 'new', description: '', image: '/images/cover-romans.jpg', videoId: 'ej_6dVdJSIU', mood: 'warm', chapters: 16 },
+  { slug: 'romans', title: 'Romans', testament: 'new', description: '', image: '/images/cover-romans.jpg', videoId: '6GcHO7d-V2g', mood: 'warm', chapters: 16 },
   { slug: 'corinthians-1', title: '1 Corinthians', testament: 'new', description: 'Read 1 Corinthians online — love, unity, and the resurrection', image: '/images/cover-corinthians-1.jpg', mood: 'warm', chapters: 16 },
   { slug: 'corinthians-2', title: '2 Corinthians', testament: 'new', description: 'Read 2 Corinthians online — comfort in affliction, strength in weakness', image: '/images/cover-corinthians-2.jpg', mood: 'warm', chapters: 13 },
   { slug: 'galatians', title: 'Galatians', testament: 'new', description: 'Read Galatians online — freedom in Christ, not chains of the law', image: '/images/cover-galatians.jpg', mood: 'warm', chapters: 6 },
