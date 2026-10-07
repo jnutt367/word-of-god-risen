@@ -70,6 +70,36 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Meet Grandpa Teddy */}
+      <section className="mx-auto max-w-6xl px-4 pt-8 sm:px-6">
+        <div className="overflow-hidden rounded-2xl border border-gold-500/15 bg-vineyard-900">
+          <div className="grid gap-0 md:grid-cols-2">
+            <div className="aspect-video md:aspect-auto md:min-h-[280px]">
+              <iframe
+                src="https://www.youtube.com/embed/25A7EQBDeI0"
+                title="Welcome to Word of God Risen — Meet Grandpa Teddy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="h-full w-full"
+              />
+            </div>
+            <div className="flex flex-col justify-center p-6 sm:p-8">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold-400">
+                Meet Grandpa Teddy
+              </p>
+              <h2 className="mt-2 font-display text-2xl text-cream-50 sm:text-3xl">
+                Your guide through the Word
+              </h2>
+              <p className="mt-3 text-cream-100/85">
+                Grandpa Teddy reads every chapter aloud in his warm, unhurried voice —
+                the whole Bible, the lost books, and the parables. Pull up a chair
+                and let's hear the Word together.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Widgets */}
       <div className="mx-auto max-w-4xl space-y-5 px-4 py-10 sm:px-6">
         <VerseOfDay />
@@ -106,36 +136,6 @@ export default function Home() {
             </span>
           </div>
         </Link>
-      </section>
-
-      {/* Meet Grandpa Teddy */}
-      <section className="mx-auto max-w-6xl px-4 pb-16 sm:px-6">
-        <div className="overflow-hidden rounded-2xl border border-gold-500/15 bg-vineyard-900">
-          <div className="grid gap-0 md:grid-cols-2">
-            <div className="aspect-video md:aspect-auto md:min-h-[280px]">
-              <iframe
-                src="https://www.youtube.com/embed/25A7EQBDeI0"
-                title="Welcome to Word of God Risen — Meet Grandpa Teddy"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="h-full w-full"
-              />
-            </div>
-            <div className="flex flex-col justify-center p-6 sm:p-8">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold-400">
-                Meet Grandpa Teddy
-              </p>
-              <h2 className="mt-2 font-display text-2xl text-cream-50 sm:text-3xl">
-                Your guide through the Word
-              </h2>
-              <p className="mt-3 text-cream-100/85">
-                Grandpa Teddy reads every chapter aloud in his warm, unhurried voice —
-                the whole Bible, the lost books, and the parables. Pull up a chair
-                and let's hear the Word together.
-              </p>
-            </div>
-          </div>
-        </div>
       </section>
 
       {/* Book grid */}
