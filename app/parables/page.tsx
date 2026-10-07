@@ -67,16 +67,26 @@ export default function ParablesPage() {
         {PARABLES.map((p) => (
           <div
             key={p.slug}
-            className="rounded-2xl border border-gold-500/15 bg-vineyard-900 p-5"
+            className="overflow-hidden rounded-2xl border border-gold-500/15 bg-vineyard-900"
           >
-            <h2 className="font-display text-xl text-cream-100">{p.title}</h2>
-            <p className="mt-1 text-sm text-sage-400">{p.ref}</p>
-            <audio
-              controls
-              preload="none"
-              src={`${BASE}/audio/parables/${p.slug}.mp3`}
-              className="mt-3 w-full"
-            />
+            <div className="aspect-[2/1] w-full overflow-hidden">
+              <img
+                src={`/images/parable-${p.slug}-card.jpg`}
+                alt={p.title}
+                className="h-full w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+            <div className="p-5">
+              <h2 className="font-display text-xl text-cream-100">{p.title}</h2>
+              <p className="mt-1 text-sm text-sage-400">{p.ref}</p>
+              <audio
+                controls
+                preload="none"
+                src={`${BASE}/audio/parables/${p.slug}.mp3`}
+                className="mt-3 w-full"
+              />
+            </div>
           </div>
         ))}
       </div>
