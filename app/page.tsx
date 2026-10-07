@@ -30,7 +30,7 @@ export default function Home() {
         </div>
         <div className="relative mx-auto max-w-4xl px-4 py-24 text-center sm:px-6 sm:py-32">
           <p className="text-sm font-semibold uppercase tracking-[0.22em] text-gold-300">
-            A Bible reader
+            Centered on the King, not the crowds
           </p>
           <h1 className="mt-4 font-display text-4xl leading-tight text-cream-50 sm:text-6xl">
             The Word of God,{" "}

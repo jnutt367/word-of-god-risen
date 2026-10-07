@@ -28,7 +28,7 @@ const quicksand = Quicksand({
 export const metadata: Metadata = {
   metadataBase: new URL("https://word-of-god-risen.vercel.app"),
   title: {
-    default: "Word of God Risen — Read the Bible & the Lost Books",
+    default: "Word of God Risen — Centered on the King",
     template: "%s · Word of God Risen",
   },
   description:
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "Word of God Risen",
-    title: "Word of God Risen — Read the Bible & the Lost Books",
+    title: "Word of God Risen — Centered on the King",
     description:
       "Enoch, Jasher, Jubilees, the Apocrypha — plus the full Bible in WEB & KJV with verse cross-references and reading plans. Centered on the King, not the crowds.",
     images: [
@@ -60,13 +60,13 @@ export const metadata: Metadata = {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Word of God Risen — Read the Bible & the Lost Books",
+        alt: "Word of God Risen — Centered on the King",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Word of God Risen — Read the Bible & the Lost Books",
+    title: "Word of God Risen — Centered on the King",
     description:
       "Enoch, Jasher, Jubilees, the Apocrypha — plus the full Bible in WEB & KJV with verse cross-references and reading plans.",
     images: ["/opengraph-image"],
