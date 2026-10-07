@@ -39,6 +39,30 @@ export default function ParablesPage() {
       <p className="mt-3 max-w-2xl font-scripture text-lg italic leading-relaxed text-sage-300">
         Earthly stories with heavenly meanings — read aloud in Grandpa Teddy's voice.
       </p>
+
+      <div className="mt-8 overflow-hidden rounded-2xl border border-gold-500/15 bg-vineyard-900">
+        <div className="aspect-video">
+          <iframe
+            src="https://www.youtube.com/embed/sybue2EZMQI"
+            title="Why Jesus Spoke in Parables"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="h-full w-full"
+          />
+        </div>
+        <div className="p-5">
+          <h2 className="font-display text-xl text-cream-100">
+            Why Jesus Spoke in Parables
+          </h2>
+          <p className="mt-1 text-sm text-sage-400">
+            Grandpa Teddy explains what parables are and why Jesus used them.
+          </p>
+        </div>
+      </div>
+
+      <h2 className="mt-10 font-display text-2xl text-cream-100">
+        Listen to each parable
+      </h2>
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
         {PARABLES.map((p) => (
           <div
