@@ -759,5 +759,22 @@
  "john:15": "https://pub-4ff11efe5fbe4087acc9ff74fc56f179.r2.dev/audio/john-15.mp3",
  "john:16": "https://pub-4ff11efe5fbe4087acc9ff74fc56f179.r2.dev/audio/john-16.mp3",
  "john:17": "https://pub-4ff11efe5fbe4087acc9ff74fc56f179.r2.dev/audio/john-17.mp3",
- "acts:13": "https://pub-4ff11efe5fbe4087acc9ff74fc56f179.r2.dev/audio/acts-13.mp3"
+ "acts:13": "https://pub-4ff11efe5fbe4087acc9ff74fc56f179.r2.dev/audio/acts-13.mp3",
+ "parable:good-samaritan": "https://pub-4ff11efe5fbe4087acc9ff74fc56f179.r2.dev/audio/parables/good-samaritan.mp3",
+ "parable:hidden-treasure": "https://pub-4ff11efe5fbe4087acc9ff74fc56f179.r2.dev/audio/parables/hidden-treasure.mp3",
+ "parable:lost-sheep": "https://pub-4ff11efe5fbe4087acc9ff74fc56f179.r2.dev/audio/parables/lost-sheep.mp3",
+ "parable:mustard-seed": "https://pub-4ff11efe5fbe4087acc9ff74fc56f179.r2.dev/audio/parables/mustard-seed.mp3",
+ "parable:pearl-of-great-price": "https://pub-4ff11efe5fbe4087acc9ff74fc56f179.r2.dev/audio/parables/pearl-of-great-price.mp3",
+ "parable:pharisee-and-tax-collector": "https://pub-4ff11efe5fbe4087acc9ff74fc56f179.r2.dev/audio/parables/pharisee-and-tax-collector.mp3",
+ "parable:prodigal-son": "https://pub-4ff11efe5fbe4087acc9ff74fc56f179.r2.dev/audio/parables/prodigal-son.mp3",
+ "parable:rich-fool": "https://pub-4ff11efe5fbe4087acc9ff74fc56f179.r2.dev/audio/parables/rich-fool.mp3",
+ "parable:rich-man-and-lazarus": "https://pub-4ff11efe5fbe4087acc9ff74fc56f179.r2.dev/audio/parables/rich-man-and-lazarus.mp3",
+ "parable:shrewd-manager": "https://pub-4ff11efe5fbe4087acc9ff74fc56f179.r2.dev/audio/parables/shrewd-manager.mp3",
+ "parable:sower": "https://pub-4ff11efe5fbe4087acc9ff74fc56f179.r2.dev/audio/parables/sower.mp3",
+ "parable:talents": "https://pub-4ff11efe5fbe4087acc9ff74fc56f179.r2.dev/audio/parables/talents.mp3",
+ "parable:ten-virgins": "https://pub-4ff11efe5fbe4087acc9ff74fc56f179.r2.dev/audio/parables/ten-virgins.mp3",
+ "parable:unforgiving-servant": "https://pub-4ff11efe5fbe4087acc9ff74fc56f179.r2.dev/audio/parables/unforgiving-servant.mp3",
+ "parable:wedding-feast": "https://pub-4ff11efe5fbe4087acc9ff74fc56f179.r2.dev/audio/parables/wedding-feast.mp3",
+ "parable:wheat-and-tares": "https://pub-4ff11efe5fbe4087acc9ff74fc56f179.r2.dev/audio/parables/wheat-and-tares.mp3",
+ "parable:workers-in-the-vineyard": "https://pub-4ff11efe5fbe4087acc9ff74fc56f179.r2.dev/audio/parables/workers-in-the-vineyard.mp3"
 }
