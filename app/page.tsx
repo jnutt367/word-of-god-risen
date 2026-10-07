@@ -79,7 +79,7 @@ export default function Home() {
 
       {/* Hear the Word — Grandpa Teddy's narration */}
       <section className="mx-auto max-w-6xl px-4 pb-4 sm:px-6">
-        <Link href="/bible/genesis/1" className="group relative block overflow-hidden rounded-2xl">
+        <Link href="/book/genesis/1" className="group relative block overflow-hidden rounded-2xl">
           <div className="absolute inset-0">
             <Image
               src="/images/plan-genesis.jpg"
