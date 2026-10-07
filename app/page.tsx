@@ -114,22 +114,26 @@ export default function Home() {
           <span className="font-display text-lg tracking-wide">✦</span>
         </div>
 
-        <h2 className="font-display text-2xl text-cream-100 sm:text-3xl">
-          Old Testament
-        </h2>
-        <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {ot.map((b) => (
-            <BookCard key={b.slug} book={b} />
-          ))}
+        <div id="old-testament" className="scroll-mt-20">
+          <h2 className="font-display text-2xl text-cream-100 sm:text-3xl">
+            Old Testament
+          </h2>
+          <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {ot.map((b) => (
+              <BookCard key={b.slug} book={b} />
+            ))}
+          </div>
         </div>
 
-        <h2 className="mt-14 font-display text-2xl text-cream-100 sm:text-3xl">
-          New Testament
-        </h2>
-        <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {nt.map((b) => (
-            <BookCard key={b.slug} book={b} />
-          ))}
+        <div id="new-testament" className="scroll-mt-20">
+          <h2 className="mt-14 font-display text-2xl text-cream-100 sm:text-3xl">
+            New Testament
+          </h2>
+          <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {nt.map((b) => (
+              <BookCard key={b.slug} book={b} />
+            ))}
+          </div>
         </div>
 
         {extra.length > 0 && (
