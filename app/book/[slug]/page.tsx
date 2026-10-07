@@ -102,6 +102,10 @@ export default async function BookPage({
           <VideoEmbed
             videoId={book.videoId}
             title={`${book.title} overview video`}
+            // Judges + Ruth still carry the legacy BibleProject embeds
+            // (honest label until their TruVINE overviews are produced);
+            // every other overview is Jason's own.
+            brand={slug === "judges" || slug === "ruth" ? "BibleProject" : "TruVINE"}
           />
         </div>
       )}

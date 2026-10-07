@@ -6,15 +6,22 @@ import { useState } from "react";
  * Polished click-to-play YouTube embed.
  *
  * Shows a branded thumbnail facade (maxres artwork, gold play button,
- * BibleProject chip) and only loads the heavy YouTube iframe after the
+ * brand chip) and only loads the heavy YouTube iframe after the
  * user taps play — faster page loads and a much more professional look.
+ *
+ * `brand` labels the video's source. Defaults to "TruVINE" for Jason's
+ * own overviews; pass "BibleProject" only for the legacy placeholder
+ * embeds that are still theirs (Judges, Ruth) until their TruVINE
+ * overviews are produced.
  */
 export default function VideoEmbed({
   videoId,
   title,
+  brand = "TruVINE",
 }: {
   videoId: string;
   title: string;
+  brand?: string;
 }) {
   const [playing, setPlaying] = useState(false);
   const [thumbSrc, setThumbSrc] = useState(
@@ -53,7 +60,7 @@ export default function VideoEmbed({
               />
               <span className="absolute inset-0 bg-gradient-to-t from-vineyard-950/85 via-vineyard-950/20 to-vineyard-950/30" />
               <span className="absolute left-4 top-4 rounded-full bg-vineyard-950/80 px-3 py-1 text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-gold-300 backdrop-blur">
-                BibleProject
+                {brand}
               </span>
               <span className="absolute inset-0 flex items-center justify-center">
                 <span className="flex h-20 w-20 items-center justify-center rounded-full bg-gold-400 text-vineyard-950 shadow-[0_8px_30px_rgba(0,0,0,0.5)] ring-4 ring-gold-200/30 transition-transform duration-300 group-hover:scale-110">

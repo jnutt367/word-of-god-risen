@@ -32,7 +32,8 @@ export default function SiteFooter() {
           </div>
           <p className="mt-4 text-xs text-sage-500">
             A not-for-profit passion project by Jason Nutt · Scripture text
-            (NIV) for reading &amp; study · Videos by{" "}
+            (WEB &amp; KJV, public domain) for reading &amp; study · Videos by
+            TruVINE · select overviews by{" "}
             <a
               href="https://bibleproject.com"
               className="underline hover:text-gold-300"
