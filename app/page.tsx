@@ -24,7 +24,15 @@ export default function Home() {
             fill
             priority
             sizes="100vw"
-            className="object-cover object-top"
+            className="hidden object-cover object-top md:block"
+          />
+          <Image
+            src="/images/wogr-hero-mobile.jpg"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="block object-cover object-top md:hidden"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-vineyard-950/70 via-vineyard-950/55 to-vineyard-950" />
         </div>
