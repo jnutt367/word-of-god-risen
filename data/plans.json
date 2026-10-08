@@ -102,7 +102,7 @@
       "description": "All four Gospels in a month — the life, teaching, death, and resurrection of Jesus, two chapters at a time.",
       "image": "/images/plan-gospels.jpg",
       "totalDays": 30,
-      "totalChapters": 70,
+      "totalChapters": 89,
       "days": [
         {
           "day": 1,
@@ -346,7 +346,7 @@
         },
         {
           "day": 11,
-          "title": "Mark 3–4",
+          "title": "Mark 3–5",
           "readings": [
             {
               "slug": "mark",
@@ -359,31 +359,25 @@
               "chapter": 3,
               "label": "Mark 4",
               "title": "Chapter IV: Jesus began to teach by the lake"
-            }
-          ]
-        },
-        {
-          "day": 12,
-          "title": "Mark 5–6",
-          "readings": [
+            },
             {
               "slug": "mark",
               "chapter": 4,
               "label": "Mark 5",
               "title": "Chapter V: When Jesus got out of the boat"
-            },
+            }
+          ]
+        },
+        {
+          "day": 12,
+          "title": "Mark 6–8",
+          "readings": [
             {
               "slug": "mark",
               "chapter": 5,
               "label": "Mark 6",
               "title": "Chapter VI: Jesus left there, to his hometown"
-            }
-          ]
-        },
-        {
-          "day": 13,
-          "title": "Mark 7–8",
-          "readings": [
+            },
             {
               "slug": "mark",
               "chapter": 6,
@@ -399,8 +393,8 @@
           ]
         },
         {
-          "day": 14,
-          "title": "Mark 9–10",
+          "day": 13,
+          "title": "Mark 9–11",
           "readings": [
             {
               "slug": "mark",
@@ -413,31 +407,25 @@
               "chapter": 9,
               "label": "Mark 10",
               "title": "Chapter X: and as was his custom, he taught them"
-            }
-          ]
-        },
-        {
-          "day": 15,
-          "title": "Mark 11–12",
-          "readings": [
+            },
             {
               "slug": "mark",
               "chapter": 10,
               "label": "Mark 11",
               "title": "Chapter XI: Jesus Comes to Jerusalem as King"
-            },
+            }
+          ]
+        },
+        {
+          "day": 14,
+          "title": "Mark 12–14",
+          "readings": [
             {
               "slug": "mark",
               "chapter": 11,
               "label": "Mark 12",
               "title": "Chapter XII: The Parable of the Tenants"
-            }
-          ]
-        },
-        {
-          "day": 16,
-          "title": "Mark 13–14",
-          "readings": [
+            },
             {
               "slug": "mark",
               "chapter": 12,
@@ -453,8 +441,8 @@
           ]
         },
         {
-          "day": 17,
-          "title": "Mark 15–16",
+          "day": 15,
+          "title": "Mark 15, Luke 1",
           "readings": [
             {
               "slug": "mark",
@@ -467,31 +455,25 @@
               "chapter": 15,
               "label": "Mark 16",
               "title": "Chapter XVI: Jesus Has Risen"
-            }
-          ]
-        },
-        {
-          "day": 18,
-          "title": "Luke 1–2",
-          "readings": [
+            },
             {
               "slug": "luke",
               "chapter": 0,
               "label": "Luke 1",
               "title": "Chapter I:  I too decided to write an orderly account"
-            },
+            }
+          ]
+        },
+        {
+          "day": 16,
+          "title": "Luke 2–4",
+          "readings": [
             {
               "slug": "luke",
               "chapter": 1,
               "label": "Luke 2",
               "title": "Chapter II:  The Birth of Jesus"
-            }
-          ]
-        },
-        {
-          "day": 19,
-          "title": "Luke 3–4",
-          "readings": [
+            },
             {
               "slug": "luke",
               "chapter": 2,
@@ -507,8 +489,8 @@
           ]
         },
         {
-          "day": 20,
-          "title": "Luke 5–6",
+          "day": 17,
+          "title": "Luke 5–7",
           "readings": [
             {
               "slug": "luke",
@@ -521,31 +503,25 @@
               "chapter": 5,
               "label": "Luke 6",
               "title": "Chapter VI: Jesus left there, to his hometown"
-            }
-          ]
-        },
-        {
-          "day": 21,
-          "title": "Luke 7–8",
-          "readings": [
+            },
             {
               "slug": "luke",
               "chapter": 6,
               "label": "Luke 7",
               "title": "Chapter VII:  The Pharisees and some of the teachers"
-            },
+            }
+          ]
+        },
+        {
+          "day": 18,
+          "title": "Luke 8–10",
+          "readings": [
             {
               "slug": "luke",
               "chapter": 7,
               "label": "Luke 8",
               "title": "Chapter VIII: “The Little Children and Jesus"
-            }
-          ]
-        },
-        {
-          "day": 22,
-          "title": "Luke 9–10",
-          "readings": [
+            },
             {
               "slug": "luke",
               "chapter": 8,
@@ -561,8 +537,8 @@
           ]
         },
         {
-          "day": 23,
-          "title": "Luke 11–12",
+          "day": 19,
+          "title": "Luke 11–13",
           "readings": [
             {
               "slug": "luke",
@@ -575,31 +551,25 @@
               "chapter": 11,
               "label": "Luke 12",
               "title": "Chapter XII: The Parable of the Tenants"
-            }
-          ]
-        },
-        {
-          "day": 24,
-          "title": "Luke 13–14",
-          "readings": [
+            },
             {
               "slug": "luke",
               "chapter": 12,
               "label": "Luke 13",
               "title": "Chapter XIII: Signs of the End Times"
-            },
+            }
+          ]
+        },
+        {
+          "day": 20,
+          "title": "Luke 14–16",
+          "readings": [
             {
               "slug": "luke",
               "chapter": 13,
               "label": "Luke 14",
               "title": "Chapter XIV: Jesus Anointed at Bethany"
-            }
-          ]
-        },
-        {
-          "day": 25,
-          "title": "Luke 15–16",
-          "readings": [
+            },
             {
               "slug": "luke",
               "chapter": 14,
@@ -615,27 +585,87 @@
           ]
         },
         {
-          "day": 26,
-          "title": "John 1–2",
+          "day": 21,
+          "title": "Luke 17–19",
           "readings": [
+            {
+              "slug": "luke",
+              "chapter": 16,
+              "label": "Luke 17",
+              "title": "Chapter XVII: The Coming of the Kingdom"
+            },
+            {
+              "slug": "luke",
+              "chapter": 17,
+              "label": "Luke 18",
+              "title": "Chapter XVIII: The Persistent Widow"
+            },
+            {
+              "slug": "luke",
+              "chapter": 18,
+              "label": "Luke 19",
+              "title": "Chapter XIX: Zacchaeus Meets Jesus"
+            }
+          ]
+        },
+        {
+          "day": 22,
+          "title": "Luke 20–22",
+          "readings": [
+            {
+              "slug": "luke",
+              "chapter": 19,
+              "label": "Luke 20",
+              "title": "Chapter XX: Questioning His Authority"
+            },
+            {
+              "slug": "luke",
+              "chapter": 20,
+              "label": "Luke 21",
+              "title": "Chapter XXI: Signs of the End Times"
+            },
+            {
+              "slug": "luke",
+              "chapter": 21,
+              "label": "Luke 22",
+              "title": "Chapter XXII: The Last Supper"
+            }
+          ]
+        },
+        {
+          "day": 23,
+          "title": "Luke 23, John 1",
+          "readings": [
+            {
+              "slug": "luke",
+              "chapter": 22,
+              "label": "Luke 23",
+              "title": "Chapter XXIII: The Crucifixion"
+            },
+            {
+              "slug": "luke",
+              "chapter": 23,
+              "label": "Luke 24",
+              "title": "Chapter XXIV: He Is Risen"
+            },
             {
               "slug": "john",
               "chapter": 0,
               "label": "John 1",
               "title": "Chapter I: The Word Became Flesh!"
-            },
+            }
+          ]
+        },
+        {
+          "day": 24,
+          "title": "John 2–4",
+          "readings": [
             {
               "slug": "john",
               "chapter": 1,
               "label": "John 2",
               "title": "Chapter II: Water Into Wine"
-            }
-          ]
-        },
-        {
-          "day": 27,
-          "title": "John 3–4",
-          "readings": [
+            },
             {
               "slug": "john",
               "chapter": 2,
@@ -651,8 +681,8 @@
           ]
         },
         {
-          "day": 28,
-          "title": "John 5–6",
+          "day": 25,
+          "title": "John 5–7",
           "readings": [
             {
               "slug": "john",
@@ -665,31 +695,25 @@
               "chapter": 5,
               "label": "John 6",
               "title": "Chapter VI: Jesus Feeds the Five Thousand"
-            }
-          ]
-        },
-        {
-          "day": 29,
-          "title": "John 7–8",
-          "readings": [
+            },
             {
               "slug": "john",
               "chapter": 6,
               "label": "John 7",
               "title": "Chapter VII: Jesus Goes to the Festival"
-            },
+            }
+          ]
+        },
+        {
+          "day": 26,
+          "title": "John 8–10",
+          "readings": [
             {
               "slug": "john",
               "chapter": 7,
               "label": "John 8",
               "title": "Chapter VIII: Jesus went to the Mount"
-            }
-          ]
-        },
-        {
-          "day": 30,
-          "title": "John 9–10",
-          "readings": [
+            },
             {
               "slug": "john",
               "chapter": 8,
@@ -701,6 +725,96 @@
               "chapter": 9,
               "label": "John 10",
               "title": "Chapter X: The Good Shepherd"
+            }
+          ]
+        },
+        {
+          "day": 27,
+          "title": "John 11–13",
+          "readings": [
+            {
+              "slug": "john",
+              "chapter": 10,
+              "label": "John 11",
+              "title": "Chapter XI: Lazarus Raised from the Dead"
+            },
+            {
+              "slug": "john",
+              "chapter": 11,
+              "label": "John 12",
+              "title": "Chapter XII: Mary Anoints Jesus"
+            },
+            {
+              "slug": "john",
+              "chapter": 12,
+              "label": "John 13",
+              "title": "Chapter XIII: Jesus Washes Their Feet"
+            }
+          ]
+        },
+        {
+          "day": 28,
+          "title": "John 14–16",
+          "readings": [
+            {
+              "slug": "john",
+              "chapter": 13,
+              "label": "John 14",
+              "title": "Chapter XIV: The Way, the Truth, the Life"
+            },
+            {
+              "slug": "john",
+              "chapter": 14,
+              "label": "John 15",
+              "title": "Chapter XV: I Am the True Vine"
+            },
+            {
+              "slug": "john",
+              "chapter": 15,
+              "label": "John 16",
+              "title": "Chapter XVI: The Work of the Holy Spirit"
+            }
+          ]
+        },
+        {
+          "day": 29,
+          "title": "John 17–19",
+          "readings": [
+            {
+              "slug": "john",
+              "chapter": 16,
+              "label": "John 17",
+              "title": "Chapter XVII: Jesus Prays for His Own"
+            },
+            {
+              "slug": "john",
+              "chapter": 17,
+              "label": "John 18",
+              "title": "Chapter XVIII: Betrayed and Arrested"
+            },
+            {
+              "slug": "john",
+              "chapter": 18,
+              "label": "John 19",
+              "title": "Chapter XIX: It Is Finished"
+            }
+          ]
+        },
+        {
+          "day": 30,
+          "title": "John 20–21",
+          "readings": [
+            {
+              "slug": "john",
+              "chapter": 19,
+              "label": "John 20",
+              "title": "Chapter XX: The Empty Tomb"
+            },
+            {
+              "slug": "john",
+              "chapter": 20,
+              "label": "John 21",
+              "title": "Chapter XXI: Feed My Sheep"
             }
           ]
         }
@@ -1174,7 +1288,7 @@
       "description": "One chapter a day through Acts and Romans — the birth of the church and the very heart of the gospel.",
       "image": "/images/plan-acts-romans.jpg",
       "totalDays": 28,
-      "totalChapters": 29,
+      "totalChapters": 44,
       "days": [
         {
           "day": 1,
@@ -1196,20 +1310,14 @@
         },
         {
           "day": 2,
-          "title": "Acts 3",
+          "title": "Acts 3–4",
           "readings": [
             {
               "slug": "acts",
               "chapter": 2,
               "label": "Acts 3",
               "title": "Chapter III: Peter Heals a Beggar"
-            }
-          ]
-        },
-        {
-          "day": 3,
-          "title": "Acts 4",
-          "readings": [
+            },
             {
               "slug": "acts",
               "chapter": 3,
@@ -1219,21 +1327,15 @@
           ]
         },
         {
-          "day": 4,
-          "title": "Acts 5",
+          "day": 3,
+          "title": "Acts 5–6",
           "readings": [
             {
               "slug": "acts",
               "chapter": 4,
               "label": "Acts 5",
               "title": "Chapter V: Ananias and Sapphira"
-            }
-          ]
-        },
-        {
-          "day": 5,
-          "title": "Acts 6",
-          "readings": [
+            },
             {
               "slug": "acts",
               "chapter": 5,
@@ -1243,21 +1345,15 @@
           ]
         },
         {
-          "day": 6,
-          "title": "Acts 7",
+          "day": 4,
+          "title": "Acts 7–8",
           "readings": [
             {
               "slug": "acts",
               "chapter": 6,
               "label": "Acts 7",
               "title": "Chapter VII: Stephen’s Speech"
-            }
-          ]
-        },
-        {
-          "day": 7,
-          "title": "Acts 8",
-          "readings": [
+            },
             {
               "slug": "acts",
               "chapter": 7,
@@ -1267,21 +1363,15 @@
           ]
         },
         {
-          "day": 8,
-          "title": "Acts 9",
+          "day": 5,
+          "title": "Acts 9–10",
           "readings": [
             {
               "slug": "acts",
               "chapter": 8,
               "label": "Acts 9",
               "title": "Chapter IX: Saul’s Conversion"
-            }
-          ]
-        },
-        {
-          "day": 9,
-          "title": "Acts 10",
-          "readings": [
+            },
             {
               "slug": "acts",
               "chapter": 9,
@@ -1291,21 +1381,15 @@
           ]
         },
         {
-          "day": 10,
-          "title": "Acts 11",
+          "day": 6,
+          "title": "Acts 11–12",
           "readings": [
             {
               "slug": "acts",
               "chapter": 10,
               "label": "Acts 11",
               "title": "Chapter XI: Peter Explains Actions"
-            }
-          ]
-        },
-        {
-          "day": 11,
-          "title": "Acts 12",
-          "readings": [
+            },
             {
               "slug": "acts",
               "chapter": 11,
@@ -1315,33 +1399,159 @@
           ]
         },
         {
-          "day": 12,
-          "title": "Acts 13",
+          "day": 7,
+          "title": "Acts 13–14",
           "readings": [
             {
               "slug": "acts",
               "chapter": 12,
               "label": "Acts 13",
+              "title": "Chapter XIII: Sent Out to Preach"
+            },
+            {
+              "slug": "acts",
+              "chapter": 13,
+              "label": "Acts 14",
+              "title": "Chapter XIV: Strengthening the Churches"
+            }
+          ]
+        },
+        {
+          "day": 8,
+          "title": "Acts 15–16",
+          "readings": [
+            {
+              "slug": "acts",
+              "chapter": 14,
+              "label": "Acts 15",
+              "title": "Chapter XV: The Jerusalem Council"
+            },
+            {
+              "slug": "acts",
+              "chapter": 15,
+              "label": "Acts 16",
+              "title": "Chapter XVI: Singing in Prison"
+            }
+          ]
+        },
+        {
+          "day": 9,
+          "title": "Acts 17–18",
+          "readings": [
+            {
+              "slug": "acts",
+              "chapter": 16,
+              "label": "Acts 17",
+              "title": "Chapter XVII: Preaching at Athens"
+            },
+            {
+              "slug": "acts",
+              "chapter": 17,
+              "label": "Acts 18",
+              "title": "Chapter XVIII: Paul at Corinth"
+            }
+          ]
+        },
+        {
+          "day": 10,
+          "title": "Acts 19–20",
+          "readings": [
+            {
+              "slug": "acts",
+              "chapter": 18,
+              "label": "Acts 19",
+              "title": "Chapter XIX: Mighty Works at Ephesus"
+            },
+            {
+              "slug": "acts",
+              "chapter": 19,
+              "label": "Acts 20",
+              "title": "Chapter XX: Farewell to the Elders"
+            }
+          ]
+        },
+        {
+          "day": 11,
+          "title": "Acts 21–22",
+          "readings": [
+            {
+              "slug": "acts",
+              "chapter": 20,
+              "label": "Acts 21",
               "title": "Chapter XXI:"
+            },
+            {
+              "slug": "acts",
+              "chapter": 21,
+              "label": "Acts 22",
+              "title": "Chapter XXII: Paul Tells His Story"
+            }
+          ]
+        },
+        {
+          "day": 12,
+          "title": "Acts 23–24",
+          "readings": [
+            {
+              "slug": "acts",
+              "chapter": 22,
+              "label": "Acts 23",
+              "title": "Chapter XXIII: Standing Before the Council"
+            },
+            {
+              "slug": "acts",
+              "chapter": 23,
+              "label": "Acts 24",
+              "title": "Chapter XXIV: On Trial Before Felix"
             }
           ]
         },
         {
           "day": 13,
-          "title": "Romans 1",
+          "title": "Acts 25–26",
+          "readings": [
+            {
+              "slug": "acts",
+              "chapter": 24,
+              "label": "Acts 25",
+              "title": "Chapter XXV: I Appeal to Caesar"
+            },
+            {
+              "slug": "acts",
+              "chapter": 25,
+              "label": "Acts 26",
+              "title": "Chapter XXVI: Almost Persuaded"
+            }
+          ]
+        },
+        {
+          "day": 14,
+          "title": "Acts 27–28",
+          "readings": [
+            {
+              "slug": "acts",
+              "chapter": 26,
+              "label": "Acts 27",
+              "title": "Chapter XXVII: Shipwrecked on Malta"
+            },
+            {
+              "slug": "acts",
+              "chapter": 27,
+              "label": "Acts 28",
+              "title": "Chapter XXVIII: Preaching in Rome Unhindered"
+            }
+          ]
+        },
+        {
+          "day": 15,
+          "title": "Romans 1–2",
           "readings": [
             {
               "slug": "romans",
               "chapter": 0,
               "label": "Romans 1",
               "title": "Chapter I: Called to be an apostle"
-            }
-          ]
-        },
-        {
-          "day": 14,
-          "title": "Romans 2",
-          "readings": [
+            },
             {
               "slug": "romans",
               "chapter": 1,
@@ -1351,21 +1561,15 @@
           ]
         },
         {
-          "day": 15,
-          "title": "Romans 3",
+          "day": 16,
+          "title": "Romans 3–4",
           "readings": [
             {
               "slug": "romans",
               "chapter": 2,
               "label": "Romans 3",
               "title": "Chapter III: God’s Faithfulness"
-            }
-          ]
-        },
-        {
-          "day": 16,
-          "title": "Romans 4",
-          "readings": [
+            },
             {
               "slug": "romans",
               "chapter": 3,
