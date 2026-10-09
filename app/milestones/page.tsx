@@ -137,6 +137,11 @@ export default function MilestonesPage() {
 
       <div className="space-y-4 font-scripture text-lg leading-relaxed text-cream-100/90">
         <p>
+          Thank you — for watching, for reading, for sharing, for being part
+          of this family. Every number above is a person, and every person
+          matters. We don&apos;t take a single one of you for granted.
+        </p>
+        <p>
           &ldquo;And we know that in all things God works for the good of those
           who love him, who have been called according to his purpose.&rdquo;
           (Romans 8:28)
