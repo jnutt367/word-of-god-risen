@@ -34,10 +34,18 @@ export default function AboutPage() {
           Grandpa Teddy and made by us, not borrowed from somewhere else.
         </p>
         <p>
-          This is a not-for-profit passion project, crafted over years by a
-          developer in his spare time — to show the hopeless that a man like
-          me, or you, can be saved. Every video, every narration, every
-          illustration on this site was made with love for the TruVINE family.
+          TruVINE is an extension of our faith in Jesus — a warm, family
+          home for anyone searching for the truth about who He really is.
+          Whether you&apos;re new to faith, returning after years away, or
+          just hungry for more, you belong here.
+        </p>
+        <p>
+          This is a not-for-profit passion project, crafted over years in
+          spare hours — to show the hopeless that a man like me, or you,
+          can be saved. Every video, every narration, every illustration
+          on this site was made with love for the TruVINE family, not
+          borrowed from somewhere else. If one heart finds Jesus through
+          this work, that&apos;s enough.
         </p>
         <p>
           If this ministry has blessed you and you&apos;d like to support it,{" "}
