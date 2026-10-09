@@ -56,8 +56,9 @@ export default function ReaderView({
     ref: string;
     targets: string[];
   } | null>(null);
-  const { isRead, toggle } = useProgress();
+  const { isRead, toggle, isListened, toggleListened } = useProgress();
   const read = isRead(slug, chapterIdx);
+  const listened = isListened(slug, chapterIdx);
 
   // Restore the reader's preferred translation.
   useEffect(() => {
@@ -172,17 +173,32 @@ export default function ReaderView({
 
         {/* Actions */}
         <div className="mt-10 flex flex-col items-center gap-4">
-          <button
-            type="button"
-            onClick={() => toggle(slug, chapterIdx, chapterTitle)}
-            className={`rounded-lg px-6 py-3 text-sm font-semibold transition-colors ${
-              read
-                ? "bg-[var(--reader-verse-num)]/15 text-[var(--reader-verse-num)] border border-[var(--reader-verse-num)]/40"
-                : "bg-[var(--reader-verse-num)] text-[var(--reader-bg)] hover:opacity-90"
-            }`}
-          >
-            {read ? "✓ Read — tap to undo" : "✓ Mark as read"}
-          </button>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <button
+              type="button"
+              onClick={() => toggle(slug, chapterIdx, chapterTitle)}
+              className={`rounded-lg px-6 py-3 text-sm font-semibold transition-colors ${
+                read
+                  ? "bg-[var(--reader-verse-num)]/15 text-[var(--reader-verse-num)] border border-[var(--reader-verse-num)]/40"
+                  : "bg-[var(--reader-verse-num)] text-[var(--reader-bg)] hover:opacity-90"
+              }`}
+            >
+              {read ? "✓ Read — tap to undo" : "✓ Mark as read"}
+            </button>
+            <button
+              type="button"
+              onClick={() => toggleListened(slug, chapterIdx, chapterTitle)}
+              aria-pressed={listened}
+              title="Mark this chapter as listened to (Grandpa Teddy's narration)"
+              className={`rounded-lg px-6 py-3 text-sm font-semibold transition-colors border ${
+                listened
+                  ? "bg-[var(--reader-verse-num)]/15 text-[var(--reader-verse-num)] border-[var(--reader-verse-num)]/40"
+                  : "border-[var(--reader-line)] text-[var(--reader-muted)] hover:text-[var(--reader-verse-num)] hover:border-[var(--reader-verse-num)]/40"
+              }`}
+            >
+              {listened ? "🎧 Listened — tap to undo" : "🎧 Mark as listened"}
+            </button>
+          </div>
           <nav
             className="flex w-full items-center justify-between gap-4"
             aria-label="Chapters"

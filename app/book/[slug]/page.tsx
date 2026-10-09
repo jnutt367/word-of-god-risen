@@ -6,6 +6,7 @@ import { getAllSlugs, getBook, getChapters, getAvailableVersions } from "@/lib/b
 import ChapterGrid from "@/components/ChapterGrid";
 import VideoEmbed from "@/components/VideoEmbed";
 import BookProgress from "@/components/BookProgress";
+import MarkWatchedButton from "@/components/MarkWatchedButton";
 
 export function generateStaticParams() {
   return getAllSlugs().map((slug) => ({ slug }));
@@ -107,6 +108,12 @@ export default async function BookPage({
             // every other overview is Jason's own.
             brand={slug === "judges" || slug === "ruth" ? "BibleProject" : "TruVINE"}
           />
+          <div className="mt-4 flex justify-center">
+            <MarkWatchedButton
+              videoId={book.videoId}
+              title={`${book.title} overview`}
+            />
+          </div>
         </div>
       )}
 

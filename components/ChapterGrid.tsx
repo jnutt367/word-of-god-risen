@@ -13,12 +13,13 @@ interface Props {
 }
 
 export default function ChapterGrid({ slug, chapters, coverImage }: Props) {
-  const { isRead } = useProgress();
+  const { isRead, isListened } = useProgress();
 
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {chapters.map((ch, i) => {
         const read = isRead(slug, i);
+        const listened = isListened(slug, i);
         return (
           <Link
             key={i}
@@ -45,9 +46,18 @@ export default function ChapterGrid({ slug, chapters, coverImage }: Props) {
                 {ch.text.slice(0, 120)}…
               </p>
             </div>
-            {read && (
-              <span className="absolute right-2 top-2 rounded-full bg-vineyard-950/80 px-2.5 py-1 text-[0.7rem] font-semibold text-gold-300 backdrop-blur">
-                ✓ Read
+            {(read || listened) && (
+              <span className="absolute right-2 top-2 flex gap-1.5">
+                {read && (
+                  <span className="rounded-full bg-vineyard-950/80 px-2.5 py-1 text-[0.7rem] font-semibold text-gold-300 backdrop-blur">
+                    ✓ Read
+                  </span>
+                )}
+                {listened && (
+                  <span className="rounded-full bg-vineyard-950/80 px-2.5 py-1 text-[0.7rem] font-semibold text-gold-300 backdrop-blur">
+                    🎧 Listened
+                  </span>
+                )}
               </span>
             )}
           </Link>
