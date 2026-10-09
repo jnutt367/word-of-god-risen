@@ -30,19 +30,24 @@ export default function AboutPage() {
           Read full chapters with room to breathe. Follow the{" "}
           <span className="text-gold-300">✦ cross-references</span> wherever a
           verse echoes another. Mark chapters as read and watch your progress
-          grow. Every book opens with an overview video from our friends at{" "}
-          <a
-            href="https://bibleproject.com"
-            className="text-gold-300 underline"
-          >
-            BibleProject
-          </a>
-          .
+          grow. Every book opens with an original overview video — narrated by
+          Grandpa Teddy and made by us, not borrowed from somewhere else.
         </p>
         <p>
           This is a not-for-profit passion project, crafted over years by a
           developer in his spare time — to show the hopeless that a man like
-          me, or you, can be saved.
+          me, or you, can be saved. Every video, every narration, every
+          illustration on this site was made with love for the TruVINE family.
+        </p>
+        <p>
+          If this ministry has blessed you and you&apos;d like to support it,{" "}
+          <a
+            href="https://cash.app/$TRUVINE365"
+            className="text-gold-300 underline"
+          >
+            you can give via Cash App ($TRUVINE365)
+          </a>
+          . Every gift helps keep the Word going out.
         </p>
       </div>
 
