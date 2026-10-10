@@ -24,6 +24,7 @@ const NAV_SECTIONS = [
     heading: "More",
     items: [
       { href: "/", label: "Home" },
+      { href: "/characters", label: "Characters" },
       { href: "/plans", label: "Plans" },
       { href: "/search", label: "Search" },
       { href: "/about", label: "About" },
@@ -110,6 +111,16 @@ export default function SiteHeader() {
           aria-label="Mobile"
           className="border-t border-gold-500/15 bg-vineyard-950/95 px-4 pb-4 pt-2 backdrop-blur lg:hidden"
         >
+          <div className="flex items-center gap-2.5 px-3 pb-2 pt-1">
+            <Image
+              src="/images/truvine-emblem.png"
+              alt=""
+              width={28}
+              height={28}
+              className="h-7 w-7 shrink-0 object-contain"
+            />
+            <span className="wordmark text-base">Word of God Risen</span>
+          </div>
           {NAV_SECTIONS.map((section) => (
             <div key={section.heading} className="mt-3 first:mt-1">
               <p className="px-3 pb-1 text-xs font-semibold uppercase tracking-[0.18em] text-gold-400/80">
