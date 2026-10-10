@@ -354,14 +354,6 @@ export default function AskTeddy() {
           height={64}
           className="h-full w-full rounded-full object-cover"
         />
-        {!open && (
-          <span className="absolute -right-0.5 -top-0.5 flex h-5 w-5">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold-400 opacity-60" />
-            <span className="relative inline-flex h-5 w-5 items-center justify-center rounded-full bg-gold-500 text-[11px] font-bold text-vineyard-950">
-              ?
-            </span>
-          </span>
-        )}
       </button>
     </div>
   );
