@@ -175,12 +175,12 @@ export default function AskTeddy() {
   };
 
   return (
-    <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
+    <div className="pointer-events-none fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
       {/* Chat panel */}
       <div
         className={`w-[min(92vw,380px)] overflow-hidden rounded-2xl border border-gold-500/40 bg-cream-50 shadow-2xl shadow-black/40 transition-all duration-300 origin-bottom-right ${
           open
-            ? "scale-100 opacity-100"
+            ? "pointer-events-auto scale-100 opacity-100"
             : "pointer-events-none scale-90 opacity-0"
         }`}
         aria-hidden={!open}
@@ -345,7 +345,7 @@ export default function AskTeddy() {
         onClick={handleOpen}
         aria-label={open ? "Close Ask Teddy chat" : "Open Ask Teddy chat"}
         aria-expanded={open}
-        className="group relative grid h-16 w-16 place-items-center rounded-full border-[3px] border-gold-400 bg-vineyard-900 shadow-xl shadow-black/40 transition-transform hover:scale-105 active:scale-95"
+        className="group pointer-events-auto relative grid h-16 w-16 place-items-center rounded-full border-[3px] border-gold-400 bg-vineyard-900 shadow-xl shadow-black/40 transition-transform hover:scale-105 active:scale-95"
       >
         <Image
           src={faceSrc}
