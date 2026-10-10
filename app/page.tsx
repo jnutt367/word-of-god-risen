@@ -121,37 +121,6 @@ export default function Home() {
         <ContinueReading />
       </div>
 
-      {/* Hear the Word — Grandpa Teddy's narration */}
-      <section className="mx-auto max-w-6xl px-4 pb-4 sm:px-6">
-        <Link href="/book/genesis/1" className="group relative block overflow-hidden rounded-2xl">
-          <div className="absolute inset-0">
-            <Image
-              src="/images/plan-genesis.jpg"
-              alt=""
-              fill
-              sizes="100vw"
-              className="object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-vineyard-950/85 via-vineyard-950/60 to-vineyard-950/30" />
-          </div>
-          <div className="relative px-6 py-10 sm:px-10 sm:py-14">
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-gold-300">
-              ✦ Hear the Word
-            </p>
-            <h2 className="mt-3 max-w-lg font-display text-2xl leading-snug text-cream-50 sm:text-3xl">
-              The whole Bible, read aloud by Grandpa Teddy
-            </h2>
-            <p className="mt-3 max-w-md text-cream-100/85">
-              Every chapter in his warm, unhurried voice — Genesis through
-              Deuteronomy and the lost books, with more on the way.
-            </p>
-            <span className="mt-6 inline-flex items-center gap-2 rounded-lg bg-gold-500 px-5 py-2.5 text-sm font-semibold text-vineyard-950 transition-colors group-hover:bg-gold-400">
-              <span aria-hidden="true">▶</span> Start listening
-            </span>
-          </div>
-        </Link>
-      </section>
-
       {/* Book grid */}
       <section id="books" className="mx-auto max-w-6xl scroll-mt-20 px-4 pb-20 sm:px-6">
         <div className="vine-divider mb-8" aria-hidden="true">
