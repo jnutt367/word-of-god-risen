@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import AskTeddy from "@/components/AskTeddy";
 import { ProgressProvider } from "@/components/ProgressProvider";
 import { PlanProvider } from "@/components/PlanProvider";
 
@@ -115,6 +116,7 @@ export default function RootLayout({
             <SiteHeader />
             <main className="flex-1">{children}</main>
             <SiteFooter />
+            <AskTeddy />
           </PlanProvider>
         </ProgressProvider>
         <Analytics />
