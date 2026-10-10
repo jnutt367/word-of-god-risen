@@ -116,7 +116,7 @@ export default function RootLayout({
             <SiteHeader />
             <main className="flex-1">{children}</main>
             <SiteFooter />
-            <AskTeddy />
+            {/* <AskTeddy /> — temporarily disabled: blocking page interaction, debugging */}
           </PlanProvider>
         </ProgressProvider>
         <Analytics />
