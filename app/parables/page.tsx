@@ -7,6 +7,7 @@ export const metadata: Metadata = {
 
 const PARABLES = [
   { slug: "sower", title: "The Sower", ref: "Matthew 13:3–9", videoId: "2GF8AFwXDp0" },
+  { slug: "true-vine", title: "I Am the True Vine", ref: "John 15:1–8", videoId: "-2vOTb-puBw" },
   { slug: "wheat-and-tares", title: "The Wheat and the Tares", ref: "Matthew 13:24–30", videoId: "2WrO7EEckM8" },
   { slug: "mustard-seed", title: "The Mustard Seed", ref: "Matthew 13:31–32" },
   { slug: "hidden-treasure", title: "The Hidden Treasure", ref: "Matthew 13:44" },
