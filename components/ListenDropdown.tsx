@@ -11,7 +11,7 @@ import Link from "next/link";
 const OPTIONS = [
   { label: "Old Testament", href: "/book/genesis/0?autoplay=1", hint: "Genesis → Malachi" },
   { label: "New Testament", href: "/book/matthew/0?autoplay=1", hint: "Matthew → Revelation" },
-  { label: "Lost Books", href: "/book/enoch/0?autoplay=1", hint: "Enoch, Jasher & more" },
+  { label: "Lost Books", href: "/book/enoch-1/0?autoplay=1", hint: "Enoch, Jasher & more" },
 ];
 
 export default function ListenDropdown() {
