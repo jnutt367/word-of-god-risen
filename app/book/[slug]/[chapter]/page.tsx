@@ -11,6 +11,7 @@ import {
 import { parseVerses, type Verse } from "@/lib/verses";
 import { getCrossRefs, refsForChapter } from "@/lib/crossrefs";
 import { getVideosForChapter } from "@/lib/videos";
+import { Suspense } from "react";
 import ReaderView from "@/components/ReaderView";
 
 export function generateStaticParams() {
@@ -88,6 +89,7 @@ export default async function ReaderPage({
   const videos = getVideosForChapter(slug, idx);
 
   return (
+    <Suspense fallback={<div className="p-8 text-center text-cream-100">Loading chapter…</div>}>
     <ReaderView
       slug={slug}
       bookTitle={book.title}
@@ -103,5 +105,6 @@ export default async function ReaderPage({
       prevIdx={idx > 0 ? idx - 1 : null}
       nextIdx={idx < chapters.length - 1 ? idx + 1 : null}
     />
+    </Suspense>
   );
 }
