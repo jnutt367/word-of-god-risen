@@ -11,7 +11,7 @@ const PARABLES = [
   { slug: "wheat-and-tares", title: "The Wheat and the Tares", ref: "Matthew 13:24–30", videoId: "2WrO7EEckM8" },
   { slug: "mustard-seed", title: "The Mustard Seed", ref: "Matthew 13:31–32" },
   { slug: "hidden-treasure", title: "The Hidden Treasure", ref: "Matthew 13:44" },
-  { slug: "pearl-of-great-price", title: "The Pearl of Great Price", ref: "Matthew 13:45–46" },
+  { slug: "pearl-of-great-price", title: "The Pearl of Great Price", ref: "Matthew 13:45–46", videoId: "bxtra5KWcmI" },
   { slug: "unforgiving-servant", title: "The Unforgiving Servant", ref: "Matthew 18:23–35" },
   { slug: "workers-in-the-vineyard", title: "The Workers in the Vineyard", ref: "Matthew 20:1–16" },
   { slug: "wedding-feast", title: "The Wedding Feast", ref: "Matthew 22:1–14" },
