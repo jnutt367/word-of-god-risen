@@ -6,7 +6,7 @@ export const metadata: Metadata = {
 };
 
 const PARABLES = [
-  { slug: "sower", title: "The Sower", ref: "Matthew 13:3–9" },
+  { slug: "sower", title: "The Sower", ref: "Matthew 13:3–9", videoId: "2GF8AFwXDp0" },
   { slug: "wheat-and-tares", title: "The Wheat and the Tares", ref: "Matthew 13:24–30" },
   { slug: "mustard-seed", title: "The Mustard Seed", ref: "Matthew 13:31–32" },
   { slug: "hidden-treasure", title: "The Hidden Treasure", ref: "Matthew 13:44" },
@@ -80,6 +80,17 @@ export default function ParablesPage() {
             <div className="p-5">
               <h2 className="font-display text-xl text-cream-100">{p.title}</h2>
               <p className="mt-1 text-sm text-sage-400">{p.ref}</p>
+              {"videoId" in p && p.videoId ? (
+                <div className="mt-3 aspect-video overflow-hidden rounded-xl">
+                  <iframe
+                    src={`https://www.youtube.com/embed/${p.videoId}`}
+                    title={`${p.title} — Parable Short`}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="h-full w-full"
+                  />
+                </div>
+              ) : null}
               <audio
                 controls
                 preload="none"
