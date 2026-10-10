@@ -28,6 +28,9 @@ const quicksand = Quicksand({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://word-of-god-risen.vercel.app"),
+  verification: {
+    google: "FOb4SqXUlgqPuo4YS_4-gZbT1cpak9fuBka5aK4DXY0",
+  },
   title: {
     default: "Word of God Risen — Centered on the King",
     template: "%s · Word of God Risen",
