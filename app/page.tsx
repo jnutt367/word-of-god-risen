@@ -59,6 +59,12 @@ export default function Home() {
               Start reading
             </Link>
             <Link
+              href="/book/genesis/1"
+              className="rounded-lg bg-cream-100 px-6 py-3 text-sm font-semibold text-vineyard-950 transition-colors hover:bg-gold-300"
+            >
+              <span aria-hidden="true" className="mr-1.5">▶</span> Start listening
+            </Link>
+            <Link
               href="/search"
               className="rounded-lg border border-cream-100/25 px-6 py-3 text-sm font-semibold text-cream-100 transition-colors hover:border-gold-400 hover:text-gold-300"
             >
