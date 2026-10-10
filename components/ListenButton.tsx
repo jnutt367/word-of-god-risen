@@ -9,6 +9,7 @@ interface Props {
   bookTitle: string;
   chapterNum: number;
   verses: Verse[];
+  autoplay?: boolean;
 }
 
 type Status = "idle" | "playing" | "paused";
@@ -54,6 +55,7 @@ export default function ListenButton({
   bookTitle,
   chapterNum,
   verses,
+  autoplay = false,
 }: Props) {
   const [status, setStatus] = useState<Status>("idle");
   const [canListen, setCanListen] = useState(false);
@@ -108,6 +110,18 @@ export default function ListenButton({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bookSlug, chapterNum, verses]);
+
+  // Autoplay when ?autoplay=1 (e.g. from the homepage "Start listening" button).
+  // Browsers may block this without prior interaction — if so, the button
+  // stays ready for the user to press manually.
+  const autoplayed = useRef(false);
+  useEffect(() => {
+    if (!autoplay || autoplayed.current) return;
+    if (typeof mp3Url !== "string" || !mp3Url) return;
+    autoplayed.current = true;
+    toggleMp3(mp3Url);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoplay, mp3Url]);
 
   // Tear down audio on unmount.
   useEffect(() => {

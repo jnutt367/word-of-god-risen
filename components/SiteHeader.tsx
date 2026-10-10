@@ -4,17 +4,35 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-const NAV = [
-  { href: "/", label: "Home" },
-  { href: "/#old-testament", label: "Old Testament" },
-  { href: "/#new-testament", label: "New Testament" },
-  { href: "/#more", label: "Lost Books" },
-  { href: "/parables", label: "Parables" },
-  { href: "/plans", label: "Plans" },
-  { href: "/shorts", label: "Shorts" },
-  { href: "/search", label: "Search" },
-  { href: "/about", label: "About" },
+const NAV_SECTIONS = [
+  {
+    heading: "Scripture",
+    items: [
+      { href: "/#old-testament", label: "Old Testament" },
+      { href: "/#new-testament", label: "New Testament" },
+      { href: "/#more", label: "Lost Books" },
+    ],
+  },
+  {
+    heading: "Watch & Listen",
+    items: [
+      { href: "/parables", label: "Parables" },
+      { href: "/shorts", label: "Shorts" },
+    ],
+  },
+  {
+    heading: "More",
+    items: [
+      { href: "/", label: "Home" },
+      { href: "/plans", label: "Plans" },
+      { href: "/search", label: "Search" },
+      { href: "/about", label: "About" },
+    ],
+  },
 ];
+
+// Flat list for desktop nav
+const NAV = NAV_SECTIONS.flatMap((s) => s.items);
 
 export default function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -92,19 +110,26 @@ export default function SiteHeader() {
           aria-label="Mobile"
           className="border-t border-gold-500/15 bg-vineyard-950/95 px-4 pb-4 pt-2 backdrop-blur lg:hidden"
         >
-          <ul className="space-y-1">
-            {NAV.map((item) => (
-              <li key={item.label}>
-                <Link
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  className="block rounded-lg px-3 py-3 text-base font-medium text-cream-100 transition-colors hover:bg-vineyard-800 hover:text-gold-300"
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          {NAV_SECTIONS.map((section) => (
+            <div key={section.heading} className="mt-3 first:mt-1">
+              <p className="px-3 pb-1 text-xs font-semibold uppercase tracking-[0.18em] text-gold-400/80">
+                {section.heading}
+              </p>
+              <ul className="space-y-1">
+                {section.items.map((item) => (
+                  <li key={item.label}>
+                    <Link
+                      href={item.href}
+                      onClick={() => setOpen(false)}
+                      className="block rounded-lg px-3 py-2.5 text-base font-medium text-cream-100 transition-colors hover:bg-vineyard-800 hover:text-gold-300"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </nav>
       )}
     </header>

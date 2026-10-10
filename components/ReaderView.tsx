@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import VerseText from "@/components/VerseText";
 import CrossRefPanel from "@/components/CrossRefPanel";
 import WatchCard from "@/components/WatchCard";
@@ -52,6 +52,8 @@ export default function ReaderView({
 }: Props) {
   const [lamp, setLamp] = useState(false);
   const [version, setVersion] = useState(defaultVersion);
+  const searchParams = useSearchParams();
+  const autoplay = searchParams.get("autoplay") === "1";
   const [openRef, setOpenRef] = useState<{
     verseN: number;
     ref: string;
@@ -184,6 +186,7 @@ export default function ReaderView({
               bookTitle={bookTitle}
               chapterNum={chapterNum}
               verses={verses}
+              autoplay={autoplay}
             />
             <button
               type="button"
