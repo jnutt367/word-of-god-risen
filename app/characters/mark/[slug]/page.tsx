@@ -1,11 +1,23 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { existsSync } from "fs";
+import { join } from "path";
 import { CHARACTERS, getCharacter } from "@/data/characters";
 import InlineMd from "@/components/InlineMd";
 
 // Printify store URL — set when the trading card products go live.
 const PRINTIFY_STORE_URL = "";
+
+function cardImages(slug: string): { front: string; back: string } | null {
+  const front = `/images/cards/${slug}-front.jpg`;
+  const back = `/images/cards/${slug}-back.jpg`;
+  const pub = join(process.cwd(), "public");
+  if (existsSync(join(pub, front)) && existsSync(join(pub, back))) {
+    return { front, back };
+  }
+  return null;
+}
 
 export function generateStaticParams() {
   return CHARACTERS.map((c) => ({ slug: c.slug }));
@@ -67,27 +79,6 @@ export default async function CharacterPage({
               Scripture gives no name
             </p>
           )}
-
-          {/* Trading card CTA — Printify URL lands here when products go live */}
-          <div className="mt-6">
-            {PRINTIFY_STORE_URL ? (
-              <a
-                href={PRINTIFY_STORE_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block rounded-full bg-gold-500 px-6 py-3 text-sm font-bold text-vineyard-950 transition-colors hover:bg-gold-400"
-              >
-                Get the Trading Card
-              </a>
-            ) : (
-              <span
-                aria-disabled="true"
-                className="inline-block cursor-not-allowed rounded-full border border-gold-500/30 px-6 py-3 text-sm font-semibold text-sage-400"
-              >
-                Trading cards — coming soon
-              </span>
-            )}
-          </div>
         </div>
       </div>
 
@@ -153,6 +144,67 @@ export default async function CharacterPage({
           </div>
         </section>
       )}
+
+      {/* Trading card showcase */}
+      {(() => {
+        const card = cardImages(slug);
+        if (!card) return null;
+        return (
+          <section className="mt-10">
+            <h2 className="font-display text-2xl text-cream-100">
+              Trading Card
+            </h2>
+            <p className="mt-2 max-w-2xl leading-relaxed text-sage-400">
+              A keepsake of {c.name}&rsquo;s story — the portrait on the
+              front, the key moments on the back.
+            </p>
+            <div className="mt-6 grid gap-6 sm:grid-cols-2 sm:gap-8">
+              <figure>
+                <div className="overflow-hidden rounded-2xl border border-gold-500/20 shadow-lg shadow-black/30">
+                  <img
+                    src={card.front}
+                    alt={`${c.name} trading card — front`}
+                    loading="lazy"
+                    className="w-full"
+                  />
+                </div>
+                <figcaption className="mt-2 text-center text-xs uppercase tracking-[0.18em] text-sage-500">
+                  Front
+                </figcaption>
+              </figure>
+              <figure>
+                <div className="overflow-hidden rounded-2xl border border-gold-500/20 shadow-lg shadow-black/30">
+                  <img
+                    src={card.back}
+                    alt={`${c.name} trading card — back`}
+                    loading="lazy"
+                    className="w-full"
+                  />
+                </div>
+                <figcaption className="mt-2 text-center text-xs uppercase tracking-[0.18em] text-sage-500">
+                  Back
+                </figcaption>
+              </figure>
+            </div>
+            <div className="mt-6">
+              {PRINTIFY_STORE_URL ? (
+                <a
+                  href={PRINTIFY_STORE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm font-medium text-gold-300 underline decoration-gold-500/40 underline-offset-4 transition-colors hover:text-gold-400"
+                >
+                  Available in the TruVINE store
+                </a>
+              ) : (
+                <p className="text-sm italic text-sage-500">
+                  Trading cards coming soon to the TruVINE store.
+                </p>
+              )}
+            </div>
+          </section>
+        );
+      })()}
 
       <p className="mt-10 border-t border-gold-500/15 pt-6 font-scripture text-sm italic text-sage-500">
         Every claim above is from Scripture unless labeled &ldquo;Tradition.&rdquo;
