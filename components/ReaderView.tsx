@@ -134,6 +134,33 @@ export default function ReaderView({
           </div>
         </div>
 
+        {/* Prev/Next at top */}
+        <nav
+          className="mb-6 flex w-full items-center justify-between gap-4"
+          aria-label="Chapters"
+        >
+          {prevIdx !== null ? (
+            <Link
+              href={`/book/${slug}/${prevIdx}`}
+              className="rounded-lg border border-[var(--reader-line)] px-4 py-2.5 text-sm font-medium text-[var(--reader-muted)] hover:text-[var(--reader-verse-num)]"
+            >
+              ← Previous
+            </Link>
+          ) : (
+            <span />
+          )}
+          {nextIdx !== null ? (
+            <Link
+              href={`/book/${slug}/${nextIdx}`}
+              className="rounded-lg border border-[var(--reader-line)] px-4 py-2.5 text-sm font-medium text-[var(--reader-muted)] hover:text-[var(--reader-verse-num)]"
+            >
+              Next →
+            </Link>
+          ) : (
+            <span />
+          )}
+        </nav>
+
         {/* Chapter heading */}
         {image && (
           <div className="relative mb-8 aspect-[21/9] overflow-hidden rounded-2xl">
