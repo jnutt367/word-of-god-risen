@@ -44,7 +44,7 @@ export default function ParablesPage() {
       <div className="mt-8 overflow-hidden rounded-2xl border border-gold-500/15 bg-vineyard-900">
         <div className="aspect-video">
           <iframe
-            src="https://www.youtube.com/embed/sybue2EZMQI"
+            src="https://www.youtube.com/embed/QCF-t91FnQE"
             title="Why Jesus Spoke in Parables"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
