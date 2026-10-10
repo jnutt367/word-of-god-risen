@@ -106,7 +106,7 @@ export default function AskTeddy() {
   // Teddy's "look" for this visit — a slightly different outfit/scene each
   // time, like he's been out tending the farm. 1: hay field, 2: chicken coop,
   // 3: sunset fence line, 4: cozy indoors.
-  const [look] = useState(() => 1 + Math.floor(Math.random() * 3));
+  const [look] = useState(() => 1 + Math.floor(Math.random() * 4));
   const faceSrc = `/images/teddy-face-${look}.png`;
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
