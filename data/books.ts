@@ -66,7 +66,7 @@ export const BOOKS: BookMeta[] = [
   { slug: 'acts', title: 'Acts', testament: 'new', description: '', image: '/images/cover-acts.jpg', videoId: 'HKwdR9BsOJA', mood: 'warm', chapters: 28 },
   { slug: 'romans', title: 'Romans', testament: 'new', description: '', image: '/images/cover-romans.jpg', videoId: '6GcHO7d-V2g', mood: 'warm', chapters: 16 },
   { slug: 'corinthians-1', title: '1 Corinthians', testament: 'new', description: 'Read 1 Corinthians online — love, unity, and the resurrection', image: '/images/cover-corinthians-1.jpg', videoId: 'M4ezlPwE_lw', mood: 'warm', chapters: 16 },
-  { slug: 'corinthians-2', title: '2 Corinthians', testament: 'new', description: 'Read 2 Corinthians online — comfort in affliction, strength in weakness', image: '/images/cover-corinthians-2.jpg', mood: 'warm', chapters: 13 },
+  { slug: 'corinthians-2', title: '2 Corinthians', testament: 'new', description: 'Read 2 Corinthians online — comfort in affliction, strength in weakness', image: '/images/cover-corinthians-2.jpg', videoId: '7HpSEJkWI7Q', mood: 'warm', chapters: 13 },
   { slug: 'galatians', title: 'Galatians', testament: 'new', description: 'Read Galatians online — freedom in Christ, not chains of the law', image: '/images/cover-galatians.jpg', videoId: 'A1NZGltQpbA', mood: 'warm', chapters: 6 },
   { slug: 'ephesians', title: 'Ephesians', testament: 'new', description: 'Read Ephesians online — the armor of God and riches of grace', image: '/images/cover-ephesians.jpg', mood: 'warm', chapters: 6 },
   { slug: 'philippians', title: 'Philippians', testament: 'new', description: 'Read Philippians online — joy in every circumstance', image: '/images/cover-philippians.jpg', mood: 'warm', chapters: 4 },
