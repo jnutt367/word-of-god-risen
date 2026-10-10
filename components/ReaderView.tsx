@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import VerseText from "@/components/VerseText";
 import CrossRefPanel from "@/components/CrossRefPanel";
 import WatchCard from "@/components/WatchCard";
@@ -59,6 +60,56 @@ export default function ReaderView({
   const { isRead, toggle, isListened, toggleListened } = useProgress();
   const read = isRead(slug, chapterIdx);
   const listened = isListened(slug, chapterIdx);
+  const router = useRouter();
+
+  // ---- Reading progress bar ----
+  const progressRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const el = progressRef.current;
+      if (!el) return;
+      const doc = document.documentElement;
+      const scrollable = doc.scrollHeight - doc.clientHeight;
+      const pct = scrollable > 0 ? Math.min(1, Math.max(0, window.scrollY / scrollable)) : 0;
+      el.style.transform = `scaleX(${pct})`;
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  // ---- Swipe between chapters (mobile) ----
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
+  const onTouchStart = (e: React.TouchEvent) => {
+    const t = e.touches[0];
+    touchStart.current = { x: t.clientX, y: t.clientY };
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const start = touchStart.current;
+    touchStart.current = null;
+    if (!start) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - start.x;
+    const dy = t.clientY - start.y;
+    // Only horizontal swipes: horizontal distance must dominate vertical
+    // and exceed the minimum threshold.
+    if (Math.abs(dx) < 80 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    if (dx < 0 && nextIdx !== null) {
+      router.push(`/book/${slug}/${nextIdx}`);
+    } else if (dx > 0 && prevIdx !== null) {
+      router.push(`/book/${slug}/${prevIdx}`);
+    }
+  };
 
   // Restore the reader's preferred translation.
   useEffect(() => {
@@ -82,7 +133,18 @@ export default function ReaderView({
   const verses = versesByVersion[version] ?? versesByVersion[defaultVersion];
 
   return (
-    <div className={`reader-theme ${lamp ? "lamp" : ""} min-h-screen bg-[var(--reader-bg)] transition-colors`}>
+    <div
+      className={`reader-theme ${lamp ? "lamp" : ""} min-h-screen bg-[var(--reader-bg)] transition-colors`}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+    >
+      {/* Reading progress bar */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed left-0 top-0 z-50 h-1 w-full origin-left bg-[var(--reader-verse-num)]"
+        style={{ transform: "scaleX(0)" }}
+        ref={progressRef}
+      />
       <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-12">
         {/* Top bar */}
         <div className="mb-8 flex items-center justify-between gap-3">
