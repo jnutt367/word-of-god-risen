@@ -6,7 +6,7 @@ import { join } from "path";
 import { CHARACTERS, getCharacter } from "@/data/characters";
 import InlineMd from "@/components/InlineMd";
 
-// Printify store URL — set when the trading card products go live.
+// Printify store URL — set when the Faces of Faith card products go live.
 const PRINTIFY_STORE_URL = "";
 
 function cardImages(slug: string): { front: string; back: string } | null {
@@ -145,15 +145,18 @@ export default async function CharacterPage({
         </section>
       )}
 
-      {/* Trading card showcase */}
+      {/* Faces of Faith showcase */}
       {(() => {
         const card = cardImages(slug);
         if (!card) return null;
         return (
           <section className="mt-10">
             <h2 className="font-display text-2xl text-cream-100">
-              Trading Card
+              Faces of Faith
             </h2>
+            <p className="mt-1 text-sm italic text-gold-300/80">
+              &ldquo;Surrounded by so great a cloud of witnesses&rdquo; — Hebrews 12:1
+            </p>
             <p className="mt-2 max-w-2xl leading-relaxed text-sage-400">
               A keepsake of {c.name}&rsquo;s story — the portrait on the
               front, the key moments on the back.
@@ -163,7 +166,7 @@ export default async function CharacterPage({
                 <div className="overflow-hidden rounded-2xl border border-gold-500/20 shadow-lg shadow-black/30">
                   <img
                     src={card.front}
-                    alt={`${c.name} trading card — front`}
+                    alt={`${c.name} Faces of Faith card — front`}
                     loading="lazy"
                     className="w-full"
                   />
@@ -176,7 +179,7 @@ export default async function CharacterPage({
                 <div className="overflow-hidden rounded-2xl border border-gold-500/20 shadow-lg shadow-black/30">
                   <img
                     src={card.back}
-                    alt={`${c.name} trading card — back`}
+                    alt={`${c.name} Faces of Faith card — back`}
                     loading="lazy"
                     className="w-full"
                   />
@@ -198,7 +201,7 @@ export default async function CharacterPage({
                 </a>
               ) : (
                 <p className="text-sm italic text-sage-500">
-                  Trading cards coming soon to the TruVINE store.
+                  Faces of Faith cards coming soon to the TruVINE store.
                 </p>
               )}
             </div>
