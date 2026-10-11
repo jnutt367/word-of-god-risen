@@ -771,10 +771,10 @@ export const CHARACTERS: Character[] = [
   },
   {
     "slug": "salome",
-    "name": "Salome, Daughter of Herodias",
-    "subtitle": "Daughter of Herodias",
+    "name": "Daughter of Herodias",
+    "subtitle": "Unnamed in Scripture",
     "image": "/images/characters/salome.jpg",
-    "caption": "",
+    "caption": "Scripture never names her — she is only \"the daughter of Herodias\" (Mark 6:22). The historian Josephus calls her Salome.",
     "group": "faces",
     "unnamed": true,
     "facts": [
