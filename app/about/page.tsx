@@ -47,15 +47,20 @@ export default function AboutPage() {
           borrowed from somewhere else. If one heart finds Jesus through
           this work, that&apos;s enough.
         </p>
-        <p>
-          If this ministry has blessed you and you&apos;d like to support it,{" "}
+      </div>
+
+      <div className="mt-10 rounded-2xl border border-gold-500/15 bg-vineyard-900 p-6">
+        <h2 className="font-display text-xl text-cream-50">Partner with us</h2>
+        <p className="mt-2 font-scripture text-lg leading-relaxed text-cream-100/90">
+          If the Lord leads you to help keep this ministry planting seeds,
+          you can partner with us through Cash App:{" "}
           <a
             href="https://cash.app/$TRUVINE365"
             className="text-gold-300 underline"
           >
-            you can give via Cash App ($TRUVINE365)
+            $TRUVINE365
           </a>
-          . Every gift helps keep the Word going out.
+          . No pressure, ever; we&apos;re grateful you&apos;re here.
         </p>
       </div>
 
