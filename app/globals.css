@@ -53,6 +53,17 @@ body {
   color: var(--color-vineyard-950);
 }
 
+/* Visible keyboard focus everywhere (accessibility rule, Oct 2026).
+   Gold ring on the dark vineyard surfaces; a deeper amber on the lamp
+   (light) reader theme so the ring keeps AA contrast there too. */
+:focus-visible {
+  outline: 2px solid var(--color-gold-400);
+  outline-offset: 2px;
+}
+.reader-theme.lamp :focus-visible {
+  outline-color: #865c10;
+}
+
 /* TruVINE gradient text (blue -> green, like the wordmark) */
 .text-truvine-gradient {
   background: linear-gradient(90deg, #4a86e8 0%, #6aa84f 55%, #82c23f 100%);
@@ -109,8 +120,8 @@ body {
   --reader-bg: #f3ead3;
   --reader-ink: #2b2318;
   --reader-muted: #6f6247;
-  --reader-faint: #8a7a58;
-  --reader-verse-num: #a5761f;
+  --reader-faint: #77653f;
+  --reader-verse-num: #865c10;
   --reader-card: #faf4e3;
   --reader-line: rgba(165, 118, 31, 0.22);
 }

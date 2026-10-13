@@ -21,7 +21,7 @@ export default function Home() {
         <div className="absolute inset-0">
           <Image
             src="/images/wogr-hero-banner.jpg"
-            alt=""
+            alt="Three crosses on a hill at sunrise, above rows of grapevines"
             fill
             priority
             sizes="100vw"
@@ -29,7 +29,7 @@ export default function Home() {
           />
           <Image
             src="/images/wogr-hero-mobile.jpg"
-            alt=""
+            alt="Three crosses on a hill at sunrise, above rows of grapevines"
             fill
             priority
             sizes="100vw"

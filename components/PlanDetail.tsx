@@ -34,7 +34,7 @@ export default function PlanDetailPage({ planId }: { planId: string }) {
         <div className="relative aspect-[21/9]">
           <Image
             src={plan.image}
-            alt=""
+            alt={`${plan.title} plan illustration`}
             fill
             sizes="(max-width: 768px) 100vw, 768px"
             className="object-cover"

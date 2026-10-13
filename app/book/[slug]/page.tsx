@@ -64,7 +64,7 @@ export default async function BookPage({
           <div className="relative aspect-[21/9] sm:aspect-[28/9]">
             <Image
               src={book.image}
-              alt=""
+              alt={`${book.title} cover illustration`}
               fill
               sizes="(max-width: 1024px) 100vw, 1024px"
               className="object-cover object-top"

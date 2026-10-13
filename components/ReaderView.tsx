@@ -231,7 +231,7 @@ export default function ReaderView({
           <div className="relative mb-8 aspect-[21/9] overflow-hidden rounded-2xl">
             <Image
               src={image}
-              alt=""
+              alt={`${bookTitle} illustration`}
               fill
               sizes="(max-width: 768px) 100vw, 768px"
               className="object-cover object-top"

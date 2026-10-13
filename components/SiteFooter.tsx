@@ -4,7 +4,7 @@ export default function SiteFooter() {
   return (
     <footer className="border-t border-gold-500/15 bg-vineyard-900/60">
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-        <div className="vine-divider mb-6">
+        <div className="vine-divider mb-6" aria-hidden="true">
           <span className="text-lg">✦</span>
         </div>
         <div className="flex flex-col items-center gap-3 text-center">
