@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import Image from "next/image";
 import Link from "next/link";
+import BuildersArt from "@/components/BuildersArt";
 
 export default function Error({
   error,
@@ -17,15 +17,7 @@ export default function Error({
 
   return (
     <section className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 sm:py-24">
-      <div className="overflow-hidden rounded-2xl border border-gold-500/15 bg-vineyard-900 shadow-2xl">
-        <Image
-          src="/images/builders-404.png"
-          alt="Jason and Judah of the True Vine Construction Crew on a vineyard path at golden hour — Jason kneels repairing a broken wooden signpost while Judah holds up a lantern and points the way home"
-          width={1920}
-          height={1280}
-          className="h-auto w-full"
-        />
-      </div>
+      <BuildersArt />
 
       <p className="mt-10 text-sm font-semibold uppercase tracking-[0.22em] text-gold-300">
         Something went wrong
