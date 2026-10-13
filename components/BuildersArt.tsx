@@ -15,12 +15,23 @@ const MORNING: ArtVariant = {
   alt: "Jason and Judah of the True Vine Construction Crew on a vineyard path at sunrise — a rooster crows from the fence rail while Jason tightens the last bolt on the repaired signpost, coffee steaming beside his toolbox, and Judah smiles over his own mug of coffee",
 };
 
+const DAY: ArtVariant = {
+  src: "/images/builders-404-day.png",
+  alt: "Jason and Judah of the True Vine Construction Crew on a vineyard path at midday — Jason kneels repairing a broken signpost post while chickens scatter around his open toolbox, a sheepdog trots down the path between the vines, and Judah holds up a lantern in the bright sun",
+};
+
+const NIGHT: ArtVariant = {
+  src: "/images/builders-404-night.png",
+  alt: "Jason and Judah of the True Vine Construction Crew on a vineyard path at night under a starry sky and crescent moon — Jason rests on a stool with a mug of coffee beside the broken signpost, Judah holds up a glowing lantern, and a sleepy donkey watches them, unimpressed",
+};
+
 function variantForHour(hour: number): ArtVariant {
-  // Morning crew (5:00–10:59 local) gets the sunrise art. Day and
-  // night variants are still to come; those hours keep the evening
-  // lantern art for now.
+  // The crew keeps the visitor's hours: morning (5:00–10:59),
+  // day (11:00–16:59), evening (17:00–20:59), night (21:00–4:59).
   if (hour >= 5 && hour < 11) return MORNING;
-  return EVENING;
+  if (hour >= 11 && hour < 17) return DAY;
+  if (hour >= 17 && hour < 21) return EVENING;
+  return NIGHT;
 }
 
 /**
