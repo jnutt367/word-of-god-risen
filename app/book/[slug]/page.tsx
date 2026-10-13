@@ -36,6 +36,9 @@ export async function generateMetadata({
     openGraph: {
       title: `${book.title} · Word of God Risen`,
       description: blurb,
+      images: book.image
+        ? [{ url: book.image, alt: `${book.title} cover illustration` }]
+        : undefined,
     },
   };
 }
