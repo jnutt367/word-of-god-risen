@@ -47,15 +47,66 @@ never a fake real-time.
   chapters in the library (78 books; 1,503 audio chapters) · the latest
   counted day's read+heard total (the vine's lights).
 - **Internal-only:** listen completions (collected; not displayed).
-- **Country garland:** the component renders it **only** when the
-  snapshot carries a `countries` array with an honest source label.
-  The app cannot see its own analytics geography at runtime, so the
-  garland stays dark until a roll-up supplies verified geography
-  (e.g. Vercel Analytics visitor countries) — it is never guessed.
+- **Country layer (v2):** the world map under the vine is always drawn;
+  country lights and the labeled "Neighbors near and far" list render
+  **only** when the snapshot carries `countries` rows with an honest
+  source label and window. The app cannot see its own analytics
+  geography at runtime, so the lights stay dark until a roll-up
+  supplies verified geography — they are never guessed, and no other
+  property's audience is ever plotted (see the v2 section below).
 - **Recent-chapters river:** same rule — rendered only when the roll-up
   supplies aggregate recent rows (book + chapter + kind + day, no
   identity). Currently dark for the same reason: event detail rows live
   in the Analytics dashboard, not in an export the roll-up can read yet.
+
+## v2 — the world under the vine (Oct 15, 2026)
+
+Jason's critique of v1: the vine's dots didn't *say* "countries
+reading" on their own — "maybe like a transparent map of the world."
+He was right; v2 builds exactly that.
+
+- **Ground layer.** A soft, translucent world map sits beneath the
+  vine in the same figure: equirectangular landmasses in faint warm
+  parchment at low opacity, TruVINE palette. The vine's trunk is rooted
+  low-center and its branches reach across the map. The geometry is
+  **Natural Earth 110m (public domain)**, vendored into the repo as
+  `lib/world-map.json` by `scripts/build-world-map.mjs` — no external
+  tile services, no map libraries, no trackers, nothing fetched at
+  runtime. (Antarctica omitted; N. Cyprus, Somaliland, and Kosovo have
+  no ISO code in the source data, so they are drawn in the land but can
+  never carry a light.)
+- **Country lights.** When the snapshot's `countries[]` carries a row
+  whose `code` (ISO 3166-1 alpha-2) resolves in the vendored geography,
+  that country gets a golden light at its approximate centroid —
+  radius scaled gently (log) by its read+heard total, capped, breathing
+  with the same `.hb-glow` motion as the fruit lights and fully still
+  under `prefers-reduced-motion`. The country's land also rests a
+  little warmer beneath its light. The vine's fruit lights remain a
+  separate layer with their original meaning: the latest counted day's
+  chapters.
+- **Meaning made plain.** The figure's copy says it outright: "Each
+  light is a country where the Word was opened." The labeled list
+  ("Neighbors near and far") names **every** country row with its count
+  and window — "Philippines — 32 chapters this week" — plus its
+  read/heard split when both exist, so the map is never the only
+  carrier of meaning. Hovering or tapping a light shows the same
+  name + count via the light's `<title>`. The whole figure is a
+  labelled `role="img"` whose summary names the lit countries; the
+  counters and the list are real text.
+- **Data path.** `data/heartbeat.json` countries rows are now
+  `{ code, name, read, heard }`, with snapshot-level `countriesWindow`
+  (the window the counts cover — printed on the page beside every
+  count) and `countriesSource`. `scripts/heartbeat-rollup.mjs`
+  normalizes and validates rows fed to it (legacy v1 `chaptersRead`
+  rows are still accepted). The operator supplies rows from **this
+  app's own Vercel Web Analytics geography** — country-level aggregates
+  only, no cities, no IPs, no per-visitor rows, per the no-tracking
+  posture. Sources never mix: the YouTube channel's audience geography
+  is a different property's data and is **never** plotted here.
+- **Honest empty state.** Until real country rows exist, the map
+  renders as a quiet world under the resting vine, with the expectancy
+  line: "Country lights join as our daily count gathers them — each
+  light will mark a country where the Word was opened."
 
 ## Why not real-time counters in a database
 
@@ -75,9 +126,11 @@ only where the numbers come from, not what they mean.
 
 ## Accessibility & motion
 
-- The vine SVG is a labelled figure (`role="img"` + a plain-language
-  summary); every number also exists as text.
-- The only motion is the fruit lights' slow opacity breath
+- The figure (world map + vine, v2) is a labelled figure (`role="img"`
+  + a plain-language summary that names any lit countries and their
+  counts); every number also exists as text, and the country list
+  repeats the map's meaning in plain words beside it.
+- The only motion is the lights' slow opacity breath
   (`.hb-glow` in `app/globals.css`), fully disabled under
   `prefers-reduced-motion: reduce`.
 - Colors come from the existing vineyard/gold/sage palette; tile text
