@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { Verse } from "@/lib/verses";
 import { getBook } from "@/lib/bible-client";
+import { beatListenStart, beatListenComplete } from "@/lib/heartbeat";
 
 interface Props {
   bookSlug: string;
@@ -68,6 +69,12 @@ export default function ListenButton({
   const [duration, setDuration] = useState(0);
   const [ambientOn, setAmbientOn] = useState(true);
   const session = useRef(0);
+  // Bible Heartbeat: the audio element's handlers are attached once, so
+  // they read the current chapter from this ref instead of stale props.
+  const chapterRef = useRef({ bookSlug, chapterNum });
+  useEffect(() => {
+    chapterRef.current = { bookSlug, chapterNum };
+  }, [bookSlug, chapterNum]);
   const panelRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const ambientRef = useRef<HTMLAudioElement | null>(null);
@@ -234,6 +241,10 @@ export default function ListenButton({
       a.onended = () => {
         setStatus("idle");
         setProgress(0);
+        beatListenComplete(
+          chapterRef.current.bookSlug,
+          chapterRef.current.chapterNum
+        );
       };
       audioRef.current = a;
     }
@@ -251,6 +262,7 @@ export default function ListenButton({
       a.play().catch(() => setStatus("idle"));
       ambientPlay();
       setStatus("playing");
+      beatListenStart(bookSlug, chapterNum);
     } else if (status === "playing") {
       a.pause();
       ambientPause();
@@ -341,13 +353,17 @@ export default function ListenButton({
       u.rate = rate;
       if (i === parts.length - 1) {
         u.onend = () => {
-          if (session.current === mySession) setStatus("idle");
+          if (session.current === mySession) {
+            setStatus("idle");
+            beatListenComplete(bookSlug, chapterNum);
+          }
         };
       }
       synth.speak(u);
     });
     ambientPlay();
     setStatus("playing");
+    beatListenStart(bookSlug, chapterNum);
   };
 
   const toggleTts = () => {

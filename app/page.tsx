@@ -8,6 +8,7 @@ import ContinueReading from "@/components/ContinueReading";
 import PlanContinue from "@/components/PlanContinue";
 import ListenDropdown from "@/components/ListenDropdown";
 import LatestShorts from "@/components/LatestShorts";
+import BodyHeartbeat from "@/components/BodyHeartbeat";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -121,6 +122,9 @@ export default function Home() {
         <PlanContinue />
         <ContinueReading />
       </div>
+
+      {/* The Body, Reading — the Bible Heartbeat */}
+      <BodyHeartbeat />
 
       {/* Book grid */}
       <section id="books" className="mx-auto max-w-6xl scroll-mt-20 px-4 pb-20 sm:px-6">

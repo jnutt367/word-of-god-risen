@@ -125,3 +125,23 @@ body {
   --reader-card: #faf4e3;
   --reader-line: rgba(165, 118, 31, 0.22);
 }
+
+/* Bible Heartbeat — the vine's fruit lights breathe, slowly and calmly.
+ * This is the only ambient motion on the heartbeat card, and it stops
+ * entirely for readers who prefer reduced motion. */
+@keyframes hb-breathe {
+  from {
+    opacity: 0.55;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.hb-glow {
+  animation: hb-breathe 4.5s ease-in-out infinite alternate;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hb-glow {
+    animation: none;
+  }
+}

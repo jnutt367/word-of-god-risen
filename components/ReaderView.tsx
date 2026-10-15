@@ -9,6 +9,8 @@ import CrossRefPanel from "@/components/CrossRefPanel";
 import WatchCard from "@/components/WatchCard";
 import ListenButton from "@/components/ListenButton";
 import { useProgress } from "@/components/ProgressProvider";
+import { beatRead, beatBookComplete } from "@/lib/heartbeat";
+import { getBook } from "@/lib/bible-client";
 import { VERSION_STORAGE_KEY } from "@/lib/versions";
 import type { Verse } from "@/lib/verses";
 import type { ChapterVideo } from "@/lib/videos";
@@ -59,10 +61,28 @@ export default function ReaderView({
     ref: string;
     targets: string[];
   } | null>(null);
-  const { isRead, toggle, isListened, toggleListened } = useProgress();
+  const { isRead, toggle, isListened, toggleListened, readOnPage } =
+    useProgress();
   const read = isRead(slug, chapterIdx);
   const listened = isListened(slug, chapterIdx);
   const router = useRouter();
+
+  // Bible Heartbeat: opening a chapter is one anonymous beat (deduped
+  // per session inside lib/heartbeat).
+  useEffect(() => {
+    beatRead(slug, chapterIdx);
+  }, [slug, chapterIdx]);
+
+  const onToggleRead = () => {
+    const readBefore = readOnPage(slug).length;
+    const nowRead = toggle(slug, chapterIdx, chapterTitle);
+    if (nowRead) {
+      beatRead(slug, chapterIdx);
+      // Finishing the last unread chapter of a book = one book beat.
+      const total = getBook(slug)?.chapters ?? 0;
+      if (total > 0 && readBefore + 1 >= total) beatBookComplete(slug);
+    }
+  };
 
   // ---- Reading progress bar ----
   const progressRef = useRef<HTMLDivElement>(null);
@@ -268,7 +288,7 @@ export default function ReaderView({
           <div className="flex flex-wrap items-center justify-center gap-3">
             <button
               type="button"
-              onClick={() => toggle(slug, chapterIdx, chapterTitle)}
+              onClick={onToggleRead}
               className={`rounded-lg px-6 py-3 text-sm font-semibold transition-colors ${
                 read
                   ? "bg-[var(--reader-verse-num)]/15 text-[var(--reader-verse-num)] border border-[var(--reader-verse-num)]/40"
