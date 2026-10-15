@@ -79,6 +79,13 @@ import {
  * with a small breathing gold dot (aria-hidden — the text carries
  * the meaning), pulsing on the silhouettes' own .hb-glow timing;
  * the "state not recorded" row gets no dot, having no light.
+ *
+ * TEST VIEW (/heartbeat-test): the optional `fixture` prop injects
+ * a make-believe live payload so any single place can be previewed
+ * through this exact render path. Fixture mode never fetches,
+ * never polls, and never writes — see BodyHeartbeatProps and
+ * HEARTBEAT.md's test-view section. Without a fixture (the
+ * homepage), nothing about this component's behavior changes.
  */
 
 interface HbTotals {
@@ -142,7 +149,7 @@ interface LiveSubdivisionRow extends LiveCountRow {
   name: string;
 }
 
-interface LiveData {
+export interface LiveData {
   live: boolean;
   asOf: string | null;
   since: string;
@@ -151,6 +158,19 @@ interface LiveData {
   countries: LiveCountRow[];
   /** Today's subdivision rows (v3.1), keyed by ISO 3166-2 code. */
   subdivisions?: LiveSubdivisionRow[];
+}
+
+export interface BodyHeartbeatProps {
+  /**
+   * TEST ONLY — an injected, make-believe live payload, used by
+   * /heartbeat-test to preview how a single place would light the
+   * disc. When a fixture is supplied the component renders it
+   * through the exact production path below and NEVER fetches
+   * /api/heartbeat (no GET, no POST, no polling) — the live
+   * counters are neither read nor written by the test view. The
+   * homepage passes no fixture and is unchanged. See HEARTBEAT.md.
+   */
+  fixture?: LiveData;
 }
 
 interface WorldCountry {
@@ -267,8 +287,8 @@ function toMapCountry(row: HbCountryRow): MapCountry {
   };
 }
 
-export default function BodyHeartbeat() {
-  const [live, setLive] = useState<LiveData | null>(null);
+export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
+  const [live, setLive] = useState<LiveData | null>(fixture ?? null);
 
   const load = useCallback(async () => {
     try {
@@ -284,6 +304,9 @@ export default function BodyHeartbeat() {
   }, []);
 
   useEffect(() => {
+    // TEST VIEW: a supplied fixture is the whole data source — no
+    // fetch of /api/heartbeat, no polling, no writes, ever.
+    if (fixture) return;
     // The first load is the point of the effect — subscribing to an
     // external system (the live counter) and syncing its state in.
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -297,7 +320,7 @@ export default function BodyHeartbeat() {
       clearInterval(id);
       document.removeEventListener("visibilitychange", onVisible);
     };
-  }, [load]);
+  }, [load, fixture]);
 
   const liveActive = Boolean(live?.live);
   const totals = liveActive && live ? live.totals : hb.totals;
@@ -887,7 +910,14 @@ export default function BodyHeartbeat() {
           </div>
         )}
 
-        {liveActive ? (
+        {fixture ? (
+          <p className="mx-auto mt-10 max-w-xl text-center text-xs leading-relaxed text-sage-400">
+            Test view — this section is drawn by the same code as the
+            live homepage, fed one make-believe chapter for the place
+            picked above. Nothing here is counted, stored, or sent
+            anywhere; the live counters were never read or written.
+          </p>
+        ) : liveActive ? (
           <p className="mx-auto mt-10 max-w-xl text-center text-xs leading-relaxed text-sage-400">
             Counted as the Body reads since {longDate(hb.since)} — this page
             listens again about every minute

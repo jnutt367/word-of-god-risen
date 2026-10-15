@@ -516,6 +516,59 @@ with no second attempt.
   store, and every display decision in `lib/heartbeat-display.ts`
   are untouched.
 
+## Test view — preview a place's light (Oct 15, 2026)
+
+Jason's wish (~6:21pm): "I wish there was some way to get a test
+to see if someone's state lights up." Now there is: **/heartbeat-test**.
+
+- **What it does.** A picker offers all 51 US subdivisions (the 50
+  states + DC) plus every country in the vendored world data
+  (polygon countries and centroid-only ones alike). Picking a place
+  feeds the production `<BodyHeartbeat>` a **fixture** — an injected
+  payload shaped exactly like a real GET answer carrying ONE
+  chapter for exactly that place — and the section renders through
+  the ordinary production code path: same silhouette fills, same
+  hearts, same ember rule (a picked state lights at full treatment
+  while the United States steps back to its ember), and the place's
+  would-be side row (breathing dot + name + "1 chapter today")
+  under "Today on the vine" / "United States — by state". A
+  `?place=US-WV` deep link names the initial pick, so a QA check
+  can point at one place. Its purpose is verification: any place's
+  shape, position, and heart can be confirmed true on the disc
+  before a real reader ever lights it.
+- **The no-write guarantee.** The test view performs **no network
+  calls at all**: the fixture is built in the browser from the
+  vendored map data (`lib/heartbeat-test-places.ts` +
+  `components/HeartbeatTestPicker.tsx`), and `BodyHeartbeat`'s
+  fixture mode (the optional `fixture` prop) suppresses its fetch,
+  its 60-second poll, and any write — the live counters are neither
+  read nor written, and nothing is POSTed, ever. The fixture exists
+  only in the page's memory. The component's own fine print says so
+  in fixture mode, and the page carries a prominent banner: "TEST
+  VIEW — this is not live data; nothing here is counted."
+- **Not public.** The page sets `robots: noindex, nofollow` in its
+  metadata, is linked from no navigation, and is absent from the
+  sitemap (which is an explicit list — it was simply never added).
+- **Homepage untouched, verified.** The only change to
+  `components/BodyHeartbeat.tsx` is the optional prop, its
+  useState seed, the effect's fixture early-return, and the
+  fixture-mode fine print; with no fixture supplied, the homepage's
+  server-rendered heartbeat section is byte-for-byte identical to
+  before the change (75,346 bytes, compared directly).
+- **Fixture QA (Oct 15, 2026).** Server-rendered checks against a
+  local production build: US-WV / US-AK / US-HI / US-TX each render
+  exactly their own subdivision path with its heart pair
+  (r 6.5 halo + r 2.6 core) at the vendored centroid — WV (341.9,
+  527.3) its small shape in the eastern US cluster; AK (450.3,
+  421.4) broad up toward the pole, left of top-center; HI (408.4,
+  298.9) its tiny island specks far up-disc; TX (318.7, 468.3) the
+  large shape low in the US cluster — the United States behind
+  each as the single 0.12 ember fill, no country heart, no
+  "state not recorded" row, and no other state's path present.
+  Kenya (KE) renders the full country treatment (fill + heart
+  r 7/r 3 at 671.7, 719.7, lower right on the disc) with no ember
+  anywhere — countries without subdivisions behave exactly as live.
+
 ## Accessibility & motion
 
 - The figure (the world map; the vine overlay was removed in
