@@ -5,20 +5,28 @@ import {
   readCounters,
   type BeatKind,
 } from "@/lib/heartbeat-store";
+import { subdivisionCode } from "@/lib/subdivisions";
 import snapshot from "@/data/heartbeat.json";
 
 /**
- * The Bible Heartbeat — live counting endpoint (v3).
+ * The Bible Heartbeat — live counting endpoint (v3, subdivisions v3.1).
  *
- * GET  → the current live totals (Blob counters), today's bucket, and
- *        today's country rows. Falls back to the checked-in snapshot
- *        (live: false) whenever the store is unreachable or not
- *        configured, so the homepage never depends on the store.
+ * GET  → the current live totals (Blob counters), today's bucket,
+ *        today's country rows, and today's subdivision rows (full
+ *        ISO 3166-2 codes — "US-FL" style). Falls back to the
+ *        checked-in snapshot (live: false) whenever the store is
+ *        unreachable or not configured, so the homepage never
+ *        depends on the store.
  * POST → one anonymous beat: { "type": "read" | "listen" |
  *        "listen_complete" | "book" }. The body carries nothing else —
  *        no book, no chapter, no identity. The reader's country is
- *        derived here from Vercel's edge header (x-vercel-ip-country),
- *        country only; the IP itself is never read or stored.
+ *        derived here from Vercel's edge header (x-vercel-ip-country);
+ *        the subdivision comes from x-vercel-ip-country-region,
+ *        sanitized per country by lib/subdivisions.ts (v3.1: US
+ *        readers → their state, 50 states + DC only) and keyed
+ *        generically as an ISO 3166-2 code, never a US-specific
+ *        field. Both are aggregate counts only — the IP itself is
+ *        never read or stored, and no other header is kept.
  *
  * See HEARTBEAT.md for the schema, merge rule, and known limits.
  */
@@ -49,6 +57,7 @@ function snapshotFallback() {
       totals: snap.totals,
       today: snap.today,
       countries: [],
+      subdivisions: [],
     },
     { headers: NO_STORE }
   );
@@ -71,6 +80,16 @@ function readerCountry(req: Request): string | null {
   return /^[A-Z]{2}$/.test(cc) && cc !== "XX" ? cc : null;
 }
 
+/** Subdivision of the reader's connection as a full ISO 3166-2 code
+ *  ("US-FL"), from Vercel's edge region header — sanitized hard by
+ *  lib/subdivisions.ts (v3.1: US readers only, 50 states + DC;
+ *  territories and malformed values dropped). Countries without a
+ *  registered sanitizer yield null; the header's raw value is never
+ *  stored anywhere. */
+function readerSubdivision(req: Request, country: string | null): string | null {
+  return subdivisionCode(country, req.headers.get("x-vercel-ip-country-region"));
+}
+
 export async function POST(req: Request) {
   let kind: string | undefined;
   try {
@@ -83,7 +102,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false }, { status: 400 });
   }
   try {
-    const updated = await incrementCounters(kind as BeatKind, readerCountry(req));
+    const country = readerCountry(req);
+    const updated = await incrementCounters(
+      kind as BeatKind,
+      country,
+      readerSubdivision(req, country)
+    );
     if (!updated) {
       return NextResponse.json({ ok: false, live: false }, { status: 503 });
     }

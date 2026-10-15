@@ -12,11 +12,15 @@ import worldMap from "@/lib/world-map.json";
  * vendored in lib/world-map.json — no tile services, no trackers) with
  * the Vine rooted at its heart and branches spreading across it.
  *
- * The vine's fruit lights are today's chapters, read + heard. A country
- * that carries counts lights up in its own silhouette — its actual
- * shape filled with warm golden light, breathing gently — with a small
- * bright heart at its center; a counted country with no polygon in the
- * vendored geography falls back to a light at its centroid. Every lit
+ * A country that carries counts lights up in its own silhouette —
+ * its actual shape filled with warm golden light, breathing gently —
+ * with a small bright heart at its center; a counted country with no
+ * polygon in the vendored geography falls back to a light at its
+ * centroid. The map's lights are GEOGRAPHY ONLY (Jason's model,
+ * Oct 15): each person's read traces to their location — his reads
+ * light Florida, his cousin's light West Virginia. Today's chapter
+ * total rides as TEXT in the caption and counters; the vine is soft
+ * root artwork and carries no data dots of any kind. Every lit
  * country is also named in plain text (today's live chips and/or the
  * "Neighbors near and far" garland), so the picture never carries the
  * meaning alone.
@@ -28,8 +32,22 @@ import worldMap from "@/lib/world-map.json";
  * is unreachable. Live country rows are today's, counted from this
  * app's own reading only; snapshot rows cover their labeled window and
  * come from this app's own Web Analytics geography. Sources never mix,
- * and another property's audience is never plotted here. See
- * HEARTBEAT.md for the full story.
+ * and another property's audience is never plotted here.
+ *
+ * v3.1: within a counted country, today's SUBDIVISION silhouettes
+ * (geometry in lib/world-map.json `subdivisions`, keyed generically
+ * by full ISO 3166-2 code — "US-FL" style) light with a warmer golden
+ * treatment, layered over the national fill. v3.1 vendors the USA
+ * (50 states + DC); the keying is generic so the worldwide admin-1
+ * pass (v3.2) needs no schema change. Subdivision counts are
+ * aggregates only, taken from the connection's region signal the
+ * same anonymous way countries are. See HEARTBEAT.md.
+ *
+ * Display rule (Jason, Oct 15): a light appears ONLY where it means
+ * something, and it means a PLACE — country fills and hearts, and
+ * subdivision fills within them. There are no decorative dots and
+ * no data-fruit anywhere on the disc; the vine's branches are soft,
+ * curved, and quiet, clearly behind the country lights.
  */
 
 interface HbTotals {
@@ -77,13 +95,31 @@ interface HeartbeatData {
   recent: HbRecent[];
 }
 
+interface LiveCountRow {
+  code: string;
+  read: number;
+  heard: number;
+  total: number;
+}
+
+/** One live subdivision row from GET /api/heartbeat (v3.1) — `code`
+ *  is the full ISO 3166-2 code ("US-FL"); country/region are its
+ *  parts; `name` is the display name resolved server-side. */
+interface LiveSubdivisionRow extends LiveCountRow {
+  country: string;
+  region: string;
+  name: string;
+}
+
 interface LiveData {
   live: boolean;
   asOf: string | null;
   since: string;
   totals: HbTotals;
   today: { date: string; chaptersRead: number; chaptersHeard: number };
-  countries: { code: string; read: number; heard: number; total: number }[];
+  countries: LiveCountRow[];
+  /** Today's subdivision rows (v3.1), keyed by ISO 3166-2 code. */
+  subdivisions?: LiveSubdivisionRow[];
 }
 
 interface WorldCountry {
@@ -105,6 +141,8 @@ const world = worldMap as {
   land: string;
   countries: Record<string, WorldCountry>;
   extraCentroids?: Record<string, WorldCentroid>;
+  /** Admin-1 geometry keyed by full ISO 3166-2 code ("US-FL"). */
+  subdivisions?: Record<string, WorldCountry>;
 };
 
 const MONTHS = [
@@ -149,27 +187,10 @@ function regionName(code: string): string {
   }
 }
 
-/**
- * Fruit-light positions along the vine's branches on the disc
- * (viewBox 1000×1000), near the heart first, then out along the arms —
- * the lit ones fill the vine the way grapes cluster as the count grows.
- */
-const LIGHTS: { x: number; y: number }[] = [
-  { x: 500, y: 468 }, { x: 476, y: 512 }, { x: 524, y: 516 },
-  { x: 484, y: 460 }, { x: 518, y: 466 }, { x: 466, y: 486 },
-  { x: 536, y: 492 }, { x: 492, y: 538 }, { x: 514, y: 542 },
-  { x: 456, y: 522 }, { x: 440, y: 494 }, { x: 392, y: 488 },
-  { x: 348, y: 482 }, { x: 310, y: 476 }, { x: 452, y: 452 },
-  { x: 404, y: 398 }, { x: 356, y: 348 }, { x: 466, y: 566 },
-  { x: 436, y: 640 }, { x: 408, y: 706 }, { x: 506, y: 580 },
-  { x: 508, y: 660 }, { x: 512, y: 724 }, { x: 560, y: 560 },
-  { x: 622, y: 636 }, { x: 682, y: 712 }, { x: 580, y: 494 },
-  { x: 660, y: 486 }, { x: 724, y: 474 }, { x: 560, y: 446 },
-  { x: 624, y: 386 }, { x: 684, y: 330 }, { x: 518, y: 420 },
-  { x: 532, y: 368 }, { x: 462, y: 592 }, { x: 556, y: 600 },
-  { x: 428, y: 430 }, { x: 600, y: 300 }, { x: 268, y: 470 },
-  { x: 760, y: 540 },
-];
+/* (There is deliberately NO fruit/dot position table anymore: the
+ * fruit-lights layer was removed entirely at Jason's word, Oct 15 —
+ * the map's lights are geography only, so nothing here positions a
+ * data dot on the vine.) */
 
 /** Gentle log-ish radius for a centroid light, capped — a big country
  *  of readers glows wider, never louder than the vine itself. */
@@ -184,6 +205,16 @@ function silhouetteFill(total: number): number {
 }
 function silhouetteGlow(total: number): number {
   return Math.min(0.3, 0.14 + 0.055 * Math.log10(1 + total));
+}
+
+/** Subdivision silhouettes sit a touch brighter than their country's
+ *  fill so the two layers read as one nation, kindled closer in —
+ *  never a second, competing map. */
+function subdivisionFill(total: number): number {
+  return Math.min(0.55, 0.26 + 0.12 * Math.log10(1 + total));
+}
+function subdivisionGlow(total: number): number {
+  return Math.min(0.26, 0.12 + 0.05 * Math.log10(1 + total));
 }
 
 interface MapCountry extends HbCountryRow {
@@ -242,7 +273,6 @@ export default function BodyHeartbeat() {
   const today = liveActive && live ? live.today : hb.today;
   const { library, recent } = hb;
   const todayCount = today.chaptersRead + today.chaptersHeard;
-  const lit = Math.min(todayCount, LIGHTS.length);
   const allQuiet = totals.chaptersRead + totals.chaptersHeard === 0;
   const windowLabel = (hb.countriesWindow || "").trim();
 
@@ -261,6 +291,53 @@ export default function BodyHeartbeat() {
           .filter((c) => c.code && c.total > 0)
           .sort((a, b) => b.total - a.total)
       : [];
+
+  // Today's live subdivision rows (v3.1) — names and positions
+  // resolve against the vendored subdivision geography, keyed by
+  // full ISO 3166-2 code; a counted subdivision always has a polygon
+  // there (the POST sanitizes against the same tables).
+  interface LiveSubdivisionDisplay extends HbCountryRow {
+    country: string;
+    geo: WorldCountry | null;
+  }
+  const liveSubdivisionRows: LiveSubdivisionDisplay[] =
+    liveActive && live
+      ? (live.subdivisions ?? [])
+          .map((s) => {
+            const code = (s.code || "").toUpperCase();
+            const geo = world.subdivisions?.[code] ?? null;
+            return {
+              code,
+              name: s.name || geo?.name || code,
+              read: s.read ?? 0,
+              heard: s.heard ?? 0,
+              total: s.total ?? (s.read ?? 0) + (s.heard ?? 0),
+              country: (s.country || code.split("-")[0] || "").toUpperCase(),
+              geo,
+            };
+          })
+          .filter((s) => s.code && s.total > 0)
+          .sort((a, b) => b.total - a.total)
+      : [];
+  const subdivisionPhrase = (s: HbCountryRow) =>
+    `${s.name} — ${fmt(s.total)} ${s.total === 1 ? "chapter" : "chapters"} today`;
+  // Subdivision rows grouped under their country for the list below
+  // ("United States — by state"); only the US can appear in v3.1,
+  // but the grouping itself is generic.
+  const subdivisionGroups: [string, LiveSubdivisionDisplay[]][] = [];
+  for (const s of liveSubdivisionRows) {
+    const g = subdivisionGroups.find(([c]) => c === s.country);
+    if (g) g[1].push(s);
+    else subdivisionGroups.push([s.country, [s]]);
+  }
+  const subdivisionGroupLabel = (country: string) =>
+    country === "US"
+      ? "United States — by state"
+      : `${regionName(country)} — by region`;
+  const subdivisionSentence =
+    liveSubdivisionRows.length > 0
+      ? ` Within the United States, ${liveSubdivisionRows.length} ${liveSubdivisionRows.length === 1 ? "state is" : "states are"} also lit in ${liveSubdivisionRows.length === 1 ? "its" : "their"} own shapes: ${liveSubdivisionRows.map(subdivisionPhrase).join("; ")}.`
+      : "";
 
   // Snapshot country rows — the daily record, with its own labeled
   // window. Normalized once; the garland below always speaks for them.
@@ -297,9 +374,9 @@ export default function BodyHeartbeat() {
 
   const figureLabel =
     mapRows.length > 0
-      ? `A grapevine rooted at the heart of a soft world map drawn as a disc. ${lit} fruit lights are lit — one for each chapter read or heard today, ${longDate(today.date)}. ${mapRows.length} ${mapRows.length === 1 ? "country is" : "countries are"} lit in its own shape, where the Word was opened${mapSource === "live" ? " today" : ""}: ${mapRows.map(mapPhrase).join("; ")}.`
-      : lit > 0
-        ? `A grapevine rooted at the heart of a soft world map drawn as a disc, with ${lit} golden fruit lights lit — one for each chapter read or heard today, ${longDate(today.date)}. No country shapes are lit yet.`
+      ? `A grapevine rooted at the heart of a soft world map drawn as a disc. ${fmt(todayCount)} ${todayCount === 1 ? "chapter was" : "chapters were"} read or heard today, ${longDate(today.date)}. ${mapRows.length} ${mapRows.length === 1 ? "country is" : "countries are"} lit in its own shape, where the Word was opened${mapSource === "live" ? " today" : ""}: ${mapRows.map(mapPhrase).join("; ")}.${mapSource === "live" ? subdivisionSentence : ""}`
+      : todayCount > 0
+        ? `A grapevine rooted at the heart of a soft world map drawn as a disc, with ${fmt(todayCount)} ${todayCount === 1 ? "chapter" : "chapters"} read or heard today, ${longDate(today.date)}. No country shapes are lit yet.`
         : "A grapevine rooted at the heart of a soft world map drawn as a disc, at rest in the early morning — the counting of chapters has only just begun, and no country shapes are lit yet.";
 
   const tiles: { label: string; value: number; sub: string }[] = [
@@ -346,9 +423,11 @@ export default function BodyHeartbeat() {
           counted in totals only. Not just numbers… neighbors.
         </p>
 
-        {/* The world + the Vine — the disc is the ground; the vine's
-            fruit lights are today's chapters; a counted country lights
-            up in its own silhouette, named in the text below. */}
+        {/* The world + the Vine — the disc is the ground; the vine is
+            soft root artwork only; a counted country lights up in
+            its own silhouette (and its subdivisions within it),
+            named in the text below. The map's lights are geography
+            only — today's chapter total is text, in the caption. */}
         <figure role="img" aria-label={figureLabel} className="mx-auto mt-6 max-w-2xl">
           <svg
             viewBox={world.viewBox}
@@ -382,6 +461,46 @@ export default function BodyHeartbeat() {
               strokeWidth="0.6"
               strokeOpacity="0.12"
             />
+            {/* the vine — rooted at the disc's heart, branches
+                spreading across the world. Soft on purpose (Jason,
+                Oct 15): gently bowed, thin, and quiet, drawn UNDER
+                the country lights so it reads as a plant holding
+                them, never a starburst competing with them. */}
+            <g fill="none" stroke="#7a5a33" strokeLinecap="round" opacity="0.85">
+              <path
+                d="M500 500 C 494 524 506 542 499 562"
+                strokeWidth="7.5"
+              />
+              <g strokeWidth="4">
+                <path d="M500 500 C 448 472 388 466 318 478" />
+                <path d="M500 500 C 438 440 388 380 340 336" />
+                <path d="M500 500 C 442 560 414 650 398 726" />
+                <path d="M500 500 C 524 578 520 668 512 752" />
+                <path d="M500 500 C 568 550 646 638 700 730" />
+                <path d="M500 500 C 578 466 670 458 748 468" />
+                <path d="M500 500 C 568 434 642 372 700 318" />
+              </g>
+              <g strokeWidth="2.25">
+                <path d="M500 500 C 504 446 526 400 540 356" />
+                <path d="M430 492 C 400 450 366 436 330 424" />
+                <path d="M584 492 C 612 450 652 438 690 428" />
+                <path d="M500 500 C 462 534 450 592 448 646" />
+                <path d="M500 500 C 542 538 568 596 580 652" />
+              </g>
+            </g>
+            {/* leaves */}
+            <g fill="#7fa088" opacity="0.45">
+              <ellipse cx="392" cy="462" rx="14" ry="6.5" transform="rotate(-24 392 462)" />
+              <ellipse cx="404" cy="392" rx="13" ry="6" transform="rotate(-48 404 392)" />
+              <ellipse cx="440" cy="618" rx="13" ry="6" transform="rotate(52 440 618)" />
+              <ellipse cx="528" cy="640" rx="13" ry="6" transform="rotate(6 528 640)" />
+              <ellipse cx="622" cy="622" rx="13" ry="6" transform="rotate(48 622 622)" />
+              <ellipse cx="640" cy="462" rx="14" ry="6.5" transform="rotate(-20 640 462)" />
+              <ellipse cx="618" cy="392" rx="12" ry="6" transform="rotate(-42 618 392)" />
+              <ellipse cx="556" cy="392" rx="11" ry="5.5" transform="rotate(-64 556 392)" />
+              <ellipse cx="368" cy="540" rx="11" ry="5.5" transform="rotate(30 368 540)" />
+              <ellipse cx="676" cy="556" rx="11" ry="5.5" transform="rotate(-30 676 556)" />
+            </g>
             {/* lit countries — the nation itself, in its own shape:
                 a soft outer glow, then the golden fill, breathing */}
             {mapRows.map((c, i) =>
@@ -411,62 +530,40 @@ export default function BodyHeartbeat() {
                 </g>
               ) : null
             )}
-            {/* the vine — rooted at the disc's heart, branches
-                spreading across the world */}
-            <g fill="none" stroke="#7a5a33" strokeLinecap="round">
-              <path
-                d="M500 500 C 496 524 505 542 500 562"
-                strokeWidth="10"
-              />
-              <g strokeWidth="6">
-                <path d="M500 500 C 440 492 380 486 318 478" />
-                <path d="M500 500 C 452 448 396 392 340 336" />
-                <path d="M500 500 C 462 572 424 648 398 726" />
-                <path d="M500 500 C 508 586 506 668 512 752" />
-                <path d="M500 500 C 566 566 636 644 700 730" />
-                <path d="M500 500 C 584 492 664 482 748 468" />
-                <path d="M500 500 C 566 442 636 382 700 318" />
-              </g>
-              <g strokeWidth="3.5">
-                <path d="M500 500 C 512 452 528 402 540 356" />
-                <path d="M430 492 C 396 462 366 440 330 424" />
-                <path d="M584 492 C 620 462 652 442 690 428" />
-                <path d="M500 500 C 470 540 452 590 448 646" />
-                <path d="M500 500 C 540 545 566 596 580 652" />
-              </g>
-            </g>
-            <circle cx="500" cy="500" r="10" fill="#7a5a33" />
-            {/* leaves */}
-            <g fill="#7fa088" opacity="0.5">
-              <ellipse cx="392" cy="462" rx="14" ry="6.5" transform="rotate(-24 392 462)" />
-              <ellipse cx="404" cy="392" rx="13" ry="6" transform="rotate(-48 404 392)" />
-              <ellipse cx="440" cy="618" rx="13" ry="6" transform="rotate(52 440 618)" />
-              <ellipse cx="528" cy="640" rx="13" ry="6" transform="rotate(6 528 640)" />
-              <ellipse cx="622" cy="622" rx="13" ry="6" transform="rotate(48 622 622)" />
-              <ellipse cx="640" cy="462" rx="14" ry="6.5" transform="rotate(-20 640 462)" />
-              <ellipse cx="618" cy="392" rx="12" ry="6" transform="rotate(-42 618 392)" />
-              <ellipse cx="556" cy="392" rx="11" ry="5.5" transform="rotate(-64 556 392)" />
-              <ellipse cx="368" cy="540" rx="11" ry="5.5" transform="rotate(30 368 540)" />
-              <ellipse cx="676" cy="556" rx="11" ry="5.5" transform="rotate(-30 676 556)" />
-            </g>
-            {/* fruit lights — today's chapters */}
-            {LIGHTS.map((p, i) =>
-              i < lit ? (
-                <g key={i} className="hb-glow" style={{ animationDelay: `${(i % 7) * 0.6}s` }}>
-                  <circle cx={p.x} cy={p.y} r="10" fill="#e4b95c" opacity="0.22" />
-                  <circle cx={p.x} cy={p.y} r="4.5" fill="#f0cd7e" />
-                </g>
-              ) : (
-                <circle
-                  key={i}
-                  cx={p.x}
-                  cy={p.y}
-                  r="3.5"
-                  fill="#b9cdc0"
-                  opacity="0.28"
-                />
-              )
-            )}
+            {/* lit subdivisions — within a lit country, the
+                first-level regions carrying counts today light in
+                their own shapes over the national fill (v3.1;
+                ISO 3166-2 keying, the US states today). The
+                country's heart below still renders — one nation,
+                kindled closer in. */}
+            {mapSource === "live" &&
+              liveSubdivisionRows.map((s, i) =>
+                s.geo ? (
+                  <g
+                    key={`sub-${s.code}`}
+                    className="hb-glow"
+                    style={{ animationDelay: `${((i + 2) % 5) * 0.9}s` }}
+                  >
+                    <title>{subdivisionPhrase(s)}</title>
+                    <path
+                      d={s.geo.path}
+                      fill="#ffdf8a"
+                      fillRule="evenodd"
+                      opacity={subdivisionGlow(s.total)}
+                      filter="url(#hb-soft)"
+                    />
+                    <path
+                      d={s.geo.path}
+                      fill="#ffdf8a"
+                      fillRule="evenodd"
+                      fillOpacity={subdivisionFill(s.total)}
+                      stroke="#ffe9b0"
+                      strokeWidth="0.7"
+                      strokeOpacity="0.55"
+                    />
+                  </g>
+                ) : null
+              )}
             {/* country hearts — a small bright core at each lit
                 country's center; for a counted country with no
                 polygon, the heart carries a fuller halo and ring
@@ -507,11 +604,12 @@ export default function BodyHeartbeat() {
             })}
           </svg>
           <figcaption className="mt-2 text-center text-sm text-sage-300">
-            {lit > 0 ? (
+            {todayCount > 0 ? (
               <>
                 {fmt(todayCount)}{" "}
                 {todayCount === 1 ? "chapter" : "chapters"} read or heard
-                today, {longDate(today.date)} — each light, a neighbor.
+                today, {longDate(today.date)} — each light on the map,
+                a neighbor.
               </>
             ) : (
               "The vine at rest over the world — its lights kindle as neighbors read."
@@ -576,6 +674,34 @@ export default function BodyHeartbeat() {
                 </li>
               ))}
             </ul>
+            {/* Subdivisions, grouped under their country — the text
+                mirror of the state silhouettes on the disc (v3.1). */}
+            {subdivisionGroups.map(([country, rows]) => (
+              <div key={country} className="mt-6">
+                <h4 className="text-center font-display text-base text-cream-50">
+                  {subdivisionGroupLabel(country)}
+                </h4>
+                <ul className="mt-3 flex flex-wrap justify-center gap-2">
+                  {rows.map((s) => (
+                    <li
+                      key={s.code}
+                      className="rounded-full border border-gold-500/25 bg-vineyard-950/60 px-3.5 py-1.5 text-sm text-cream-100"
+                    >
+                      {s.name}{" "}
+                      <span className="text-gold-300">
+                        {fmt(s.total)} {s.total === 1 ? "chapter" : "chapters"} today
+                      </span>
+                      {s.heard > 0 && (
+                        <span className="text-sage-300">
+                          {" "}
+                          · {fmt(s.read)} read · {fmt(s.heard)} heard
+                        </span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
             <p className="mt-3 text-center text-xs text-sage-400">
               Counted as the Body reads — the country of a reader&rsquo;s
               connection only, never a name, never an address.
