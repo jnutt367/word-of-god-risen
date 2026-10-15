@@ -16,8 +16,8 @@ import {
  *
  * The picture: the world as a flat disc (azimuthal equidistant,
  * centered on the North Pole; Natural Earth geometry, public domain,
- * vendored in lib/world-map.json — no tile services, no trackers) with
- * the Vine rooted at its heart and branches spreading across it.
+ * vendored in lib/world-map.json — no tile services, no trackers) —
+ * a pure map, carrying no artwork overlay (v3.1.3, see below).
  *
  * A country that carries counts lights up in its own silhouette —
  * its actual shape filled with warm golden light, breathing gently —
@@ -26,8 +26,7 @@ import {
  * centroid. The map's lights are GEOGRAPHY ONLY (Jason's model,
  * Oct 15): each person's read traces to their location — his reads
  * light Florida, his cousin's light West Virginia. Today's chapter
- * total rides as TEXT in the caption and counters; the vine is soft
- * root artwork and carries no data dots of any kind. Every lit
+ * total rides as TEXT in the caption and counters. Every lit
  * country is also named in plain text (today's live chips and/or the
  * "Neighbors near and far" garland), so the picture never carries the
  * meaning alone.
@@ -53,8 +52,7 @@ import {
  * Display rule (Jason, Oct 15): a light appears ONLY where it means
  * something, and it means a PLACE — country fills and hearts, and
  * subdivision fills within them. There are no decorative dots and
- * no data-fruit anywhere on the disc; the vine's branches are soft,
- * curved, and quiet, clearly behind the country lights.
+ * no data-fruit anywhere on the disc.
  *
  * v3.1.1: FINEST GEOGRAPHY WINS THE LIGHT (Jason, Oct 15). When a
  * country has recorded subdivisions in the shown set, the country
@@ -66,6 +64,21 @@ import {
  * over the whole nation as if the whole nation had read. A country
  * with no recorded subdivisions is unchanged from v3. The decision
  * logic lives in lib/heartbeat-display.ts; see HEARTBEAT.md.
+ *
+ * v3.1.3: THE VINE OVERLAY IS GONE (Jason's condition — "if they
+ * stay they should look like what they are" — with the call left to
+ * Judah, one redesign attempt under a hard gate). The redesign —
+ * tapered filled ribbon branches, a gnarled root stem, forks,
+ * curling tendrils, muted bark brown behind the lights — was
+ * rendered against the production data (US ember + Florida lit)
+ * and inspected: it read as blades / a pinwheel, not unmistakably
+ * as a grapevine. With any honest doubt the gate's answer was
+ * deletion, so the disc is now a pure map. The same build restores
+ * the light markers in the side lists (the design Jason confirmed
+ * at 4:31pm): every lit country row and lit subdivision row opens
+ * with a small breathing gold dot (aria-hidden — the text carries
+ * the meaning), pulsing on the silhouettes' own .hb-glow timing;
+ * the "state not recorded" row gets no dot, having no light.
  */
 
 interface HbTotals {
@@ -208,7 +221,7 @@ function regionName(code: string): string {
 /* (There is deliberately NO fruit/dot position table anymore: the
  * fruit-lights layer was removed entirely at Jason's word, Oct 15 —
  * the map's lights are geography only, so nothing here positions a
- * data dot on the vine.) */
+ * data dot on the map.) */
 
 /** Gentle log-ish radius for a centroid light, capped — a big country
  *  of readers glows wider, never louder than the vine itself. */
@@ -413,10 +426,10 @@ export default function BodyHeartbeat() {
 
   const figureLabel =
     mapRows.length > 0
-      ? `A grapevine rooted at the heart of a soft world map drawn as a disc. ${fmt(todayCount)} ${todayCount === 1 ? "chapter was" : "chapters were"} read or heard today, ${longDate(today.date)}. Where the Word was opened${mapSource === "live" ? " today" : ""}: ${mapRows.map(describeCountry).join("; ")}.`
+      ? `A soft world map drawn as a disc. ${fmt(todayCount)} ${todayCount === 1 ? "chapter was" : "chapters were"} read or heard today, ${longDate(today.date)}. Where the Word was opened${mapSource === "live" ? " today" : ""}: ${mapRows.map(describeCountry).join("; ")}.`
       : todayCount > 0
-        ? `A grapevine rooted at the heart of a soft world map drawn as a disc, with ${fmt(todayCount)} ${todayCount === 1 ? "chapter" : "chapters"} read or heard today, ${longDate(today.date)}. No country shapes are lit yet.`
-        : "A grapevine rooted at the heart of a soft world map drawn as a disc, at rest in the early morning — the counting of chapters has only just begun, and no country shapes are lit yet.";
+        ? `A soft world map drawn as a disc, with ${fmt(todayCount)} ${todayCount === 1 ? "chapter" : "chapters"} read or heard today, ${longDate(today.date)}. No country shapes are lit yet.`
+        : "A soft world map drawn as a disc, at rest in the early morning — the counting of chapters has only just begun, and no country shapes are lit yet.";
 
   const tiles: { label: string; value: number; sub: string }[] = [
     {
@@ -462,11 +475,12 @@ export default function BodyHeartbeat() {
           counted in totals only. Not just numbers… neighbors.
         </p>
 
-        {/* The world + the Vine — the disc is the ground; the vine is
-            soft root artwork only; a counted country lights up in
-            its own silhouette (and its subdivisions within it),
-            named in the text below. The map's lights are geography
-            only — today's chapter total is text, in the caption. */}
+        {/* The world alone — a pure map since v3.1.3 (the vine
+            overlay was deleted: it never read unmistakably as a
+            vine). A counted country lights up in its own silhouette
+            (and its subdivisions within it), named in the text
+            below. The map's lights are geography only — today's
+            chapter total is text, in the caption. */}
         <figure role="img" aria-label={figureLabel} className="mx-auto mt-6 max-w-2xl">
           <svg
             viewBox={world.viewBox}
@@ -500,33 +514,13 @@ export default function BodyHeartbeat() {
               strokeWidth="0.6"
               strokeOpacity="0.12"
             />
-            {/* the vine — rooted at the disc's heart, branches
-                spreading across the world. Soft on purpose (Jason,
-                Oct 15): gently bowed, thin, and quiet, drawn UNDER
-                the country lights so it reads as a plant holding
-                them, never a starburst competing with them. */}
-            <g fill="none" stroke="#7a5a33" strokeLinecap="round" opacity="0.85">
-              <path
-                d="M500 500 C 494 524 506 542 499 562"
-                strokeWidth="7.5"
-              />
-              <g strokeWidth="4">
-                <path d="M500 500 C 448 472 388 466 318 478" />
-                <path d="M500 500 C 438 440 388 380 340 336" />
-                <path d="M500 500 C 442 560 414 650 398 726" />
-                <path d="M500 500 C 524 578 520 668 512 752" />
-                <path d="M500 500 C 568 550 646 638 700 730" />
-                <path d="M500 500 C 578 466 670 458 748 468" />
-                <path d="M500 500 C 568 434 642 372 700 318" />
-              </g>
-              <g strokeWidth="2.25">
-                <path d="M500 500 C 504 446 526 400 540 356" />
-                <path d="M430 492 C 400 450 366 436 330 424" />
-                <path d="M584 492 C 612 450 652 438 690 428" />
-                <path d="M500 500 C 462 534 450 592 448 646" />
-                <path d="M500 500 C 542 538 568 596 580 652" />
-              </g>
-            </g>
+            {/* (No vine overlay — v3.1.3 removed it under Jason's
+                rule "if they stay they should look like what they
+                are": the one permitted redesign, tapered filled
+                ribbons with forks and tendrils, still read as
+                blades / a pinwheel rather than unmistakably as a
+                grapevine, so the overlay was deleted and the disc
+                is a pure map. See HEARTBEAT.md.) */}
             {/* lit countries — the nation itself, in its own shape:
                 a soft outer glow, then the golden fill, breathing.
                 EMBER countries (v3.1.1 — the country has recorded
@@ -680,7 +674,7 @@ export default function BodyHeartbeat() {
                 a neighbor.
               </>
             ) : (
-              "The vine at rest over the world — its lights kindle as neighbors read."
+              "The world at rest — its lights kindle as neighbors read."
             )}
           </figcaption>
           <p className="mt-2 text-center text-sm text-cream-100/85">
@@ -713,7 +707,7 @@ export default function BodyHeartbeat() {
         {allQuiet && (
           <p className="mx-auto mt-6 max-w-xl text-center text-sm italic text-sage-300">
             {liveActive
-              ? "The counting has only just begun — as the first neighbors open chapters, the vine will kindle here within about a minute."
+              ? "The counting has only just begun — as the first neighbors open chapters, the map will kindle here within about a minute."
               : "The counting has only just begun — the first chapters opened here will appear tomorrow morning, the way a farmer walks the rows and finds what grew in the night."}
           </p>
         )}
@@ -726,11 +720,19 @@ export default function BodyHeartbeat() {
               Today on the vine
             </h3>
             <ul className="mt-4 flex flex-wrap justify-center gap-2">
-              {liveRows.map((c) => (
+              {liveRows.map((c, i) => (
                 <li
                   key={c.code}
-                  className="rounded-full border border-gold-500/25 bg-vineyard-950/60 px-3.5 py-1.5 text-sm text-cream-100"
+                  className="inline-flex items-center gap-2 rounded-full border border-gold-500/25 bg-vineyard-950/60 px-3.5 py-1.5 text-sm text-cream-100"
                 >
+                  {/* the row's light — breathing in step with its
+                      silhouette on the map (v3.1.3); aria-hidden,
+                      the text beside it carries the meaning */}
+                  <span
+                    aria-hidden="true"
+                    className="hb-glow inline-block h-2 w-2 shrink-0 rounded-full bg-gold-300"
+                    style={{ animationDelay: `${(i % 5) * 0.9}s` }}
+                  />
                   {c.name}{" "}
                   <span className="text-gold-300">
                     {fmt(c.total)} {c.total === 1 ? "chapter" : "chapters"} today
@@ -767,11 +769,19 @@ export default function BodyHeartbeat() {
                     {subdivisionGroupLabel(country)}
                   </h4>
                   <ul className="mt-3 flex flex-wrap justify-center gap-2">
-                    {rows.map((s) => (
+                    {rows.map((s, i) => (
                       <li
                         key={s.code}
-                        className="rounded-full border border-gold-500/25 bg-vineyard-950/60 px-3.5 py-1.5 text-sm text-cream-100"
+                        className="inline-flex items-center gap-2 rounded-full border border-gold-500/25 bg-vineyard-950/60 px-3.5 py-1.5 text-sm text-cream-100"
                       >
+                        {/* the row's light — breathing in step with
+                            its silhouette on the map (v3.1.3);
+                            aria-hidden, the text carries the meaning */}
+                        <span
+                          aria-hidden="true"
+                          className="hb-glow inline-block h-2 w-2 shrink-0 rounded-full bg-gold-300"
+                          style={{ animationDelay: `${((i + 2) % 5) * 0.9}s` }}
+                        />
                         {s.name}{" "}
                         <span className="text-gold-300">
                           {fmt(s.total)} {s.total === 1 ? "chapter" : "chapters"} today
@@ -816,11 +826,19 @@ export default function BodyHeartbeat() {
               Neighbors near and far
             </h3>
             <ul className="mt-4 flex flex-wrap justify-center gap-2">
-              {snapRows.map((c) => (
+              {snapRows.map((c, i) => (
                 <li
                   key={c.code || c.name}
-                  className="rounded-full border border-gold-500/25 bg-vineyard-950/60 px-3.5 py-1.5 text-sm text-cream-100"
+                  className="inline-flex items-center gap-2 rounded-full border border-gold-500/25 bg-vineyard-950/60 px-3.5 py-1.5 text-sm text-cream-100"
                 >
+                  {/* the row's light — breathing in step with its
+                      silhouette on the map (v3.1.3); aria-hidden,
+                      the text beside it carries the meaning */}
+                  <span
+                    aria-hidden="true"
+                    className="hb-glow inline-block h-2 w-2 shrink-0 rounded-full bg-gold-300"
+                    style={{ animationDelay: `${(i % 5) * 0.9}s` }}
+                  />
                   {c.name}{" "}
                   <span className="text-gold-300">{garlandPhrase(c)}</span>
                   {c.heard > 0 && (

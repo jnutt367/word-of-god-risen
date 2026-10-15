@@ -470,9 +470,56 @@ something**, and a leaf means nothing.
   data**: country fills and hearts, subdivision fills and hearts,
   and nothing else.
 
+## v3.1.3 — the vine overlay deleted; list rows carry their light (Oct 15, 2026)
+
+Jason, on the vine's branches: "If they stay they should look like
+what they are — you call it." The call was delegated, with one
+redesign attempt allowed under a hard gate: render the redesigned
+vine against the production data and ask, honestly, "does this
+read as a grapevine, or as rays/spokes?" Any doubt meant deletion,
+with no second attempt.
+
+- **The redesign was built**: the uniform strokes were replaced by
+  tapered filled ribbons — a gnarled root stem at the disc's heart,
+  six main branches of deliberately unequal length curving with
+  natural bends, six forks splitting at irregular points, and four
+  thin tendrils ending in curls; muted bark brown, low opacity,
+  behind the country/state lights, as specified.
+- **The gate render was inspected** (production-data fixture: US
+  as ember, Florida lit with its heart). Verdict, honestly: the
+  tapered ribbons read as **blades / a pinwheel** — broad curved
+  petals radiating from the pole — not unmistakably as a grapevine.
+  The tapering that was meant to suggest wood made leaves of the
+  branches. Under the gate there was exactly one permitted answer.
+- **The vine overlay is deleted.** `components/BodyHeartbeat.tsx`
+  no longer draws any artwork over the world: the disc is a pure
+  map — rim, parchment land, and the lights of places, nothing
+  else. Copy that described the drawing was corrected to match
+  (the figure's aria summary no longer speaks of a grapevine; the
+  section's name, "One Vine, many neighbors," is unchanged — it
+  names the Body, not the artwork). A pure-map fixture render was
+  inspected in its place: quiet dark world, the United States
+  resting as its faint ember, Florida's small bright shape and
+  heart the only strong light. Every mark is a place; the picture
+  can be read at a glance.
+- **The side lists regained their light markers** — the design
+  Jason confirmed at 4:31pm this same day, which the list had lost:
+  every lit country row ("Today on the vine" and the "Neighbors
+  near and far" garland) and every lit subdivision row now opens
+  with a small gold dot, `aria-hidden`, breathing on the same
+  `.hb-glow` 4.5s pulse as its silhouette (delay-matched to it) and
+  frozen under `prefers-reduced-motion`. The "United States —
+  state not recorded" row gets **no** dot: it has no light on the
+  map, and the dot means a light. The list is the map's voice, and
+  now it breathes in step with the shapes it names.
+- Display only, as ever: the counters document, the routes, the
+  store, and every display decision in `lib/heartbeat-display.ts`
+  are untouched.
+
 ## Accessibility & motion
 
-- The figure (world map + vine, v2) is a labelled figure (`role="img"`
+- The figure (the world map; the vine overlay was removed in
+  v3.1.3) is a labelled figure (`role="img"`
   + a plain-language summary that names any lit countries and their
   counts — v3.1: and any lit subdivisions within them); every number
   also exists as text, and the country list repeats the map's
