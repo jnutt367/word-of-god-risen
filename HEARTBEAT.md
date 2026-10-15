@@ -297,12 +297,106 @@ snapshot remain the permanent record, exactly as before.
   the write in the connector's reporting — the endpoint's own reads
   are the authoritative evidence.)
 
+## v3.1 — subdivisions join the disc; lights are geography only (Oct 15, 2026)
+
+Jason's decision (Oct 15, ~4:52pm): within a country, the count goes
+one level closer — to the first-level subdivision (a US state) — as
+an aggregate only, in his fence logic: "we're not gathering any
+details about this person, only that they're in a state — and you
+can't pinpoint that person even if you know there's only one."
+**State-level aggregates only; nothing about any person is gathered
+or stored.** Same posture as countries, one rung down.
+
+**Generic ISO 3166-2 keying (architecture note, Jason, ~4:57pm).**
+Subdivisions are going worldwide next (provinces, prefectures,
+Länder — every country's own first-level divisions), so NOTHING in
+v3.1 is US-shaped: a subdivision is always its full ISO 3166-2 code
+("US-FL"), in the counters document (`days[].subdivisions`,
+`subdivisionTotals`), the API (`subdivisions[]` rows carrying
+`code`/`country`/`region`/`name`), the vendored geometry
+(`lib/world-map.json` → `subdivisions`), and the component. The
+worldwide admin-1 pass (v3.2) slots in by extending two registries
+in `lib/subdivisions.ts` (per-country region sanitizers + name
+tables) and the generator's sources — no schema change anywhere.
+
+**Data.** When a beat's country has a registered sanitizer, the
+route reads `x-vercel-ip-country-region` and records the sanitized
+subdivision beside the country count (read/listen beats only, same
+as countries). v3.1 registers the US only: accepted values are the
+region part ("FL") or the full code ("US-FL"), normalized and
+matched against the 50 states + DC (`^[A-Z]{2}$` after
+normalization); territories (PR/GU/VI/AS/MP…), foreign subdivisions
+on a US beat, and anything malformed are dropped silently — the
+country count always stands. The raw header value is never stored;
+no other header is read; the IP is never read (unchanged from v3).
+`normalizeCounters` fills the new fields on pre-v3.1 documents, so
+the stored counters carried forward untouched (verified live:
+totals only grew through the deploy).
+
+**Geometry.** `scripts/build-world-map.mjs` vendors admin-1
+polygons from us-atlas `states-10m` (public-domain source data)
+through the SAME azimuthal disc, simplified on the adaptive epsilon
+ladder (DC survives at 0.02), keyed "US-AL"…"US-WY" + "US-DC".
+`--subdivisions-only` rebuilds just that section and preserves the
+shipped land/countries/extraCentroids byte-for-byte (verified).
+Placement was verified two ways: formula ground-truth points
+(Sacramento/Austin/Miami) land inside their state paths, and a
+raster render shows the 51-state mosaic tiling the US silhouette's
+disc position. Note the two sources differ in resolution — the
+states are Census-detailed, the country outline is Natural Earth
+110m — so state coastlines trace slightly MORE detail than the
+national outline beneath them (most visible around the Great Lakes
+and island coasts); centroids agree, and the overlay reads as one
+nation. The state layer's own pixel footprint was diff-verified
+against a no-state render (the differing region equals Florida's
+disc bounding box exactly).
+
+**Display.** When today's live rows include subdivisions, their
+silhouettes render over their country's fill in a warmer gold
+(`#ffdf8a`, log-scaled fill/glow, same breathing), the country heart
+still renders on top — one nation, kindled closer in. The text list
+groups them under their country ("United States — by state") in the
+same chip style with read/heard breakdowns, and the figure's
+aria-label names them. With no subdivision rows, the display is
+exactly v3's.
+
+**Director fixes (Jason, from photos of the live disc, ~5:01–
+5:10pm) — landed in the same build.** The map's lights are
+GEOGRAPHY ONLY: each person's read traces to their location (his
+reads light Florida; his cousin's would light West Virginia). The
+old fruit-dot layer — pale dots at every unlit position plus a lit
+cluster at the disc's center — confused that meaning and is
+REMOVED ENTIRELY: no unlit dots, no center dots, no data marks on
+the vine at all. Today's chapter total rides as text in the
+figcaption and the counters. The vine is soft root artwork only:
+branches redrawn as thinner, gently bowed curves (widths 4/2.25,
+trunk 7.5, opacity 0.85), drawn UNDER the land's lights so the
+countries read first. Render QA on the production data shape (US
+only): the disc's only lights are the US fill/glow/heart — no
+circles at the center, nothing stray over oceans or unlit land.
+
+**Verification (Oct 15, 2026).** Local only, with spoofed headers —
+never against production: a vitest harness (in-memory Blob stub,
+the real route + store + subdivisions modules) passed 7 tests:
+US+"FL" and US+"US-FL" both count `US-FL`; PR dropped while the US
+count stands; CA+"ON" earns no subdivision in v3.1; headerless and
+garbage region values drop silently; the stored document is keyed
+generically with no US-specific field names. ESLint clean;
+production build clean. Deployed as commit `e1c575b`. Production
+GET answers `live: true` with `subdivisions: []` — stated plainly:
+**the array is empty until the first real US reader whose
+connection carries a region signal arrives**; no production beat
+was sent by this build, and the live counters (real reader
+activity) were not reset or altered — they grew on their own during
+the deploy window (US today 5 → 9 chapters).
+
 ## Accessibility & motion
 
 - The figure (world map + vine, v2) is a labelled figure (`role="img"`
   + a plain-language summary that names any lit countries and their
-  counts); every number also exists as text, and the country list
-  repeats the map's meaning in plain words beside it.
+  counts — v3.1: and any lit subdivisions within them); every number
+  also exists as text, and the country list repeats the map's
+  meaning in plain words beside it.
 - The only motion is the lights' slow opacity breath
   (`.hb-glow` in `app/globals.css`), fully disabled under
   `prefers-reduced-motion: reduce`.
