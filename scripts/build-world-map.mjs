@@ -1,22 +1,31 @@
 #!/usr/bin/env node
 /**
- * World-map generator for the Bible Heartbeat (v2) — ONE-TIME, manual.
+ * World-map generator for the Bible Heartbeat — ONE-TIME, manual.
  *
- * Produces lib/world-map.json: equirectangular SVG paths for every
- * country plus an approximate centroid per country, keyed by ISO 3166-1
- * alpha-2. The output is vendored into the repo — the app makes NO
- * runtime calls to any map/tile service and loads no trackers.
+ * v2 produced equirectangular SVG paths; v3 (Oct 15, 2026) re-projects
+ * the same Natural Earth geometry through an azimuthal equidistant
+ * projection centered on the North Pole, so the world renders as a
+ * flat disc and the vine grows from its heart.
+ *
+ * Produces lib/world-map.json: SVG paths for every country plus an
+ * approximate centroid per country, keyed by ISO 3166-1 alpha-2, all in
+ * disc coordinates. Also emits `extraCentroids` — disc centroids for
+ * alpha-2 codes that have metadata coordinates but no Natural Earth
+ * polygon, so a counted country without a silhouette can still fall
+ * back to a centroid light. The output is vendored into the repo — the
+ * app makes NO runtime calls to any map/tile service and loads no
+ * trackers.
  *
  * Sources (both public data, fetched only when regenerating):
  *   - Geometry: Natural Earth 110m (PUBLIC DOMAIN) via the world-atlas
  *     TopoJSON distribution (cdn.jsdelivr.net/npm/world-atlas@2).
  *   - Names / alpha-2 codes / centroid lat-lng: mledoze/countries.
  *
- * Antarctica is omitted (it would smear across the bottom of an
- * equirectangular view). Three Natural Earth features have no ISO code
- * (N. Cyprus, Somaliland, Kosovo): they are drawn in the merged land
- * path but carry no per-country entry, so no light can be plotted on
- * them. France/Norway (ISO "-99" in Natural Earth) are matched by name.
+ * Antarctica is omitted (it would ring the entire rim of the disc).
+ * Three Natural Earth features have no ISO code (N. Cyprus, Somaliland,
+ * Kosovo): they are drawn in the merged land path but carry no
+ * per-country entry, so no light can be plotted on them. France/Norway
+ * (ISO "-99" in Natural Earth) are matched by name.
  *
  * Usage: node scripts/build-world-map.mjs   (needs network, once)
  */
@@ -30,8 +39,21 @@ const META_URL = "https://cdn.jsdelivr.net/gh/mledoze/countries@master/dist/coun
 const topo = await (await fetch(TOPO_URL)).json();
 const meta = await (await fetch(META_URL)).json();
 
-const W = 1000, H = 500;
-const project = (lon, lat) => [((lon + 180) / 360) * W, ((90 - lat) / 180) * H];
+const W = 1000, H = 1000;
+const CENTER = W / 2;
+// Azimuthal equidistant, centered on the North Pole: a point's distance
+// from the disc's center is proportional to its angular distance from
+// the pole, and its direction is its longitude — longitude 0° toward
+// the bottom of the disc, increasing eastward to the right, ±180° at
+// the top. The disc radius (470 units) reaches 150° from the pole,
+// past the southernmost land (≈55°S).
+const DISC_R = 470;
+const K = DISC_R / ((150 * Math.PI) / 180);
+const project = (lon, lat) => {
+  const lam = (lon * Math.PI) / 180;
+  const rho = K * (((90 - lat) * Math.PI) / 180);
+  return [CENTER + rho * Math.sin(lam), CENTER + rho * Math.cos(lam)];
+};
 
 // --- TopoJSON decode ---
 const { scale, translate } = topo.transform;
@@ -153,17 +175,34 @@ for (const geom of topo.objects.countries.geometries) {
   countries[code] = { name: m?.name?.common || name, path, cx: r1(cx), cy: r1(cy) };
 }
 
+// Centroid-only fallbacks: alpha-2 codes with metadata coordinates but
+// no Natural Earth polygon entry above (small territories and the
+// like). A counted country found here gets a centroid light instead of
+// a silhouette. Antarctica is excluded — it has no polygon here either.
+const extraCentroids = {};
+for (const c of meta) {
+  const code = c.cca2;
+  if (!code || code === "AQ" || countries[code]) continue;
+  if (!Array.isArray(c.latlng) || c.latlng.length !== 2) continue;
+  const [cx, cy] = project(c.latlng[1], c.latlng[0]);
+  extraCentroids[code] = { name: c.name?.common || code, cx: r1(cx), cy: r1(cy) };
+}
+
 const out = {
   viewBox: `0 0 ${W} ${H}`,
+  projection:
+    "Azimuthal equidistant, centered on the North Pole (disc radius reaches 150° from the pole)",
   source:
     "Natural Earth 110m (public domain) via world-atlas; centroids from mledoze/countries latlng",
   land: landParts.join(""),
   countries,
+  extraCentroids,
 };
 const here = dirname(fileURLToPath(import.meta.url));
 const dest = join(here, "..", "lib", "world-map.json");
 writeFileSync(dest, JSON.stringify(out));
 console.log(
   `world-map.json → ${Object.keys(countries).length} countries keyed, ` +
+    `${Object.keys(extraCentroids).length} centroid-only fallbacks, ` +
     `${landParts.join("").length} land bytes`
 );

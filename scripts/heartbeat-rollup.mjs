@@ -47,6 +47,28 @@
  * can't be verified, leave it out and the snapshot keeps its last
  * honest value.
  *
+ * THE MERGE RULE (v3 — reconciling the live Blob counters):
+ * Since Oct 15, 2026 every beat counts through both doors at once —
+ * the Analytics events above AND the live counters behind
+ * GET /api/heartbeat (see "live" below). The snapshot's published
+ * totals are, field by field, the GREATER of the Analytics all-time
+ * totals and the live counters:
+ *
+ *     published = max(analytics, live)
+ *
+ * Analytics is the floor: it heard every beat since the counting
+ * began — including beats from before the Blob store existed (Jason's
+ * John 15 read on day one went to Analytics only) — so no counted
+ * chapter is ever lost. The live counters can only add what Analytics
+ * somehow missed, never subtract; and because both doors hear the
+ * same beats behind the same dedupe, the max can never double-count.
+ * The same max applies to "today" when the live bucket's date matches
+ * the snapshot's. Feed the live side by saving the JSON of
+ * GET https://word-of-god-risen.vercel.app/api/heartbeat into the
+ * counts file as "live": { "totals": {...}, "today": {...} } (the
+ * endpoint's own field names — chaptersRead/chaptersHeard/
+ * listensCompleted/booksFinished — are used verbatim there).
+ *
  * Usage: node scripts/heartbeat-rollup.mjs <counts.json>
  */
 import { readFileSync, writeFileSync } from "node:fs";
@@ -85,6 +107,30 @@ if (input.today?.date) {
     chaptersRead: num(input.today.chapter_read),
     chaptersHeard: num(input.today.chapter_listen_start),
   };
+}
+
+// Merge rule (v3): the live Blob counters (GET /api/heartbeat, saved
+// into the counts file as "live") reconcile field-by-field by MAX —
+// Analytics is the floor, the live count can only add, and the same
+// beats behind the same dedupe mean the max never double-counts.
+if (input.live?.totals) {
+  const lt = input.live.totals;
+  snap.totals = {
+    chaptersRead: Math.max(snap.totals.chaptersRead, num(lt.chaptersRead)),
+    chaptersHeard: Math.max(snap.totals.chaptersHeard, num(lt.chaptersHeard)),
+    listensCompleted: Math.max(
+      snap.totals.listensCompleted,
+      num(lt.listensCompleted)
+    ),
+    booksFinished: Math.max(snap.totals.booksFinished, num(lt.booksFinished)),
+  };
+  if (input.live.today?.date && input.live.today.date === snap.today?.date) {
+    snap.today = {
+      date: snap.today.date,
+      chaptersRead: Math.max(snap.today.chaptersRead, num(input.live.today.chaptersRead)),
+      chaptersHeard: Math.max(snap.today.chaptersHeard, num(input.live.today.chaptersHeard)),
+    };
+  }
 }
 if (Array.isArray(input.countries)) {
   // Normalize + validate country rows (v2 schema): a name is required,
