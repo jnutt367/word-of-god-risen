@@ -527,19 +527,6 @@ export default function BodyHeartbeat() {
                 <path d="M500 500 C 542 538 568 596 580 652" />
               </g>
             </g>
-            {/* leaves */}
-            <g fill="#7fa088" opacity="0.45">
-              <ellipse cx="392" cy="462" rx="14" ry="6.5" transform="rotate(-24 392 462)" />
-              <ellipse cx="404" cy="392" rx="13" ry="6" transform="rotate(-48 404 392)" />
-              <ellipse cx="440" cy="618" rx="13" ry="6" transform="rotate(52 440 618)" />
-              <ellipse cx="528" cy="640" rx="13" ry="6" transform="rotate(6 528 640)" />
-              <ellipse cx="622" cy="622" rx="13" ry="6" transform="rotate(48 622 622)" />
-              <ellipse cx="640" cy="462" rx="14" ry="6.5" transform="rotate(-20 640 462)" />
-              <ellipse cx="618" cy="392" rx="12" ry="6" transform="rotate(-42 618 392)" />
-              <ellipse cx="556" cy="392" rx="11" ry="5.5" transform="rotate(-64 556 392)" />
-              <ellipse cx="368" cy="540" rx="11" ry="5.5" transform="rotate(30 368 540)" />
-              <ellipse cx="676" cy="556" rx="11" ry="5.5" transform="rotate(-30 676 556)" />
-            </g>
             {/* lit countries — the nation itself, in its own shape:
                 a soft outer glow, then the golden fill, breathing.
                 EMBER countries (v3.1.1 — the country has recorded

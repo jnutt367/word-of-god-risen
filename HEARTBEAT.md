@@ -448,6 +448,28 @@ only by real beats (at capture: totals read 6 / heard 5, US today
 fully lit nation; after this build Florida carries that light and
 the United States rests as its ember).
 
+## v3.1.2 — the decorative leaves removed (Oct 15, 2026)
+
+Jason, looking at the live disc: "some green dots… semi-transparent
+like ovals that look like old leaves — not sure what they are." He
+was right again: the vine artwork carried ten pale leaf ellipses
+scattered along its branches — pure decoration, but they landed
+over countries and open ocean and read as unexplained data marks.
+His standing model for this map is that **every mark must mean
+something**, and a leaf means nothing.
+
+- The leaf glyph group is removed from `components/BodyHeartbeat.tsx`
+  entirely. The vine is now its bare branches and root stem only —
+  soft root artwork, nothing on it, nothing beside it.
+- No leaf mentions existed in the aria summary or captions (the
+  figure is described as "a grapevine rooted at the heart of a soft
+  world map" — rooted branches, nothing more), so no copy changed.
+- Display only, as ever: the counters document, the routes, the
+  store, and every display decision in `lib/heartbeat-display.ts`
+  are untouched. **After this build, every mark on the disc is
+  data**: country fills and hearts, subdivision fills and hearts,
+  and nothing else.
+
 ## Accessibility & motion
 
 - The figure (world map + vine, v2) is a labelled figure (`role="img"`
