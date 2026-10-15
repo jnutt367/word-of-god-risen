@@ -390,6 +390,64 @@ was sent by this build, and the live counters (real reader
 activity) were not reset or altered — they grew on their own during
 the deploy window (US today 5 → 9 chapters).
 
+## v3.1.1 — finest geography wins the light (Oct 15, 2026)
+
+Jason, watching the first state beats land: "the entire country is
+still lit up… not state specific." He was right — the country-level
+fill rendered at full glow whenever the country had beats, so a
+Florida read lit the whole United States and the state specificity
+he asked for drowned in it. The rule now, in his direction:
+
+**A beat lights the FINEST geography recorded for it.**
+
+- **Ember step-back.** When a country has subdivision rows in the
+  shown set, its subdivisions glow at full treatment — glow layer,
+  log-scaled fill, breathing, and (new) a bright heart at each
+  subdivision's own centroid — while the country base fill drops to
+  a **faint ember**: one fill at fixed opacity 0.12, no glow layer,
+  no breathing, no country heart. The ember is labeled honestly
+  everywhere it is described (`<title>`, aria summary, the caption
+  copy): "reading recorded across the United States; divisions lit
+  where recorded" — never as "lit."
+- **The unrecorded remainder, named.** Beats counted in the
+  country's totals but carrying no recorded subdivision (region
+  signal absent, or pre-v3.1 legacy beats in today's bucket) are
+  computed as country total − Σ subdivision totals and get their own
+  quieter list row under the country's group: **"United States —
+  state not recorded"** (generic: "{Country} — division not
+  recorded"). Nothing is hidden, and nothing pretends to a precision
+  it lacks — those chapters are not spread over the whole nation as
+  if the whole nation had read.
+- **No subdivisions, no change.** A country with no subdivision rows
+  in the set glows exactly as in v3 (full fill, glow, heart) —
+  worldwide countries without division support are untouched, and
+  the snapshot set (which carries no subdivisions) renders as
+  before. The step-back happens per country, only where subdivision
+  data for that country exists in the set.
+- **Implementation.** The decisions are pure functions in
+  `lib/heartbeat-display.ts` (`lightModeForCountry`,
+  `subdivisionsOfCountry`, `unrecordedChapters`,
+  `notRecordedLabel`, `EMBER_FILL_OPACITY = 0.12`);
+  `components/BodyHeartbeat.tsx` renders what they decide. Display
+  only — the counters document, the POST/GET routes, and the store
+  were not touched.
+
+**Verification (Oct 15, 2026).** Fixture checks against the compiled
+display logic: (a) US today (country total 11) with one Florida row
+(total 2) → mode "ember", unrecorded = **9 — the legacy beats**,
+label exactly "United States — state not recorded"; foreign rows
+never dim another country; multi-state sums and the zero floor
+hold. (b) A country with no subdivisions → mode "full", no group,
+no not-recorded row — the v3 look. ESLint clean, `tsc --noEmit`
+clean, production build clean; a local `next start` smoke test of
+the snapshot path renders the section with zero ember language
+present. Production GET /api/heartbeat before and after the deploy
+returned the same live shape with the counters intact and growing
+only by real beats (at capture: totals read 6 / heard 5, US today
+11, and — the defect made visible — US-FL already at 2 under a
+fully lit nation; after this build Florida carries that light and
+the United States rests as its ember).
+
 ## Accessibility & motion
 
 - The figure (world map + vine, v2) is a labelled figure (`role="img"`

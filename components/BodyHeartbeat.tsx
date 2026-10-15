@@ -3,6 +3,13 @@
 import { useCallback, useEffect, useState } from "react";
 import heartbeat from "@/data/heartbeat.json";
 import worldMap from "@/lib/world-map.json";
+import {
+  EMBER_FILL_OPACITY,
+  lightModeForCountry,
+  notRecordedLabel,
+  subdivisionsOfCountry,
+  unrecordedChapters,
+} from "@/lib/heartbeat-display";
 
 /**
  * "The Body, Reading" — the Bible Heartbeat visualization (v3).
@@ -48,6 +55,17 @@ import worldMap from "@/lib/world-map.json";
  * subdivision fills within them. There are no decorative dots and
  * no data-fruit anywhere on the disc; the vine's branches are soft,
  * curved, and quiet, clearly behind the country lights.
+ *
+ * v3.1.1: FINEST GEOGRAPHY WINS THE LIGHT (Jason, Oct 15). When a
+ * country has recorded subdivisions in the shown set, the country
+ * fill steps back to a faint ember — no glow layer, no breathing,
+ * no country heart — and its subdivisions carry the full light,
+ * hearts included. The country's remaining chapters (counted in its
+ * totals, but with no subdivision recorded) are named honestly in
+ * the list — "United States — state not recorded" — never spread
+ * over the whole nation as if the whole nation had read. A country
+ * with no recorded subdivisions is unchanged from v3. The decision
+ * logic lives in lib/heartbeat-display.ts; see HEARTBEAT.md.
  */
 
 interface HbTotals {
@@ -321,6 +339,10 @@ export default function BodyHeartbeat() {
       : [];
   const subdivisionPhrase = (s: HbCountryRow) =>
     `${s.name} — ${fmt(s.total)} ${s.total === 1 ? "chapter" : "chapters"} today`;
+  // The honest phrase for an EMBER country (v3.1.1): reading is
+  // recorded across it, but it is NOT lit — its divisions are.
+  const emberPhrase = (c: HbCountryRow) =>
+    `${c.name} — reading recorded across the country today; divisions lit where recorded`;
   // Subdivision rows grouped under their country for the list below
   // ("United States — by state"); only the US can appear in v3.1,
   // but the grouping itself is generic.
@@ -334,10 +356,6 @@ export default function BodyHeartbeat() {
     country === "US"
       ? "United States — by state"
       : `${regionName(country)} — by region`;
-  const subdivisionSentence =
-    liveSubdivisionRows.length > 0
-      ? ` Within the United States, ${liveSubdivisionRows.length} ${liveSubdivisionRows.length === 1 ? "state is" : "states are"} also lit in ${liveSubdivisionRows.length === 1 ? "its" : "their"} own shapes: ${liveSubdivisionRows.map(subdivisionPhrase).join("; ")}.`
-      : "";
 
   // Snapshot country rows — the daily record, with its own labeled
   // window. Normalized once; the garland below always speaks for them.
@@ -372,9 +390,30 @@ export default function BodyHeartbeat() {
   const garlandPhrase = (c: HbCountryRow) =>
     `${fmt(c.total)} ${c.total === 1 ? "chapter" : "chapters"}${windowLabel ? ` ${windowLabel}` : ""}`;
 
+  // v3.1.1 — finest geography wins the light, decided against the
+  // SHOWN set: subdivision rows belong to today's live set only (the
+  // snapshot carries none), so in snapshot mode every country keeps
+  // its full v3 light.
+  const shownSubdivisions = mapSource === "live" ? liveSubdivisionRows : [];
+  const modeOf = (code: string) => lightModeForCountry(shownSubdivisions, code);
+  const subsOf = (code: string) =>
+    subdivisionsOfCountry(shownSubdivisions, code);
+  const anyEmber = mapRows.some((c) => modeOf(c.code) === "ember");
+
+  // The aria description of one mapped country. An ember country is
+  // never described as lit: reading was recorded across it, it rests
+  // as a faint ember, and its divisions carry the light.
+  const describeCountry = (c: MapCountry): string => {
+    if (modeOf(c.code) === "ember") {
+      const subs = subsOf(c.code);
+      return `reading recorded across ${c.name} — ${fmt(c.total)} ${c.total === 1 ? "chapter" : "chapters"} today; ${c.name} itself rests as a faint ember, not lit, and its divisions are lit where recorded: ${subs.map(subdivisionPhrase).join("; ")}`;
+    }
+    return `${mapPhrase(c)}, lit in its own shape`;
+  };
+
   const figureLabel =
     mapRows.length > 0
-      ? `A grapevine rooted at the heart of a soft world map drawn as a disc. ${fmt(todayCount)} ${todayCount === 1 ? "chapter was" : "chapters were"} read or heard today, ${longDate(today.date)}. ${mapRows.length} ${mapRows.length === 1 ? "country is" : "countries are"} lit in its own shape, where the Word was opened${mapSource === "live" ? " today" : ""}: ${mapRows.map(mapPhrase).join("; ")}.${mapSource === "live" ? subdivisionSentence : ""}`
+      ? `A grapevine rooted at the heart of a soft world map drawn as a disc. ${fmt(todayCount)} ${todayCount === 1 ? "chapter was" : "chapters were"} read or heard today, ${longDate(today.date)}. Where the Word was opened${mapSource === "live" ? " today" : ""}: ${mapRows.map(describeCountry).join("; ")}.`
       : todayCount > 0
         ? `A grapevine rooted at the heart of a soft world map drawn as a disc, with ${fmt(todayCount)} ${todayCount === 1 ? "chapter" : "chapters"} read or heard today, ${longDate(today.date)}. No country shapes are lit yet.`
         : "A grapevine rooted at the heart of a soft world map drawn as a disc, at rest in the early morning — the counting of chapters has only just begun, and no country shapes are lit yet.";
@@ -502,40 +541,61 @@ export default function BodyHeartbeat() {
               <ellipse cx="676" cy="556" rx="11" ry="5.5" transform="rotate(-30 676 556)" />
             </g>
             {/* lit countries — the nation itself, in its own shape:
-                a soft outer glow, then the golden fill, breathing */}
+                a soft outer glow, then the golden fill, breathing.
+                EMBER countries (v3.1.1 — the country has recorded
+                subdivisions in this set) render instead as a faint,
+                still fill at one fixed low opacity: no glow layer,
+                no breathing. The light in them belongs to their
+                subdivisions, drawn next. */}
             {mapRows.map((c, i) =>
               c.geo ? (
-                <g
-                  key={`sil-${c.code}`}
-                  className="hb-glow"
-                  style={{ animationDelay: `${(i % 5) * 0.9}s` }}
-                >
-                  <title>{mapPhrase(c)}</title>
-                  <path
-                    d={c.geo.path}
-                    fill="#e4b95c"
-                    fillRule="evenodd"
-                    opacity={silhouetteGlow(c.total)}
-                    filter="url(#hb-soft)"
-                  />
-                  <path
-                    d={c.geo.path}
-                    fill="#e4b95c"
-                    fillRule="evenodd"
-                    fillOpacity={silhouetteFill(c.total)}
-                    stroke="#ffe1a1"
-                    strokeWidth="0.8"
-                    strokeOpacity="0.5"
-                  />
-                </g>
+                modeOf(c.code) === "ember" ? (
+                  <g key={`sil-${c.code}`}>
+                    <title>{emberPhrase(c)}</title>
+                    <path
+                      d={c.geo.path}
+                      fill="#e4b95c"
+                      fillRule="evenodd"
+                      fillOpacity={EMBER_FILL_OPACITY}
+                      stroke="#ffe1a1"
+                      strokeWidth="0.8"
+                      strokeOpacity="0.25"
+                    />
+                  </g>
+                ) : (
+                  <g
+                    key={`sil-${c.code}`}
+                    className="hb-glow"
+                    style={{ animationDelay: `${(i % 5) * 0.9}s` }}
+                  >
+                    <title>{mapPhrase(c)}</title>
+                    <path
+                      d={c.geo.path}
+                      fill="#e4b95c"
+                      fillRule="evenodd"
+                      opacity={silhouetteGlow(c.total)}
+                      filter="url(#hb-soft)"
+                    />
+                    <path
+                      d={c.geo.path}
+                      fill="#e4b95c"
+                      fillRule="evenodd"
+                      fillOpacity={silhouetteFill(c.total)}
+                      stroke="#ffe1a1"
+                      strokeWidth="0.8"
+                      strokeOpacity="0.5"
+                    />
+                  </g>
+                )
               ) : null
             )}
-            {/* lit subdivisions — within a lit country, the
-                first-level regions carrying counts today light in
-                their own shapes over the national fill (v3.1;
-                ISO 3166-2 keying, the US states today). The
-                country's heart below still renders — one nation,
-                kindled closer in. */}
+            {/* lit subdivisions — the first-level regions carrying
+                counts today light in their own shapes at FULL
+                treatment (v3.1; ISO 3166-2 keying, the US states
+                today): glow, fill, breathing — and, since v3.1.1,
+                their own bright hearts, because the finest recorded
+                geography wins the light. Their country rests behind
+                them as an ember and shows no heart of its own. */}
             {mapSource === "live" &&
               liveSubdivisionRows.map((s, i) =>
                 s.geo ? (
@@ -561,15 +621,36 @@ export default function BodyHeartbeat() {
                       strokeWidth="0.7"
                       strokeOpacity="0.55"
                     />
+                    {/* the subdivision's heart — the bright core of
+                        its light, at its own center */}
+                    <circle cx={s.geo.cx} cy={s.geo.cy} r="6.5" fill="#ffdf8a" opacity="0.3" />
+                    <circle cx={s.geo.cx} cy={s.geo.cy} r="2.6" fill="#fff3c4" />
                   </g>
                 ) : null
               )}
             {/* country hearts — a small bright core at each lit
                 country's center; for a counted country with no
                 polygon, the heart carries a fuller halo and ring
-                (the centroid-light fallback) */}
+                (the centroid-light fallback). An EMBER country
+                (v3.1.1) shows NO heart: its subdivisions hold the
+                hearts now. */}
             {mapRows.map((c, i) => {
               if (!c.centroid) return null;
+              if (modeOf(c.code) === "ember") {
+                if (c.geo) return null;
+                return (
+                  <g key={`heart-${c.code}`}>
+                    <title>{emberPhrase(c)}</title>
+                    <circle
+                      cx={c.centroid.cx}
+                      cy={c.centroid.cy}
+                      r={lightRadius(c.total)}
+                      fill="#e4b95c"
+                      fillOpacity={EMBER_FILL_OPACITY}
+                    />
+                  </g>
+                );
+              }
               const r = lightRadius(c.total);
               return (
                 <g
@@ -617,7 +698,9 @@ export default function BodyHeartbeat() {
           </figcaption>
           <p className="mt-2 text-center text-sm text-cream-100/85">
             {mapRows.length > 0
-              ? "Each light is a country where the Word was opened."
+              ? anyEmber
+                ? "Each light is a place where the Word was opened — a country in its own shape, or, where the place was recorded more closely, a division within it, lit in its own shape while its country rests as a faint ember."
+                : "Each light is a country where the Word was opened."
               : "Country lights join as the count gathers them — each light will mark a country where the Word was opened."}
           </p>
         </figure>
@@ -675,33 +758,61 @@ export default function BodyHeartbeat() {
               ))}
             </ul>
             {/* Subdivisions, grouped under their country — the text
-                mirror of the state silhouettes on the disc (v3.1). */}
-            {subdivisionGroups.map(([country, rows]) => (
-              <div key={country} className="mt-6">
-                <h4 className="text-center font-display text-base text-cream-50">
-                  {subdivisionGroupLabel(country)}
-                </h4>
-                <ul className="mt-3 flex flex-wrap justify-center gap-2">
-                  {rows.map((s) => (
-                    <li
-                      key={s.code}
-                      className="rounded-full border border-gold-500/25 bg-vineyard-950/60 px-3.5 py-1.5 text-sm text-cream-100"
-                    >
-                      {s.name}{" "}
-                      <span className="text-gold-300">
-                        {fmt(s.total)} {s.total === 1 ? "chapter" : "chapters"} today
-                      </span>
-                      {s.heard > 0 && (
-                        <span className="text-sage-300">
-                          {" "}
-                          · {fmt(s.read)} read · {fmt(s.heard)} heard
+                mirror of the state silhouettes on the disc (v3.1).
+                Each group also names the country's remaining chapters
+                honestly (v3.1.1): counted in the country's totals but
+                carrying no recorded subdivision, they get their own
+                quieter row — "{Country} — state not recorded" — so
+                the list neither hides them nor lends them a finer
+                place than was recorded. */}
+            {subdivisionGroups.map(([country, rows]) => {
+              const countryRow = liveRows.find((c) => c.code === country);
+              const unrecorded = countryRow
+                ? unrecordedChapters(
+                    countryRow.total,
+                    liveSubdivisionRows,
+                    country
+                  )
+                : 0;
+              return (
+                <div key={country} className="mt-6">
+                  <h4 className="text-center font-display text-base text-cream-50">
+                    {subdivisionGroupLabel(country)}
+                  </h4>
+                  <ul className="mt-3 flex flex-wrap justify-center gap-2">
+                    {rows.map((s) => (
+                      <li
+                        key={s.code}
+                        className="rounded-full border border-gold-500/25 bg-vineyard-950/60 px-3.5 py-1.5 text-sm text-cream-100"
+                      >
+                        {s.name}{" "}
+                        <span className="text-gold-300">
+                          {fmt(s.total)} {s.total === 1 ? "chapter" : "chapters"} today
                         </span>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+                        {s.heard > 0 && (
+                          <span className="text-sage-300">
+                            {" "}
+                            · {fmt(s.read)} read · {fmt(s.heard)} heard
+                          </span>
+                        )}
+                      </li>
+                    ))}
+                    {countryRow && unrecorded > 0 && (
+                      <li
+                        key={`${country}-not-recorded`}
+                        className="rounded-full border border-cream-100/15 bg-vineyard-950/40 px-3.5 py-1.5 text-sm text-cream-100/75"
+                      >
+                        {notRecordedLabel(country, countryRow.name)}{" "}
+                        <span className="text-gold-300/80">
+                          {fmt(unrecorded)}{" "}
+                          {unrecorded === 1 ? "chapter" : "chapters"} today
+                        </span>
+                      </li>
+                    )}
+                  </ul>
+                </div>
+              );
+            })}
             <p className="mt-3 text-center text-xs text-sage-400">
               Counted as the Body reads — the country of a reader&rsquo;s
               connection only, never a name, never an address.
