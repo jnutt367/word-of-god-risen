@@ -9,6 +9,7 @@ import PlanContinue from "@/components/PlanContinue";
 import ListenDropdown from "@/components/ListenDropdown";
 import LatestShorts from "@/components/LatestShorts";
 import BodyHeartbeat from "@/components/BodyHeartbeat";
+import OpenDoor from "@/components/OpenDoor";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -125,6 +126,11 @@ export default function Home() {
 
       {/* The Body, Reading — the Bible Heartbeat */}
       <BodyHeartbeat />
+
+      {/* The Open Door — a quiet link out to the TruVINE Family Wall,
+          resting beside the heartbeat. A plain outbound link only:
+          no accounts, no tracking, no data gathered at the door. */}
+      <OpenDoor />
 
       {/* Book grid */}
       <section id="books" className="mx-auto max-w-6xl scroll-mt-20 px-4 pb-20 sm:px-6">
