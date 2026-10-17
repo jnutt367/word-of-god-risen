@@ -7,6 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import VerseText from "@/components/VerseText";
 import CrossRefPanel from "@/components/CrossRefPanel";
 import WatchCard from "@/components/WatchCard";
+import FilmCard from "@/components/FilmCard";
 import ListenButton from "@/components/ListenButton";
 import { useProgress } from "@/components/ProgressProvider";
 import { beatRead, beatBookComplete } from "@/lib/heartbeat";
@@ -14,6 +15,7 @@ import { getBook } from "@/lib/bible-client";
 import { VERSION_STORAGE_KEY } from "@/lib/versions";
 import type { Verse } from "@/lib/verses";
 import type { ChapterVideo } from "@/lib/videos";
+import type { ChapterFilm } from "@/lib/films";
 
 interface VersionInfo {
   id: string;
@@ -33,6 +35,7 @@ interface Props {
   defaultVersion: string;
   crossRefs: Record<number, string[]>;
   videos: ChapterVideo[];
+  film: ChapterFilm | null;
   prevIdx: number | null;
   nextIdx: number | null;
 }
@@ -49,6 +52,7 @@ export default function ReaderView({
   defaultVersion,
   crossRefs,
   videos,
+  film,
   prevIdx,
   nextIdx,
 }: Props) {
@@ -269,6 +273,9 @@ export default function ReaderView({
         <div className="vine-divider my-8" aria-hidden="true">
           <span>✦</span>
         </div>
+
+        {/* The chapter's animated film, beside the Listen controls */}
+        <FilmCard film={film} />
 
         {/* Scripture */}
         <article>
