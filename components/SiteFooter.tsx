@@ -23,6 +23,12 @@ export default function SiteFooter() {
             <Link href="/about" className="text-sage-300 hover:text-gold-300">
               About
             </Link>
+            <Link
+              href="/accessibility"
+              className="text-sage-300 hover:text-gold-300"
+            >
+              Accessibility
+            </Link>
             <a
               href="https://www.youtube.com/@TruVINE365"
               target="_blank"

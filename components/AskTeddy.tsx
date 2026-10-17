@@ -261,7 +261,7 @@ export default function AskTeddy() {
                         ? "Stop Teddy's voice"
                         : "Hear Teddy say this"
                     }
-                    className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-gold-500/50 px-2.5 py-1 text-xs font-medium text-gold-600 hover:bg-gold-500/10"
+                    className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-gold-500/50 px-2.5 py-1 text-xs font-medium text-[#865c10] hover:bg-gold-500/10"
                   >
                     {playingId === m.response!.id ? (
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -319,7 +319,7 @@ export default function AskTeddy() {
               awaitingIdea ? "Tell Teddy your idea…" : "Ask Teddy…"
             }
             aria-label="Message Teddy"
-            className="min-w-0 flex-1 rounded-full border border-gold-500/40 bg-white px-4 py-2 text-sm text-vineyard-950 placeholder:text-vineyard-950/40 focus:border-gold-500 focus:outline-none"
+            className="min-w-0 flex-1 rounded-full border border-gold-500/40 bg-white px-4 py-2 text-sm text-vineyard-950 placeholder:text-vineyard-950/60 focus:border-gold-500 focus:outline-none"
           />
           <button
             type="submit"

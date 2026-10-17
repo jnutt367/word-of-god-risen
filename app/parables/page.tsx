@@ -73,7 +73,7 @@ export default function ParablesPage() {
             <div className="aspect-[2/1] w-full overflow-hidden">
               <img
                 src={`/images/parable-${p.slug}-card.jpg`}
-                alt={p.title}
+                alt={`${p.title} parable illustration`}
                 className="h-full w-full object-cover"
                 loading="lazy"
               />

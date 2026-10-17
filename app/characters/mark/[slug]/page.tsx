@@ -59,7 +59,7 @@ export default async function CharacterPage({
         <div>
           <div className="overflow-hidden rounded-2xl border border-gold-500/20">
             {c.image ? (
-              <img src={c.image} alt={c.name} className="w-full object-cover" />
+              <img src={c.image} alt={`Portrait of ${c.name}`} className="w-full object-cover" />
             ) : null}
           </div>
           {c.caption ? (

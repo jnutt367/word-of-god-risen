@@ -18,7 +18,7 @@ function CharacterCard({ c }: { c: Character }) {
         {c.image ? (
           <img
             src={c.image}
-            alt={c.name}
+            alt={`Portrait of ${c.name}`}
             className="h-full w-full object-cover transition-transform group-hover:scale-105"
             loading="lazy"
           />
