@@ -145,3 +145,45 @@ body {
     animation: none;
   }
 }
+
+/* Teddy helper — Grandpa Teddy's first-visit card settles in with one
+ * soft fade; fully still for readers who prefer reduced motion. */
+@keyframes teddy-helper-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.teddy-helper {
+  animation: teddy-helper-in 0.45s ease-out both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .teddy-helper {
+    animation: none;
+  }
+}
+
+/* While Teddy's card is open, the floating Listen button he is talking
+ * about breathes a slow golden ring — an old eye can follow his words
+ * straight to the button. Calm, and still under reduced motion. */
+@keyframes teddy-point-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(240, 205, 126, 0.55);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(240, 205, 126, 0);
+  }
+}
+.teddy-point {
+  animation: teddy-point-pulse 2.6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .teddy-point {
+    animation: none;
+  }
+}

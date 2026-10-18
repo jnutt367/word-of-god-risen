@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import type { Verse } from "@/lib/verses";
 import { getBook } from "@/lib/bible-client";
 import { beatListenStart, beatListenComplete } from "@/lib/heartbeat";
@@ -11,7 +12,12 @@ interface Props {
   chapterNum: number;
   verses: Verse[];
   autoplay?: boolean;
+  /** Reader pages: also show the floating Listen bar + Teddy helper. */
+  floating?: boolean;
 }
+
+/** Teddy helper "seen it" note — the reader's own browser only. */
+const HELPER_KEY = "wogr_teddy_helper_v1";
 
 type Status = "idle" | "playing" | "paused";
 
@@ -57,6 +63,7 @@ export default function ListenButton({
   chapterNum,
   verses,
   autoplay = false,
+  floating = false,
 }: Props) {
   const [status, setStatus] = useState<Status>("idle");
   const [canListen, setCanListen] = useState(false);
@@ -78,6 +85,21 @@ export default function ListenButton({
   const panelRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const ambientRef = useRef<HTMLAudioElement | null>(null);
+  // Teddy helper (floating mode): open state + the two ends of the
+  // reader's path — the "Got it" button and the "New here?" link.
+  const [helperOpen, setHelperOpen] = useState(false);
+  const gotItRef = useRef<HTMLButtonElement>(null);
+  const showHelperRef = useRef<HTMLButtonElement>(null);
+
+  const dismissHelper = () => {
+    try {
+      localStorage.setItem(HELPER_KEY, "seen");
+    } catch {
+      /* storage unavailable — just close */
+    }
+    setHelperOpen(false);
+    showHelperRef.current?.focus();
+  };
 
   const supported = () =>
     typeof window !== "undefined" && "speechSynthesis" in window;
@@ -94,6 +116,15 @@ export default function ListenButton({
     } catch {
       /* ignore */
     }
+    // Teddy helper: a first-time reader (no "seen it" note saved)
+    // meets Grandpa Teddy's pointer to the Listen button.
+    if (floating) {
+      try {
+        if (!localStorage.getItem(HELPER_KEY)) setHelperOpen(true);
+      } catch {
+        /* storage unavailable — don't auto-show */
+      }
+    }
     const load = () => setVoices(window.speechSynthesis.getVoices());
     load();
     window.speechSynthesis.onvoiceschanged = load;
@@ -101,7 +132,7 @@ export default function ListenButton({
       window.speechSynthesis.cancel();
       window.speechSynthesis.onvoiceschanged = null;
     };
-  }, []);
+  }, [floating]);
 
   // Look up an MP3 for this chapter; reset playback when the chapter changes.
   useEffect(() => {
@@ -154,6 +185,27 @@ export default function ListenButton({
       document.removeEventListener("keydown", onKey);
     };
   }, [showSettings]);
+
+  /* ---------------- Teddy helper (floating mode) ----------------
+   * The first time a reader opens a chapter, Grandpa Teddy himself
+   * points out the Listen button (the mount effect below checks the
+   * "seen it" note). "Got it" is remembered only in the reader's own
+   * browser; the "New here?" link brings him back anytime. */
+
+  // Land keyboard readers on "Got it" so the card is easy to dismiss.
+  useEffect(() => {
+    if (helperOpen) gotItRef.current?.focus();
+  }, [helperOpen]);
+
+  // Escape closes the helper, like the settings panel.
+  useEffect(() => {
+    if (!helperOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") dismissHelper();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [helperOpen]);
 
   const stopAll = () => {
     session.current += 1;
@@ -396,19 +448,21 @@ export default function ListenButton({
   const icon = status === "playing" ? "⏸" : status === "paused" ? "▶" : "🔊";
   const toggle = () => (useMp3 ? toggleMp3(mp3Url as string) : toggleTts());
 
+  const listenAriaLabel =
+    status === "playing"
+      ? "Pause listening"
+      : status === "paused"
+        ? "Resume listening"
+        : `Listen to ${bookTitle} ${chapterNum}`;
+
   return (
+    <>
     <span ref={panelRef} className="relative inline-flex items-center gap-1.5">
       <button
         type="button"
         onClick={toggle}
         aria-pressed={status !== "idle"}
-        aria-label={
-          status === "playing"
-            ? "Pause listening"
-            : status === "paused"
-              ? "Resume listening"
-              : `Listen to ${bookTitle} ${chapterNum}`
-        }
+        aria-label={listenAriaLabel}
         title={status === "idle" ? "Listen to this chapter" : label}
         className={btn}
       >
@@ -507,5 +561,93 @@ export default function ListenButton({
         </div>
       )}
     </span>
+
+    {/* Floating Listen bar — the same control, kept in reach while the
+        reader scrolls. Same gold pill language as the reader's own
+        "Mark as read" button; the big tap target is for every hand. */}
+    {floating && (
+      <div className="fixed inset-x-0 bottom-0 z-40 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-6">
+        <div className="mx-auto flex max-w-3xl flex-col items-center gap-2">
+          <div className="flex w-full items-center gap-2">
+            <button
+              type="button"
+              onClick={toggle}
+              aria-pressed={status !== "idle"}
+              aria-label={listenAriaLabel}
+              className={`flex min-h-14 flex-1 items-center justify-center gap-2.5 rounded-full bg-[var(--reader-verse-num)] px-6 py-3.5 text-lg font-semibold text-[var(--reader-bg)] shadow-xl transition-opacity hover:opacity-95 ${helperOpen ? "teddy-point" : ""}`}
+            >
+              <span aria-hidden="true" className="text-2xl leading-none">
+                {status === "playing"
+                  ? "⏸"
+                  : status === "paused"
+                    ? "▶"
+                    : "🔊"}
+              </span>
+              {status === "playing"
+                ? "Listening… Pause"
+                : status === "paused"
+                  ? "Tap to Resume"
+                  : "Tap to Listen"}
+            </button>
+            {status !== "idle" && (
+              <button
+                type="button"
+                onClick={stopAll}
+                aria-label="Stop listening"
+                title="Stop"
+                className="flex min-h-14 min-w-14 items-center justify-center rounded-full border border-[var(--reader-line)] bg-[var(--reader-card)] text-xl text-[var(--reader-ink)] shadow-xl transition-colors hover:text-[var(--reader-verse-num)]"
+              >
+                <span aria-hidden="true">⏹</span>
+              </button>
+            )}
+          </div>
+          <button
+            ref={showHelperRef}
+            type="button"
+            onClick={() => setHelperOpen(true)}
+            aria-haspopup="dialog"
+            className="rounded-full border border-[var(--reader-line)] bg-[var(--reader-card)]/95 px-4 py-1.5 text-sm font-medium text-[var(--reader-muted)] shadow-lg transition-colors hover:text-[var(--reader-verse-num)]"
+          >
+            New here? Teddy can show you
+          </button>
+        </div>
+      </div>
+    )}
+
+    {/* Teddy helper — Grandpa Teddy points out the Listen button, once,
+        in plain words. He comes back anytime via "New here?". */}
+    {floating && helperOpen && (
+      <div
+        role="dialog"
+        aria-modal="false"
+        aria-label="Grandpa Teddy shows you how to listen"
+        className="teddy-helper fixed inset-x-0 bottom-36 z-50 px-3 sm:px-6"
+      >
+        <div className="mx-auto flex max-w-md items-start gap-4 rounded-2xl border border-[var(--reader-line)] bg-[var(--reader-card)] p-5 shadow-2xl">
+          <Image
+            src="/images/teddy-face-1.png"
+            alt="Grandpa Teddy smiling in his straw hat and overalls"
+            width={72}
+            height={72}
+            className="h-[72px] w-[72px] shrink-0 rounded-full object-cover"
+          />
+          <div>
+            <p className="text-lg leading-relaxed text-[var(--reader-ink)]">
+              Hello, friend. Tap the gold Listen button and I&rsquo;ll read
+              this chapter out loud to you.
+            </p>
+            <button
+              ref={gotItRef}
+              type="button"
+              onClick={dismissHelper}
+              className="mt-4 rounded-full bg-[var(--reader-verse-num)] px-6 py-2.5 text-base font-semibold text-[var(--reader-bg)] transition-opacity hover:opacity-95"
+            >
+              Got it
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+    </>
   );
 }

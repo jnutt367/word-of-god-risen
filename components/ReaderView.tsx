@@ -171,7 +171,8 @@ export default function ReaderView({
         style={{ transform: "scaleX(0)" }}
         ref={progressRef}
       />
-      <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-12">
+      {/* Extra bottom room so the floating Listen bar never covers text */}
+      <div className="mx-auto max-w-3xl px-4 pb-36 pt-8 sm:px-6 sm:pt-12">
         {/* Top bar */}
         <div className="mb-8 flex items-center justify-between gap-3">
           <Link
@@ -211,6 +212,7 @@ export default function ReaderView({
               chapterNum={chapterNum}
               verses={verses}
               autoplay={autoplay}
+              floating
             />
             <button
               type="button"
