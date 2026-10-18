@@ -6,6 +6,7 @@ import "./globals.css";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import AskTeddy from "@/components/AskTeddy";
+import GrandmaReset from "@/components/GrandmaReset";
 import { ProgressProvider } from "@/components/ProgressProvider";
 import { PlanProvider } from "@/components/PlanProvider";
 
@@ -117,6 +118,7 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col bg-vineyard-950 text-cream-100 font-body">
+        <GrandmaReset />
         <ProgressProvider>
           <PlanProvider>
             <SiteHeader />
