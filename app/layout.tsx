@@ -55,6 +55,11 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Jason Nutt", url: "https://www.youtube.com/@TruVINE365" }],
   creator: "Jason Nutt",
+  appleWebApp: {
+    capable: true,
+    title: "Word of God Risen",
+    statusBarStyle: "black-translucent",
+  },
   openGraph: {
     type: "website",
     siteName: "Word of God Risen",
