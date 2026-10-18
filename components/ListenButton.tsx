@@ -19,12 +19,12 @@ const VOICE_KEY = "wogr:tts-voice";
 const RATE_KEY = "wogr:tts-rate";
 const AMBIENT_KEY = "wogr:ambient";
 const MANIFEST_URL = "/audio-manifest.json";
-/** Desert ambient for all books (Jason 2026-10-09: unified bed). */
+/** Channel bed for all books (Jason 2026-10-18: the TruVINE video music bed, one bed across app + channel). */
 function ambientUrlFor(slug: string): string {
-  return "/audio/ambient-desert.mp3";
+  return "/audio/ambient-channel.mp3";
 }
-/** Warm bed sits well under narration without fighting it. */
-const AMBIENT_VOL = 0.18;
+/** Channel bed sits well under narration without fighting it (house recipe). */
+const AMBIENT_VOL = 0.12;
 
 /** Fetched once, then reused for every chapter. */
 let manifestPromise: Promise<Record<string, string>> | null = null;
