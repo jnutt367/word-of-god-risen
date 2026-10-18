@@ -6,8 +6,71 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { TEDDY_FACES, type TeddyFaceKey } from "@/lib/teddy-faces";
 
-/** Teddy's homepage welcome "seen it" note — the reader's own browser only. */
-const WELCOME_KEY = "wogr_teddy_welcomed_v1";
+/** Teddy's homepage welcome — the reader's own browser only.
+ * v1 (batch #2) was a single "seen" note. v2 gives the welcome ONE
+ * second chance for a reader who never actually met Teddy (Jason's
+ * ruling, Oct 18): the welcome may auto-open up to twice in all, on
+ * separate later visits, and only until the first real interaction
+ * makes it stop forever — an accidental dismissal shouldn't cost
+ * Grandma her tour guide. */
+const WELCOME_KEY_V1 = "wogr_teddy_welcomed_v1";
+const WELCOME_KEY = "wogr_teddy_welcome_v2";
+/** Session note: the welcome has already been offered during THIS
+ * browser session — the second chance belongs to a later visit,
+ * never later in the same sitting. */
+const WELCOME_SESSION_KEY = "wogr_teddy_welcome_session_v2";
+const WELCOME_MAX_AUTO_OPENS = 2;
+/** A "later visit" is at least this long after the last auto-open. */
+const WELCOME_LATER_VISIT_MS = 4 * 60 * 60 * 1000;
+
+type WelcomeState = { shown: number; met: boolean; lastShownAt?: number };
+
+/** Read the welcome state, migrating a v1 "seen" note if there is
+ * one: a reader who saw the one-time welcome but never met Teddy
+ * holds exactly one second chance (shown: 1) — Jason's intent.
+ * Returns null when storage is unavailable (never auto-open). */
+function readWelcomeState(): WelcomeState | null {
+  try {
+    const raw = localStorage.getItem(WELCOME_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw) as Partial<WelcomeState>;
+      return {
+        shown: typeof parsed.shown === "number" ? parsed.shown : 0,
+        met: parsed.met === true,
+        lastShownAt:
+          typeof parsed.lastShownAt === "number"
+            ? parsed.lastShownAt
+            : undefined,
+      };
+    }
+    if (localStorage.getItem(WELCOME_KEY_V1) != null) {
+      const migrated: WelcomeState = { shown: 1, met: false };
+      writeWelcomeState(migrated);
+      return migrated;
+    }
+    return { shown: 0, met: false };
+  } catch {
+    return null;
+  }
+}
+
+function writeWelcomeState(state: WelcomeState) {
+  try {
+    localStorage.setItem(WELCOME_KEY, JSON.stringify(state));
+  } catch {
+    /* storage unavailable — the welcome simply won't track */
+  }
+}
+
+/** Any real hello counts as meeting Teddy: she opens his panel
+ * herself, taps a quick question or chip, sends a message, or taps
+ * "Hear Teddy" on one of his answers. From that moment the welcome
+ * never auto-opens again, ever. */
+function markTeddyMet() {
+  const state = readWelcomeState();
+  if (!state || state.met) return;
+  writeWelcomeState({ ...state, met: true });
+}
 
 type TeddyResponse = {
   id: string; // matches /audio/teddy-chat/<id>.mp3
@@ -238,6 +301,7 @@ export default function AskTeddy() {
   }, []);
 
   const playAudio = (id: string) => {
+    markTeddyMet(); // she asked to hear his voice — they've met
     if (playingId === id) {
       audioRef.current?.pause();
       setPlayingId(null);
@@ -262,8 +326,8 @@ export default function AskTeddy() {
   };
 
   /** Teddy says hello the first time his panel opens — once per visit-set.
-   * When he opened the panel himself (his one-time homepage welcome),
-   * he waves; when she tapped his bubble, he welcomes. */
+   * When he opened the panel himself (his homepage welcome), he
+   * waves; when she tapped his bubble, he welcomes. */
   const greet = (viaAutoWelcome: boolean) => {
     if (greetedRef.current) return;
     greetedRef.current = true;
@@ -281,32 +345,60 @@ export default function AskTeddy() {
   const handleOpen = () => {
     const next = !open;
     setOpen(next);
-    if (next) greet(false);
+    if (next) {
+      markTeddyMet(); // she came to him herself — they've met
+      greet(false);
+    }
   };
 
-  /* Teddy's homepage welcome: on a reader's first-ever visit to the
-   * homepage, after a gentle beat (~2s or their first scroll), Teddy
-   * opens his panel himself — once. The "seen it" note is set the
-   * moment he opens, so any way the visit goes (close it, tap away,
-   * use a quick question) he never auto-opens again, on any page.
-   * Not a modal — the page stays fully usable beside him. */
+  /* Teddy's homepage welcome — with one second chance. After a
+   * gentle beat (~2s or her first scroll), Teddy opens his panel
+   * himself, as before. But if she never actually met him — never
+   * opened his panel herself, never tapped a question, never heard
+   * his voice — the welcome may return ONCE more: on a later visit
+   * (a new browser session, at least four hours after the last
+   * auto-open). Two auto-opens in all, ever; the moment she truly
+   * meets him, or after the second showing, he never pops up again.
+   * Not a modal — the page stays fully usable beside him — and
+   * silent, as always: no audio ever plays uninvited. */
   useEffect(() => {
     if (!onHome) return;
-    let seen = false;
+    const state = readWelcomeState();
+    if (!state || state.met || state.shown >= WELCOME_MAX_AUTO_OPENS) return;
     try {
-      seen = localStorage.getItem(WELCOME_KEY) != null;
+      // Already offered during this sitting — the second chance
+      // waits for a later visit.
+      if (sessionStorage.getItem(WELCOME_SESSION_KEY) != null) return;
     } catch {
-      seen = true; // storage unavailable — never auto-open
+      /* session storage unavailable — the four-hour rule still gates */
     }
-    if (seen) return;
+    if (
+      state.lastShownAt != null &&
+      Date.now() - state.lastShownAt < WELCOME_LATER_VISIT_MS
+    ) {
+      return;
+    }
     let fired = false;
     const fire = () => {
       if (fired) return;
       fired = true;
       try {
-        localStorage.setItem(WELCOME_KEY, "seen");
+        // One offer per sitting at most — claim this session before
+        // counting, so a second trigger can't count twice.
+        if (sessionStorage.getItem(WELCOME_SESSION_KEY) != null) return;
+        sessionStorage.setItem(WELCOME_SESSION_KEY, "offered");
       } catch {
         /* ignore */
+      }
+      // Count this showing — unless she met him in the meantime
+      // (her own tap already said hello first).
+      const fresh = readWelcomeState();
+      if (fresh && !fresh.met && fresh.shown < WELCOME_MAX_AUTO_OPENS) {
+        writeWelcomeState({
+          shown: fresh.shown + 1,
+          met: false,
+          lastShownAt: Date.now(),
+        });
       }
       window.removeEventListener("scroll", onScroll);
       if (!openRef.current) {
@@ -326,6 +418,7 @@ export default function AskTeddy() {
   const send = (raw: string) => {
     const text = raw.trim();
     if (!text) return;
+    markTeddyMet(); // a question or a chip tap — they've met
     setMessages((m) => [...m, { from: "user", text }]);
     setInput("");
     if (awaitingIdea) {
