@@ -187,3 +187,11 @@ body {
     animation: none;
   }
 }
+
+/* Ask Teddy's panel — when Teddy opens his own welcome, readers who
+ * prefer reduced motion simply see it appear, no slide or scale. */
+@media (prefers-reduced-motion: reduce) {
+  .askteddy-panel {
+    transition: none;
+  }
+}

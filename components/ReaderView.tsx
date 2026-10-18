@@ -23,6 +23,12 @@ interface VersionInfo {
   name: string;
 }
 
+/* Word size — three steps, normal first. The reader's own browser
+ * remembers the choice, the same way it remembers their translation.
+ * Steps are rem sizes for the verse text in VerseText. */
+const TEXT_SIZE_KEY = "wogr:text-size";
+const TEXT_SIZES_REM = [1.18, 1.42, 1.68];
+
 interface Props {
   slug: string;
   bookTitle: string;
@@ -58,6 +64,15 @@ export default function ReaderView({
 }: Props) {
   const [lamp, setLamp] = useState(false);
   const [version, setVersion] = useState(defaultVersion);
+  const [textSizeIdx, setTextSizeIdx] = useState(0);
+  // Set (read-only) by ListenButton when the narration finishes on its
+  // own — keyed to the chapter so a new chapter never shows a leftover
+  // line. Drives the one plain chapter-end line in the actions area.
+  const [endedKey, setEndedKey] = useState<string | null>(null);
+  const chapterKey = `${slug}:${chapterIdx}`;
+  const narrationEnded = endedKey === chapterKey;
+  const handleEndedChange = (ended: boolean) =>
+    setEndedKey(ended ? chapterKey : null);
   const searchParams = useSearchParams();
   const autoplay = searchParams.get("autoplay") === "1";
   const [openRef, setOpenRef] = useState<{
@@ -137,13 +152,16 @@ export default function ReaderView({
     }
   };
 
-  // Restore the reader's preferred translation.
+  // Restore the reader's preferred translation and word size.
   useEffect(() => {
     try {
       const saved = localStorage.getItem(VERSION_STORAGE_KEY);
       if (saved && versesByVersion[saved]) setVersion(saved);
+      const savedSize = parseInt(localStorage.getItem(TEXT_SIZE_KEY) || "", 10);
+      if (savedSize >= 0 && savedSize < TEXT_SIZES_REM.length)
+        setTextSizeIdx(savedSize);
     } catch {
-      /* storage unavailable — stay on default */
+      /* storage unavailable — stay on defaults */
     }
   }, [versesByVersion]);
 
@@ -151,6 +169,16 @@ export default function ReaderView({
     setVersion(id);
     try {
       localStorage.setItem(VERSION_STORAGE_KEY, id);
+    } catch {
+      /* ignore */
+    }
+  };
+
+  const changeTextSize = (idx: number) => {
+    const next = Math.min(TEXT_SIZES_REM.length - 1, Math.max(0, idx));
+    setTextSizeIdx(next);
+    try {
+      localStorage.setItem(TEXT_SIZE_KEY, String(next));
     } catch {
       /* ignore */
     }
@@ -213,6 +241,7 @@ export default function ReaderView({
               verses={verses}
               autoplay={autoplay}
               floating
+              onEndedChange={handleEndedChange}
             />
             <button
               type="button"
@@ -222,6 +251,32 @@ export default function ReaderView({
             >
               {lamp ? "☾ Night" : "☀ Lamp"}
             </button>
+            <div
+              role="group"
+              aria-label="Word size"
+              className="flex rounded-full border border-[var(--reader-line)] p-0.5"
+            >
+              <button
+                type="button"
+                onClick={() => changeTextSize(textSizeIdx - 1)}
+                disabled={textSizeIdx === 0}
+                aria-label="Make the words smaller"
+                title="Make the words smaller"
+                className="rounded-full px-3 py-1 text-xs font-semibold text-[var(--reader-muted)] transition-colors hover:text-[var(--reader-verse-num)] disabled:opacity-40 disabled:hover:text-[var(--reader-muted)]"
+              >
+                A−
+              </button>
+              <button
+                type="button"
+                onClick={() => changeTextSize(textSizeIdx + 1)}
+                disabled={textSizeIdx === TEXT_SIZES_REM.length - 1}
+                aria-label="Make the words bigger"
+                title="Make the words bigger"
+                className="rounded-full px-3 py-1 text-xs font-semibold text-[var(--reader-muted)] transition-colors hover:text-[var(--reader-verse-num)] disabled:opacity-40 disabled:hover:text-[var(--reader-muted)]"
+              >
+                A+
+              </button>
+            </div>
           </div>
         </div>
 
@@ -285,6 +340,7 @@ export default function ReaderView({
             verses={verses}
             bookTitle={bookTitle}
             chapterNum={chapterNum}
+            fontSizeRem={TEXT_SIZES_REM[textSizeIdx]}
             crossRefs={crossRefs}
             onOpenRefs={(verseN, ref, targets) =>
               setOpenRef({ verseN, ref, targets })
@@ -320,6 +376,16 @@ export default function ReaderView({
               {listened ? "🎧 Listened — tap to undo" : "🎧 Mark as listened"}
             </button>
           </div>
+          {narrationEnded && (
+            <p
+              role="status"
+              className="text-center text-base font-medium text-[var(--reader-ink)]"
+            >
+              {nextIdx !== null
+                ? `That's the end of ${bookTitle} ${chapterNum} — tap Next for ${bookTitle} ${chapterNum + 1} →`
+                : `That's the end of ${bookTitle} ${chapterNum} — well done.`}
+            </p>
+          )}
           <nav
             className="flex w-full items-center justify-between gap-4"
             aria-label="Chapters"

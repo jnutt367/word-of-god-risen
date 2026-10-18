@@ -7,6 +7,8 @@ interface Props {
   verses: Verse[];
   bookTitle: string;
   chapterNum: number;
+  /** Verse text size in rem — the reader's "Bigger words" choice. */
+  fontSizeRem?: number;
   /** verse number -> list of "Book C:V" strings */
   crossRefs: Record<number, string[]>;
   onOpenRefs: (verseN: number, ref: string, targets: string[]) => void;
@@ -21,11 +23,15 @@ export default function VerseText({
   verses,
   bookTitle,
   chapterNum,
+  fontSizeRem = 1.18,
   crossRefs,
   onOpenRefs,
 }: Props) {
   return (
-    <div className="font-scripture text-[1.18rem] leading-[1.9] text-[var(--reader-ink)]">
+    <div
+      className="font-scripture leading-[1.9] text-[var(--reader-ink)]"
+      style={{ fontSize: `${fontSizeRem}rem` }}
+    >
       {verses.map((v) => {
         const ref = v.n > 0 ? verseRef(bookTitle, chapterNum, v.n) : null;
         const targets = v.n > 0 ? crossRefs[v.n] : undefined;

@@ -14,6 +14,13 @@ interface Props {
   autoplay?: boolean;
   /** Reader pages: also show the floating Listen bar + Teddy helper. */
   floating?: boolean;
+  /**
+   * Read-only narration-end note for the parent (the chapter-end line).
+   * Called with true when the narration finishes on its own, false when
+   * playback starts or stops. It changes NO audio behavior — the warm
+   * bed keeps looping after the Scripture ends, exactly as always.
+   */
+  onEndedChange?: (ended: boolean) => void;
 }
 
 /** Teddy helper "seen it" note — the reader's own browser only. */
@@ -64,6 +71,7 @@ export default function ListenButton({
   verses,
   autoplay = false,
   floating = false,
+  onEndedChange,
 }: Props) {
   const [status, setStatus] = useState<Status>("idle");
   const [canListen, setCanListen] = useState(false);
@@ -82,6 +90,12 @@ export default function ListenButton({
   useEffect(() => {
     chapterRef.current = { bookSlug, chapterNum };
   }, [bookSlug, chapterNum]);
+  // The audio handlers are attached once, so the ended-note for the
+  // parent is read from a ref too (same pattern as chapterRef).
+  const endedRef = useRef(onEndedChange);
+  useEffect(() => {
+    endedRef.current = onEndedChange;
+  }, [onEndedChange]);
   const panelRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const ambientRef = useRef<HTMLAudioElement | null>(null);
@@ -222,6 +236,7 @@ export default function ListenButton({
     stopAmbient();
     setStatus("idle");
     setProgress(0);
+    endedRef.current?.(false);
   };
 
   /* ---------------- warm ambient bed ---------------- */
@@ -297,6 +312,10 @@ export default function ListenButton({
           chapterRef.current.bookSlug,
           chapterRef.current.chapterNum
         );
+        // Read-only note for the chapter-end line. The ambient bed is
+        // deliberately NOT touched here — it keeps looping after the
+        // Scripture ends (Jason's beloved behavior, preserved exactly).
+        endedRef.current?.(true);
       };
       audioRef.current = a;
     }
@@ -314,6 +333,7 @@ export default function ListenButton({
       a.play().catch(() => setStatus("idle"));
       ambientPlay();
       setStatus("playing");
+      endedRef.current?.(false);
       beatListenStart(bookSlug, chapterNum);
     } else if (status === "playing") {
       a.pause();
@@ -408,6 +428,9 @@ export default function ListenButton({
           if (session.current === mySession) {
             setStatus("idle");
             beatListenComplete(bookSlug, chapterNum);
+            // Same read-only ended note as the MP3 path; the bed is
+            // untouched and keeps playing, exactly as before.
+            endedRef.current?.(true);
           }
         };
       }
@@ -415,6 +438,7 @@ export default function ListenButton({
     });
     ambientPlay();
     setStatus("playing");
+    endedRef.current?.(false);
     beatListenStart(bookSlug, chapterNum);
   };
 

@@ -3,6 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+/** Teddy's homepage welcome "seen it" note — the reader's own browser only. */
+const WELCOME_KEY = "wogr_teddy_welcomed_v1";
 
 type TeddyResponse = {
   id: string; // matches /audio/teddy-chat/<id>.mp3
@@ -102,7 +106,15 @@ function logFeatureRequest(text: string) {
 }
 
 export default function AskTeddy() {
+  const pathname = usePathname();
+  const onHome = pathname === "/";
+  const onReaderPage = pathname?.startsWith("/book/") ?? false;
   const [open, setOpen] = useState(false);
+  const openRef = useRef(false);
+  const greetedRef = useRef(false);
+  useEffect(() => {
+    openRef.current = open;
+  }, [open ]);
   // Teddy's "look" for this visit — a slightly different outfit/scene each
   // time, like he's been out tending the farm. 1: hay field, 2: chicken coop,
   // 3: sunset fence line, 4: cozy indoors.
@@ -112,7 +124,6 @@ export default function AskTeddy() {
   const [input, setInput] = useState("");
   const [awaitingIdea, setAwaitingIdea] = useState(false);
   const [playingId, setPlayingId] = useState<string | null>(null);
-  const [hasGreeted, setHasGreeted] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -150,14 +161,58 @@ export default function AskTeddy() {
     if (key === "feature-ask") setAwaitingIdea(true);
   };
 
+  /** Teddy says hello the first time his panel opens — once per visit-set. */
+  const greet = () => {
+    if (greetedRef.current) return;
+    greetedRef.current = true;
+    pushTeddy("greeting");
+  };
+
   const handleOpen = () => {
     const next = !open;
     setOpen(next);
-    if (next && !hasGreeted) {
-      setHasGreeted(true);
-      pushTeddy("greeting");
-    }
+    if (next) greet();
   };
+
+  /* Teddy's homepage welcome: on a reader's first-ever visit to the
+   * homepage, after a gentle beat (~2s or their first scroll), Teddy
+   * opens his panel himself — once. The "seen it" note is set the
+   * moment he opens, so any way the visit goes (close it, tap away,
+   * use a quick question) he never auto-opens again, on any page.
+   * Not a modal — the page stays fully usable beside him. */
+  useEffect(() => {
+    if (!onHome) return;
+    let seen = false;
+    try {
+      seen = localStorage.getItem(WELCOME_KEY) != null;
+    } catch {
+      seen = true; // storage unavailable — never auto-open
+    }
+    if (seen) return;
+    let fired = false;
+    const fire = () => {
+      if (fired) return;
+      fired = true;
+      try {
+        localStorage.setItem(WELCOME_KEY, "seen");
+      } catch {
+        /* ignore */
+      }
+      window.removeEventListener("scroll", onScroll);
+      if (!openRef.current) {
+        setOpen(true);
+        greet();
+      }
+    };
+    const onScroll = () => fire();
+    const t = setTimeout(fire, 2000);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener("scroll", onScroll);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onHome]);
 
   const send = (raw: string) => {
     const text = raw.trim();
@@ -175,10 +230,16 @@ export default function AskTeddy() {
   };
 
   return (
-    <div className="pointer-events-none fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
+    /* On reader pages Teddy lifts his bubble (bottom-32) so he never
+     * sits on the floating Listen bar at the foot of the chapter. */
+    <div
+      className={`pointer-events-none fixed right-5 z-50 flex flex-col items-end gap-3 ${
+        onReaderPage ? "bottom-32" : "bottom-5"
+      }`}
+    >
       {/* Chat panel */}
       <div
-        className={`w-[min(92vw,380px)] overflow-hidden rounded-2xl border border-gold-500/40 bg-cream-50 shadow-2xl shadow-black/40 transition-all duration-300 origin-bottom-right ${
+        className={`askteddy-panel w-[min(92vw,380px)] overflow-hidden rounded-2xl border border-gold-500/40 bg-cream-50 shadow-2xl shadow-black/40 transition-all duration-300 origin-bottom-right ${
           open
             ? "pointer-events-auto scale-100 opacity-100"
             : "pointer-events-none scale-90 opacity-0"
@@ -354,6 +415,16 @@ export default function AskTeddy() {
           height={64}
           className="h-full w-full rounded-full object-cover"
         />
+        {/* A word chip for eyes — the screen-reader name already exists;
+            Grandma's eyes get the same courtesy while he's closed. */}
+        {!open && (
+          <span
+            aria-hidden="true"
+            className="absolute right-full top-1/2 mr-3 -translate-y-1/2 whitespace-nowrap rounded-full bg-gold-500 px-3 py-1.5 text-xs font-semibold text-vineyard-950 shadow-lg"
+          >
+            Ask Teddy
+          </span>
+        )}
       </button>
     </div>
   );
