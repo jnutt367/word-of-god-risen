@@ -13,6 +13,10 @@ type TeddyResponse = {
   id: string; // matches /audio/teddy-chat/<id>.mp3
   text: string;
   links?: { label: string; href: string }[];
+  /** Follow-on chips rendered inside the answer itself — the farm
+   * walk chains its stops this way, one door at a time. A chip's
+   * exact words route through CHIP_ROUTES in send(). */
+  chips?: string[];
   /** Tender answers (prayer, comfort) and joyful ones wear their own
    * faces — see faceForResponse below. */
   mood?: "tender" | "joyful";
@@ -42,6 +46,60 @@ const RESPONSES: Record<string, TeddyResponse> = {
     id: "characters",
     text: "Oh, you'll love this — we've got the whole cast of Mark ready to meet! Every disciple, every face, with their story straight from Scripture.",
     links: [{ label: "Meet the characters", href: "/characters" }],
+  },
+  /* The farm walk — Teddy shows a new arrival around himself, one
+   * door at a time, in plain words. Every stop carries its door, so
+   * faceForResponse dresses him as the Guide all the way through. */
+  farm: {
+    id: "farm",
+    text: "Well, come on then — I'll show you around the farm myself, one door at a time. We've built a fair bit here, but don't you worry: I'll walk slow, and you can stop me anytime.",
+    chips: ["First stop: the Bible →", "That's all I need, thanks"],
+  },
+  "farm-bible": {
+    id: "farm-bible",
+    text: "First stop is the heart of the whole farm — the Bible itself, every chapter read out loud in my voice. Just tap a book, tap a chapter, and tap the gold Listen button, and I'll read to you. And don't you worry about losin' your place — it's kept right here on your own phone.",
+    links: [{ label: "See all the books", href: "/#books" }],
+    chips: ["Next: the movies →", "That's all I need, thanks"],
+  },
+  "farm-movies": {
+    id: "farm-movies",
+    text: "Next up, the movies! We've made a film of the Gospel of Mark, where I read the whole chapter word-for-word, and “Come and Hear” — that's our family's story so far. This door takes you to a gentle page where both films are waitin' for you.",
+    links: [
+      {
+        label: "Watch the movies",
+        href: "https://jnutt367.github.io/truvine/come-and-hear/",
+      },
+    ],
+    chips: ["Next: the Family Wall →", "That's all I need, thanks"],
+  },
+  "farm-wall": {
+    id: "farm-wall",
+    text: "This here's the Family Wall, where our family hangs — every face up there by permission and by love. Joinin' is simple: you send Jason a letter, he reads every word himself, and he hangs you on the wall by hand. Welcomed, not processed — that's the way of this house.",
+    links: [
+      {
+        label: "Visit the Family Wall",
+        href: "https://jnutt367.github.io/truvine/family-wall/",
+      },
+    ],
+    chips: ["Next: all the videos →", "That's all I need, thanks"],
+  },
+  "farm-videos": {
+    id: "farm-videos",
+    text: "Over on YouTube you'll find the whole TruVINE channel — the films, the little Shorts, and new videos as they come. If you like watchin' on the television or passin' a video along to family, that's the place to go.",
+    links: [
+      { label: "TruVINE on YouTube", href: "https://www.youtube.com/@TruVINE365" },
+    ],
+    chips: ["Last stop: the store →", "That's all I need, thanks"],
+  },
+  "farm-store": {
+    id: "farm-store",
+    text: "Last stop on our walk — the little store. It's got shirts and hoodies with the Word on 'em, for anybody who'd like one. No pressure at all, friend — we're just glad you came by the farm.",
+    links: [{ label: "Visit the store", href: "https://truvine.printify.me/" }],
+    chips: ["Finish the walk →", "That's all I need, thanks"],
+  },
+  "farm-close": {
+    id: "farm-close",
+    text: "Well, that's the whole farm, friend — and you did just fine. Anytime you want another look around, just tap my face down in the corner and ask. I'll be right here.",
   },
   "feature-ask": {
     id: "feature-ask",
@@ -73,7 +131,22 @@ const QUICK_REPLIES = [
   "Show me reading plans",
   "Meet the characters",
   "I have a feature idea",
+  "Show me around the farm",
 ];
+
+/** Exact chip words → the answer they open. Checked in send() before
+ * the keyword matcher, so the farm walk's "next stop" chips (and its
+ * entry chip) always land on the right answer. */
+const CHIP_ROUTES: Record<string, string> = {
+  "Show me around the farm": "farm",
+  "First stop: the Bible →": "farm-bible",
+  "Next: the movies →": "farm-movies",
+  "Next: the Family Wall →": "farm-wall",
+  "Next: all the videos →": "farm-videos",
+  "Last stop: the store →": "farm-store",
+  "Finish the walk →": "farm-close",
+  "That's all I need, thanks": "thanks",
+};
 
 type Message = {
   from: "teddy" | "user";
@@ -108,6 +181,12 @@ function matchIntent(input: string): string {
   if (/\b(plan|plans)\b/.test(t)) return "plans";
   if (/\b(character|characters|disciple|disciples|who is|people)\b/.test(t))
     return "characters";
+  if (
+    /(show me around|take me around|walk me around|around the farm|show me the farm|\btour\b|what'?s all this|what is all this|what'?s this place|what is this place)/.test(
+      t
+    )
+  )
+    return "farm";
   if (
     /\b(start|begin|beginning|new here|first time|where do i|how do i start)\b/.test(
       t
@@ -255,6 +334,11 @@ export default function AskTeddy() {
       setTimeout(() => pushTeddy("feature-confirm"), 400);
       return;
     }
+    const chipTarget = CHIP_ROUTES[text];
+    if (chipTarget) {
+      setTimeout(() => pushTeddy(chipTarget), 400);
+      return;
+    }
     const intent = matchIntent(text);
     setTimeout(() => pushTeddy(intent), 400);
   };
@@ -354,6 +438,20 @@ export default function AskTeddy() {
                         >
                           {l.label}
                         </Link>
+                      ))}
+                    </div>
+                  )}
+                  {m.response!.chips && (
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {m.response!.chips.map((c) => (
+                        <button
+                          key={c}
+                          type="button"
+                          onClick={() => send(c)}
+                          className="rounded-full border border-gold-500/60 px-3 py-1.5 text-xs font-medium text-vineyard-900 hover:bg-gold-500/15"
+                        >
+                          {c}
+                        </button>
                       ))}
                     </div>
                   )}
