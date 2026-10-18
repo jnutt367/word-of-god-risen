@@ -649,8 +649,8 @@ export default function ListenButton({
       >
         <div className="mx-auto flex max-w-md items-start gap-4 rounded-2xl border border-[var(--reader-line)] bg-[var(--reader-card)] p-5 shadow-2xl">
           <Image
-            src="/images/teddy-face-1.png"
-            alt="Grandpa Teddy smiling in his straw hat and overalls"
+            src="/images/teddy-faces/guide.webp"
+            alt="Grandpa Teddy pointing the way, in his straw hat and overalls"
             width={72}
             height={72}
             className="h-[72px] w-[72px] shrink-0 rounded-full object-cover"

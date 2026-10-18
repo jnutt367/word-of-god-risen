@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { TEDDY_FACES, type TeddyFaceKey } from "@/lib/teddy-faces";
 
 /** Teddy's homepage welcome "seen it" note — the reader's own browser only. */
 const WELCOME_KEY = "wogr_teddy_welcomed_v1";
@@ -12,6 +13,9 @@ type TeddyResponse = {
   id: string; // matches /audio/teddy-chat/<id>.mp3
   text: string;
   links?: { label: string; href: string }[];
+  /** Tender answers (prayer, comfort) and joyful ones wear their own
+   * faces — see faceForResponse below. */
+  mood?: "tender" | "joyful";
 };
 
 const RESPONSES: Record<string, TeddyResponse> = {
@@ -46,10 +50,12 @@ const RESPONSES: Record<string, TeddyResponse> = {
   "feature-confirm": {
     id: "feature-confirm",
     text: "That's a mighty fine idea! Let me run it past the builders — Jason and Judah — and we'll see what we can do.",
+    mood: "joyful",
   },
   pray: {
     id: "pray",
     text: "Let's take a breath together, friend. The Lord is near to all who call on Him. Whatever's weighin' on you today, He's already holdin' it. I'll be prayin' for you.",
+    mood: "tender",
   },
   fallback: {
     id: "fallback",
@@ -73,7 +79,24 @@ type Message = {
   from: "teddy" | "user";
   response?: TeddyResponse;
   text?: string;
+  /** The face Teddy wore for this message — set when he speaks. */
+  face?: TeddyFaceKey;
 };
+
+/**
+ * Teddy's face for an answer, by the shape of the moment:
+ * tender words (prayer, comfort) wear the Shepherd's calm; joyful
+ * words wear the Laugh; an answer that sends her somewhere wears
+ * the Guide; anything else, he's listening. The greeting is set by
+ * greet() — the Wave when he opens his own homepage welcome, the
+ * Welcome when she comes to him herself.
+ */
+function faceForResponse(response: TeddyResponse): TeddyFaceKey {
+  if (response.mood === "tender") return "shepherd";
+  if (response.mood === "joyful") return "laugh";
+  if (response.links && response.links.length > 0) return "guide";
+  return "listener";
+}
 
 function matchIntent(input: string): string {
   const t = input.toLowerCase();
@@ -115,11 +138,6 @@ export default function AskTeddy() {
   useEffect(() => {
     openRef.current = open;
   }, [open ]);
-  // Teddy's "look" for this visit — a slightly different outfit/scene each
-  // time, like he's been out tending the farm. 1: hay field, 2: chicken coop,
-  // 3: sunset fence line, 4: cozy indoors.
-  const [look] = useState(() => 1 + Math.floor(Math.random() * 4));
-  const faceSrc = `/images/teddy-face-${look}.png`;
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [awaitingIdea, setAwaitingIdea] = useState(false);
@@ -157,21 +175,34 @@ export default function AskTeddy() {
 
   const pushTeddy = (key: string) => {
     const response = RESPONSES[key];
-    setMessages((m) => [...m, { from: "teddy", response }]);
+    setMessages((m) => [
+      ...m,
+      { from: "teddy", response, face: faceForResponse(response) },
+    ]);
     if (key === "feature-ask") setAwaitingIdea(true);
   };
 
-  /** Teddy says hello the first time his panel opens — once per visit-set. */
-  const greet = () => {
+  /** Teddy says hello the first time his panel opens — once per visit-set.
+   * When he opened the panel himself (his one-time homepage welcome),
+   * he waves; when she tapped his bubble, he welcomes. */
+  const greet = (viaAutoWelcome: boolean) => {
     if (greetedRef.current) return;
     greetedRef.current = true;
-    pushTeddy("greeting");
+    const response = RESPONSES.greeting;
+    setMessages((m) => [
+      ...m,
+      {
+        from: "teddy",
+        response,
+        face: viaAutoWelcome ? "wave" : "welcome",
+      },
+    ]);
   };
 
   const handleOpen = () => {
     const next = !open;
     setOpen(next);
-    if (next) greet();
+    if (next) greet(false);
   };
 
   /* Teddy's homepage welcome: on a reader's first-ever visit to the
@@ -201,7 +232,7 @@ export default function AskTeddy() {
       window.removeEventListener("scroll", onScroll);
       if (!openRef.current) {
         setOpen(true);
-        greet();
+        greet(true);
       }
     };
     const onScroll = () => fire();
@@ -211,7 +242,6 @@ export default function AskTeddy() {
       clearTimeout(t);
       window.removeEventListener("scroll", onScroll);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onHome]);
 
   const send = (raw: string) => {
@@ -228,6 +258,18 @@ export default function AskTeddy() {
     const intent = matchIntent(text);
     setTimeout(() => pushTeddy(intent), 400);
   };
+
+  // The face on Teddy's chrome (header + bubble) follows the moment:
+  // closed and at rest he's the Shepherd, calm in his corner; while the
+  // panel is open he wears the face of his latest word — or the
+  // Listener's, while he's still waiting on hers.
+  const lastTeddyFace = [...messages]
+    .reverse()
+    .find((m) => m.from === "teddy")?.face;
+  const chromeFace: TeddyFaceKey = open
+    ? (lastTeddyFace ?? "listener")
+    : "shepherd";
+  const chrome = TEDDY_FACES[chromeFace];
 
   return (
     /* On reader pages Teddy lifts his bubble (bottom-32) so he never
@@ -249,11 +291,12 @@ export default function AskTeddy() {
         {/* Header */}
         <div className="flex items-center gap-3 bg-vineyard-900 px-4 py-3">
           <Image
-            src={faceSrc}
-            alt="Grandpa Teddy"
+            key={chromeFace}
+            src={chrome.src}
+            alt={chrome.alt}
             width={44}
             height={44}
-            className="h-11 w-11 rounded-full border-2 border-gold-400 object-cover"
+            className="teddy-face-swap h-11 w-11 rounded-full border-2 border-gold-400 object-cover"
           />
           <div className="min-w-0">
             <p className="font-display text-lg leading-tight text-gold-300">
@@ -291,7 +334,7 @@ export default function AskTeddy() {
             ) : (
               <div key={i} className="flex max-w-[92%] items-start gap-2">
                 <Image
-                  src={faceSrc}
+                  src={TEDDY_FACES[m.face ?? "listener"].src}
                   alt=""
                   width={28}
                   height={28}
@@ -409,11 +452,12 @@ export default function AskTeddy() {
         className="group pointer-events-auto relative grid h-16 w-16 place-items-center rounded-full border-[3px] border-gold-400 bg-vineyard-900 shadow-xl shadow-black/40 transition-transform hover:scale-105 active:scale-95"
       >
         <Image
-          src={faceSrc}
+          key={chromeFace}
+          src={chrome.src}
           alt=""
           width={64}
           height={64}
-          className="h-full w-full rounded-full object-cover"
+          className="teddy-face-swap h-full w-full rounded-full object-cover"
         />
         {/* A word chip for eyes — the screen-reader name already exists;
             Grandma's eyes get the same courtesy while he's closed. */}
