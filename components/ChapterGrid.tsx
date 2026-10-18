@@ -24,7 +24,7 @@ export default function ChapterGrid({ slug, chapters, coverImage }: Props) {
           <Link
             key={i}
             href={`/book/${slug}/${i}`}
-            className="group relative overflow-hidden rounded-xl border border-gold-500/15 bg-vineyard-900 transition-all hover:-translate-y-1 hover:border-gold-500/40"
+            className="group relative overflow-hidden rounded-xl border border-gold-500/15 bg-vineyard-900 transition-all hover:-translate-y-1 hover:border-gold-500/40 motion-reduce:transition-none motion-reduce:hover:-translate-y-0"
           >
             {coverImage && (
               <div className="relative aspect-video overflow-hidden">
@@ -33,7 +33,7 @@ export default function ChapterGrid({ slug, chapters, coverImage }: Props) {
                   alt=""
                   fill
                   sizes="(max-width: 640px) 100vw, 33vw"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-vineyard-950/85 via-transparent to-transparent" />
               </div>

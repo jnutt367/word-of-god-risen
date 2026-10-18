@@ -41,7 +41,7 @@ export default function ListenDropdown() {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-haspopup="menu"
-        className="rounded-lg bg-cream-100 px-6 py-3 text-sm font-semibold text-vineyard-950 transition-colors hover:bg-gold-300"
+        className="rounded-lg bg-cream-100 px-6 py-3.5 text-base font-semibold text-vineyard-950 transition-colors hover:bg-gold-300"
       >
         <span aria-hidden="true" className="mr-1.5">▶</span> Start listening
         <span aria-hidden="true" className="ml-1.5 text-xs">▾</span>

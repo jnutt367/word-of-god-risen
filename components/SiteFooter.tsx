@@ -13,19 +13,19 @@ export default function SiteFooter() {
             path.&rdquo;
           </p>
           <p className="text-sm text-sage-400">Psalm 119:105</p>
-          <div className="mt-2 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm">
-            <Link href="/" className="text-sage-300 hover:text-gold-300">
+          <div className="mt-2 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-sm">
+            <Link href="/" className="inline-block py-2 text-sage-300 hover:text-gold-300">
               Home
             </Link>
-            <Link href="/search" className="text-sage-300 hover:text-gold-300">
+            <Link href="/search" className="inline-block py-2 text-sage-300 hover:text-gold-300">
               Search
             </Link>
-            <Link href="/about" className="text-sage-300 hover:text-gold-300">
+            <Link href="/about" className="inline-block py-2 text-sage-300 hover:text-gold-300">
               About
             </Link>
             <Link
               href="/accessibility"
-              className="text-sage-300 hover:text-gold-300"
+              className="inline-block py-2 text-sage-300 hover:text-gold-300"
             >
               Accessibility
             </Link>
@@ -33,13 +33,13 @@ export default function SiteFooter() {
               href="https://www.youtube.com/@TruVINE365"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sage-300 hover:text-gold-300"
+              className="inline-block py-2 text-sage-300 hover:text-gold-300"
             >
               TruVINE on YouTube
             </a>
             <a
               href="mailto:jnutt367@gmail.com"
-              className="text-sage-300 hover:text-gold-300"
+              className="inline-block py-2 text-sage-300 hover:text-gold-300"
             >
               jnutt367@gmail.com
             </a>

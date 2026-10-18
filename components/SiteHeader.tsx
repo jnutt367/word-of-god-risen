@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -35,16 +35,114 @@ const NAV_SECTIONS = [
 // Flat list for desktop nav
 const NAV = NAV_SECTIONS.flatMap((s) => s.items);
 
+// "Visit the Farm" — the TruVINE doors beyond this app, grouped the way
+// Teddy walks the farm: watch a film, sit on the porch, then the rest.
+// Every one is an external page and opens in a new tab.
+const FARM_SECTIONS = [
+  {
+    heading: "Watch",
+    items: [
+      {
+        href: "https://www.youtube.com/watch?v=z9pwCVw7Rf0",
+        label: "The Gospel of Mark — the film",
+        hint: "(opens YouTube)",
+      },
+      {
+        href: "https://jnutt367.github.io/truvine/come-and-hear/",
+        label: "Come and Hear — our story",
+      },
+      {
+        href: "https://www.youtube.com/@TruVINE365",
+        label: "All our videos",
+        hint: "(opens YouTube)",
+      },
+    ],
+  },
+  {
+    heading: "The Porch",
+    items: [
+      {
+        href: "https://jnutt367.github.io/truvine/family-wall/",
+        label: "The Family Wall",
+      },
+      {
+        href: "https://jnutt367.github.io/truvine/field-report/",
+        label: "The Field Report",
+      },
+      {
+        href: "https://jnutt367.github.io/truvine/links/",
+        label: "The Key Ring — every door",
+      },
+    ],
+  },
+  {
+    heading: "More from the Farm",
+    items: [
+      {
+        href: "https://truvine.printify.me/",
+        label: "The Store",
+      },
+    ],
+  },
+];
+
+type FarmItem = (typeof FARM_SECTIONS)[number]["items"][number];
+
+function FarmLink({
+  item,
+  onNavigate,
+}: {
+  item: FarmItem;
+  onNavigate: () => void;
+}) {
+  return (
+    <a
+      href={item.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={onNavigate}
+      aria-label={`${item.label} (opens in a new tab)`}
+      className="block rounded-lg px-3 py-3 transition-colors hover:bg-vineyard-800"
+    >
+      <span className="block text-lg font-medium leading-snug text-cream-100">
+        {item.label}
+      </span>
+      {item.hint && (
+        <span aria-hidden="true" className="mt-0.5 block text-sm text-sage-300">
+          {item.hint}
+        </span>
+      )}
+    </a>
+  );
+}
+
 export default function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const [farmOpen, setFarmOpen] = useState(false);
+  const farmRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") {
+        setOpen(false);
+        setFarmOpen(false);
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
+
+  // The farm panel closes when a tap lands anywhere outside it.
+  useEffect(() => {
+    if (!farmOpen) return;
+    const onDown = (e: MouseEvent) => {
+      if (farmRef.current && !farmRef.current.contains(e.target as Node)) {
+        setFarmOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, [farmOpen]);
 
   return (
     <header className="sticky top-0 z-40 border-b border-gold-500/15 bg-vineyard-950/90 backdrop-blur">
@@ -67,26 +165,79 @@ export default function SiteHeader() {
           </span>
         </Link>
 
-        {/* Desktop nav */}
-        <nav aria-label="Main" className="hidden lg:block">
-          <ul className="flex items-center gap-1 sm:gap-2">
-            {NAV.map((item) => (
-              <li key={item.label}>
-                <Link
-                  href={item.href}
-                  className="rounded-lg px-3 py-2 text-sm font-medium text-sage-300 transition-colors hover:bg-vineyard-800 hover:text-gold-300"
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        {/* Desktop: the Bible's own nav stays first and primary, then
+            one door out to the rest of the farm. */}
+        <div className="hidden items-center gap-1 lg:flex">
+          <nav aria-label="Main">
+            <ul className="flex items-center gap-1 sm:gap-2">
+              {NAV.map((item) => (
+                <li key={item.label}>
+                  <Link
+                    href={item.href}
+                    className="block rounded-lg px-3 py-3 text-sm font-medium text-sage-300 transition-colors hover:bg-vineyard-800 hover:text-gold-300"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <div ref={farmRef} className="relative">
+            <button
+              type="button"
+              aria-expanded={farmOpen}
+              aria-haspopup="true"
+              aria-controls="farm-menu"
+              onClick={() => setFarmOpen((v) => !v)}
+              className="flex min-h-[48px] items-center gap-1.5 rounded-lg px-3 py-3 text-sm font-semibold text-gold-300 transition-colors hover:bg-vineyard-800 hover:text-gold-400"
+            >
+              Visit the Farm
+              <span aria-hidden="true" className="text-xs">
+                {farmOpen ? "▴" : "▾"}
+              </span>
+            </button>
+            {farmOpen && (
+              <div
+                id="farm-menu"
+                aria-label="Visit the farm"
+                className="absolute right-0 top-full z-50 mt-2 w-[44rem] max-w-[calc(100vw-2rem)] rounded-2xl border border-gold-500/25 bg-vineyard-950 p-6 shadow-[0_24px_60px_rgba(0,0,0,0.55)]"
+              >
+                <div className="grid grid-cols-3 gap-6">
+                  {FARM_SECTIONS.map((section) => (
+                    <div
+                      key={section.heading}
+                      role="group"
+                      aria-labelledby={`farm-desktop-${section.heading.replace(/\s+/g, "-").toLowerCase()}`}
+                    >
+                      <p
+                        id={`farm-desktop-${section.heading.replace(/\s+/g, "-").toLowerCase()}`}
+                        className="px-3 pb-1 text-sm font-semibold uppercase tracking-[0.18em] text-gold-400"
+                      >
+                        {section.heading}
+                      </p>
+                      <ul className="space-y-1">
+                        {section.items.map((item) => (
+                          <li key={item.label}>
+                            <FarmLink
+                              item={item}
+                              onNavigate={() => setFarmOpen(false)}
+                            />
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
 
         {/* Mobile hamburger */}
         <button
           type="button"
-          className="rounded-lg p-2 text-cream-100 hover:bg-vineyard-800 lg:hidden"
+          className="rounded-lg p-3 text-cream-100 hover:bg-vineyard-800 lg:hidden"
           aria-expanded={open}
           aria-controls="mobile-nav"
           aria-label={open ? "Close menu" : "Open menu"}
@@ -121,26 +272,60 @@ export default function SiteHeader() {
             />
             <span className="wordmark text-base">Word of God Risen</span>
           </div>
-          {NAV_SECTIONS.map((section) => (
-            <div key={section.heading} className="mt-3 first:mt-1">
-              <p className="px-3 pb-1 text-xs font-semibold uppercase tracking-[0.18em] text-gold-400/80">
-                {section.heading}
-              </p>
-              <ul className="space-y-1">
-                {section.items.map((item) => (
-                  <li key={item.label}>
-                    <Link
-                      href={item.href}
-                      onClick={() => setOpen(false)}
-                      className="block rounded-lg px-3 py-2.5 text-base font-medium text-cream-100 transition-colors hover:bg-vineyard-800 hover:text-gold-300"
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+          <div className="grid gap-x-8 sm:grid-cols-2">
+            {NAV_SECTIONS.map((section) => (
+              <div key={section.heading} className="mt-3 first:mt-1">
+                <p className="px-3 pb-1 text-sm font-semibold uppercase tracking-[0.18em] text-gold-400/80">
+                  {section.heading}
+                </p>
+                <ul className="space-y-1">
+                  {section.items.map((item) => (
+                    <li key={item.label}>
+                      <Link
+                        href={item.href}
+                        onClick={() => setOpen(false)}
+                        className="flex min-h-[48px] items-center rounded-lg px-3 py-3 text-lg font-medium text-cream-100 transition-colors hover:bg-vineyard-800 hover:text-gold-300"
+                      >
+                        {item.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          {/* Visit the Farm — every other TruVINE door, below the
+              Bible's own pages so the app's nav stays primary. */}
+          <div className="mt-5 border-t border-gold-500/15 pt-4">
+            <p className="px-3 pb-1 font-display text-lg text-gold-300">
+              Visit the Farm
+            </p>
+            <div className="grid gap-x-8 sm:grid-cols-2">
+              {FARM_SECTIONS.map((section) => (
+                <div
+                  key={section.heading}
+                  role="group"
+                  aria-labelledby={`farm-mobile-${section.heading.replace(/\s+/g, "-").toLowerCase()}`}
+                  className="mt-3"
+                >
+                  <p
+                    id={`farm-mobile-${section.heading.replace(/\s+/g, "-").toLowerCase()}`}
+                    className="px-3 pb-1 text-sm font-semibold uppercase tracking-[0.18em] text-gold-400/80"
+                  >
+                    {section.heading}
+                  </p>
+                  <ul className="space-y-1">
+                    {section.items.map((item) => (
+                      <li key={item.label}>
+                        <FarmLink item={item} onNavigate={() => setOpen(false)} />
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
         </nav>
       )}
     </header>

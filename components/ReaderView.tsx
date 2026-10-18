@@ -205,7 +205,7 @@ export default function ReaderView({
         <div className="mb-8 flex items-center justify-between gap-3">
           <Link
             href={`/book/${slug}`}
-            className="text-sm font-medium text-[var(--reader-muted)] hover:text-[var(--reader-verse-num)]"
+            className="-my-2 inline-block py-2 text-sm font-medium text-[var(--reader-muted)] hover:text-[var(--reader-verse-num)]"
           >
             ← {bookTitle}
           </Link>
@@ -223,7 +223,7 @@ export default function ReaderView({
                     onClick={() => changeVersion(v.id)}
                     aria-pressed={version === v.id}
                     title={v.name}
-                    className={`rounded-full px-3 py-1 text-xs font-semibold transition-colors ${
+                    className={`rounded-full px-3 py-1.5 text-sm font-semibold transition-colors ${
                       version === v.id
                         ? "bg-[var(--reader-verse-num)] text-[var(--reader-bg)]"
                         : "text-[var(--reader-muted)] hover:text-[var(--reader-verse-num)]"
@@ -246,7 +246,7 @@ export default function ReaderView({
             <button
               type="button"
               onClick={() => setLamp((v) => !v)}
-              className="rounded-full border border-[var(--reader-line)] px-4 py-1.5 text-sm font-medium text-[var(--reader-muted)] transition-colors hover:text-[var(--reader-verse-num)]"
+              className="rounded-full border border-[var(--reader-line)] px-4 py-2 text-sm font-medium text-[var(--reader-muted)] transition-colors hover:text-[var(--reader-verse-num)]"
               aria-pressed={lamp}
             >
               {lamp ? "☾ Night" : "☀ Lamp"}
@@ -262,7 +262,7 @@ export default function ReaderView({
                 disabled={textSizeIdx === 0}
                 aria-label="Make the words smaller"
                 title="Make the words smaller"
-                className="rounded-full px-3 py-1 text-xs font-semibold text-[var(--reader-muted)] transition-colors hover:text-[var(--reader-verse-num)] disabled:opacity-40 disabled:hover:text-[var(--reader-muted)]"
+                className="rounded-full px-3 py-1.5 text-sm font-semibold text-[var(--reader-muted)] transition-colors hover:text-[var(--reader-verse-num)] disabled:opacity-40 disabled:hover:text-[var(--reader-muted)]"
               >
                 A−
               </button>
@@ -272,7 +272,7 @@ export default function ReaderView({
                 disabled={textSizeIdx === TEXT_SIZES_REM.length - 1}
                 aria-label="Make the words bigger"
                 title="Make the words bigger"
-                className="rounded-full px-3 py-1 text-xs font-semibold text-[var(--reader-muted)] transition-colors hover:text-[var(--reader-verse-num)] disabled:opacity-40 disabled:hover:text-[var(--reader-muted)]"
+                className="rounded-full px-3 py-1.5 text-sm font-semibold text-[var(--reader-muted)] transition-colors hover:text-[var(--reader-verse-num)] disabled:opacity-40 disabled:hover:text-[var(--reader-muted)]"
               >
                 A+
               </button>
@@ -288,7 +288,7 @@ export default function ReaderView({
           {prevIdx !== null ? (
             <Link
               href={`/book/${slug}/${prevIdx}`}
-              className="rounded-lg border border-[var(--reader-line)] px-4 py-2.5 text-sm font-medium text-[var(--reader-muted)] hover:text-[var(--reader-verse-num)]"
+              className="rounded-lg border border-[var(--reader-line)] px-4 py-3 text-sm font-medium text-[var(--reader-muted)] hover:text-[var(--reader-verse-num)]"
             >
               ← Previous
             </Link>
@@ -298,7 +298,7 @@ export default function ReaderView({
           {nextIdx !== null ? (
             <Link
               href={`/book/${slug}/${nextIdx}`}
-              className="rounded-lg border border-[var(--reader-line)] px-4 py-2.5 text-sm font-medium text-[var(--reader-muted)] hover:text-[var(--reader-verse-num)]"
+              className="rounded-lg border border-[var(--reader-line)] px-4 py-3 text-sm font-medium text-[var(--reader-muted)] hover:text-[var(--reader-verse-num)]"
             >
               Next →
             </Link>
@@ -393,7 +393,7 @@ export default function ReaderView({
             {prevIdx !== null ? (
               <Link
                 href={`/book/${slug}/${prevIdx}`}
-                className="rounded-lg border border-[var(--reader-line)] px-4 py-2.5 text-sm font-medium text-[var(--reader-muted)] hover:text-[var(--reader-verse-num)]"
+                className="rounded-lg border border-[var(--reader-line)] px-4 py-3 text-sm font-medium text-[var(--reader-muted)] hover:text-[var(--reader-verse-num)]"
               >
                 ← Previous
               </Link>
@@ -403,7 +403,7 @@ export default function ReaderView({
             {nextIdx !== null ? (
               <Link
                 href={`/book/${slug}/${nextIdx}`}
-                className="rounded-lg border border-[var(--reader-line)] px-4 py-2.5 text-sm font-medium text-[var(--reader-muted)] hover:text-[var(--reader-verse-num)]"
+                className="rounded-lg border border-[var(--reader-line)] px-4 py-3 text-sm font-medium text-[var(--reader-muted)] hover:text-[var(--reader-verse-num)]"
               >
                 Next →
               </Link>

@@ -23,8 +23,12 @@
   --font-scripture: "Fraunces", Georgia, "Times New Roman", serif;
 }
 
-html {
-  scroll-behavior: smooth;
+/* Smooth scrolling only for readers who haven't asked their device
+   for reduced motion (WCAG 2.3.3 / 2.2.2 spirit — vestibular safety). */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {

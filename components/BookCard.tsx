@@ -14,7 +14,7 @@ export default function BookCard({ book }: { book: BookMeta }) {
   return (
     <Link
       href={`/book/${book.slug}`}
-      className="group overflow-hidden rounded-xl border border-gold-500/15 bg-vineyard-900 transition-all hover:-translate-y-1 hover:border-gold-500/40 hover:shadow-[0_16px_40px_rgba(0,0,0,0.45)]"
+      className="group overflow-hidden rounded-xl border border-gold-500/15 bg-vineyard-900 transition-all hover:-translate-y-1 hover:border-gold-500/40 hover:shadow-[0_16px_40px_rgba(0,0,0,0.45)] motion-reduce:transition-none motion-reduce:hover:-translate-y-0"
     >
       <div className="relative aspect-[16/9] overflow-hidden">
         {book.image ? (
@@ -23,7 +23,7 @@ export default function BookCard({ book }: { book: BookMeta }) {
             alt=""
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            className="object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
           />
         ) : (
           <div className="h-full w-full bg-gradient-to-br from-vineyard-700 to-vineyard-950" />
@@ -39,7 +39,7 @@ export default function BookCard({ book }: { book: BookMeta }) {
         <h3 className="font-display text-lg text-cream-100 group-hover:text-gold-300">
           {book.title}
         </h3>
-        <p className="mt-0.5 text-xs uppercase tracking-[0.12em] text-sage-400">
+        <p className="mt-0.5 text-sm uppercase tracking-[0.12em] text-sage-400">
           {book.chapters} chapters
         </p>
         {read > 0 && (
