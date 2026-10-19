@@ -289,6 +289,13 @@ function toMapCountry(row: HbCountryRow): MapCountry {
 
 export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   const [live, setLive] = useState<LiveData | null>(fixture ?? null);
+  // TRUTH GATE (Oct 19, exam item D): the checked-in snapshot opens at
+  // zero, and until the first live fetch has answered — one way or the
+  // other — the counters print NO number at all, so a stale zero can
+  // never dress up as the count on first paint. The fetch settling in
+  // the `finally` below is what opens the gate; fixture mode is
+  // settled by definition (its numbers are its own test data).
+  const [settled, setSettled] = useState(Boolean(fixture));
 
   const load = useCallback(async () => {
     try {
@@ -300,6 +307,8 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
       }
     } catch {
       /* the snapshot stands — the counting is never blocked by the display */
+    } finally {
+      setSettled(true);
     }
   }, []);
 
@@ -322,6 +331,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
     };
   }, [load, fixture]);
 
+  const gathering = !settled;
   const liveActive = Boolean(live?.live);
   const totals = liveActive && live ? live.totals : hb.totals;
   const today = liveActive && live ? live.today : hb.today;
@@ -447,27 +457,28 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
     return `${mapPhrase(c)}, lit in its own shape`;
   };
 
-  const figureLabel =
-    mapRows.length > 0
+  const figureLabel = gathering
+    ? "A soft world map drawn as a disc, at rest while today's count gathers."
+    : mapRows.length > 0
       ? `A soft world map drawn as a disc. ${fmt(todayCount)} ${todayCount === 1 ? "chapter was" : "chapters were"} read or heard today, ${longDate(today.date)}. Where the Word was opened${mapSource === "live" ? " today" : ""}: ${mapRows.map(describeCountry).join("; ")}.`
       : todayCount > 0
         ? `A soft world map drawn as a disc, with ${fmt(todayCount)} ${todayCount === 1 ? "chapter" : "chapters"} read or heard today, ${longDate(today.date)}. No country shapes are lit yet.`
         : "A soft world map drawn as a disc, at rest in the early morning — the counting of chapters has only just begun, and no country shapes are lit yet.";
 
-  const tiles: { label: string; value: number; sub: string }[] = [
+  const tiles: { label: string; value: number | null; sub: string }[] = [
     {
       label: "Chapters read",
-      value: totals.chaptersRead,
+      value: gathering ? null : totals.chaptersRead,
       sub: "opened and read here",
     },
     {
       label: "Chapters heard",
-      value: totals.chaptersHeard,
+      value: gathering ? null : totals.chaptersHeard,
       sub: "in Grandpa Teddy's voice",
     },
     {
       label: "Books finished",
-      value: totals.booksFinished,
+      value: gathering ? null : totals.booksFinished,
       sub: "cover to cover, by neighbors",
     },
     {
@@ -689,7 +700,9 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
             })}
           </svg>
           <figcaption className="mt-2 text-center text-sm text-sage-300">
-            {todayCount > 0 ? (
+            {gathering ? (
+              "Gathering today's count — the lights kindle as the count comes in."
+            ) : todayCount > 0 ? (
               <>
                 {fmt(todayCount)}{" "}
                 {todayCount === 1 ? "chapter" : "chapters"} read or heard
@@ -716,9 +729,15 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               key={t.label}
               className="rounded-xl border border-cream-100/10 bg-vineyard-950/60 px-4 py-5 text-center"
             >
-              <p className="font-display text-3xl text-gold-300">
-                {fmt(t.value)}
-              </p>
+              {t.value === null ? (
+                <p className="flex min-h-9 items-center justify-center font-display text-lg text-sage-300">
+                  Gathering the count…
+                </p>
+              ) : (
+                <p className="font-display text-3xl text-gold-300">
+                  {fmt(t.value)}
+                </p>
+              )}
               <p className="mt-1 text-sm font-semibold text-cream-50">
                 {t.label}
               </p>
@@ -727,7 +746,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
           ))}
         </ul>
 
-        {allQuiet && (
+        {settled && allQuiet && (
           <p className="mx-auto mt-6 max-w-xl text-center text-sm italic text-sage-300">
             {liveActive
               ? "The counting has only just begun — as the first neighbors open chapters, the map will kindle here within about a minute."

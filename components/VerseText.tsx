@@ -50,9 +50,9 @@ export default function VerseText({
               <button
                 type="button"
                 onClick={() => onOpenRefs(v.n, ref, targets)}
-                className="ml-2 inline-flex h-6 w-6 items-center justify-center rounded-full border border-[var(--reader-verse-num)]/50 align-middle font-body text-[0.7rem] text-[var(--reader-verse-num)] transition-colors hover:bg-[var(--reader-verse-num)] hover:text-[var(--reader-bg)]"
+                className="relative ml-2 inline-flex h-6 w-6 items-center justify-center rounded-full border border-[var(--reader-verse-num)]/50 align-middle font-body text-[0.7rem] text-[var(--reader-verse-num)] transition-colors after:absolute after:-inset-2 after:content-[''] hover:bg-[var(--reader-verse-num)] hover:text-[var(--reader-bg)]"
                 aria-label={`Cross-references for ${ref}`}
-                title={`Cross-references for ${ref}`}
+                title={`See other passages connected to ${ref}`}
               >
                 ✦
               </button>

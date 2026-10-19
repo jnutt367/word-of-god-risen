@@ -152,7 +152,7 @@ export default function ShareVerseButton({ verseText, reference }: Props) {
       type="button"
       onClick={share}
       disabled={busy}
-      className="ml-2 inline-flex h-6 w-6 items-center justify-center rounded-full border border-[var(--reader-verse-num)]/50 align-middle font-body text-[0.7rem] text-[var(--reader-verse-num)] transition-colors hover:bg-[var(--reader-verse-num)] hover:text-[var(--reader-bg)] disabled:opacity-50"
+      className="relative ml-2 inline-flex h-6 w-6 items-center justify-center rounded-full border border-[var(--reader-verse-num)]/50 align-middle font-body text-[0.7rem] text-[var(--reader-verse-num)] transition-colors after:absolute after:-inset-2 after:content-[''] hover:bg-[var(--reader-verse-num)] hover:text-[var(--reader-bg)] disabled:opacity-50"
       aria-label={`Share ${reference} as an image`}
       title={`Share ${reference} as an image`}
     >

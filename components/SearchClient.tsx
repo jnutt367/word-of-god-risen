@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { BOOKS, type BookMeta } from "@/data/books";
 
 interface Entry {
   p: string;
@@ -41,6 +42,65 @@ function highlight(text: string, q: string): string {
   }
 }
 
+/* Passage-address resolution (exam item E, Oct 19): "Psalm 23",
+ * "John 3", "Genesis 1:1" name a PLACE, not a word to hunt for — the
+ * search offers that chapter itself, straight away. Chapter numbers
+ * map 1:1 onto chapter indexes across the whole library (verified
+ * against data/chapters: every entry's chapter number equals its
+ * index + 1, no exceptions). */
+const BOOK_NAME_ALIASES: Record<string, string> = {
+  psalm: "psalms",
+  ps: "psalms",
+  psa: "psalms",
+  "song of songs": "song-of-solomon",
+  canticles: "song-of-solomon",
+  revelations: "revelation",
+  enoch: "enoch-1",
+  "1 enoch": "enoch-1",
+};
+
+function normalizedBookName(s: string): string {
+  return s
+    .toLowerCase()
+    .replace(/\./g, "")
+    .replace(/-/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+const BOOK_LOOKUP = (() => {
+  const map = new Map<string, BookMeta>();
+  for (const b of BOOKS) {
+    map.set(normalizedBookName(b.title), b);
+    map.set(normalizedBookName(b.title.replace(/^the book of /i, "")), b);
+    map.set(normalizedBookName(b.title.replace(/^book of /i, "")), b);
+    map.set(normalizedBookName(b.slug), b);
+  }
+  for (const [alias, slug] of Object.entries(BOOK_NAME_ALIASES)) {
+    const book = BOOKS.find((b) => b.slug === slug);
+    if (book) map.set(alias, book);
+  }
+  return map;
+})();
+
+interface PassageHit {
+  book: BookMeta;
+  chapter: number;
+  verse: number | null;
+}
+
+function resolvePassage(raw: string): PassageHit | null {
+  const m = normalizedBookName(raw).match(
+    /^(.+?)\s+(\d{1,3})(?:[:\s]\s*(\d{1,3}))?$/
+  );
+  if (!m) return null;
+  const book = BOOK_LOOKUP.get(m[1].trim());
+  if (!book) return null;
+  const chapter = parseInt(m[2], 10);
+  if (chapter < 1 || chapter > book.chapters) return null;
+  return { book, chapter, verse: m[3] ? parseInt(m[3], 10) : null };
+}
+
 function searchIndex(index: Entry[], q: string): Entry[] {
   const query = q.trim().toLowerCase();
   if (query.length < 2) return [];
@@ -70,13 +130,15 @@ export default function SearchClient({ initialQuery }: { initialQuery: string })
     [index, q]
   );
 
+  const passage = useMemo(() => resolvePassage(q), [q]);
+
   return (
     <div>
       <input
         type="search"
         value={q}
         onChange={(e) => setQ(e.target.value)}
-        placeholder="Search every chapter… (try “mustard seed”)"
+        placeholder="Search every chapter… (try “Psalm 23” or “mustard seed”)"
         aria-label="Search chapters"
         autoFocus
         className="w-full rounded-xl border-2 border-vineyard-700 bg-vineyard-900 px-5 py-4 text-lg text-cream-100 placeholder:text-sage-500 focus:border-gold-500 focus:outline-none"
@@ -86,8 +148,29 @@ export default function SearchClient({ initialQuery }: { initialQuery: string })
           ? index
             ? `Type at least 2 letters to search ${index.length} chapters.`
             : "Loading the search index…"
-          : `${hits.length} result${hits.length === 1 ? "" : "s"}`}
+          : passage
+            ? "You named a place in the Bible — here it is:"
+            : `${hits.length} result${hits.length === 1 ? "" : "s"}`}
       </p>
+      {passage && (
+        <Link
+          href={`/book/${passage.book.slug}/${passage.chapter - 1}`}
+          className="mt-4 flex items-center justify-between gap-4 rounded-xl border-2 border-gold-500/50 bg-vineyard-900 px-5 py-4 transition-colors hover:border-gold-400"
+        >
+          <span>
+            <span className="block text-xs font-semibold uppercase tracking-[0.12em] text-gold-400">
+              Go straight to
+            </span>
+            <span className="mt-1 block font-display text-xl text-cream-50">
+              {passage.book.title} {passage.chapter}
+              {passage.verse ? `:${passage.verse}` : ""}
+            </span>
+          </span>
+          <span aria-hidden="true" className="text-2xl text-gold-300">
+            →
+          </span>
+        </Link>
+      )}
       <ul className="mt-4 space-y-1">
         {hits.map((e) => {
           const page = e.p.replace(/\.html$/, "");
@@ -117,7 +200,7 @@ export default function SearchClient({ initialQuery }: { initialQuery: string })
           );
         })}
       </ul>
-      {q.trim().length >= 2 && index && hits.length === 0 && (
+      {q.trim().length >= 2 && index && hits.length === 0 && !passage && (
         <p className="py-10 text-center text-sage-400">
           No chapters found for &ldquo;{q.trim()}&rdquo;.
         </p>

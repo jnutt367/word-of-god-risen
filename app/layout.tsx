@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     template: "%s · Word of God Risen",
   },
   description:
-    "Read the Book of Enoch, Jasher, Jubilees and the Apocrypha online free — plus the full Bible in WEB & KJV with verse-by-verse cross-references, reading plans and progress tracking. Centered on the King, not the crowds.",
+    "The whole Bible, read out loud by Grandpa Teddy — every chapter free. No account, no password: tap a book, tap a chapter, tap Listen.",
   keywords: [
     "read book of enoch online",
     "book of jasher online",

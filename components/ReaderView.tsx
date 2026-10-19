@@ -201,15 +201,17 @@ export default function ReaderView({
       />
       {/* Extra bottom room so the floating Listen bar never covers text */}
       <div className="mx-auto max-w-3xl px-4 pb-36 pt-8 sm:px-6 sm:pt-12">
-        {/* Top bar */}
-        <div className="mb-8 flex items-center justify-between gap-3">
+        {/* Top bar — on phones the controls get their own full-width
+            row of 48px targets (WCAG exam item A, Oct 19); from sm up
+            the bar returns to its compact one-line self. */}
+        <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <Link
             href={`/book/${slug}`}
-            className="-my-2 inline-block py-2 text-sm font-medium text-[var(--reader-muted)] hover:text-[var(--reader-verse-num)]"
+            className="-my-2 inline-flex min-h-12 items-center py-2 text-sm font-medium text-[var(--reader-muted)] hover:text-[var(--reader-verse-num)] sm:min-h-0"
           >
             ← {bookTitle}
           </Link>
-          <div className="flex items-center gap-2">
+          <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
             {versions.length > 1 && (
               <div
                 role="group"
@@ -223,7 +225,7 @@ export default function ReaderView({
                     onClick={() => changeVersion(v.id)}
                     aria-pressed={version === v.id}
                     title={v.name}
-                    className={`rounded-full px-3 py-1.5 text-sm font-semibold transition-colors ${
+                    className={`min-h-12 rounded-full px-4 py-1.5 text-sm font-semibold transition-colors sm:min-h-0 sm:px-3 ${
                       version === v.id
                         ? "bg-[var(--reader-verse-num)] text-[var(--reader-bg)]"
                         : "text-[var(--reader-muted)] hover:text-[var(--reader-verse-num)]"
@@ -246,7 +248,7 @@ export default function ReaderView({
             <button
               type="button"
               onClick={() => setLamp((v) => !v)}
-              className="rounded-full border border-[var(--reader-line)] px-4 py-2 text-sm font-medium text-[var(--reader-muted)] transition-colors hover:text-[var(--reader-verse-num)]"
+              className="min-h-12 rounded-full border border-[var(--reader-line)] px-4 py-2 text-sm font-medium text-[var(--reader-muted)] transition-colors hover:text-[var(--reader-verse-num)] sm:min-h-0"
               aria-pressed={lamp}
             >
               {lamp ? "☾ Night" : "☀ Lamp"}
@@ -262,7 +264,7 @@ export default function ReaderView({
                 disabled={textSizeIdx === 0}
                 aria-label="Make the words smaller"
                 title="Make the words smaller"
-                className="rounded-full px-3 py-1.5 text-sm font-semibold text-[var(--reader-muted)] transition-colors hover:text-[var(--reader-verse-num)] disabled:opacity-40 disabled:hover:text-[var(--reader-muted)]"
+                className="min-h-12 rounded-full px-4 py-1.5 text-sm font-semibold text-[var(--reader-muted)] transition-colors hover:text-[var(--reader-verse-num)] disabled:opacity-40 disabled:hover:text-[var(--reader-muted)] sm:min-h-0 sm:px-3"
               >
                 A−
               </button>
@@ -272,7 +274,7 @@ export default function ReaderView({
                 disabled={textSizeIdx === TEXT_SIZES_REM.length - 1}
                 aria-label="Make the words bigger"
                 title="Make the words bigger"
-                className="rounded-full px-3 py-1.5 text-sm font-semibold text-[var(--reader-muted)] transition-colors hover:text-[var(--reader-verse-num)] disabled:opacity-40 disabled:hover:text-[var(--reader-muted)]"
+                className="min-h-12 rounded-full px-4 py-1.5 text-sm font-semibold text-[var(--reader-muted)] transition-colors hover:text-[var(--reader-verse-num)] disabled:opacity-40 disabled:hover:text-[var(--reader-muted)] sm:min-h-0 sm:px-3"
               >
                 A+
               </button>
@@ -376,6 +378,9 @@ export default function ReaderView({
               {listened ? "🎧 Listened — tap to undo" : "🎧 Mark as listened"}
             </button>
           </div>
+          <p className="text-center text-sm text-[var(--reader-muted)]">
+            Your place is kept on this phone.
+          </p>
           {narrationEnded && (
             <p
               role="status"

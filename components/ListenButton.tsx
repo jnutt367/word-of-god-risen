@@ -80,6 +80,9 @@ export default function ListenButton({
   const [rate, setRate] = useState(1);
   const [showSettings, setShowSettings] = useState(false);
   const [mp3Url, setMp3Url] = useState<string | null | undefined>(undefined);
+  // Plain-words note when the sound can't start (Oct 19 kindness pass)
+  // — said out loud on the bar instead of failing in silence.
+  const [notice, setNotice] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const [ambientOn, setAmbientOn] = useState(true);
@@ -330,7 +333,13 @@ export default function ListenButton({
   const toggleMp3 = (url: string) => {
     const a = getAudio(url);
     if (status === "idle") {
-      a.play().catch(() => setStatus("idle"));
+      setNotice(null);
+      a.play().catch(() => {
+        setStatus("idle");
+        setNotice(
+          "The reading couldn't start just now. Check your sound is turned up, then tap Listen again."
+        );
+      });
       ambientPlay();
       setStatus("playing");
       endedRef.current?.(false);
@@ -466,7 +475,7 @@ export default function ListenButton({
   if (!useMp3 && !canListen) return null;
 
   const btn =
-    "rounded-full border border-[var(--reader-line)] px-4 py-1.5 text-sm font-medium text-[var(--reader-muted)] transition-colors hover:text-[var(--reader-verse-num)]";
+    "min-h-12 rounded-full border border-[var(--reader-line)] px-4 py-1.5 text-sm font-medium text-[var(--reader-muted)] transition-colors hover:text-[var(--reader-verse-num)] sm:min-h-0";
   const label =
     status === "playing" ? "Pause" : status === "paused" ? "Resume" : "Listen";
   const icon = status === "playing" ? "⏸" : status === "paused" ? "▶" : "🔊";
@@ -499,7 +508,7 @@ export default function ListenButton({
           onClick={stopAll}
           aria-label="Stop listening"
           title="Stop"
-          className="rounded-full border border-[var(--reader-line)] px-3 py-1.5 text-sm text-[var(--reader-muted)] transition-colors hover:text-[var(--reader-verse-num)]"
+          className="min-h-12 rounded-full border border-[var(--reader-line)] px-4 py-1.5 text-sm text-[var(--reader-muted)] transition-colors hover:text-[var(--reader-verse-num)] sm:min-h-0 sm:px-3"
         >
           ⏹
         </button>
@@ -511,7 +520,7 @@ export default function ListenButton({
           aria-pressed={ambientOn}
           aria-label={ambientOn ? "Turn off warm background music" : "Turn on warm background music"}
           title={ambientOn ? "Background music on" : "Background music off"}
-          className="rounded-full border border-[var(--reader-line)] px-2.5 py-1.5 text-sm text-[var(--reader-muted)] transition-colors hover:text-[var(--reader-verse-num)]"
+          className="min-h-12 rounded-full border border-[var(--reader-line)] px-3.5 py-1.5 text-sm text-[var(--reader-muted)] transition-colors hover:text-[var(--reader-verse-num)] sm:min-h-0 sm:px-2.5"
           style={ambientOn ? undefined : { opacity: 0.45 }}
         >
           <span aria-hidden="true">🎵</span>
@@ -538,9 +547,9 @@ export default function ListenButton({
           type="button"
           onClick={() => setShowSettings((v) => !v)}
           aria-expanded={showSettings}
-          aria-label="Voice settings"
-          title="Voice settings"
-          className="rounded-full border border-[var(--reader-line)] px-2.5 py-1.5 text-sm text-[var(--reader-muted)] transition-colors hover:text-[var(--reader-verse-num)]"
+          aria-label="Choose a reading voice"
+          title="Choose a reading voice"
+          className="min-h-12 rounded-full border border-[var(--reader-line)] px-3.5 py-1.5 text-sm text-[var(--reader-muted)] transition-colors hover:text-[var(--reader-verse-num)] sm:min-h-0 sm:px-2.5"
         >
           <span aria-hidden="true">⚙</span>
         </button>
@@ -580,7 +589,10 @@ export default function ListenButton({
             </select>
           </label>
           <p className="mt-3 text-xs leading-relaxed text-[var(--reader-muted)]">
-            Voices come from your device — every phone ships with several.
+            This chapter doesn&rsquo;t have a recording yet, so your phone
+            or computer reads it out loud in its own voice. Every device
+            comes with several voices — pick the one that&rsquo;s easiest
+            for you to hear.
           </p>
         </div>
       )}
@@ -592,6 +604,14 @@ export default function ListenButton({
     {floating && (
       <div className="fixed inset-x-0 bottom-0 z-40 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-6">
         <div className="mx-auto flex max-w-3xl flex-col items-center gap-2">
+          {notice && (
+            <p
+              role="status"
+              className="w-full rounded-xl border border-[var(--reader-line)] bg-[var(--reader-card)] px-4 py-3 text-center text-sm text-[var(--reader-ink)] shadow-lg"
+            >
+              {notice}
+            </p>
+          )}
           <div className="flex w-full items-center gap-2">
             <button
               type="button"
@@ -619,9 +639,24 @@ export default function ListenButton({
                 onClick={stopAll}
                 aria-label="Stop listening"
                 title="Stop"
-                className="flex min-h-14 min-w-14 items-center justify-center rounded-full border border-[var(--reader-line)] bg-[var(--reader-card)] text-xl text-[var(--reader-ink)] shadow-xl transition-colors hover:text-[var(--reader-verse-num)]"
+                className="flex min-h-14 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-[var(--reader-line)] bg-[var(--reader-card)] px-5 text-[var(--reader-ink)] shadow-xl transition-colors hover:text-[var(--reader-verse-num)]"
               >
-                <span aria-hidden="true">⏹</span>
+                <span aria-hidden="true" className="text-xl leading-none">⏹</span>
+                <span className="text-base font-semibold">Stop</span>
+              </button>
+            )}
+            {status !== "idle" && (
+              <button
+                type="button"
+                onClick={toggleAmbientPref}
+                aria-pressed={ambientOn}
+                aria-label={ambientOn ? "Turn off the background music" : "Turn on the background music"}
+                title={ambientOn ? "Background music on" : "Background music off"}
+                className="flex min-h-14 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-[var(--reader-line)] bg-[var(--reader-card)] px-5 text-[var(--reader-ink)] shadow-xl transition-colors hover:text-[var(--reader-verse-num)]"
+                style={ambientOn ? undefined : { opacity: 0.55 }}
+              >
+                <span aria-hidden="true" className="text-xl leading-none">🎵</span>
+                <span className="text-base font-semibold">Music</span>
               </button>
             )}
           </div>

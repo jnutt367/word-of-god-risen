@@ -217,7 +217,7 @@ export default function SiteHeader() {
                     >
                       <p
                         id={`farm-desktop-${section.heading.replace(/\s+/g, "-").toLowerCase()}`}
-                        className="px-3 pb-1 text-sm font-semibold uppercase tracking-[0.18em] text-gold-400"
+                        className="px-3 pb-1 text-sm font-semibold tracking-[0.06em] text-gold-400"
                       >
                         {section.heading}
                       </p>
@@ -283,7 +283,7 @@ export default function SiteHeader() {
           <div className="grid grid-cols-2 gap-x-8 md:grid-cols-3">
             {NAV_SECTIONS.map((section) => (
               <div key={section.heading} className="mt-3 first:mt-1">
-                <p className="px-3 pb-1 text-sm font-semibold uppercase tracking-[0.18em] text-gold-400/80">
+                <p className="px-3 pb-1 text-sm font-semibold tracking-[0.06em] text-gold-400/80">
                   {section.heading}
                 </p>
                 <ul className="space-y-1">
@@ -319,7 +319,7 @@ export default function SiteHeader() {
                 >
                   <p
                     id={`farm-mobile-${section.heading.replace(/\s+/g, "-").toLowerCase()}`}
-                    className="px-3 pb-1 text-sm font-semibold uppercase tracking-[0.18em] text-gold-400/80"
+                    className="px-3 pb-1 text-sm font-semibold tracking-[0.06em] text-gold-400/80"
                   >
                     {section.heading}
                   </p>
