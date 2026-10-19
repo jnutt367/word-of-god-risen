@@ -82,6 +82,11 @@ const FARM_SECTIONS = [
         href: "https://truvine.printify.me/",
         label: "The Store",
       },
+      {
+        href: "https://cash.app/$TRUVINE365",
+        label: "Give",
+        hint: "only if you'd like to",
+      },
     ],
   },
 ];
@@ -102,7 +107,7 @@ function FarmLink({
       rel="noopener noreferrer"
       onClick={onNavigate}
       aria-label={`${item.label} (opens in a new tab)`}
-      className="block rounded-lg px-3 py-3 transition-colors hover:bg-vineyard-800"
+      className="flex min-h-[52px] flex-col justify-center rounded-lg px-3 py-3 transition-colors hover:bg-vineyard-800"
     >
       <span className="block text-lg font-medium leading-snug text-cream-100">
         {item.label}
@@ -255,12 +260,15 @@ export default function SiteHeader() {
         </button>
       </div>
 
-      {/* Mobile nav panel */}
+      {/* Mobile nav panel — sections stay grouped as blocks and flow
+          into 2 columns on phones (3 on wider small screens) so the
+          growing list of doors fits; the panel scrolls internally
+          rather than ever clipping a door out of reach. */}
       {open && (
         <nav
           id="mobile-nav"
           aria-label="Mobile"
-          className="border-t border-gold-500/15 bg-vineyard-950/95 px-4 pb-4 pt-2 backdrop-blur lg:hidden"
+          className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-gold-500/15 bg-vineyard-950/95 px-4 pb-4 pt-2 backdrop-blur lg:hidden"
         >
           <div className="flex items-center gap-2.5 px-3 pb-2 pt-1">
             <Image
@@ -272,7 +280,7 @@ export default function SiteHeader() {
             />
             <span className="wordmark text-base">Word of God Risen</span>
           </div>
-          <div className="grid gap-x-8 sm:grid-cols-2">
+          <div className="grid grid-cols-2 gap-x-8 md:grid-cols-3">
             {NAV_SECTIONS.map((section) => (
               <div key={section.heading} className="mt-3 first:mt-1">
                 <p className="px-3 pb-1 text-sm font-semibold uppercase tracking-[0.18em] text-gold-400/80">
@@ -301,7 +309,7 @@ export default function SiteHeader() {
             <p className="px-3 pb-1 font-display text-lg text-gold-300">
               Visit the Farm
             </p>
-            <div className="grid gap-x-8 sm:grid-cols-2">
+            <div className="grid grid-cols-2 gap-x-8 md:grid-cols-3">
               {FARM_SECTIONS.map((section) => (
                 <div
                   key={section.heading}
