@@ -66,7 +66,7 @@ export const metadata: Metadata = {
     siteName: "Word of God Risen",
     title: "Word of God Risen — Centered on the King",
     description:
-      "Enoch, Jasher, Jubilees, the Apocrypha — plus the full Bible in WEB & KJV with verse cross-references and reading plans. Centered on the King, not the crowds.",
+      "The whole Bible, read out loud by Grandpa Teddy — every chapter free. No account, no password: tap a book, tap a chapter, tap Listen.",
     images: [
       {
         url: "/opengraph-image",
@@ -80,7 +80,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Word of God Risen — Centered on the King",
     description:
-      "Enoch, Jasher, Jubilees, the Apocrypha — plus the full Bible in WEB & KJV with verse cross-references and reading plans.",
+      "The whole Bible, read out loud by Grandpa Teddy — every chapter free. No account, no password: tap a book, tap a chapter, tap Listen.",
     images: ["/opengraph-image"],
   },
   robots: { index: true, follow: true },
@@ -103,7 +103,7 @@ export default function RootLayout({
     name: "Word of God Risen",
     url: "https://word-of-god-risen.vercel.app",
     description:
-      "Read the lost books of the Bible — Enoch, Jasher, Jubilees, the Apocrypha — plus the full Bible in WEB & KJV with verse cross-references, reading plans and progress tracking.",
+      "The whole Bible, read out loud by Grandpa Teddy — every chapter free. No account, no password: tap a book, tap a chapter, tap Listen.",
     inLanguage: "en",
   };
   return (
