@@ -28,7 +28,8 @@ const serverSnapshot = () => false;
  * browser session (the dedupe lives in lib/heartbeat); after the
  * tap the button rests in its counted state for the visit.
  *
- * This is NOT the "Mark as listened" place-keeper beside it: that
+ * This is NOT the "Mark as done — just for my place" place-keeper
+ * beside it: that
  * one keeps the reader's own place on their own phone and can be
  * undone. This one speaks into the Body's shared count, once.
  */

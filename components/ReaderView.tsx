@@ -369,14 +369,14 @@ export default function ReaderView({
               type="button"
               onClick={() => toggleListened(slug, chapterIdx, chapterTitle)}
               aria-pressed={listened}
-              title="Mark this chapter as listened to (Grandpa Teddy's narration)"
+              title="Mark this chapter as done — just for your place on this phone (Grandpa Teddy's narration)"
               className={`rounded-lg px-6 py-3 text-sm font-semibold transition-colors border ${
                 listened
                   ? "bg-[var(--reader-verse-num)]/15 text-[var(--reader-verse-num)] border-[var(--reader-verse-num)]/40"
                   : "border-[var(--reader-line)] text-[var(--reader-muted)] hover:text-[var(--reader-verse-num)] hover:border-[var(--reader-verse-num)]/40"
               }`}
             >
-              {listened ? "🎧 Listened — tap to undo" : "🎧 Mark as listened"}
+              {listened ? "🎧 Done, just for my place — tap to undo" : "🎧 Mark as done — just for my place"}
             </button>
           </div>
           {/* The reader's own word, counted: for every listening the

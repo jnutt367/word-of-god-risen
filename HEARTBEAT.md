@@ -762,3 +762,13 @@ always been the honest description of them.
   `prefers-reduced-motion: reduce`.
 - Colors come from the existing vineyard/gold/sage palette; tile text
   pairs cream on vineyard-950 for contrast in both site themes.
+
+## Place-keeper relabel (Oct 20, 2026)
+
+So the counted button and the on-device place-keeper can never be
+confused, Jason approved renaming the place-keeper: "🎧 Mark as
+listened" is now **"🎧 Mark as done — just for my place"** (resting
+state: "🎧 Done, just for my place — tap to undo"). Same control,
+same job — the reader's own place on their own phone, undoable,
+counting nothing. Only the counted button speaks into the Body's
+count.
