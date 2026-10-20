@@ -20,7 +20,7 @@ import { track } from "@vercel/analytics";
 const SESSION_PREFIX = "hb:";
 const BOOK_DONE_KEY = "hb:bookdone:";
 
-type BeatKind = "read" | "listen" | "listen_complete" | "book";
+type BeatKind = "read" | "listen" | "listen_complete" | "book" | "listened_marked";
 
 /** Fire-and-forget beat to the live counter. The body is the beat kind
  *  and nothing else — no book, no chapter, no identity. */
@@ -272,6 +272,35 @@ export function beatListenEnded(
   const st = readPlayedState(bookSlug, chapterNum, duration);
   fireReachedCrossings(bookSlug, chapterNum, st, duration);
   writePlayedState(bookSlug, chapterNum, st);
+}
+
+/**
+ * The reader's own word: they tapped "I listened to this chapter"
+ * (Jason's direction, Oct 20, 2026 — "give it a listened to if the
+ * person selects that button saying they listened"). This is the
+ * count for every listening the player cannot measure — above all
+ * device TTS, where speechSynthesis reports no played time at all,
+ * and any listening that happened off the playhead's watch. It is a
+ * testimony, not a measurement: it fires its OWN beat kind and is
+ * never folded into the measured listen_complete totals. Same
+ * gentle dedupe as every beat: once per browser session per chapter.
+ */
+export function beatListenedMarked(bookSlug: string, chapterIdx: number): void {
+  const key = `marked:${bookSlug}:${chapterIdx}`;
+  if (seen(key)) return;
+  markSeen(key);
+  try {
+    track("chapter_listened_marked", { book: bookSlug, chapter: chapterIdx + 1 });
+  } catch {
+    /* ignore */
+  }
+  beatLive("listened_marked");
+}
+
+/** Has this session already marked this chapter "I listened"?
+ *  (The button's counted state for the rest of the visit.) */
+export function isListenedMarked(bookSlug: string, chapterIdx: number): boolean {
+  return seen(`marked:${bookSlug}:${chapterIdx}`);
 }
 
 /** The reader's marked-read chapters now cover a whole book. Once per device per book. */

@@ -18,8 +18,12 @@ import snapshot from "@/data/heartbeat.json";
  *        unreachable or not configured, so the homepage never
  *        depends on the store.
  * POST → one anonymous beat: { "type": "read" | "listen" |
- *        "listen_complete" | "book" }. The body carries nothing else —
- *        no book, no chapter, no identity. The reader's country is
+ *        "listen_complete" | "book" | "listened_marked" }. The body
+ *        carries nothing else — no book, no chapter, no identity.
+ *        "listened_marked" is the reader's own tap on "I listened to
+ *        this chapter" — counted in its own total, never folded into
+ *        the measured listen_complete count (see HEARTBEAT.md). The
+ *        reader's country is
  *        derived here from Vercel's edge header (x-vercel-ip-country);
  *        the subdivision comes from x-vercel-ip-country-region,
  *        sanitized per country by lib/subdivisions.ts (v3.1: US
@@ -34,7 +38,13 @@ import snapshot from "@/data/heartbeat.json";
 export const dynamic = "force-dynamic";
 
 const NO_STORE = { "Cache-Control": "no-store" };
-const KINDS = new Set<BeatKind>(["read", "listen", "listen_complete", "book"]);
+const KINDS = new Set<BeatKind>([
+  "read",
+  "listen",
+  "listen_complete",
+  "book",
+  "listened_marked",
+]);
 
 interface SnapshotShape {
   since: string;
@@ -43,6 +53,8 @@ interface SnapshotShape {
     chaptersHeard: number;
     listensCompleted: number;
     booksFinished: number;
+    /** The checked-in snapshot predates the marked count. */
+    listensMarked?: number;
   };
   today: { date: string; chaptersRead: number; chaptersHeard: number };
 }
@@ -54,8 +66,8 @@ function snapshotFallback() {
       live: false,
       asOf: null,
       since: snap.since,
-      totals: snap.totals,
-      today: snap.today,
+      totals: { ...snap.totals, listensMarked: snap.totals.listensMarked ?? 0 },
+      today: { ...snap.today, listensMarked: 0 },
       countries: [],
       subdivisions: [],
     },

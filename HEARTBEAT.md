@@ -23,6 +23,7 @@ heartbeat operator through the Vercel connector:
 | `chapter_listen_start` | Chapter playback begins (Teddy MP3 or device TTS), from idle | once per browser session per chapter |
 | `chapter_listen_complete` | The listener has heard the chapter **through**: accumulated genuinely played time crosses a multiple of 80% of the chapter (played seconds only — seeks never count — and repeats add, so a second listen-through counts again). Device TTS offers no played-proportion signal, so its completion stays the final utterance's end | once per 80% crossing per browser session per chapter (TTS: once per session per chapter) |
 | `book_complete` | Marked-read chapters complete a whole book | once per device per book |
+| `chapter_listened_marked` | The reader taps "✓ I listened to this chapter" — their own word, counted in its OWN total (`listensMarked`), never folded into the measured `chapter_listen_complete` count (see "The reader's own word") | once per browser session per chapter |
 
 Instrumentation points: `components/ReaderView.tsx` (open, mark-read,
 book completion), `components/ListenButton.tsx` (start/complete for both
@@ -625,6 +626,64 @@ time or duration for its utterances — so no honest 80% measure
 exists on that path. TTS completions therefore remain what they
 were: the final utterance's end. Nothing was faked to make the two
 paths look alike.
+
+## The reader's own word — "I listened" (Oct 20, 2026)
+
+Jason's direction: *"give it a listened to if the person selects
+that button saying they listened."* The measured count has a blind
+spot and he named its remedy. Device TTS offers **no
+played-proportion signal at all** — a listener can hear a whole
+chapter read by their phone's voice and the 80% rule never knows.
+Some listening also simply happens off the playhead's watch. So the
+reader is trusted to say so, and their say-so is counted — as its
+own thing, under the house honesty:
+
+- **The button.** Every chapter page carries **"✓ I listened to
+  this chapter"** (`components/ListenedMarkButton.tsx`, in the
+  chapter-end actions under the Listen controls) — a full-size tap
+  target in the reader's own styling. After the tap it rests in
+  its counted state for the visit: **"✓ Counted — thank you."**
+- **Its own beat, its own total.** The tap fires a new beat kind,
+  **`listened_marked`** (Analytics door: `chapter_listened_marked`),
+  counted in `totals.listensMarked` and the day bucket's
+  `listensMarked` — **never folded into the measured
+  `listensCompleted`**. A tap is a testimony, not a measurement;
+  the two counts stand side by side and are never blended, exactly
+  as site visitors and chapter reads are never blended on the Field
+  Report. Like `listen_complete`, a marked beat attributes no
+  geography — it records that a listener said they listened.
+- **Same disciplines as every beat.** Dedupe: once per chapter per
+  browser session. Aggregate only: totals and the day count, no
+  identity, no IP. It flows through the same store increment path
+  as every other beat — conditional writes, the Oct 20 rescue
+  write, and a logged cause on any failure; a dropped marked beat
+  is dropped loudly, never estimated. Counters documents written
+  before this build normalize the new fields to 0 on first read —
+  the live count carried forward untouched.
+- **Not the place-keeper.** The chapter's "🎧 Mark as listened"
+  button is unchanged: it keeps the reader's own place on their
+  own phone, is undoable, and counts nothing. The new button
+  speaks into the Body's shared count, once. Different jobs,
+  different labels, side by side.
+- **Where it shows.** GET /api/heartbeat exposes
+  `totals.listensMarked` and `today.listensMarked`. The Field
+  Report prints it beside the measured count — *"…listened
+  through · N marked 'I listened'"* — the reader's word standing
+  next to the measurement, each named for what it is. The homepage
+  does not display it, and the Big Picture deck's totals remain
+  the measured set.
+- **Verified without touching the count.** A stubbed-store harness
+  passed 29 checks (totals math, the two counts' separation, no
+  geography, pre-existing-document normalization, the rescue path
+  landing a marked beat exactly once under a total precondition
+  deadlock, generic errors still propagating, and the client
+  dedupe — one tap, one beat, per session per chapter); `tsc`
+  clean, ESLint at the standing baseline, production build clean;
+  a local no-store smoke test answered the new kind with 503
+  (accepted, unconfigured) against 400 for a bogus kind, and the
+  GET fallback carries the new fields at 0. **No synthetic beat
+  was sent to production** — the first real marked count will be
+  a real reader's tap.
 
 ## The frozen store — incident and repair (Oct 20, 2026)
 

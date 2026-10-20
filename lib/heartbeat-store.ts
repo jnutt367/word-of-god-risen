@@ -27,13 +27,24 @@ import snapshot from "@/data/heartbeat.json";
 
 export const COUNTERS_PATH = "heartbeat/counters.json";
 
-export type BeatKind = "read" | "listen" | "listen_complete" | "book";
+export type BeatKind =
+  | "read"
+  | "listen"
+  | "listen_complete"
+  | "book"
+  | "listened_marked";
 
 export interface HbTotals {
   chaptersRead: number;
   chaptersHeard: number;
   listensCompleted: number;
   booksFinished: number;
+  /** The reader's own word: chapters a listener marked "I listened"
+   *  by tapping the button (Oct 20, 2026). A SEPARATE count from the
+   *  measured listensCompleted — a tap is a testimony, not a
+   *  measurement, and the two are never folded together. See
+   *  HEARTBEAT.md, "The reader's own word". */
+  listensMarked: number;
 }
 
 export interface HbCountryCounts {
@@ -45,6 +56,10 @@ export interface HbDay {
   date: string; // YYYY-MM-DD (UTC)
   chaptersRead: number;
   chaptersHeard: number;
+  /** Chapters marked "I listened" by their own listeners that day.
+   *  Carries no country/subdivision attribution — like
+   *  listen_complete, a marked beat records the count only. */
+  listensMarked: number;
   countries: Record<string, HbCountryCounts>;
   /** Subdivision counts for the day (v3.1), keyed by full ISO 3166-2
    *  code ("US-FL"). Only beats whose country has subdivision
@@ -65,7 +80,9 @@ export interface HbCounters {
 
 interface SnapshotShape {
   since: string;
-  totals: HbTotals;
+  /** The checked-in snapshot predates listensMarked; the field is
+   *  optional there and the seed supplies 0 (see seedCounters). */
+  totals: Omit<HbTotals, "listensMarked"> & { listensMarked?: number };
   today: { date: string; chaptersRead: number; chaptersHeard: number };
 }
 
@@ -84,6 +101,7 @@ function emptyDay(date: string): HbDay {
     date,
     chaptersRead: 0,
     chaptersHeard: 0,
+    listensMarked: 0,
     countries: {},
     subdivisions: {},
   };
@@ -102,13 +120,14 @@ export function seedCounters(): HbCounters {
       date: snap.today.date,
       chaptersRead: snap.today.chaptersRead,
       chaptersHeard: snap.today.chaptersHeard,
+      listensMarked: 0,
       countries: {},
       subdivisions: {},
     });
   }
   return {
     since: snap.since,
-    totals: { ...snap.totals },
+    totals: { ...snap.totals, listensMarked: snap.totals.listensMarked ?? 0 },
     subdivisionTotals: {},
     days,
     updatedAt: new Date().toISOString(),
@@ -118,14 +137,17 @@ export function seedCounters(): HbCounters {
 /**
  * Fill fields a counters document written by an older version lacks
  * (v3 documents predate `subdivisionTotals` and the day-level
- * `subdivisions`), so an upgrade never has to migrate the stored JSON
- * by hand.
+ * `subdivisions`; documents before Oct 20, 2026 predate
+ * `listensMarked`), so an upgrade never has to migrate the stored
+ * JSON by hand.
  */
 function normalizeCounters(c: HbCounters): HbCounters {
   c.subdivisionTotals ??= {};
+  c.totals.listensMarked ??= 0;
   for (const day of c.days) {
     day.countries ??= {};
     day.subdivisions ??= {};
+    day.listensMarked ??= 0;
   }
   return c;
 }
@@ -212,6 +234,14 @@ function applyBeat(
       break;
     case "listen_complete":
       c.totals.listensCompleted += 1;
+      break;
+    case "listened_marked":
+      // The reader's own word — its own total and its own day count,
+      // never folded into the measured listensCompleted, and (like
+      // listen_complete) no geography: the button records that a
+      // listener said they listened, nothing about where.
+      c.totals.listensMarked += 1;
+      day.listensMarked += 1;
       break;
     case "book":
       c.totals.booksFinished += 1;
@@ -305,6 +335,7 @@ export function publicView(c: HbCounters) {
       date: today.date,
       chaptersRead: today.chaptersRead,
       chaptersHeard: today.chaptersHeard,
+      listensMarked: today.listensMarked ?? 0,
     },
     countries: rows(today.countries),
     subdivisions: subdivisionRows,
