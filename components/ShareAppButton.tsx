@@ -1,0 +1,129 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+
+const SHARE_TITLE = "Word of God Risen";
+const SHARE_TEXT =
+  "The whole Bible, read out loud by Grandpa Teddy — every chapter free. No account, no password: tap a book, tap a chapter, tap Listen.";
+const SHARE_URL = "https://word-of-god-risen.vercel.app/";
+
+/**
+ * "Share this app" — shares the app itself (not a verse) so Jason can
+ * hand the link to someone standing next to him. Uses the Web Share API
+ * when the device offers it; otherwise copies the link and confirms,
+ * with a manual copy panel as the last resort. A dismissed share sheet
+ * stays quiet — no error noise.
+ */
+export default function ShareAppButton({
+  compact = false,
+}: {
+  compact?: boolean;
+}) {
+  const [copied, setCopied] = useState(false);
+  const [manualOpen, setManualOpen] = useState(false);
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const timer = useRef<number | null>(null);
+
+  useEffect(
+    () => () => {
+      if (timer.current) window.clearTimeout(timer.current);
+    },
+    []
+  );
+
+  // The manual-copy panel closes on an outside tap or Escape,
+  // the same way the header's other panels behave.
+  useEffect(() => {
+    if (!manualOpen) return;
+    const onDown = (e: PointerEvent) => {
+      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) {
+        setManualOpen(false);
+      }
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setManualOpen(false);
+    };
+    document.addEventListener("pointerdown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [manualOpen]);
+
+  async function share() {
+    // First choice: the device's own share sheet (texts, Messenger, …).
+    if (typeof navigator !== "undefined" && "share" in navigator) {
+      try {
+        await navigator.share({
+          title: SHARE_TITLE,
+          text: SHARE_TEXT,
+          url: SHARE_URL,
+        });
+        return;
+      } catch (err) {
+        // The visitor dismissed the sheet — stay quiet, no fallback.
+        if (err instanceof DOMException && err.name === "AbortError") return;
+        // Anything else: fall through and offer the link to copy.
+      }
+    }
+
+    // Fallback: copy the link and say so, briefly and visibly.
+    try {
+      await navigator.clipboard.writeText(SHARE_URL);
+      setCopied(true);
+      if (timer.current) window.clearTimeout(timer.current);
+      timer.current = window.setTimeout(() => setCopied(false), 3000);
+      return;
+    } catch {
+      // Clipboard unavailable too — open the manual copy panel below.
+    }
+    setManualOpen(true);
+  }
+
+  return (
+    <div ref={wrapRef} className="relative">
+      <button
+        type="button"
+        onClick={share}
+        aria-label="Share this app with a friend"
+        className={
+          compact
+            ? "flex min-h-[44px] items-center gap-1 rounded-lg bg-gold-500 px-3 py-2.5 text-sm font-semibold text-vineyard-950 transition-colors hover:bg-gold-400"
+            : "flex min-h-[48px] items-center gap-1.5 rounded-lg bg-gold-500 px-4 py-3 text-sm font-semibold text-vineyard-950 transition-colors hover:bg-gold-400"
+        }
+      >
+        <span aria-hidden="true">{copied ? "✓" : "⤴"}</span>
+        {copied ? "Link copied" : compact ? "Share" : "Share this app"}
+      </button>
+      <span aria-live="polite" className="sr-only">
+        {copied ? "Link copied — paste it anywhere." : ""}
+      </span>
+
+      {manualOpen && (
+        <div className="absolute right-0 top-full z-50 mt-2 w-72 max-w-[calc(100vw-2rem)] rounded-xl border border-gold-500/25 bg-vineyard-950 p-4 shadow-2xl">
+          <p className="text-sm font-semibold text-cream-100">
+            Copy the app link:
+          </p>
+          <input
+            readOnly
+            value={SHARE_URL}
+            onFocus={(e) => e.currentTarget.select()}
+            aria-label="Word of God Risen app link"
+            className="mt-2 w-full rounded-lg border border-cream-100/25 bg-vineyard-900 px-3 py-2.5 text-sm text-cream-100"
+          />
+          <p className="mt-2 text-sm text-sage-300">
+            Tap the link to select it, then copy it and paste it anywhere.
+          </p>
+          <button
+            type="button"
+            onClick={() => setManualOpen(false)}
+            className="mt-3 min-h-[44px] rounded-lg border border-cream-100/25 px-3 py-2 text-sm font-medium text-cream-100 transition-colors hover:border-gold-400 hover:text-gold-300"
+          >
+            Close
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}

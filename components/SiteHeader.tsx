@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import ShareAppButton from "@/components/ShareAppButton";
 
 const NAV_SECTIONS = [
   {
@@ -237,6 +238,16 @@ export default function SiteHeader() {
               </div>
             )}
           </div>
+
+          {/* Share this app — in the header so the door to hand the
+              app to a friend is one tap away on every page, the way
+              it is when the app is opened beside somebody. */}
+          <ShareAppButton />
+        </div>
+
+        {/* Mobile share — the same door, sized for the phone bar */}
+        <div className="ml-auto lg:hidden">
+          <ShareAppButton compact />
         </div>
 
         {/* Mobile hamburger */}
