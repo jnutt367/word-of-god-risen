@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import ShareAppButton from "@/components/ShareAppButton";
+import { useVideoChoice, VideoChoiceModal } from "@/components/VideoChoice";
 
 const NAV_SECTIONS = [
   {
@@ -38,7 +39,8 @@ const NAV = NAV_SECTIONS.flatMap((s) => s.items);
 
 // "Visit the Farm" — the TruVINE doors beyond this app, grouped the way
 // Teddy walks the farm: watch a film, sit on the porch, then the rest.
-// Every one is an external page and opens in a new tab.
+// They open in a new tab — except the Mark film, which asks first
+// (watch here, or YouTube) like every video door in the app.
 const FARM_SECTIONS = [
   {
     heading: "Watch",
@@ -46,7 +48,7 @@ const FARM_SECTIONS = [
       {
         href: "https://www.youtube.com/watch?v=z9pwCVw7Rf0",
         label: "The Gospel of Mark — the film",
-        hint: "(opens YouTube)",
+        videoId: "z9pwCVw7Rf0",
       },
       {
         href: "https://jnutt367.github.io/truvine/come-and-hear/",
@@ -94,6 +96,40 @@ const FARM_SECTIONS = [
 
 type FarmItem = (typeof FARM_SECTIONS)[number]["items"][number];
 
+/**
+ * The Mark film door asks first (VideoChoice) instead of opening
+ * YouTube on tap: watch here in the app, or go to YouTube by choice.
+ * The farm menu stays open behind the dialog, so closing it lands the
+ * reader right back on this door.
+ */
+function FarmVideoItem({ item }: { item: FarmItem }) {
+  const choice = useVideoChoice();
+  if (!item.videoId) return null;
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={choice.openChoice}
+        aria-haspopup="dialog"
+        className="flex min-h-[52px] w-full flex-col justify-center rounded-lg px-3 py-3 text-left transition-colors hover:bg-vineyard-800"
+      >
+        <span className="block text-lg font-medium leading-snug text-cream-100">
+          {item.label}
+        </span>
+      </button>
+      {choice.open && (
+        <VideoChoiceModal
+          onClose={choice.closeChoice}
+          videoId={item.videoId}
+          title={item.label}
+          youtubeUrl={item.href}
+        />
+      )}
+    </>
+  );
+}
+
 function FarmLink({
   item,
   onNavigate,
@@ -101,6 +137,7 @@ function FarmLink({
   item: FarmItem;
   onNavigate: () => void;
 }) {
+  if (item.videoId) return <FarmVideoItem item={item} />;
   return (
     <a
       href={item.href}

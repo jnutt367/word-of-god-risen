@@ -1,4 +1,7 @@
+"use client";
+
 import YouTubeThumb from "./YouTubeThumb";
+import { useVideoChoice, VideoChoiceModal } from "./VideoChoice";
 import { filmUrl, type ChapterFilm } from "@/lib/films";
 
 /**
@@ -6,17 +9,21 @@ import { filmUrl, type ChapterFilm } from "@/lib/films";
  * film on the TruVINE channel, a card beside the chapter's Listen
  * controls offering the film: the same chapter, read word-for-word by
  * Grandpa Teddy, told on screen.
+ *
+ * The tap asks first (VideoChoice): watch here in the app, or open in
+ * YouTube — it never transports the reader without asking.
  */
 export default function FilmCard({ film }: { film: ChapterFilm | null }) {
+  const choice = useVideoChoice();
   if (!film) return null;
 
   return (
     <section aria-label="Watch the animated film" className="mb-8">
-      <a
-        href={filmUrl(film.id)}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="group flex items-center gap-4 overflow-hidden rounded-xl border border-[var(--reader-line)] bg-[var(--reader-card)] p-3 transition-colors hover:border-[var(--reader-verse-num)]/50"
+      <button
+        type="button"
+        onClick={choice.openChoice}
+        aria-haspopup="dialog"
+        className="group flex w-full cursor-pointer items-center gap-4 overflow-hidden rounded-xl border border-[var(--reader-line)] bg-[var(--reader-card)] p-3 text-left transition-colors hover:border-[var(--reader-verse-num)]/50"
       >
         <div className="relative aspect-video w-32 shrink-0 overflow-hidden rounded-lg sm:w-44">
           <YouTubeThumb id={film.id} />
@@ -38,7 +45,15 @@ export default function FilmCard({ film }: { film: ChapterFilm | null }) {
             {film.note}
           </p>
         </div>
-      </a>
+      </button>
+      {choice.open && (
+        <VideoChoiceModal
+          onClose={choice.closeChoice}
+          videoId={film.id}
+          title={film.title}
+          youtubeUrl={filmUrl(film.id)}
+        />
+      )}
     </section>
   );
 }

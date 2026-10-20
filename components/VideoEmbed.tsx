@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { VideoChoiceModal } from "./VideoChoice";
 
 /**
  * Polished click-to-play YouTube embed.
@@ -8,6 +9,10 @@ import { useState } from "react";
  * Shows a branded thumbnail facade (maxres artwork, gold play button,
  * brand chip) and only loads the heavy YouTube iframe after the
  * user taps play — faster page loads and a much more professional look.
+ *
+ * The tap asks first (VideoChoice): "Watch here" plays in place, in
+ * this frame, exactly as it always has; "Open in YouTube" is there
+ * for readers who'd rather go — but nobody is carried off unasked.
  *
  * `brand` labels the video's source. Defaults to "TruVINE" for Jason's
  * own overviews; pass "BibleProject" only for the legacy placeholder
@@ -24,14 +29,30 @@ export default function VideoEmbed({
   brand?: string;
 }) {
   const [playing, setPlaying] = useState(false);
+  const [choiceOpen, setChoiceOpen] = useState(false);
   const [thumbSrc, setThumbSrc] = useState(
     `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`
   );
+  const facadeRef = useRef<HTMLButtonElement>(null);
+  const playerRef = useRef<HTMLDivElement>(null);
+
+  const closeChoice = useCallback((returnFocus = true) => {
+    setChoiceOpen(false);
+    if (returnFocus) {
+      requestAnimationFrame(() => facadeRef.current?.focus());
+    }
+  }, []);
+
+  // When playback starts in place, land focus on the player so a
+  // keyboard reader arrives where the video now lives.
+  useEffect(() => {
+    if (playing) playerRef.current?.focus();
+  }, [playing]);
 
   return (
     <div className="rounded-2xl bg-gradient-to-br from-gold-500/50 via-gold-500/10 to-transparent p-px shadow-[0_16px_40px_rgba(0,0,0,0.45)]">
       <div className="overflow-hidden rounded-[15px] bg-vineyard-950">
-        <div className="relative aspect-video w-full">
+        <div ref={playerRef} tabIndex={-1} className="relative aspect-video w-full">
           {playing ? (
             <iframe
               className="h-full w-full"
@@ -44,8 +65,10 @@ export default function VideoEmbed({
           ) : (
             <button
               type="button"
-              onClick={() => setPlaying(true)}
-              aria-label={`Play video: ${title}`}
+              ref={facadeRef}
+              onClick={() => setChoiceOpen(true)}
+              aria-haspopup="dialog"
+              aria-label={`Watch video: ${title}`}
               className="group absolute inset-0 h-full w-full cursor-pointer"
             >
               <img
@@ -83,6 +106,15 @@ export default function VideoEmbed({
           )}
         </div>
       </div>
+      {choiceOpen && (
+        <VideoChoiceModal
+          onClose={closeChoice}
+          videoId={videoId}
+          title={title}
+          youtubeUrl={`https://www.youtube.com/watch?v=${videoId}`}
+          onWatchHere={() => setPlaying(true)}
+        />
+      )}
     </div>
   );
 }
