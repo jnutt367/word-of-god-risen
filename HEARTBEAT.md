@@ -626,6 +626,70 @@ exists on that path. TTS completions therefore remain what they
 were: the final utterance's end. Nothing was faked to make the two
 paths look alike.
 
+## The frozen store — incident and repair (Oct 20, 2026)
+
+**What happened.** The live Blob counters froze at
+`updatedAt: 2026-10-18T15:55:25.755Z` (11:55am ET, Oct 18) with totals
+32 read · 14 heard · 7 completed. For two days GET /api/heartbeat
+kept answering `live: true` with that document, the Field Report
+heartbeat faithfully republished the frozen totals, and no reader
+beat landed — Jason caught it by testing on Oct 20: he read and
+listened to a full chapter end to end, two Field Report runs
+republished, and nothing moved. The client fires each beat
+fire-and-forget (fail-soft by design, so the page never breaks), and
+the route swallowed every failure into a bare 503 — a dead write
+path was invisible from everywhere a reader or watcher could see.
+
+**What the evidence showed.** Jason's catch was traced through the
+whole chain. The client wiring (`ReaderView`/`ListenButton` → the
+Oct 20 counter builds) is intact and unchanged in behavior; the
+server store and route are byte-identical to the Oct 15 v3.1 build
+that counted correctly for three days. The Blob store itself is
+healthy (status available, billing active, quota not exceeded, one
+1,014-byte document), and its three env vars stand exactly as
+created on Oct 15 — never edited, token not expired. Reads never
+failed: the frozen document was served fresh throughout. Only the
+writes stopped, all of them, from one beat to the next. The exact
+server-side error could not be read back: this team's plan/scope
+returns 403 for runtime logs and 402 for Analytics custom-event
+queries through the connector (the same scope wall noted at v1).
+The failure shape — reads healthy, every conditional write failing
+from a single moment onward, store and credentials provably sound —
+fits a write precondition that can never match again (the ETag
+optimistic-concurrency check deadlocking every increment into a
+silently dropped beat), and the repair below is built to cure that
+class outright rather than bet on one theory.
+
+**The repair.** `incrementCounters` keeps its five conditional
+attempts; if all of them lose their precondition, it now makes one
+final rescue attempt — a fresh read and an unconditional write —
+instead of dropping the beat, and the rescued document heals the
+chain (later beats read the new document's ETag and conditional
+writes work again). Every failure branch now logs its cause
+(`console.error` in the store and in the route, including the
+dropped-beat and snapshot-fallback paths), so a future failure is
+never silent twice. Verified without touching the live count: a
+stubbed-store harness passed 12 checks (normal write lands in one
+conditional put; under a total precondition deadlock the rescue
+lands the beat exactly once and the next beat writes conditionally
+again; an unknown store error still propagates and writes nothing),
+`tsc` clean, ESLint at the standing baseline, production build
+clean. No synthetic beat was sent to production to test this — the
+count is the public record. The write path's production proof is
+the next real reader beat: a chapter opened or heard should move
+`asOf` off Oct 18 within one homepage refresh (the display polls
+about every minute).
+
+**What is lost, stated plainly.** Beats that reached only the Blob
+door between Oct 18, 11:55am ET and this repair are gone and cannot
+be backfilled: the live counters never received them, and the
+Analytics door's event totals cannot be queried from the operator's
+connection on this plan (402), so the daily roll-up has nothing to
+reconcile from for that window either. The checked-in snapshot was
+never refreshed after Oct 15 for the same reason. As ever, the
+totals are a faithful floor — this window is part of why that has
+always been the honest description of them.
+
 ## Accessibility & motion
 
 - The figure (the world map; the vine overlay was removed in

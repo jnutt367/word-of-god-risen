@@ -68,7 +68,10 @@ export async function GET() {
     const loaded = await readCounters();
     if (!loaded) return snapshotFallback();
     return NextResponse.json(publicView(loaded.counters), { headers: NO_STORE });
-  } catch {
+  } catch (err) {
+    // The snapshot fallback keeps the homepage whole; the log keeps
+    // the cause, so a silent store failure is never silent twice.
+    console.error("[heartbeat] live read failed; serving snapshot:", err);
     return snapshotFallback();
   }
 }
@@ -109,10 +112,14 @@ export async function POST(req: Request) {
       readerSubdivision(req, country)
     );
     if (!updated) {
+      console.error(
+        `[heartbeat] beat dropped: incrementCounters returned null (kind: ${kind})`
+      );
       return NextResponse.json({ ok: false, live: false }, { status: 503 });
     }
     return NextResponse.json({ ok: true });
-  } catch {
+  } catch (err) {
+    console.error("[heartbeat] beat failed with an error:", err);
     return NextResponse.json({ ok: false }, { status: 503 });
   }
 }

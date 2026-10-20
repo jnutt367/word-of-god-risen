@@ -225,6 +225,17 @@ function applyBeat(
  * the write is conditional on the ETag just read, and a lost race
  * retries against the fresh document. At this ministry's scale the
  * window is tiny; HEARTBEAT.md names the residual limit honestly.
+ *
+ * The rescue (Oct 20, 2026 — see HEARTBEAT.md, "The frozen store"):
+ * if every conditional write fails on its precondition, the beat is
+ * no longer dropped. One final attempt re-reads the document fresh
+ * and writes it back unconditionally. A stored document whose ETag
+ * can never match again would otherwise deadlock every future beat
+ * silently — reads stay healthy, writes all "lose the race," and the
+ * counters freeze while looking live. The rescue write also heals
+ * the document: later beats read the ETag of the rescued write and
+ * conditional writes work again. Every failure on the way is logged
+ * (console.error) so the next failure carries its cause with it.
  */
 export async function incrementCounters(
   kind: BeatKind,
@@ -232,6 +243,7 @@ export async function incrementCounters(
   subdivision: string | null = null
 ): Promise<HbCounters | null> {
   if (!storeConfigured()) return null;
+  let preconditionFailures = 0;
   for (let attempt = 0; attempt < 5; attempt++) {
     const loaded = await readCounters();
     if (!loaded) return null;
@@ -240,9 +252,26 @@ export async function incrementCounters(
       await writeCounters(loaded.counters, loaded.etag);
       return loaded.counters;
     } catch (err) {
-      if (err instanceof BlobPreconditionFailedError) continue;
+      if (err instanceof BlobPreconditionFailedError) {
+        preconditionFailures += 1;
+        continue;
+      }
+      console.error(
+        `[heartbeat] conditional write failed (attempt ${attempt + 1}/5):`,
+        err
+      );
       throw err;
     }
+  }
+  if (preconditionFailures > 0) {
+    console.error(
+      `[heartbeat] ${preconditionFailures} conditional writes lost their precondition; attempting one unconditional rescue write`
+    );
+    const loaded = await readCounters();
+    if (!loaded) return null;
+    applyBeat(loaded.counters, kind, country, subdivision);
+    await writeCounters(loaded.counters, null);
+    return loaded.counters;
   }
   return null; // five lost races in a row — the beat is dropped, never faked
 }
