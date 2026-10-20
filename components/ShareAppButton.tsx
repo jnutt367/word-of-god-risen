@@ -6,13 +6,19 @@ const SHARE_TITLE = "Word of God Risen";
 const SHARE_TEXT =
   "The whole Bible, read out loud by Grandpa Teddy — every chapter free. No account, no password: tap a book, tap a chapter, tap Listen.";
 const SHARE_URL = "https://word-of-god-risen.vercel.app/";
+const SHARE_CARD_URL = "/share-card.png";
+const SHARE_CARD_NAME = "word-of-god-risen-share-card.png";
 
 /**
  * "Share this app" — shares the app itself (not a verse) so Jason can
- * hand the link to someone standing next to him. Uses the Web Share API
- * when the device offers it; otherwise copies the link and confirms,
- * with a manual copy panel as the last resort. A dismissed share sheet
- * stays quiet — no error noise.
+ * hand it to someone standing next to him. First choice: the picture
+ * card (public/share-card.png) as a real image file through the Web
+ * Share API, so it lands as ONE clean picture with the blessed line
+ * and link riding along. Where file sharing isn't offered, it falls
+ * back to the plain text + link share; with no share sheet at all it
+ * copies the link and confirms, with a manual copy panel as the last
+ * resort. A dismissed share sheet stays quiet — no fallback fires
+ * behind the visitor's back.
  */
 export default function ShareAppButton({
   compact = false,
@@ -23,6 +29,7 @@ export default function ShareAppButton({
   const [manualOpen, setManualOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
   const timer = useRef<number | null>(null);
+  const cardPromise = useRef<Promise<File | null> | null>(null);
 
   useEffect(
     () => () => {
@@ -51,9 +58,45 @@ export default function ShareAppButton({
     };
   }, [manualOpen]);
 
+  // The picture card, fetched once and kept for the next tap.
+  function loadCard(): Promise<File | null> {
+    if (!cardPromise.current) {
+      cardPromise.current = (async () => {
+        try {
+          const res = await fetch(SHARE_CARD_URL);
+          if (!res.ok) return null;
+          const blob = await res.blob();
+          return new File([blob], SHARE_CARD_NAME, { type: "image/png" });
+        } catch {
+          return null;
+        }
+      })();
+    }
+    return cardPromise.current;
+  }
+
   async function share() {
-    // First choice: the device's own share sheet (texts, Messenger, …).
     if (typeof navigator !== "undefined" && "share" in navigator) {
+      // First choice: the picture card itself, so the app arrives as
+      // one clean image — not a wall of words with a doubled preview.
+      const card = await loadCard();
+      if (card && navigator.canShare && navigator.canShare({ files: [card] })) {
+        try {
+          await navigator.share({
+            files: [card],
+            title: SHARE_TITLE,
+            text: SHARE_TEXT,
+            url: SHARE_URL,
+          });
+          return;
+        } catch (err) {
+          // The visitor dismissed the sheet — stay quiet, no fallback.
+          if (err instanceof DOMException && err.name === "AbortError") return;
+          // Anything else: fall through to the plain text + link share.
+        }
+      }
+
+      // Second choice: the device's own share sheet (texts, Messenger, …).
       try {
         await navigator.share({
           title: SHARE_TITLE,
