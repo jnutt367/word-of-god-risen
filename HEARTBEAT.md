@@ -21,7 +21,7 @@ heartbeat operator through the Vercel connector:
 |---|---|---|
 | `chapter_read` | A chapter opens in the reader, or is marked read | once per browser session per chapter |
 | `chapter_listen_start` | Chapter playback begins (Teddy MP3 or device TTS), from idle | once per browser session per chapter |
-| `chapter_listen_complete` | The listener has heard the chapter **through**: genuinely played time reaches 80% of the chapter (played spans only — seeks never count), or playback reaches the natural end. Device TTS offers no played-proportion signal, so its completion stays the final utterance's end | once per browser session per chapter |
+| `chapter_listen_complete` | The listener has heard the chapter **through**: accumulated genuinely played time crosses a multiple of 80% of the chapter (played seconds only — seeks never count — and repeats add, so a second listen-through counts again). Device TTS offers no played-proportion signal, so its completion stays the final utterance's end | once per 80% crossing per browser session per chapter (TTS: once per session per chapter) |
 | `book_complete` | Marked-read chapters complete a whole book | once per device per book |
 
 Instrumentation points: `components/ReaderView.tsx` (open, mark-read,
@@ -582,21 +582,42 @@ it — the count now says so.
 
 **The rule.** A chapter counts as **listened through** when the
 listener's genuinely played time reaches **80% of the chapter's
-duration** — or at the natural end, whichever comes first. The
-measure is played time, never playhead position: the player feeds
-the audio element's own `played` TimeRanges (the browser's record
-of what actually sounded; a scrubbed-past passage leaves a gap and
-earns nothing) into `notePlayedSpan` in `lib/heartbeat.ts`, which
-merges the spans per chapter in `sessionStorage` — so the total
-accumulates across player remounts within the browser session —
-and fires the existing `listen_complete` beat at the threshold.
-No server or schema change: the beat kind, the counters, and the
-roll-up are exactly as before; only the client-side trigger moved.
-The beat also gained the same gentle once-per-session-per-chapter
-dedupe the read and listen-start beats always had (it previously
-had none). The displayed name changed to match the measure: the
-Field Report totals now read **"listened through"** wherever they
-previously said "listens finished."
+duration**. The measure is played time, never playhead position:
+the player follows the playhead as one continuous segment in
+`components/ListenButton.tsx` — while it advances at the speed of
+real time it is genuinely sounding; a jump the clock cannot
+explain is a seek, which closes the segment where the sound
+stopped and starts a new one where it resumes, so a scrubbed-past
+passage earns nothing. Closed segments feed `notePlayedSpan` in
+`lib/heartbeat.ts`, which adds their seconds per chapter in
+`sessionStorage` — so the total accumulates across player remounts
+within the browser session — and fires the existing
+`listen_complete` beat at the threshold. No server or schema
+change: the beat kind, the counters, and the roll-up are exactly
+as before; only the client-side trigger moved. The natural end
+releases a threshold crossing the played time has reached but not
+yet fired, and adds nothing of its own. The displayed name changed
+to match the measure: the Field Report totals now read
+**"listened through"** wherever they previously said "listens
+finished."
+
+**The correction — repeats count (Jason's ruling, later the same
+day).** The first shipped version of this rule merged played spans
+into a union, so it measured *coverage*: re-listening a stretch
+never added time. Jason overruled it — *"if someone rereads the
+passage it should count as a listen again."* The count measures
+**listening**, not coverage. Played seconds now simply add,
+repeats included: hearing a chapter's first half twice is a whole
+chapter heard. Each time the accumulated total crosses a further
+multiple of the 80% line (0.8×, 1.6×, 2.4× … of the duration) the
+chapter counts once more — a full second listen-through in one
+sitting is a second listen. The dedupe moved with the rule: it now
+guards **each crossing** (keyed by crossing number), so no crossing
+can ever fire twice, while crossings beyond the first are no
+longer swallowed. (Span sets stored by the first shipped rule are
+migrated on first read: their covered seconds carry over as played
+time, and a chapter that build already counted keeps its crossing
+marked as fired.)
 
 **The TTS exception, stated plainly.** Device text-to-speech has
 no played-proportion signal — `speechSynthesis` reports no elapsed

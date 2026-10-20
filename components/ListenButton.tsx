@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import type { Verse } from "@/lib/verses";
 import { getBook } from "@/lib/bible-client";
-import { beatListenStart, beatListenComplete, notePlayedSpan } from "@/lib/heartbeat";
+import { beatListenStart, beatListenComplete, beatListenEnded, notePlayedSpan } from "@/lib/heartbeat";
 
 interface Props {
   bookSlug: string;
@@ -102,6 +102,35 @@ export default function ListenButton({
   const panelRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const ambientRef = useRef<HTMLAudioElement | null>(null);
+  // Bible Heartbeat "listened through": the stretch of the chapter
+  // being genuinely played right now, tracked as one continuous
+  // segment. The segment closes wherever the sound stops being
+  // continuous (pause, seek, stop, end), and only closed segments are
+  // fed to the heartbeat — so jumped-over seconds never enter the
+  // count, while a stretch honestly re-listened sounds again as a new
+  // segment and counts again. The segment carries its own chapter, so
+  // a chapter switch credits the chapter that was actually playing.
+  const segRef = useRef<{
+    slug: string;
+    num: number;
+    start: number;
+    lastPos: number;
+    wall: number;
+  } | null>(null);
+  /** Feed the open segment (up to `upto`) to the heartbeat; close it. */
+  const flushSegment = (upto: number) => {
+    const seg = segRef.current;
+    if (!seg) return;
+    segRef.current = null;
+    const d = audioRef.current?.duration;
+    if (d && isFinite(d) && d > 0) {
+      notePlayedSpan(seg.slug, seg.num, seg.start, Math.min(upto, d), d);
+    }
+  };
+  const flushRef = useRef(flushSegment);
+  useEffect(() => {
+    flushRef.current = flushSegment;
+  });
   // Teddy helper (floating mode): open state + the two ends of the
   // reader's path — the "Got it" button and the "New here?" link.
   const [helperOpen, setHelperOpen] = useState(false);
@@ -226,6 +255,9 @@ export default function ListenButton({
 
   const stopAll = () => {
     session.current += 1;
+    // Close any open listened-through segment before teardown, so the
+    // seconds already sounded are counted for their own chapter.
+    flushRef.current(audioRef.current?.currentTime || 0);
     if (typeof window !== "undefined" && "speechSynthesis" in window) {
       window.speechSynthesis.cancel();
     }
@@ -309,29 +341,64 @@ export default function ListenButton({
       a.onloadedmetadata = () => setDuration(a!.duration || 0);
       a.ontimeupdate = () => {
         setProgress(a!.currentTime || 0);
-        // Bible Heartbeat "listened through": feed the tracker's own
-        // played ranges — the browser's record of what genuinely
-        // sounded, with gaps where the reader scrubbed — to the
-        // heartbeat. At 80% truly played the chapter counts, without
+        // Bible Heartbeat "listened through": follow the playhead as
+        // one continuous segment. While it advances at the speed of
+        // real time it is genuinely sounding. A jump the clock cannot
+        // explain is a seek — close the segment where the sound
+        // stopped and start a new one where it resumes, so the
+        // jumped-over passage earns nothing. Re-listening a stretch
+        // sounds again as a new segment and counts again: repeats are
+        // listening. At 80% truly played the chapter counts, without
         // demanding the track's very last second.
         const d = a!.duration;
-        if (isFinite(d) && d > 0) {
-          try {
-            const { bookSlug: slug, chapterNum: num } = chapterRef.current;
-            for (let i = 0; i < a!.played.length; i++) {
-              notePlayedSpan(slug, num, a!.played.start(i), a!.played.end(i), d);
+        const now = a!.currentTime || 0;
+        const wall = Date.now() / 1000;
+        try {
+          const { bookSlug: slug, chapterNum: num } = chapterRef.current;
+          const seg = segRef.current;
+          if (!seg || seg.slug !== slug || seg.num !== num) {
+            segRef.current = { slug, num, start: now, lastPos: now, wall };
+          } else if (now !== seg.lastPos) {
+            const dPos = now - seg.lastPos;
+            const dWall = wall - seg.wall;
+            if (dPos > 0 && dPos <= dWall * 1.5 + 1) {
+              seg.lastPos = now;
+              seg.wall = wall;
+              // Feed long segments as they grow, so a tab closed
+              // mid-chapter loses at most a few seconds of listening.
+              if (now - seg.start >= 5 && isFinite(d) && d > 0) {
+                notePlayedSpan(slug, num, seg.start, now, d);
+                seg.start = now;
+              }
+            } else {
+              // Seek or jump: close at the last sounded position.
+              if (isFinite(d) && d > 0) {
+                notePlayedSpan(seg.slug, seg.num, seg.start, seg.lastPos, d);
+              }
+              segRef.current = { slug, num, start: now, lastPos: now, wall };
             }
-          } catch {
-            /* counting never breaks playback */
+          } else {
+            seg.wall = wall;
           }
+        } catch {
+          /* counting never breaks playback */
         }
+      };
+      a.onpause = () => {
+        // The sound stopped here — close the segment where it stopped.
+        flushRef.current(a!.currentTime || 0);
       };
       a.onended = () => {
         setStatus("idle");
         setProgress(0);
-        beatListenComplete(
+        // Close the final segment, then let the heartbeat release any
+        // crossing the played time reached. The end itself adds
+        // nothing — repeats and thresholds are the played-time rule.
+        flushRef.current(a!.currentTime || 0);
+        beatListenEnded(
           chapterRef.current.bookSlug,
-          chapterRef.current.chapterNum
+          chapterRef.current.chapterNum,
+          a!.duration || 0
         );
         // Read-only note for the chapter-end line. The ambient bed is
         // deliberately NOT touched here — it keeps looping after the

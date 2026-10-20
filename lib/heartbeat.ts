@@ -81,13 +81,19 @@ export function beatListenStart(bookSlug: string, chapterNum: number): void {
   beatLive("listen");
 }
 
-/**
- * The listener heard a chapter through: at least LISTENED_THROUGH of
- * it genuinely played (see notePlayedSpan), or playback reached the
- * natural end. Once per session per chapter, like every other beat.
- */
-export function beatListenComplete(bookSlug: string, chapterNum: number): void {
-  const key = `complete:${bookSlug}:${chapterNum}`;
+/** Session key for crossing #k of a chapter (crossing 1 keeps the
+ *  original key, so a chapter counted under the first shipped rule is
+ *  never counted twice by the corrected one in the same session). */
+function crossingKey(bookSlug: string, chapterNum: number, k: number): string {
+  return k <= 1
+    ? `complete:${bookSlug}:${chapterNum}`
+    : `complete:${bookSlug}:${chapterNum}:x${k}`;
+}
+
+/** Fire the listen_complete beat for crossing #k — guarded per
+ *  crossing, so a crossing once fired never fires again. */
+function fireListenCrossing(bookSlug: string, chapterNum: number, k: number): void {
+  const key = crossingKey(bookSlug, chapterNum, k);
   if (seen(key)) return;
   markSeen(key);
   try {
@@ -99,68 +105,139 @@ export function beatListenComplete(bookSlug: string, chapterNum: number): void {
 }
 
 /**
+ * The listener heard a chapter through once: played time crossed one
+ * multiple of LISTENED_THROUGH (see notePlayedSpan), playback reached
+ * the natural end, or device TTS finished the chapter. This exported
+ * beat fires crossing #1 only; further listen-throughs in the same
+ * session fire as further crossings from the played-time tracker.
+ */
+export function beatListenComplete(bookSlug: string, chapterNum: number): void {
+  fireListenCrossing(bookSlug, chapterNum, 1);
+}
+
+/**
  * "Listened through" (Jason's ruling, Oct 20, 2026): a chapter counts
  * when the listener has genuinely PLAYED at least this share of it —
  * measured in played time, never playhead position, so seeking ahead
  * earns nothing. No looser than this: 80% of a chapter truly heard is
  * a listener who stayed; the old rule (only the track's very last
  * second counted) measured the file, not the listening.
+ *
+ * Jason's correction, same day: the count measures LISTENING, not
+ * coverage — "if someone rereads the passage it should count as a
+ * listen again." So played seconds ADD, repeats included: hearing a
+ * chapter's first half twice is 100% of a chapter heard. Every time
+ * the accumulated total crosses a further multiple of this share
+ * (0.8×, 1.6×, 2.4× … of the duration), the chapter counts again.
  */
 export const LISTENED_THROUGH = 0.8;
 
 type Span = [number, number];
 
+/** Accumulated played seconds + crossings already fired, per chapter
+ *  per browser session. */
+interface PlayedState {
+  total: number;
+  fired: number;
+}
+
 const playedKey = (bookSlug: string, chapterNum: number) =>
   `played:${bookSlug}:${chapterNum}`;
 
-function readSpans(key: string): Span[] {
-  try {
-    const raw = sessionStorage.getItem(SESSION_PREFIX + key);
-    if (!raw) return [];
-    const arr: unknown = JSON.parse(raw);
-    if (!Array.isArray(arr)) return [];
-    return arr.filter(
-      (s): s is Span =>
-        Array.isArray(s) &&
-        s.length === 2 &&
-        typeof s[0] === "number" &&
-        typeof s[1] === "number" &&
-        isFinite(s[0]) &&
-        isFinite(s[1]) &&
-        s[1] > s[0]
-    );
-  } catch {
-    return [];
+/** Union length of a span list — used only to migrate the span sets
+ *  the first shipped rule stored, so their played time carries over. */
+function spansTotal(spans: Span[]): number {
+  const sorted = [...spans].sort((a, b) => a[0] - b[0]);
+  const merged: Span[] = [];
+  for (const s of sorted) {
+    const last = merged[merged.length - 1];
+    if (last && s[0] <= last[1]) last[1] = Math.max(last[1], s[1]);
+    else merged.push([s[0], s[1]]);
   }
+  return merged.reduce((sum, s) => sum + (s[1] - s[0]), 0);
 }
 
-function writeSpans(key: string, spans: Span[]): void {
+function readPlayedState(
+  bookSlug: string,
+  chapterNum: number,
+  duration: number
+): PlayedState {
   try {
-    sessionStorage.setItem(SESSION_PREFIX + key, JSON.stringify(spans));
+    const raw = sessionStorage.getItem(SESSION_PREFIX + playedKey(bookSlug, chapterNum));
+    if (!raw) return { total: 0, fired: 0 };
+    const parsed: unknown = JSON.parse(raw);
+    if (
+      parsed &&
+      typeof parsed === "object" &&
+      !Array.isArray(parsed) &&
+      isFinite((parsed as PlayedState).total)
+    ) {
+      const st = parsed as PlayedState;
+      return {
+        total: Math.max(0, st.total),
+        fired: Math.max(0, Math.floor(st.fired || 0)),
+      };
+    }
+    if (Array.isArray(parsed)) {
+      // Stored by the first shipped rule as a union span set. Its
+      // covered seconds carry over as played time; if that build
+      // already counted the chapter, its crossing stands as fired.
+      const spans = parsed.filter(
+        (s): s is Span =>
+          Array.isArray(s) &&
+          s.length === 2 &&
+          typeof s[0] === "number" &&
+          typeof s[1] === "number" &&
+          isFinite(s[0]) &&
+          isFinite(s[1]) &&
+          s[1] > s[0]
+      );
+      const total = spansTotal(spans);
+      const fired = seen(crossingKey(bookSlug, chapterNum, 1))
+        ? Math.max(1, Math.floor(total / (LISTENED_THROUGH * duration)))
+        : 0;
+      return { total, fired };
+    }
+  } catch {
+    /* unreadable state — start fresh rather than break playback */
+  }
+  return { total: 0, fired: 0 };
+}
+
+function writePlayedState(bookSlug: string, chapterNum: number, st: PlayedState): void {
+  try {
+    sessionStorage.setItem(
+      SESSION_PREFIX + playedKey(bookSlug, chapterNum),
+      JSON.stringify(st)
+    );
   } catch {
     /* private mode etc. — counting just becomes approximate */
   }
 }
 
-/** Merge [start, end] into the sorted span set; return total covered seconds. */
-function mergeSpan(spans: Span[], start: number, end: number): { spans: Span[]; total: number } {
-  const all = [...spans, [start, end] as Span].sort((a, b) => a[0] - b[0]);
-  const merged: Span[] = [];
-  for (const s of all) {
-    const last = merged[merged.length - 1];
-    if (last && s[0] <= last[1]) last[1] = Math.max(last[1], s[1]);
-    else merged.push([s[0], s[1]]);
+/** Fire every crossing the accumulated total has reached but not yet
+ *  fired (each crossing is itself guarded, so none can fire twice). */
+function fireReachedCrossings(
+  bookSlug: string,
+  chapterNum: number,
+  st: PlayedState,
+  duration: number
+): void {
+  const reached = Math.floor(st.total / (LISTENED_THROUGH * duration));
+  while (st.fired < reached) {
+    st.fired += 1;
+    fireListenCrossing(bookSlug, chapterNum, st.fired);
   }
-  return { spans: merged, total: merged.reduce((sum, s) => sum + (s[1] - s[0]), 0) };
 }
 
 /**
  * Note a span of a chapter that was genuinely played — fed from the
- * audio element's own `played` ranges, the browser's record of what
- * actually sounded, so a passage scrubbed past never enters the sum.
- * Spans accumulate per browser session (across player remounts); when
- * the played total reaches LISTENED_THROUGH of the chapter's duration,
- * the chapter counts as listened through.
+ * player's own accounting of what actually sounded (see ListenButton),
+ * so a passage scrubbed past never enters the sum. Every played
+ * second adds to the chapter's session total, INCLUDING seconds that
+ * repeat an earlier stretch: re-listening is listening. Each time the
+ * total crosses a further multiple of LISTENED_THROUGH × duration,
+ * the chapter counts as listened through once more.
  */
 export function notePlayedSpan(
   bookSlug: string,
@@ -171,14 +248,30 @@ export function notePlayedSpan(
 ): void {
   if (!isFinite(duration) || duration <= 0) return;
   if (!isFinite(start) || !isFinite(end)) return;
-  if (seen(`complete:${bookSlug}:${chapterNum}`)) return;
   const s = Math.max(0, Math.min(start, duration));
   const e = Math.max(0, Math.min(end, duration));
-  if (e - s < 0.25) return; // slivers are event noise at range edges
-  const key = playedKey(bookSlug, chapterNum);
-  const { spans, total } = mergeSpan(readSpans(key), s, e);
-  writeSpans(key, spans);
-  if (total >= LISTENED_THROUGH * duration) beatListenComplete(bookSlug, chapterNum);
+  if (e - s < 0.25) return; // slivers are event noise at segment edges
+  const st = readPlayedState(bookSlug, chapterNum, duration);
+  st.total += e - s;
+  fireReachedCrossings(bookSlug, chapterNum, st, duration);
+  writePlayedState(bookSlug, chapterNum, st);
+}
+
+/**
+ * Playback reached the chapter's natural end. Under the repeats rule
+ * the end earns nothing by itself — it only releases a crossing the
+ * accumulated played time has already reached but not yet fired, and
+ * never one that already fired.
+ */
+export function beatListenEnded(
+  bookSlug: string,
+  chapterNum: number,
+  duration: number
+): void {
+  if (!isFinite(duration) || duration <= 0) return;
+  const st = readPlayedState(bookSlug, chapterNum, duration);
+  fireReachedCrossings(bookSlug, chapterNum, st, duration);
+  writePlayedState(bookSlug, chapterNum, st);
 }
 
 /** The reader's marked-read chapters now cover a whole book. Once per device per book. */
