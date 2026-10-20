@@ -85,7 +85,11 @@ export default function ShareAppButton({
           await navigator.share({
             files: [card],
             title: SHARE_TITLE,
-            text: SHARE_TEXT,
+            // The tappable address also rides inside the message body:
+            // some receiving apps drop the separate url field when a
+            // file is attached, and the card's printed address is
+            // readable but not tappable. The link must always arrive.
+            text: SHARE_TEXT + "\n" + SHARE_URL,
             url: SHARE_URL,
           });
           return;
