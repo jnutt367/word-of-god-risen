@@ -21,7 +21,7 @@ heartbeat operator through the Vercel connector:
 |---|---|---|
 | `chapter_read` | A chapter opens in the reader, or is marked read | once per browser session per chapter |
 | `chapter_listen_start` | Chapter playback begins (Teddy MP3 or device TTS), from idle | once per browser session per chapter |
-| `chapter_listen_complete` | Playback reaches the chapter's end | — |
+| `chapter_listen_complete` | The listener has heard the chapter **through**: genuinely played time reaches 80% of the chapter (played spans only — seeks never count), or playback reaches the natural end. Device TTS offers no played-proportion signal, so its completion stays the final utterance's end | once per browser session per chapter |
 | `book_complete` | Marked-read chapters complete a whole book | once per device per book |
 
 Instrumentation points: `components/ReaderView.tsx` (open, mark-read,
@@ -568,6 +568,42 @@ to see if someone's state lights up." Now there is: **/heartbeat-test**.
   Kenya (KE) renders the full country treatment (fill + heart
   r 7/r 3 at 671.7, 719.7, lower right on the disc) with no ember
   anywhere — countries without subdivisions behave exactly as live.
+
+## "Listened through" — the 80% played-time rule (Oct 20, 2026)
+
+Jason's ruling: *"Having to listen to the entire thing just to count
+as having listened is like saying that if we don't sit down and read
+a whole chapter in one sitting it don't count"* — and, pressed for
+the line: 80%, "not over liberal." The old rule fired
+`chapter_listen_complete` only at the track's very last second; it
+measured the file, not the listening. A listener who hears four
+fifths of a chapter of John has heard the most important thing in
+it — the count now says so.
+
+**The rule.** A chapter counts as **listened through** when the
+listener's genuinely played time reaches **80% of the chapter's
+duration** — or at the natural end, whichever comes first. The
+measure is played time, never playhead position: the player feeds
+the audio element's own `played` TimeRanges (the browser's record
+of what actually sounded; a scrubbed-past passage leaves a gap and
+earns nothing) into `notePlayedSpan` in `lib/heartbeat.ts`, which
+merges the spans per chapter in `sessionStorage` — so the total
+accumulates across player remounts within the browser session —
+and fires the existing `listen_complete` beat at the threshold.
+No server or schema change: the beat kind, the counters, and the
+roll-up are exactly as before; only the client-side trigger moved.
+The beat also gained the same gentle once-per-session-per-chapter
+dedupe the read and listen-start beats always had (it previously
+had none). The displayed name changed to match the measure: the
+Field Report totals now read **"listened through"** wherever they
+previously said "listens finished."
+
+**The TTS exception, stated plainly.** Device text-to-speech has
+no played-proportion signal — `speechSynthesis` reports no elapsed
+time or duration for its utterances — so no honest 80% measure
+exists on that path. TTS completions therefore remain what they
+were: the final utterance's end. Nothing was faked to make the two
+paths look alike.
 
 ## Accessibility & motion
 

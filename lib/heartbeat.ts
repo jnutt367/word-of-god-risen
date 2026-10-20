@@ -81,14 +81,104 @@ export function beatListenStart(bookSlug: string, chapterNum: number): void {
   beatLive("listen");
 }
 
-/** Playback reached the end of a chapter. */
+/**
+ * The listener heard a chapter through: at least LISTENED_THROUGH of
+ * it genuinely played (see notePlayedSpan), or playback reached the
+ * natural end. Once per session per chapter, like every other beat.
+ */
 export function beatListenComplete(bookSlug: string, chapterNum: number): void {
+  const key = `complete:${bookSlug}:${chapterNum}`;
+  if (seen(key)) return;
+  markSeen(key);
   try {
     track("chapter_listen_complete", { book: bookSlug, chapter: chapterNum });
   } catch {
     /* ignore */
   }
   beatLive("listen_complete");
+}
+
+/**
+ * "Listened through" (Jason's ruling, Oct 20, 2026): a chapter counts
+ * when the listener has genuinely PLAYED at least this share of it —
+ * measured in played time, never playhead position, so seeking ahead
+ * earns nothing. No looser than this: 80% of a chapter truly heard is
+ * a listener who stayed; the old rule (only the track's very last
+ * second counted) measured the file, not the listening.
+ */
+export const LISTENED_THROUGH = 0.8;
+
+type Span = [number, number];
+
+const playedKey = (bookSlug: string, chapterNum: number) =>
+  `played:${bookSlug}:${chapterNum}`;
+
+function readSpans(key: string): Span[] {
+  try {
+    const raw = sessionStorage.getItem(SESSION_PREFIX + key);
+    if (!raw) return [];
+    const arr: unknown = JSON.parse(raw);
+    if (!Array.isArray(arr)) return [];
+    return arr.filter(
+      (s): s is Span =>
+        Array.isArray(s) &&
+        s.length === 2 &&
+        typeof s[0] === "number" &&
+        typeof s[1] === "number" &&
+        isFinite(s[0]) &&
+        isFinite(s[1]) &&
+        s[1] > s[0]
+    );
+  } catch {
+    return [];
+  }
+}
+
+function writeSpans(key: string, spans: Span[]): void {
+  try {
+    sessionStorage.setItem(SESSION_PREFIX + key, JSON.stringify(spans));
+  } catch {
+    /* private mode etc. — counting just becomes approximate */
+  }
+}
+
+/** Merge [start, end] into the sorted span set; return total covered seconds. */
+function mergeSpan(spans: Span[], start: number, end: number): { spans: Span[]; total: number } {
+  const all = [...spans, [start, end] as Span].sort((a, b) => a[0] - b[0]);
+  const merged: Span[] = [];
+  for (const s of all) {
+    const last = merged[merged.length - 1];
+    if (last && s[0] <= last[1]) last[1] = Math.max(last[1], s[1]);
+    else merged.push([s[0], s[1]]);
+  }
+  return { spans: merged, total: merged.reduce((sum, s) => sum + (s[1] - s[0]), 0) };
+}
+
+/**
+ * Note a span of a chapter that was genuinely played — fed from the
+ * audio element's own `played` ranges, the browser's record of what
+ * actually sounded, so a passage scrubbed past never enters the sum.
+ * Spans accumulate per browser session (across player remounts); when
+ * the played total reaches LISTENED_THROUGH of the chapter's duration,
+ * the chapter counts as listened through.
+ */
+export function notePlayedSpan(
+  bookSlug: string,
+  chapterNum: number,
+  start: number,
+  end: number,
+  duration: number
+): void {
+  if (!isFinite(duration) || duration <= 0) return;
+  if (!isFinite(start) || !isFinite(end)) return;
+  if (seen(`complete:${bookSlug}:${chapterNum}`)) return;
+  const s = Math.max(0, Math.min(start, duration));
+  const e = Math.max(0, Math.min(end, duration));
+  if (e - s < 0.25) return; // slivers are event noise at range edges
+  const key = playedKey(bookSlug, chapterNum);
+  const { spans, total } = mergeSpan(readSpans(key), s, e);
+  writeSpans(key, spans);
+  if (total >= LISTENED_THROUGH * duration) beatListenComplete(bookSlug, chapterNum);
 }
 
 /** The reader's marked-read chapters now cover a whole book. Once per device per book. */

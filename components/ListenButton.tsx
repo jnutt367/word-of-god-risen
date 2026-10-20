@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import type { Verse } from "@/lib/verses";
 import { getBook } from "@/lib/bible-client";
-import { beatListenStart, beatListenComplete } from "@/lib/heartbeat";
+import { beatListenStart, beatListenComplete, notePlayedSpan } from "@/lib/heartbeat";
 
 interface Props {
   bookSlug: string;
@@ -307,7 +307,25 @@ export default function ListenButton({
       a = new Audio();
       a.preload = "metadata";
       a.onloadedmetadata = () => setDuration(a!.duration || 0);
-      a.ontimeupdate = () => setProgress(a!.currentTime || 0);
+      a.ontimeupdate = () => {
+        setProgress(a!.currentTime || 0);
+        // Bible Heartbeat "listened through": feed the tracker's own
+        // played ranges — the browser's record of what genuinely
+        // sounded, with gaps where the reader scrubbed — to the
+        // heartbeat. At 80% truly played the chapter counts, without
+        // demanding the track's very last second.
+        const d = a!.duration;
+        if (isFinite(d) && d > 0) {
+          try {
+            const { bookSlug: slug, chapterNum: num } = chapterRef.current;
+            for (let i = 0; i < a!.played.length; i++) {
+              notePlayedSpan(slug, num, a!.played.start(i), a!.played.end(i), d);
+            }
+          } catch {
+            /* counting never breaks playback */
+          }
+        }
+      };
       a.onended = () => {
         setStatus("idle");
         setProgress(0);
