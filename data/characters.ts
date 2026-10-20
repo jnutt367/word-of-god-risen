@@ -630,6 +630,41 @@ export const CHARACTERS: Character[] = [
     ]
   },
   {
+    "slug": "salome",
+    "name": "Daughter of Herodias",
+    "subtitle": "Unnamed in Scripture",
+    "image": "/images/characters/salome.jpg",
+    "caption": "Scripture never names her — she is only \"the daughter of Herodias\" (Mark 6:22). The historian Josephus calls her Salome.",
+    "group": "faces",
+    "unnamed": true,
+    "facts": [
+      {
+        "text": "At Herod's birthday banquet, **she came in and danced, and she pleased Herod and his guests**",
+        "ref": "Mark 6:22"
+      },
+      {
+        "text": "Herod swore to her: **\"Whatever you ask me, I will give you, up to half of my kingdom\"**",
+        "ref": "Mark 6:23"
+      },
+      {
+        "text": "She went out and said to her mother, **\"What shall I ask?\"** — Herodias answered, \"The head of John the Baptist\"",
+        "ref": "Mark 6:24"
+      },
+      {
+        "text": "She came in immediately with haste and said, **\"I want you to give me at once the head of John the Baptist on a platter\"**",
+        "ref": "Mark 6:25"
+      }
+    ],
+    "personality": [
+      "**Young** — a girl dancing at a banquet, asking her mother what to wish for (Mark 6:22, 24)",
+      "**Used** — her mother turned a dance into a murder (Mark 6:24-25)",
+      "**A tragedy, not a villainess** — Scripture shows a young woman caught in her mother's scheme, not its author"
+    ],
+    "chapters": [
+      6
+    ]
+  },
+  {
     "slug": "herod-antipas",
     "name": "Herod Antipas",
     "subtitle": "Tetrarch of Galilee · The Divided King",
@@ -770,38 +805,25 @@ export const CHARACTERS: Character[] = [
     ]
   },
   {
-    "slug": "salome",
-    "name": "Daughter of Herodias",
-    "subtitle": "Unnamed in Scripture",
-    "image": "/images/characters/salome.jpg",
-    "caption": "Scripture never names her — she is only \"the daughter of Herodias\" (Mark 6:22). The historian Josephus calls her Salome.",
+    "slug": "rufus",
+    "name": "Rufus (Son of Simon of Cyrene)",
+    "subtitle": "Son of Simon of Cyrene · Chosen in the Lord",
+    "image": "/images/characters/rufus.jpg",
+    "caption": "",
     "group": "faces",
-    "unnamed": true,
+    "unnamed": false,
     "facts": [
       {
-        "text": "At Herod's birthday banquet, **she came in and danced, and she pleased Herod and his guests**",
-        "ref": "Mark 6:22"
-      },
-      {
-        "text": "Herod swore to her: **\"Whatever you ask me, I will give you, up to half of my kingdom\"**",
-        "ref": "Mark 6:23"
-      },
-      {
-        "text": "She went out and said to her mother, **\"What shall I ask?\"** — Herodias answered, \"The head of John the Baptist\"",
-        "ref": "Mark 6:24"
-      },
-      {
-        "text": "She came in immediately with haste and said, **\"I want you to give me at once the head of John the Baptist on a platter\"**",
-        "ref": "Mark 6:25"
+        "text": "Mark names Rufus in Mark 15:21 — \"they compelled a passerby, Simon of Cyrene, who was coming in from the country, **the father of Alexander and Rufus**, to carry his cross.\" Mark names the sons because his readers knew them; they were known in the early church.",
+        "ref": ""
       }
     ],
     "personality": [
-      "**Young** — a girl dancing at a banquet, asking her mother what to wish for (Mark 6:22, 24)",
-      "**Used** — her mother turned a dance into a murder (Mark 6:24-25)",
-      "**A tragedy, not a villainess** — Scripture shows a young woman caught in her mother's scheme, not its author"
+      "**Known by the church** — Mark doesn't explain who Alexander and Rufus are because his audience already knew them (Mark 15:21)",
+      "**\"Chosen in the Lord\"** — if the Romans greeting is his, Paul's word for him is one of honor (Rom 16:13, per tradition)"
     ],
     "chapters": [
-      6
+      15
     ]
   },
   {

@@ -61,6 +61,7 @@ const SUBTITLES = {
   "rich-young-ruler": "The One Who Walked Away",
   "poor-widow": "Two Small Coins · The Greatest Gift",
   "simon-of-cyrene": "From Cyrene · He Carried the Cross",
+  rufus: "Son of Simon of Cyrene · Chosen in the Lord",
   "joseph-of-arimathea": "Council Member · The Bold Burial",
   "syrophoenician-woman": "A Gentile Mother's Faith",
   barabbas: "The Prisoner Set Free",
@@ -71,6 +72,18 @@ const SUBTITLES = {
   "deaf-mute-decapolis": "\u201cEphphatha\u201d — Be Opened",
   "withered-hand": "Healed on the Sabbath",
   "scribe-greatest-commandment": "\u201cNot Far from the Kingdom\u201d",
+};
+
+// Display overrides that must survive regeneration. The Daughter of Herodias
+// fix (commit 7f04abb) was originally a hand-edit to the generated data file;
+// it lives here now so re-running this script never reverts it.
+const OVERRIDES = {
+  salome: {
+    name: "Daughter of Herodias",
+    subtitle: "Unnamed in Scripture",
+    caption:
+      "Scripture never names her — she is only \"the daughter of Herodias\" (Mark 6:22). The historian Josephus calls her Salome.",
+  },
 };
 
 function section(md, heading) {
@@ -161,12 +174,13 @@ for (const file of files) {
 
   const group = TWELVE.has(slug) ? "twelve" : KEY_FIGURES.has(slug) ? "key" : "faces";
 
+  const override = OVERRIDES[slug] || {};
   chars.push({
     slug,
-    name,
-    subtitle: SUBTITLES[slug] || "",
+    name: override.name || name,
+    subtitle: override.subtitle || SUBTITLES[slug] || "",
     image: img,
-    caption,
+    caption: override.caption || caption,
     group,
     unnamed: UNNAMED.has(slug),
     facts: parsedFacts,
