@@ -96,6 +96,15 @@ const FARM_SECTIONS = [
 
 type FarmItem = (typeof FARM_SECTIONS)[number]["items"][number];
 
+// Mobile farm order (Jason, Oct 21): "More from the Farm" rides
+// top-right, beside Watch, so the Store and Give doors never sit at
+// the bottom of the panel where the floating Listen bar lives.
+const MOBILE_FARM_SECTIONS = [
+  FARM_SECTIONS[0],
+  FARM_SECTIONS[2],
+  FARM_SECTIONS[1],
+];
+
 /**
  * The Mark film door asks first (VideoChoice) instead of opening
  * YouTube on tap: watch here in the app, or go to YouTube by choice.
@@ -188,7 +197,7 @@ export default function SiteHeader() {
   }, [farmOpen]);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-gold-500/15 bg-vineyard-950/90 backdrop-blur">
+    <header className="sticky top-0 z-[60] border-b border-gold-500/15 bg-vineyard-950/90 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link
           href="/"
@@ -316,7 +325,7 @@ export default function SiteHeader() {
         <nav
           id="mobile-nav"
           aria-label="Mobile"
-          className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-gold-500/15 bg-vineyard-950/95 px-4 pb-4 pt-2 backdrop-blur lg:hidden"
+          className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-gold-500/15 bg-vineyard-950/95 px-4 pb-32 pt-2 backdrop-blur lg:hidden"
         >
           <div className="flex items-center gap-2.5 px-3 pb-2 pt-1">
             <Image
@@ -358,7 +367,7 @@ export default function SiteHeader() {
               Visit the Farm
             </p>
             <div className="grid grid-cols-2 gap-x-8 md:grid-cols-3">
-              {FARM_SECTIONS.map((section) => (
+              {MOBILE_FARM_SECTIONS.map((section) => (
                 <div
                   key={section.heading}
                   role="group"
