@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import BodyHeartbeat, { type LiveData } from "@/components/BodyHeartbeat";
+import { heartbeatToday } from "@/lib/heartbeat-date";
 import {
   COUNTRY_OPTIONS,
   SUBDIVISION_OPTIONS,
@@ -32,7 +33,7 @@ import {
  *  exactly the picked place — shaped precisely like a real
  *  GET /api/heartbeat answer carrying a single beat. */
 function fixtureFor(place: PlaceOption): LiveData {
-  const todayIso = new Date().toISOString().slice(0, 10);
+  const todayIso = heartbeatToday();
   const fixture: LiveData = {
     live: true,
     asOf: null,

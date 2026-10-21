@@ -162,7 +162,7 @@ live counters, owned by `lib/heartbeat-store.ts`:
   "since": "2026-10-15",
   "totals": { "chaptersRead": 0, "chaptersHeard": 0,
               "listensCompleted": 0, "booksFinished": 0 },
-  "days": [ { "date": "2026-10-15",            // UTC day bucket
+  "days": [ { "date": "2026-10-15",            // America/New_York day bucket
               "chaptersRead": 0, "chaptersHeard": 0,
               "countries": { "PH": { "read": 0, "heard": 0 } } } ],
   "updatedAt": "2026-10-15T20:38:48.961Z"      // last counted beat
@@ -772,3 +772,24 @@ state: "🎧 Done, just for my place — tap to undo"). Same control,
 same job — the reader's own place on their own phone, undoable,
 counting nothing. Only the counted button speaks into the Body's
 count.
+
+## "Today" runs on the house's clock (Oct 20, 2026)
+
+Jason spotted the live page saying "today, October 21, 2026" at
+8:25 p.m. Eastern on October 20. The day bucket was derived from
+UTC, so the heartbeat rolled over at 8 p.m. Eastern. The calendar
+anchor is now **America/New_York** everywhere the Body Heartbeat
+derives its current day: a single pure helper,
+`lib/heartbeat-date.ts` (`heartbeatToday`), feeds the server's
+beat bucketing and public "today" view in
+`lib/heartbeat-store.ts` and the client fixture in
+`components/HeartbeatTestPicker.tsx`. `updatedAt` remains an
+instant timestamp; only the calendar-day key changed. No data
+collection, copy, totals, or map behavior changed.
+
+Stored history was **not** rewritten. Buckets written before the
+fix were keyed by UTC day, so there is a one-time seam: the
+pre-fix `2026-10-21` bucket may already hold beats from after
+8 p.m. Eastern on October 20, and those counts will stand in that
+date's bucket when the Eastern calendar reaches October 21. From
+the deployment forward, new beats use the Eastern calendar day.

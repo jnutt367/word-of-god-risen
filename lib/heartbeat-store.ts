@@ -22,6 +22,7 @@
  * worldwide admin-1 pass (v3.2) slots in without rework.
  */
 import { get, put, BlobPreconditionFailedError } from "@vercel/blob";
+import { heartbeatToday } from "@/lib/heartbeat-date";
 import { splitSubdivision, subdivisionName } from "@/lib/subdivisions";
 import snapshot from "@/data/heartbeat.json";
 
@@ -53,7 +54,7 @@ export interface HbCountryCounts {
 }
 
 export interface HbDay {
-  date: string; // YYYY-MM-DD (UTC)
+  date: string; // YYYY-MM-DD (America/New_York calendar day)
   chaptersRead: number;
   chaptersHeard: number;
   /** Chapters marked "I listened" by their own listeners that day.
@@ -90,10 +91,6 @@ const snap = snapshot as SnapshotShape;
 
 export function storeConfigured(): boolean {
   return Boolean(process.env.BLOB_READ_WRITE_TOKEN);
-}
-
-export function utcToday(): string {
-  return new Date().toISOString().slice(0, 10);
 }
 
 function emptyDay(date: string): HbDay {
@@ -193,7 +190,7 @@ function applyBeat(
   country: string | null,
   subdivision: string | null
 ): void {
-  const today = utcToday();
+  const today = heartbeatToday();
   let day = c.days.find((d) => d.date === today);
   if (!day) {
     day = emptyDay(today);
@@ -311,7 +308,8 @@ export async function incrementCounters(
  *  3166-2 codes, with country/region parts and a display name) —
  *  nothing else leaves the store. */
 export function publicView(c: HbCounters) {
-  const today = c.days.find((d) => d.date === utcToday()) ?? emptyDay(utcToday());
+  const todayKey = heartbeatToday();
+  const today = c.days.find((d) => d.date === todayKey) ?? emptyDay(todayKey);
   const rows = (rec: Record<string, HbCountryCounts>) =>
     Object.entries(rec)
       .map(([code, v]) => ({ code, read: v.read, heard: v.heard, total: v.read + v.heard }))
