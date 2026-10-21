@@ -52,15 +52,16 @@ export default function AboutPage() {
       <div className="mt-10 rounded-2xl border border-gold-500/15 bg-vineyard-900 p-6">
         <h2 className="font-display text-xl text-cream-50">Partner with us</h2>
         <p className="mt-2 font-scripture text-lg leading-relaxed text-cream-100/90">
-          If the Lord leads you to help keep this ministry planting seeds,
-          you can partner with us through Cash App:{" "}
+          If this ministry has blessed you and you&apos;d like to help it
+          keep going, you can{" "}
           <a
             href="https://cash.app/$TRUVINE365"
             className="text-gold-300 underline"
           >
-            $TRUVINE365
+            give here
           </a>
-          . No pressure, ever; we&apos;re grateful you&apos;re here.
+          . Everything here is free, and it always will be — giving is
+          never expected, only received with thanks.
         </p>
       </div>
 
