@@ -793,3 +793,10 @@ pre-fix `2026-10-21` bucket may already hold beats from after
 8 p.m. Eastern on October 20, and those counts will stand in that
 date's bucket when the Eastern calendar reaches October 21. From
 the deployment forward, new beats use the Eastern calendar day.
+
+**Deployment verification.** Commit `b37d9eb` was pushed to
+`main`; at 8:35 p.m. EDT on October 20 (already October 21 in
+UTC), production `GET /api/heartbeat` answered `live: true` with
+`today.date: "2026-10-20"`, 10 chapters read, 8 heard, and 6
+marked for that Eastern day. The helper's boundary checks also
+pass at Eastern midnight in both daylight and standard time.
