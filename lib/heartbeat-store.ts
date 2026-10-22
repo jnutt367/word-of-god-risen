@@ -74,7 +74,12 @@ export interface HbCounters {
   totals: HbTotals;
   /** Lifetime subdivision counts (v3.1), keyed by ISO 3166-2 code. */
   subdivisionTotals: Record<string, HbCountryCounts>;
-  /** Recent day buckets, ascending by date; pruned to the last 14. */
+  /** Day buckets, ascending by date. Retention was 14 days until
+   *  Oct 21, 2026; raised to 400 so the public growth record ("The
+   *  Vine Is Growing" on the homepage map) can show last week, last
+   *  month, and beyond — the day-by-day story is the family's, and
+   *  it is kept. Each bucket is small (counts + place rows), so a
+   *  year of days stays a modest document. */
   days: HbDay[];
   updatedAt: string; // ISO timestamp of the last counted beat
 }
@@ -196,7 +201,7 @@ function applyBeat(
     day = emptyDay(today);
     c.days.push(day);
     c.days.sort((a, b) => (a.date < b.date ? -1 : 1));
-    c.days = c.days.slice(-14);
+    c.days = c.days.slice(-400);
   }
   const bump = (cc: HbCountryCounts | undefined, field: "read" | "heard") => {
     if (cc) cc[field] += 1;
@@ -315,15 +320,16 @@ export function publicView(c: HbCounters) {
       .map(([code, v]) => ({ code, read: v.read, heard: v.heard, total: v.read + v.heard }))
       .filter((r) => r.total > 0)
       .sort((a, b) => b.total - a.total);
-  const subdivisionRows = rows(today.subdivisions ?? {}).map((r) => {
-    const parts = splitSubdivision(r.code);
-    return {
-      ...r,
-      country: parts?.country ?? "",
-      region: parts?.region ?? r.code,
-      name: subdivisionName(r.code) ?? parts?.region ?? r.code,
-    };
-  });
+  const namedSubdivisions = (rec: Record<string, HbCountryCounts>) =>
+    rows(rec).map((r) => {
+      const parts = splitSubdivision(r.code);
+      return {
+        ...r,
+        country: parts?.country ?? "",
+        region: parts?.region ?? r.code,
+        name: subdivisionName(r.code) ?? parts?.region ?? r.code,
+      };
+    });
   return {
     live: true as const,
     asOf: c.updatedAt,
@@ -336,6 +342,21 @@ export function publicView(c: HbCounters) {
       listensMarked: today.listensMarked ?? 0,
     },
     countries: rows(today.countries),
-    subdivisions: subdivisionRows,
+    subdivisions: namedSubdivisions(today.subdivisions ?? {}),
+    /** The day-by-day record (Oct 21, 2026) — the same aggregates
+     *  the store keeps per day: counts plus the place rows that lit
+     *  that day, countries and subdivisions in the same shapes as
+     *  today's rows above. It powers "The Vine Is Growing" on the
+     *  homepage map: last week, last month, and the family's growth
+     *  over time, public for any neighbor who wants to look. Still
+     *  totals only — a day's story, never a person's. */
+    history: c.days.map((d) => ({
+      date: d.date,
+      chaptersRead: d.chaptersRead,
+      chaptersHeard: d.chaptersHeard,
+      listensMarked: d.listensMarked ?? 0,
+      countries: rows(d.countries ?? {}),
+      subdivisions: namedSubdivisions(d.subdivisions ?? {}),
+    })),
   };
 }

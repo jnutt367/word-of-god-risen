@@ -149,6 +149,18 @@ interface LiveSubdivisionRow extends LiveCountRow {
   name: string;
 }
 
+/** One day of the live day-by-day record (Oct 21, 2026): the day's
+ *  counts plus the place rows that lit that day, in the same shapes
+ *  as today's rows. Feeds "The Vine Is Growing" below the map. */
+interface LiveDay {
+  date: string;
+  chaptersRead: number;
+  chaptersHeard: number;
+  listensMarked?: number;
+  countries: LiveCountRow[];
+  subdivisions?: LiveSubdivisionRow[];
+}
+
 export interface LiveData {
   live: boolean;
   asOf: string | null;
@@ -158,6 +170,8 @@ export interface LiveData {
   countries: LiveCountRow[];
   /** Today's subdivision rows (v3.1), keyed by ISO 3166-2 code. */
   subdivisions?: LiveSubdivisionRow[];
+  /** The day-by-day record, ascending by date (Oct 21, 2026). */
+  history?: LiveDay[];
 }
 
 export interface BodyHeartbeatProps {
@@ -464,6 +478,80 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
       : todayCount > 0
         ? `A soft world map drawn as a disc, with ${fmt(todayCount)} ${todayCount === 1 ? "chapter" : "chapters"} read or heard today, ${longDate(today.date)}. No country shapes are lit yet.`
         : "A soft world map drawn as a disc, at rest in the early morning — the counting of chapters has only just begun, and no country shapes are lit yet.";
+
+  // "The Vine Is Growing" (Oct 21, 2026) — the day-by-day record,
+  // turned into a growth story on the map's own card: a continuous
+  // calendar series (days with no counted beat stand honestly at
+  // zero), rolling windows (last 7 days, the 7 before, last 30),
+  // and every place that has ever lit. Live history only — the
+  // snapshot carries no day series, and sources never mix.
+  interface GrowthDay {
+    date: string;
+    chaptersRead: number;
+    chaptersHeard: number;
+    total: number;
+    places: string[];
+  }
+  const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const dayKeyToUTC = (iso: string) => {
+    const [y, m, d] = iso.split("-").map((n) => parseInt(n, 10));
+    return Date.UTC(y || 1970, (m || 1) - 1, d || 1);
+  };
+  const utcToDayKey = (t: number) => {
+    const dt = new Date(t);
+    return `${dt.getUTCFullYear()}-${String(dt.getUTCMonth() + 1).padStart(2, "0")}-${String(dt.getUTCDate()).padStart(2, "0")}`;
+  };
+  const weekdayOf = (iso: string) =>
+    WEEKDAYS[new Date(dayKeyToUTC(iso)).getUTCDay()] ?? "";
+  const dayOfMonth = (iso: string) => parseInt(iso.split("-")[2] ?? "", 10) || "";
+
+  const growthDays: GrowthDay[] = (() => {
+    if (!liveActive || !live?.history || live.history.length === 0) return [];
+    const byDate = new Map<string, LiveDay>();
+    for (const d of live.history) byDate.set(d.date, d);
+    const start = dayKeyToUTC(live.history[0].date);
+    const end = dayKeyToUTC(live.today.date);
+    if (!Number.isFinite(start) || !Number.isFinite(end) || end < start) return [];
+    const out: GrowthDay[] = [];
+    for (let t = start; t <= end; t += 86_400_000) {
+      const key = utcToDayKey(t);
+      const d = byDate.get(key);
+      const places = d
+        ? [
+            ...d.countries.map((c) => regionName((c.code || "").toUpperCase())),
+            ...(d.subdivisions ?? []).map((s) => s.name || s.code),
+          ]
+        : [];
+      out.push({
+        date: key,
+        chaptersRead: d?.chaptersRead ?? 0,
+        chaptersHeard: d?.chaptersHeard ?? 0,
+        total: (d?.chaptersRead ?? 0) + (d?.chaptersHeard ?? 0),
+        places,
+      });
+    }
+    return out;
+  })();
+  const sumWindow = (days: GrowthDay[], from: number, to?: number) =>
+    days.slice(from, to).reduce((acc, d) => acc + d.total, 0);
+  const growthLast7 = growthDays.length ? sumWindow(growthDays, -7) : 0;
+  const growthPrev7 =
+    growthDays.length > 7 ? sumWindow(growthDays, -14, -7) : 0;
+  const growthLast30 = growthDays.length ? sumWindow(growthDays, -30) : 0;
+  const growthPlaces = (() => {
+    if (!liveActive || !live?.history) return 0;
+    const seen = new Set<string>();
+    for (const d of live.history) {
+      for (const c of d.countries) if (c.total > 0) seen.add(c.code);
+      for (const s of d.subdivisions ?? []) if (s.total > 0) seen.add(s.code);
+    }
+    return seen.size;
+  })();
+  const growthChart = growthDays.slice(-14);
+  const growthMax = Math.max(1, ...growthChart.map((d) => d.total));
+  const growthLabel = growthDays.length
+    ? `Day-by-day chapters read and heard, ${longDate(growthDays[0].date)} through ${longDate(growthDays[growthDays.length - 1].date)}. Last 7 days: ${fmt(growthLast7)} chapters. The 7 days before: ${fmt(growthPrev7)}. Last 30 days: ${fmt(growthLast30)}. ${fmt(growthPlaces)} places have lit up on the map in this record.`
+    : "";
 
   const tiles: { label: string; value: number | null; sub: string }[] = [
     {
@@ -926,6 +1014,143 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 </li>
               ))}
             </ul>
+          </div>
+        )}
+
+        {/* The Vine Is Growing — the day-by-day record, public on
+            the map's own card (Oct 21, 2026, Jason's word: "so that
+            people could look if they want it… so they can feel like
+            they're part of a growing family"). Rolling windows and
+            a two-week bar story, with the full numbers in a table —
+            the chart never carries the meaning alone. Totals only,
+            as everywhere on this card. */}
+        {growthDays.length > 0 && (
+          <div className="mx-auto mt-12 max-w-3xl">
+            <h3 className="text-center font-display text-xl text-cream-50">
+              The Vine Is Growing
+            </h3>
+            <p className="mx-auto mt-2 max-w-xl text-center text-sm text-cream-100/85">
+              Day by day, the family gathers. Every number below is a
+              day of neighbors opening the Word somewhere — counted in
+              totals only, the way a shepherd counts the flock at the
+              gate.
+            </p>
+            <ul className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
+              {[
+                {
+                  label: "Last 7 days",
+                  value: growthLast7,
+                  sub: "chapters read & heard",
+                },
+                {
+                  label: "The 7 days before",
+                  value: growthPrev7,
+                  sub: "the week that was",
+                },
+                {
+                  label: "Last 30 days",
+                  value: growthLast30,
+                  sub: "a month of gathering",
+                },
+                {
+                  label: "Places lit",
+                  value: growthPlaces,
+                  sub: "countries & states on the map",
+                },
+              ].map((w) => (
+                <li
+                  key={w.label}
+                  className="rounded-xl border border-cream-100/10 bg-vineyard-950/60 px-4 py-4 text-center"
+                >
+                  <p className="font-display text-2xl text-gold-300">
+                    {fmt(w.value)}
+                  </p>
+                  <p className="mt-1 text-sm font-semibold text-cream-50">
+                    {w.label}
+                  </p>
+                  <p className="mt-0.5 text-xs text-sage-300">{w.sub}</p>
+                </li>
+              ))}
+            </ul>
+            <figure className="mt-8">
+              <div
+                role="img"
+                aria-label={growthLabel}
+                className="flex items-end gap-1.5 sm:gap-2"
+              >
+                {growthChart.map((d) => (
+                  <div
+                    key={d.date}
+                    aria-hidden="true"
+                    className="flex flex-1 flex-col items-center gap-1.5"
+                    title={`${longDate(d.date)} — ${fmt(d.total)} ${d.total === 1 ? "chapter" : "chapters"}`}
+                  >
+                    <span className="min-h-4 text-[11px] font-semibold text-gold-300">
+                      {d.total > 0 ? fmt(d.total) : ""}
+                    </span>
+                    <div className="flex h-28 w-full items-end border-b border-cream-100/15">
+                      <div
+                        className="w-full rounded-t bg-gold-400/80"
+                        style={{
+                          height: `${d.total > 0 ? Math.max(4, (d.total / growthMax) * 100) : 0}%`,
+                        }}
+                      />
+                    </div>
+                    <span className="text-center text-[10px] leading-tight text-sage-300">
+                      {weekdayOf(d.date)}
+                      <br />
+                      {dayOfMonth(d.date)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <figcaption className="mt-3 text-center text-sm text-sage-300">
+                Each bar is a day — chapters read and heard over the
+                last two weeks.
+              </figcaption>
+            </figure>
+            <details className="mt-6">
+              <summary className="cursor-pointer text-center text-sm font-semibold text-gold-300">
+                See the day-by-day numbers
+              </summary>
+              <div className="mt-4 overflow-x-auto">
+                <table className="w-full text-left text-sm">
+                  <caption className="sr-only">
+                    Chapters read and heard, day by day, with the
+                    places that lit each day
+                  </caption>
+                  <thead>
+                    <tr className="border-b border-cream-100/15 text-sage-300">
+                      <th scope="col" className="py-2 pr-3 font-semibold">Day</th>
+                      <th scope="col" className="py-2 pr-3 font-semibold">Read</th>
+                      <th scope="col" className="py-2 pr-3 font-semibold">Heard</th>
+                      <th scope="col" className="py-2 font-semibold">Places that lit</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {growthDays.map((d) => (
+                      <tr
+                        key={d.date}
+                        className="border-b border-cream-100/5 text-cream-100"
+                      >
+                        <th scope="row" className="py-2 pr-3 font-normal">
+                          {weekdayOf(d.date)}, {longDate(d.date)}
+                        </th>
+                        <td className="py-2 pr-3">{fmt(d.chaptersRead)}</td>
+                        <td className="py-2 pr-3">{fmt(d.chaptersHeard)}</td>
+                        <td className="py-2">
+                          {d.places.length > 0
+                            ? d.places.join(", ")
+                            : d.total > 0
+                              ? "place not recorded"
+                              : "—"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </details>
           </div>
         )}
 

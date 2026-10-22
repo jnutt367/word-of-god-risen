@@ -800,3 +800,31 @@ UTC), production `GET /api/heartbeat` answered `live: true` with
 `today.date: "2026-10-20"`, 10 chapters read, 8 heard, and 6
 marked for that Eastern day. The helper's boundary checks also
 pass at Eastern midnight in both daylight and standard time.
+
+## The Vine Is Growing — the day-by-day record goes public (Oct 21, 2026)
+
+Jason's word, late on the ministry's biggest day so far: people should
+be able to *see* yesterday, last week, last month — "so they can feel
+like they're part of a growing family." The record already existed
+(the store has kept per-day buckets since v3); this pass opens the
+window onto it and makes sure the record endures.
+
+- **Retention 14 → 400 days** (`lib/heartbeat-store.ts`): the day
+  buckets no longer roll off after two weeks. Each bucket is small
+  (counts + place rows), so a year-plus of days stays a modest
+  document. The counting had run eight days when this landed, so
+  nothing had yet been pruned — the public record begins whole,
+  from October 15, 2026.
+- **The public view gains `history`**: every stored day, ascending —
+  its chaptersRead / chaptersHeard / listensMarked plus the country
+  and subdivision rows that lit that day, in the same shapes as
+  today's rows. Same privacy class as everything the view already
+  exposed: a day's aggregates, never a person's anything.
+- **The display** (`components/BodyHeartbeat.tsx`): a new section on
+  the map's own card, "The Vine Is Growing" — rolling windows (last
+  7 days, the 7 before, last 30 days, places lit), a two-week bar
+  chart, and the full day-by-day numbers in a real table under a
+  disclosure, so the chart never carries the meaning alone. The
+  series is calendar-continuous: a day with no counted beat stands
+  at zero rather than vanishing. Live history only — in snapshot
+  fallback the section simply does not render, and sources never mix.
