@@ -43,7 +43,7 @@ const AMBIENT_VOL = 0.12;
 let manifestPromise: Promise<Record<string, string>> | null = null;
 function loadManifest(): Promise<Record<string, string>> {
   if (!manifestPromise) {
-    manifestPromise = fetch(MANIFEST_URL)
+    manifestPromise = fetch(MANIFEST_URL, { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : {}))
       .catch(() => ({}));
   }

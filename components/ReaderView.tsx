@@ -10,6 +10,7 @@ import WatchCard from "@/components/WatchCard";
 import FilmCard from "@/components/FilmCard";
 import ListenButton from "@/components/ListenButton";
 import ListenedMarkButton from "@/components/ListenedMarkButton";
+import AudioReportButton from "@/components/AudioReportButton";
 import { useProgress } from "@/components/ProgressProvider";
 import { beatRead, beatBookComplete } from "@/lib/heartbeat";
 import { getBook } from "@/lib/bible-client";
@@ -383,6 +384,10 @@ export default function ReaderView({
               player cannot measure (device TTS above all). Its own
               beat, its own total — see ListenedMarkButton. */}
           <ListenedMarkButton bookSlug={slug} chapterIdx={chapterIdx} />
+          {/* The listener's tripwire: one tap reports this chapter's
+              audio for a fresh listen on our side — see
+              AudioReportButton and AUDIO-REPORTS.md. */}
+          <AudioReportButton bookSlug={slug} chapterIdx={chapterIdx} />
           <p className="text-center text-sm text-[var(--reader-muted)]">
             Your place is kept on this phone.
           </p>
