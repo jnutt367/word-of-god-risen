@@ -92,6 +92,12 @@ export default function ShareVerseButton({ verseText, reference }: Props) {
         if (lines.length <= 10) break;
         fontSize -= 4;
       }
+      // The card adds its own quote marks only when the verse does not
+      // bring its own — a verse that opens mid-speech (e.g. Matt 5:17)
+      // already begins with a quote, and doubling it looks like a typo.
+      const trimmedText = verseText.trim();
+      const verseOpensQuoted = /^["\u201C\u2018]/.test(trimmedText);
+      const verseClosesQuoted = /["\u201D\u2019]$/.test(trimmedText);
       const lineHeight = fontSize * 1.45;
       const blockH = lines.length * lineHeight;
       let y = size / 2 - blockH / 2 + 40;
@@ -102,7 +108,9 @@ export default function ShareVerseButton({ verseText, reference }: Props) {
       for (let li = 0; li < lines.length; li++) {
         const l = lines[li];
         const decorated =
-          (li === 0 ? "\u201C" : "") + l + (li === lines.length - 1 ? "\u201D" : "");
+          (li === 0 && !verseOpensQuoted ? "\u201C" : "") +
+          l +
+          (li === lines.length - 1 && !verseClosesQuoted ? "\u201D" : "");
         ctx.fillText(decorated, size / 2, y);
         y += lineHeight;
       }
