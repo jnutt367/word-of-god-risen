@@ -7,6 +7,7 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import AskTeddy from "@/components/AskTeddy";
 import GrandmaReset from "@/components/GrandmaReset";
+import RegisterSW from "@/components/RegisterSW";
 import { ProgressProvider } from "@/components/ProgressProvider";
 import { PlanProvider } from "@/components/PlanProvider";
 
@@ -129,6 +130,7 @@ export default function RootLayout({
         </ProgressProvider>
         <Analytics />
         <SpeedInsights />
+        <RegisterSW />
       </body>
     </html>
   );
