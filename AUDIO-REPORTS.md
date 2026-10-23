@@ -49,3 +49,17 @@ finds it.
 - **The ship gate**: no new or regenerated audio joins the manifest
   without passing the transcript check first. The machine listens
   before the listeners do.
+
+## The honor rule (Jason, Oct 22, 2026 — "always honor the user")
+
+A listener's flag is honored FIRST, before any verification: the
+flagged chapter's recording comes down immediately (its manifest
+entry is pulled; the chapter falls back to the device's built-in
+voice, which prefers a man's voice), and it stays down while the
+chapter is checked. Teddy's recording goes back up only when the
+chapter is known fixed — verified clean by the transcript check, or
+rebuilt through the gated repair and then verified. The button's own
+words to the listener promise exactly this. A scheduled watch
+(`audio-flag-response`, every 3 hours) reads the report counts
+against `~/workspace/audio-gen/audit/flags/flag-state.json` and
+carries out the takedown and the verification.

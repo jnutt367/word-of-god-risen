@@ -21,7 +21,10 @@ const serverSnapshot = () => false;
  * book and chapter only, nothing about the reader — and the report
  * lands in the counts the evening reading report reads, so a
  * damaged chapter finds us before the next listener finds it.
- * Once per chapter per session.
+ * Once per chapter per session. The promise under the button is
+ * Jason's standing rule (Oct 22, 2026 — "always honor the user"):
+ * a flag takes the chapter down to the device voice while it is
+ * checked, and Teddy's recording returns only when it is fixed.
  */
 export default function AudioReportButton({ bookSlug, chapterIdx }: Props) {
   const chapterKey = `${bookSlug}:${chapterIdx}`;
@@ -56,7 +59,7 @@ export default function AudioReportButton({ bookSlug, chapterIdx }: Props) {
       </button>
       <p className="text-center text-sm text-[var(--reader-muted)]">
         {reported
-          ? "Thank you — we'll give this chapter a fresh listen ourselves."
+          ? "We heard you — thank you. This chapter's recording comes down while we check it, and Teddy's fixed recording goes back up as soon as it's right."
           : "Gibberish, looping, or words that aren't in the chapter? Tap, and we'll check this chapter's audio."}
       </p>
     </div>
