@@ -4,7 +4,7 @@
    only the app's own shell and static files. API calls and audio are
    NEVER cached: the heartbeat stays live and chapter audio streams. */
 
-const CACHE = "wogr-shell-v2";
+const CACHE = "wogr-shell-v3";
 const SHELL = [
   "/",
   "/offline",
