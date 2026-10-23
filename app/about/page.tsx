@@ -108,6 +108,16 @@ export default function AboutPage() {
               </a>{" "}
               — centered on the King, not the crowds.
             </p>
+            <p className="mt-1 text-sm text-sage-400">
+              Grandpa Teddy&rsquo;s films are watched in 26 countries —{" "}
+              <a
+                href="https://jnutt367.github.io/truvine/nations/"
+                className="text-gold-300 underline"
+              >
+                see the map
+              </a>
+              .
+            </p>
             <div className="mt-3 flex gap-4 text-sm">
               <a
                 href="mailto:jnutt367@gmail.com"
