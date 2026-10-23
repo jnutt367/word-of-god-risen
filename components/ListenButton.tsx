@@ -517,6 +517,11 @@ export default function ListenButton({
       const u = new SpeechSynthesisUtterance(text);
       if (voice) u.voice = voice;
       u.rate = rate;
+      // Jason's standing preference (Oct 22, 2026): the device-voice
+      // fallback should sound like a man. Many phones (esp. Android)
+      // offer only unnamed voices the name-hints above can't sort, so
+      // the narration is also deepened toward a man's register.
+      u.pitch = 0.8;
       if (i === parts.length - 1) {
         u.onend = () => {
           if (session.current === mySession) {
