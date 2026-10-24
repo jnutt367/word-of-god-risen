@@ -12,10 +12,12 @@
  * never a claim that every chapter has already passed. No numbers.
  *
  * Like OpenDoor, this component is deliberately inert: no client
- * JavaScript, no fetch, nothing gathered. It sits on the homepage
- * beside the Body Heartbeat card, and mirrored on the About page
- * (bare = no outer page-frame, for embedding in About's narrower
- * container).
+ * JavaScript, no fetch, nothing gathered. It leads the homepage —
+ * the first content after the hero, moved up Oct 23, 2026 so a
+ * visitor meets it before the books and the map — and is mirrored
+ * on the About page (bare = no outer page-frame, for embedding in
+ * About's narrower container), where chapter pages link to it at
+ * /about#word-integrity.
  */
 export default function WordIntegrityNote({
   bare = false,

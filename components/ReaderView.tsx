@@ -388,6 +388,21 @@ export default function ReaderView({
               audio for a fresh listen on our side — see
               AudioReportButton and AUDIO-REPORTS.md. */}
           <AudioReportButton bookSlug={slug} chapterIdx={chapterIdx} />
+          {/* One-line integrity note beside the tripwire (Jason,
+              Oct 23, 2026): the promise, right where a listener
+              would look for it. Full note lives on About. */}
+          <p className="max-w-md text-center text-xs leading-relaxed text-[var(--reader-muted)]">
+            Every reading is{" "}
+            <Link
+              href="/about#word-integrity"
+              className="underline decoration-dotted underline-offset-2 transition-colors hover:text-[var(--reader-verse-num)]"
+            >
+              checked word for word
+            </Link>{" "}
+            against the written Word. If something sounds wrong, tap
+            &lsquo;Something sounds wrong&rsquo; — we&rsquo;ll act right
+            away.
+          </p>
           <p className="text-center text-sm text-[var(--reader-muted)]">
             Your place is kept on this phone.
           </p>

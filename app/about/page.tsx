@@ -50,9 +50,10 @@ export default function AboutPage() {
         </p>
       </div>
 
-      {/* The same Word Integrity promise that stands beside the
-          homepage heartbeat (Jason, Oct 23, 2026). */}
-      <div className="mt-10">
+      {/* The same Word Integrity promise that leads the homepage
+          (Jason, Oct 23, 2026). The id is the anchor the chapter
+          pages link to: /about#word-integrity. */}
+      <div id="word-integrity" className="mt-10 scroll-mt-24">
         <WordIntegrityNote bare />
       </div>
 

@@ -88,6 +88,15 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Word Integrity — first content after the hero, on purpose
+          (Jason, Oct 23, 2026): a visitor should meet the promise
+          before the books and the map. Every Teddy reading is being
+          checked word for word, and a chapter that doesn't match
+          comes down right away. */}
+      <div className="pt-6">
+        <WordIntegrityNote />
+      </div>
+
       {/* Meet Grandpa Teddy */}
       <section className="mx-auto max-w-6xl px-4 pt-8 sm:px-6">
         <div className="overflow-hidden rounded-2xl border border-gold-500/15 bg-vineyard-900">
@@ -127,12 +136,6 @@ export default function Home() {
 
       {/* The Body, Reading — the Bible Heartbeat */}
       <BodyHeartbeat />
-
-      {/* Word Integrity — the standing promise beside the heartbeat:
-          every Teddy reading is being checked word for word, and a
-          chapter that doesn't match comes down right away (Jason,
-          Oct 23, 2026 — readers everywhere should know). */}
-      <WordIntegrityNote />
 
       {/* The Open Door — a quiet link out to the TruVINE Family Wall,
           resting beside the heartbeat. A plain outbound link only:
