@@ -9,6 +9,7 @@ import PlanContinue from "@/components/PlanContinue";
 import ListenDropdown from "@/components/ListenDropdown";
 import LatestShorts from "@/components/LatestShorts";
 import BodyHeartbeat from "@/components/BodyHeartbeat";
+import WordIntegrityNote from "@/components/WordIntegrityNote";
 import OpenDoor from "@/components/OpenDoor";
 
 export const metadata: Metadata = {
@@ -126,6 +127,12 @@ export default function Home() {
 
       {/* The Body, Reading — the Bible Heartbeat */}
       <BodyHeartbeat />
+
+      {/* Word Integrity — the standing promise beside the heartbeat:
+          every Teddy reading is being checked word for word, and a
+          chapter that doesn't match comes down right away (Jason,
+          Oct 23, 2026 — readers everywhere should know). */}
+      <WordIntegrityNote />
 
       {/* The Open Door — a quiet link out to the TruVINE Family Wall,
           resting beside the heartbeat. A plain outbound link only:

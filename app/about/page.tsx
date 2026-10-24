@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import WordIntegrityNote from "@/components/WordIntegrityNote";
 
 export const metadata: Metadata = {
   title: "About",
@@ -47,6 +48,12 @@ export default function AboutPage() {
           borrowed from somewhere else. If one heart finds Jesus through
           this work, that&apos;s enough.
         </p>
+      </div>
+
+      {/* The same Word Integrity promise that stands beside the
+          homepage heartbeat (Jason, Oct 23, 2026). */}
+      <div className="mt-10">
+        <WordIntegrityNote bare />
       </div>
 
       <div className="mt-10 rounded-2xl border border-gold-500/15 bg-vineyard-900 p-6">
