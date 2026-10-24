@@ -27,9 +27,9 @@ import {
  * Oct 15): each person's read traces to their location — his reads
  * light Florida, his cousin's light West Virginia. Today's chapter
  * total rides as TEXT in the caption and counters. Every lit
- * country is also named in plain text (today's live chips and/or the
- * "Neighbors near and far" garland), so the picture never carries the
- * meaning alone.
+ * country is also named in plain text (the day's chips in the list
+ * below and/or the "Neighbors near and far" garland), so the picture
+ * never carries the meaning alone.
  *
  * The numbers come from the live counters (GET /api/heartbeat, fed by
  * the private Blob store) refreshed about every minute, and fall back
@@ -97,6 +97,11 @@ import {
  * and is unchanged; a day with no recorded reading stands at rest
  * at zero, never wearing another day's lights. Sources still never
  * mix: browsing reads the live history only, never the snapshot.
+ * The day list below the map follows the shown day while browsing
+ * (Jason, later that morning): under its own dated heading —
+ * "Friday, October 23, 2026 on the Vine" — it names that day's
+ * places with that day's counts; the lifetime tiles above it never
+ * follow, and stepping home restores "Today on the vine" exactly.
  */
 
 interface HbTotals {
@@ -434,15 +439,10 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   // recorded across it, but it is NOT lit — its divisions are.
   const emberPhrase = (c: HbCountryRow) =>
     `${c.name} — reading recorded across the country ${shownDayWord}; divisions lit where recorded`;
-  // Subdivision rows grouped under their country for the list below
-  // ("United States — by state"); only the US can appear in v3.1,
-  // but the grouping itself is generic.
-  const subdivisionGroups: [string, LiveSubdivisionDisplay[]][] = [];
-  for (const s of liveSubdivisionRows) {
-    const g = subdivisionGroups.find(([c]) => c === s.country);
-    if (g) g[1].push(s);
-    else subdivisionGroups.push([s.country, [s]]);
-  }
+  // (Subdivision rows are grouped under their country further
+  // down, from the SHOWN set — see shownSubdivisionGroups beside
+  // the day browsing — so the list below the map can follow the
+  // day the map is showing.)
   const subdivisionGroupLabel = (country: string) =>
     country === "US"
       ? "United States — by state"
@@ -453,6 +453,10 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   // (Defined here, ahead of both day browsing and "The Vine Is
   // Growing" below, which share them.)
   const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const WEEKDAYS_FULL = [
+    "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday",
+    "Friday", "Saturday",
+  ];
   const dayKeyToUTC = (iso: string) => {
     const [y, m, d] = iso.split("-").map((n) => parseInt(n, 10));
     return Date.UTC(y || 1970, (m || 1) - 1, d || 1);
@@ -463,6 +467,8 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   };
   const weekdayOf = (iso: string) =>
     WEEKDAYS[new Date(dayKeyToUTC(iso)).getUTCDay()] ?? "";
+  const weekdayFullOf = (iso: string) =>
+    WEEKDAYS_FULL[new Date(dayKeyToUTC(iso)).getUTCDay()] ?? "";
   const dayOfMonth = (iso: string) => parseInt(iso.split("-")[2] ?? "", 10) || "";
 
   // ── Day browsing (Oct 24, 2026) ────────────────────────────────
@@ -594,6 +600,25 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   const subsOf = (code: string) =>
     subdivisionsOfCountry(shownSubdivisions, code);
   const anyEmber = mapRows.some((c) => modeOf(c.code) === "ember");
+
+  // The "on the Vine" day list below the map follows the SHOWN day
+  // (Jason, Oct 24, 2026): at the live default these are today's
+  // rows and the block renders exactly as it always has; while
+  // browsing, the same list carries the stepped-to day's own rows
+  // from the history, under that day's date. The lifetime tiles
+  // above the list never follow — they are lifetime, and stay so.
+  const vineRows: HbCountryRow[] = browsedDay
+    ? browsedDay.countries
+    : liveRows;
+  // Subdivision rows of the shown set, grouped under their country
+  // for the list ("United States — by state"); only the US can
+  // appear in v3.1, but the grouping itself is generic.
+  const shownSubdivisionGroups: [string, LiveSubdivisionDisplay[]][] = [];
+  for (const s of shownSubdivisions) {
+    const g = shownSubdivisionGroups.find(([c]) => c === s.country);
+    if (g) g[1].push(s);
+    else shownSubdivisionGroups.push([s.country, [s]]);
+  }
 
   // The aria description of one mapped country. An ember country is
   // never described as lit: reading was recorded across it, it rests
@@ -1050,15 +1075,20 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
           </p>
         )}
 
-        {/* Today's live countries — counted as the Body reads, in
-            plain text beside the map's silhouettes. */}
-        {liveActive && liveRows.length > 0 && (
-          <div className="mx-auto mt-10 max-w-3xl">
+        {/* The shown day's live countries — counted as the Body
+            reads, in plain text beside the map's silhouettes. At
+            the live default this is "Today on the vine"; while day
+            browsing it follows the map to the stepped-to day, under
+            that day's date, with that day's own counts. */}
+        {liveActive && vineRows.length > 0 && (
+          <div aria-live="polite" className="mx-auto mt-10 max-w-3xl">
             <h3 className="text-center font-display text-xl text-cream-50">
-              Today on the vine
+              {browsedDay
+                ? `${weekdayFullOf(shownDate)}, ${longDate(shownDate)} on the Vine`
+                : "Today on the vine"}
             </h3>
             <ul className="mt-4 flex flex-wrap justify-center gap-2">
-              {liveRows.map((c, i) => (
+              {vineRows.map((c, i) => (
                 <li
                   key={c.code}
                   className="inline-flex items-center gap-2 rounded-full border border-gold-500/25 bg-vineyard-950/60 px-3.5 py-1.5 text-sm text-cream-100"
@@ -1073,7 +1103,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                   />
                   {c.name}{" "}
                   <span className="text-gold-300">
-                    {fmt(c.total)} {c.total === 1 ? "chapter" : "chapters"} today
+                    {fmt(c.total)} {c.total === 1 ? "chapter" : "chapters"} {shownWhen}
                   </span>
                   {c.heard > 0 && (
                     <span className="text-sage-300">
@@ -1092,12 +1122,12 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 quieter row — "{Country} — state not recorded" — so
                 the list neither hides them nor lends them a finer
                 place than was recorded. */}
-            {subdivisionGroups.map(([country, rows]) => {
-              const countryRow = liveRows.find((c) => c.code === country);
+            {shownSubdivisionGroups.map(([country, rows]) => {
+              const countryRow = vineRows.find((c) => c.code === country);
               const unrecorded = countryRow
                 ? unrecordedChapters(
                     countryRow.total,
-                    liveSubdivisionRows,
+                    shownSubdivisions,
                     country
                   )
                 : 0;
@@ -1122,7 +1152,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                         />
                         {s.name}{" "}
                         <span className="text-gold-300">
-                          {fmt(s.total)} {s.total === 1 ? "chapter" : "chapters"} today
+                          {fmt(s.total)} {s.total === 1 ? "chapter" : "chapters"} {shownWhen}
                         </span>
                         {s.heard > 0 && (
                           <span className="text-sage-300">
@@ -1140,7 +1170,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                         {notRecordedLabel(country, countryRow.name)}{" "}
                         <span className="text-gold-300/80">
                           {fmt(unrecorded)}{" "}
-                          {unrecorded === 1 ? "chapter" : "chapters"} today
+                          {unrecorded === 1 ? "chapter" : "chapters"} {shownWhen}
                         </span>
                       </li>
                     )}
