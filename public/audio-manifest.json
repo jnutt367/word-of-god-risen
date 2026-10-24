@@ -1251,5 +1251,9 @@
  "song:5": "https://jnutt367.github.io/truvine/audio/song-of-solomon-5.mp3",
  "song:6": "https://jnutt367.github.io/truvine/audio/song-of-solomon-6.mp3",
  "song:7": "https://jnutt367.github.io/truvine/audio/song-of-solomon-7.mp3",
- "song:8": "https://jnutt367.github.io/truvine/audio/song-of-solomon-8.mp3"
+ "song:8": "https://jnutt367.github.io/truvine/audio/song-of-solomon-8.mp3",
+ "lamentations:1": "https://jnutt367.github.io/truvine/audio/lamentations-1.mp3",
+ "lamentations:3": "https://jnutt367.github.io/truvine/audio/lamentations-3.mp3",
+ "lamentations:4": "https://jnutt367.github.io/truvine/audio/lamentations-4.mp3",
+ "lamentations:5": "https://jnutt367.github.io/truvine/audio/lamentations-5.mp3"
 }
