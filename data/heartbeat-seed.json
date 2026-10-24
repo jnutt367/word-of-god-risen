@@ -1,0 +1,251 @@
+{
+  "since": "2026-10-15",
+  "totals": {
+    "chaptersRead": 163,
+    "chaptersHeard": 91,
+    "listensCompleted": 47,
+    "booksFinished": 2,
+    "listensMarked": 48
+  },
+  "subdivisionTotals": {
+    "US-FL": {
+      "read": 131,
+      "heard": 84
+    },
+    "US-OR": {
+      "read": 16,
+      "heard": 0
+    },
+    "US-NY": {
+      "read": 1,
+      "heard": 0
+    },
+    "US-VA": {
+      "read": 1,
+      "heard": 0
+    },
+    "US-TN": {
+      "read": 1,
+      "heard": 0
+    },
+    "US-IA": {
+      "read": 1,
+      "heard": 0
+    },
+    "US-SC": {
+      "read": 1,
+      "heard": 0
+    },
+    "US-KS": {
+      "read": 1,
+      "heard": 1
+    },
+    "US-LA": {
+      "read": 2,
+      "heard": 2
+    }
+  },
+  "days": [
+    {
+      "date": "2026-10-15",
+      "chaptersRead": 8,
+      "chaptersHeard": 7,
+      "listensMarked": 0,
+      "countries": {
+        "US": {
+          "read": 8,
+          "heard": 7
+        }
+      },
+      "subdivisions": {
+        "US-FL": {
+          "read": 3,
+          "heard": 3
+        }
+      }
+    },
+    {
+      "date": "2026-10-16",
+      "chaptersRead": 4,
+      "chaptersHeard": 0,
+      "listensMarked": 0,
+      "countries": {
+        "US": {
+          "read": 4,
+          "heard": 0
+        }
+      },
+      "subdivisions": {
+        "US-OR": {
+          "read": 4,
+          "heard": 0
+        }
+      }
+    },
+    {
+      "date": "2026-10-17",
+      "chaptersRead": 7,
+      "chaptersHeard": 0,
+      "listensMarked": 0,
+      "countries": {
+        "US": {
+          "read": 7,
+          "heard": 0
+        }
+      },
+      "subdivisions": {
+        "US-OR": {
+          "read": 5,
+          "heard": 0
+        },
+        "US-NY": {
+          "read": 1,
+          "heard": 0
+        },
+        "US-VA": {
+          "read": 1,
+          "heard": 0
+        }
+      }
+    },
+    {
+      "date": "2026-10-18",
+      "chaptersRead": 13,
+      "chaptersHeard": 7,
+      "listensMarked": 0,
+      "countries": {
+        "US": {
+          "read": 12,
+          "heard": 7
+        },
+        "AU": {
+          "read": 1,
+          "heard": 0
+        }
+      },
+      "subdivisions": {
+        "US-FL": {
+          "read": 11,
+          "heard": 7
+        },
+        "US-TN": {
+          "read": 1,
+          "heard": 0
+        }
+      }
+    },
+    {
+      "date": "2026-10-20",
+      "chaptersRead": 21,
+      "chaptersHeard": 12,
+      "listensMarked": 8,
+      "countries": {
+        "US": {
+          "read": 21,
+          "heard": 12
+        }
+      },
+      "subdivisions": {
+        "US-FL": {
+          "read": 20,
+          "heard": 12
+        },
+        "US-OR": {
+          "read": 1,
+          "heard": 0
+        }
+      }
+    },
+    {
+      "date": "2026-10-21",
+      "chaptersRead": 43,
+      "chaptersHeard": 23,
+      "listensMarked": 12,
+      "countries": {
+        "US": {
+          "read": 42,
+          "heard": 23
+        },
+        "GH": {
+          "read": 1,
+          "heard": 0
+        }
+      },
+      "subdivisions": {
+        "US-FL": {
+          "read": 36,
+          "heard": 23
+        },
+        "US-OR": {
+          "read": 4,
+          "heard": 0
+        },
+        "US-IA": {
+          "read": 1,
+          "heard": 0
+        },
+        "US-SC": {
+          "read": 1,
+          "heard": 0
+        }
+      }
+    },
+    {
+      "date": "2026-10-22",
+      "chaptersRead": 39,
+      "chaptersHeard": 22,
+      "listensMarked": 16,
+      "countries": {
+        "US": {
+          "read": 39,
+          "heard": 22
+        }
+      },
+      "subdivisions": {
+        "US-FL": {
+          "read": 37,
+          "heard": 21
+        },
+        "US-KS": {
+          "read": 1,
+          "heard": 1
+        },
+        "US-OR": {
+          "read": 1,
+          "heard": 0
+        }
+      }
+    },
+    {
+      "date": "2026-10-23",
+      "chaptersRead": 28,
+      "chaptersHeard": 20,
+      "listensMarked": 12,
+      "countries": {
+        "US": {
+          "read": 27,
+          "heard": 20
+        },
+        "BS": {
+          "read": 1,
+          "heard": 0
+        }
+      },
+      "subdivisions": {
+        "US-FL": {
+          "read": 24,
+          "heard": 18
+        },
+        "US-LA": {
+          "read": 2,
+          "heard": 2
+        },
+        "US-OR": {
+          "read": 1,
+          "heard": 0
+        }
+      }
+    }
+  ],
+  "updatedAt": "2026-10-23T23:51:45.653Z"
+}

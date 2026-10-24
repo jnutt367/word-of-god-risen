@@ -63,3 +63,23 @@ words to the listener promise exactly this. A scheduled watch
 (`audio-flag-response`, every 3 hours) reads the report counts
 against `~/workspace/audio-gen/audit/flags/flag-state.json` and
 carries out the takedown and the verification.
+
+## The store moved (Oct 23, 2026)
+
+The reports' document shared the Bible Heartbeat's home, and moved
+with it the night that home locked: the private Vercel Blob store
+hit its plan's operations ceiling (see HEARTBEAT.md, "v4 — the
+count-keeper moves house"), and both counters now live in an
+Upstash Redis database (free tier), reached over REST. The reports
+keep their exact shape and semantics; their keys sit under `ar:`
+beside the heartbeat's `hb:` keys, writes are atomic increments,
+and a day assembles into the history when it closes, as before.
+The seed (`data/audio-reports-seed.json`) is the Blob store's last
+verified record — the Oct 23, 19:42 EDT snapshot plus Jason's
+matthew:27 tap of ~19:49 EDT that evening (pre-lock, confirmed by
+Jason and the flag ledger) — nine chapters in all, so an untouched
+store resumes from the truth. One honest loss from the locked
+window: report taps made while the store was locked left no second
+record anywhere (the tap fires no Analytics event) and cannot be
+restored; the honor rule above was carried out through the outage
+by Jason's own word in chat, as the flag ledger shows.

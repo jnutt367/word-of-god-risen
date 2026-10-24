@@ -1,32 +1,76 @@
 /**
- * The Bible Heartbeat — live counters (v3), server-side only.
+ * The Bible Heartbeat — live counters (v4), server-side only.
  *
- * One small JSON document in the project's private Vercel Blob store
- * ("word-of-god-risen-blob", connected Oct 15, 2026) holds the live
- * totals. The heartbeat API route (app/api/heartbeat/route.ts) is the
- * only reader/writer. See HEARTBEAT.md for the schema, the merge rule
- * that reconciles these counters with the Analytics record, and the
- * known limits.
+ * THE COUNT-KEEPER MOVED HOUSE (Oct 23, 2026). The counters' first
+ * home was one JSON document in a private Vercel Blob store; that
+ * store hit the Hobby plan's advanced-operations ceiling
+ * (2,000/2,000) eight days after go-live and locked until Nov 22 —
+ * beats stopped landing while reads served the fallback. Jason's
+ * ruling: move the count-keeper to a free home. It now lives in an
+ * Upstash Redis database (free tier), reached over its REST API via
+ * lib/redis-rest.ts — see HEARTBEAT.md, "v4 — the count-keeper
+ * moves house." The Blob document's last verified state (Oct 23,
+ * 19:51 EDT: 163 read · 91 heard · 47 completed · 48 marked · 2
+ * books, with the full day-by-day record) is checked in as
+ * data/heartbeat-seed.json and seeds an empty store, so the live
+ * counters resume from the truth and never below it.
  *
- * Privacy, unchanged from v1: totals only. A beat carries no identity —
- * the only geography stored is the reader session's COUNTRY, derived by
- * the route from Vercel's edge header (x-vercel-ip-country). No IP is
- * ever read or stored. Since v3.1, a beat may also record its
- * SUBDIVISION — the full ISO 3166-2 code ("US-FL") of the connection's
- * first-level region (x-vercel-ip-country-region, sanitized per
- * country by lib/subdivisions.ts; v3.1 covers the US: 50 states + DC)
- * — a subdivision-level aggregate only, stored as a count beside a
- * subdivision code exactly like the count beside a country code;
- * nothing about any person is gathered or kept. The schema is keyed
- * generically (ISO 3166-2), never US-specific in shape, so the
- * worldwide admin-1 pass (v3.2) slots in without rework.
+ * The Redis layout (all keys under "hb:"):
+ *   hb:meta       hash — since, updatedAt, seeded marker
+ *   hb:totals     hash — the five lifetime counters (HINCRBY)
+ *   hb:subtotals  hash — lifetime subdivision counts, "US-FL:read"
+ *   hb:days       hash — CLOSED day buckets, field = date, value =
+ *                 the day's JSON record (the same HbDay shape the
+ *                 Blob document kept)
+ *   hb:opendays   set  — dates whose day is still open
+ *   hb:day:<date> hash — the open day's counts (HINCRBY)
+ *   hb:day:<date>:geo hash — the open day's country ("c:US:read")
+ *                 and subdivision ("s:US-FL:read") counts
+ * A day is assembled into hb:days when it closes (the first beat of
+ * a later day rolls it over), so a read assembles the public view
+ * from a flat handful of commands however long the history grows —
+ * and every write is an atomic increment, never a whole-document
+ * read-modify-write. The frozen-store failure class of the Blob
+ * days (a write precondition that can never match again) does not
+ * exist here: increments cannot deadlock.
+ *
+ * Privacy, unchanged since v1: totals only. A beat carries no
+ * identity — the only geography stored is the reader session's
+ * COUNTRY, derived by the route from Vercel's edge header
+ * (x-vercel-ip-country). No IP is ever read or stored. Since v3.1,
+ * a beat may also record its SUBDIVISION — the full ISO 3166-2
+ * code ("US-FL") of the connection's first-level region
+ * (x-vercel-ip-country-region, sanitized per country by
+ * lib/subdivisions.ts) — a subdivision-level aggregate only, stored
+ * as a count beside a subdivision code exactly like the count
+ * beside a country code; nothing about any person is gathered or
+ * kept. The schema is keyed generically (ISO 3166-2), never
+ * US-specific in shape.
  */
-import { get, put, BlobPreconditionFailedError } from "@vercel/blob";
 import { heartbeatToday } from "@/lib/heartbeat-date";
 import { splitSubdivision, subdivisionName } from "@/lib/subdivisions";
-import snapshot from "@/data/heartbeat.json";
+import {
+  hashToRecord,
+  redisCommand,
+  redisConfig,
+  redisPipeline,
+  toInt,
+  type RedisCommand,
+  type RedisConfig,
+} from "@/lib/redis-rest";
+import seedSnapshot from "@/data/heartbeat-seed.json";
 
-export const COUNTERS_PATH = "heartbeat/counters.json";
+/** The counters' home key in the Redis store (in the Blob days this
+ *  named the document path, "heartbeat/counters.json"). */
+export const COUNTERS_PATH = "hb:meta";
+
+const META = "hb:meta";
+const TOTALS = "hb:totals";
+const SUBTOTALS = "hb:subtotals";
+const DAYS = "hb:days";
+const OPEN = "hb:opendays";
+const dayKey = (date: string) => `hb:day:${date}`;
+const geoKey = (date: string) => `hb:day:${date}:geo`;
 
 export type BeatKind =
   | "read"
@@ -74,28 +118,17 @@ export interface HbCounters {
   totals: HbTotals;
   /** Lifetime subdivision counts (v3.1), keyed by ISO 3166-2 code. */
   subdivisionTotals: Record<string, HbCountryCounts>;
-  /** Day buckets, ascending by date. Retention was 14 days until
-   *  Oct 21, 2026; raised to 400 so the public growth record ("The
-   *  Vine Is Growing" on the homepage map) can show last week, last
-   *  month, and beyond — the day-by-day story is the family's, and
-   *  it is kept. Each bucket is small (counts + place rows), so a
-   *  year of days stays a modest document. */
+  /** Day buckets, ascending by date. Retention is 400 days (raised
+   *  Oct 21, 2026) so the public growth record ("The Vine Is
+   *  Growing" on the homepage map) can show last week, last month,
+   *  and beyond — the day-by-day story is the family's, and it is
+   *  kept. */
   days: HbDay[];
   updatedAt: string; // ISO timestamp of the last counted beat
 }
 
-interface SnapshotShape {
-  since: string;
-  /** The checked-in snapshot predates listensMarked; the field is
-   *  optional there and the seed supplies 0 (see seedCounters). */
-  totals: Omit<HbTotals, "listensMarked"> & { listensMarked?: number };
-  today: { date: string; chaptersRead: number; chaptersHeard: number };
-}
-
-const snap = snapshot as SnapshotShape;
-
 export function storeConfigured(): boolean {
-  return Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+  return redisConfig() !== null;
 }
 
 function emptyDay(date: string): HbDay {
@@ -110,30 +143,17 @@ function emptyDay(date: string): HbDay {
 }
 
 /**
- * The seed: the checked-in snapshot's totals (the permanent record
- * through the last roll-up), so the live counters start from the truth
- * and never below it. Day/country detail starts empty — pre-Blob beats
- * carried no country attribution, and none is invented for them.
+ * The seed: the counters' last verified record from the Blob store
+ * (data/heartbeat-seed.json — totals AND the full day-by-day
+ * history through Oct 23, 2026, 19:51 EDT), so an empty store
+ * starts from the truth and never below it. The checked-in snapshot
+ * (data/heartbeat.json) remains the unconfigured-store fallback and
+ * is untouched by this.
  */
 export function seedCounters(): HbCounters {
-  const days: HbDay[] = [];
-  if (snap.today.chaptersRead + snap.today.chaptersHeard > 0) {
-    days.push({
-      date: snap.today.date,
-      chaptersRead: snap.today.chaptersRead,
-      chaptersHeard: snap.today.chaptersHeard,
-      listensMarked: 0,
-      countries: {},
-      subdivisions: {},
-    });
-  }
-  return {
-    since: snap.since,
-    totals: { ...snap.totals, listensMarked: snap.totals.listensMarked ?? 0 },
-    subdivisionTotals: {},
-    days,
-    updatedAt: new Date().toISOString(),
-  };
+  return normalizeCounters(
+    JSON.parse(JSON.stringify(seedSnapshot)) as HbCounters
+  );
 }
 
 /**
@@ -141,7 +161,7 @@ export function seedCounters(): HbCounters {
  * (v3 documents predate `subdivisionTotals` and the day-level
  * `subdivisions`; documents before Oct 20, 2026 predate
  * `listensMarked`), so an upgrade never has to migrate the stored
- * JSON by hand.
+ * data by hand.
  */
 function normalizeCounters(c: HbCounters): HbCounters {
   c.subdivisionTotals ??= {};
@@ -154,158 +174,302 @@ function normalizeCounters(c: HbCounters): HbCounters {
   return c;
 }
 
-interface LoadedCounters {
-  counters: HbCounters;
-  /** ETag of the stored document, for conditional writes; null if new. */
-  etag: string | null;
-}
-
-/** Read the live counters (seeded in memory if the document is new). */
-export async function readCounters(): Promise<LoadedCounters | null> {
-  if (!storeConfigured()) return null;
-  const res = await get(COUNTERS_PATH, { access: "private", useCache: false });
-  if (!res || res.statusCode !== 200 || !res.stream) {
-    return { counters: seedCounters(), etag: null };
-  }
-  const text = await new Response(res.stream).text();
+function parseDay(json: string, date: string): HbDay {
   try {
-    return {
-      counters: normalizeCounters(JSON.parse(text) as HbCounters),
-      etag: res.blob.etag,
-    };
+    const day = JSON.parse(json) as HbDay;
+    day.date = date;
+    day.countries ??= {};
+    day.subdivisions ??= {};
+    day.listensMarked ??= 0;
+    return day;
   } catch {
-    return { counters: seedCounters(), etag: res.blob.etag };
+    return emptyDay(date);
   }
 }
 
-async function writeCounters(counters: HbCounters, etag: string | null): Promise<void> {
-  await put(COUNTERS_PATH, JSON.stringify(counters), {
-    access: "private",
-    contentType: "application/json",
-    addRandomSuffix: false,
-    allowOverwrite: true,
-    cacheControlMaxAge: 0,
-    ...(etag ? { ifMatch: etag } : {}),
+/** An open day's two hashes → its HbDay record. */
+function dayFromHashes(
+  date: string,
+  scalars: Record<string, string>,
+  geo: Record<string, string>
+): HbDay {
+  const day = emptyDay(date);
+  day.chaptersRead = toInt(scalars.chaptersRead);
+  day.chaptersHeard = toInt(scalars.chaptersHeard);
+  day.listensMarked = toInt(scalars.listensMarked);
+  for (const [field, value] of Object.entries(geo)) {
+    const parts = field.split(":");
+    if (parts.length !== 3) continue;
+    const [scope, code, which] = parts;
+    if (which !== "read" && which !== "heard") continue;
+    const rec =
+      scope === "c"
+        ? (day.countries[code] ??= { read: 0, heard: 0 })
+        : scope === "s"
+          ? (day.subdivisions[code] ??= { read: 0, heard: 0 })
+          : null;
+    if (rec) rec[which] = toInt(value);
+  }
+  return day;
+}
+
+function addDayInto(target: HbDay, add: HbDay): void {
+  target.chaptersRead += add.chaptersRead;
+  target.chaptersHeard += add.chaptersHeard;
+  target.listensMarked += add.listensMarked;
+  for (const [code, v] of Object.entries(add.countries)) {
+    const t = (target.countries[code] ??= { read: 0, heard: 0 });
+    t.read += v.read;
+    t.heard += v.heard;
+  }
+  for (const [code, v] of Object.entries(add.subdivisions)) {
+    const t = (target.subdivisions[code] ??= { read: 0, heard: 0 });
+    t.read += v.read;
+    t.heard += v.heard;
+  }
+}
+
+function flattenCounts(
+  rec: Record<string, HbCountryCounts>
+): (string | number)[] {
+  const out: (string | number)[] = [];
+  for (const [code, v] of Object.entries(rec)) {
+    out.push(`${code}:read`, v.read, `${code}:heard`, v.heard);
+  }
+  return out;
+}
+
+/** The commands that write a whole counters document (the seed)
+ *  into an empty store. Idempotent values — re-running writes the
+ *  same truth. */
+function seedCommands(c: HbCounters): RedisCommand[] {
+  const commands: RedisCommand[] = [
+    [
+      "HSET",
+      META,
+      "since",
+      c.since,
+      "updatedAt",
+      c.updatedAt,
+      "seeded",
+      "1",
+    ],
+    [
+      "HSET",
+      TOTALS,
+      "chaptersRead",
+      c.totals.chaptersRead,
+      "chaptersHeard",
+      c.totals.chaptersHeard,
+      "listensCompleted",
+      c.totals.listensCompleted,
+      "booksFinished",
+      c.totals.booksFinished,
+      "listensMarked",
+      c.totals.listensMarked,
+    ],
+  ];
+  const subs = flattenCounts(c.subdivisionTotals);
+  if (subs.length > 0) commands.push(["HSET", SUBTOTALS, ...subs]);
+  if (c.days.length > 0) {
+    const dayArgs: (string | number)[] = [];
+    for (const day of c.days) dayArgs.push(day.date, JSON.stringify(day));
+    commands.push(["HSET", DAYS, ...dayArgs]);
+  }
+  return commands;
+}
+
+/** Seed an untouched store from the verified record. The HSETNX
+ *  marker makes this a no-op on every later call (one cheap command
+ *  per request) — and if the store is ever wiped, the record heals
+ *  back to the seed rather than to zero. */
+async function ensureSeeded(cfg: RedisConfig): Promise<void> {
+  const won = await redisCommand(cfg, ["HSETNX", META, "seeded", "1"]);
+  if (won === 1) {
+    await redisPipeline(cfg, seedCommands(seedCounters()));
+  }
+}
+
+/** Assemble the full counters document from the store's keys. */
+async function loadCounters(cfg: RedisConfig): Promise<HbCounters> {
+  const [metaFlat, totalsFlat, subFlat, daysFlat, openRaw] =
+    await redisPipeline(cfg, [
+      ["HGETALL", META],
+      ["HGETALL", TOTALS],
+      ["HGETALL", SUBTOTALS],
+      ["HGETALL", DAYS],
+      ["SMEMBERS", OPEN],
+    ]);
+  const meta = hashToRecord(metaFlat);
+  const totalsRec = hashToRecord(totalsFlat);
+  const daysByDate = new Map<string, HbDay>();
+  for (const [date, json] of Object.entries(hashToRecord(daysFlat))) {
+    daysByDate.set(date, parseDay(json, date));
+  }
+  const openDates = Array.isArray(openRaw) ? openRaw.map(String) : [];
+  if (openDates.length > 0) {
+    const commands: RedisCommand[] = [];
+    for (const date of openDates) {
+      commands.push(["HGETALL", dayKey(date)], ["HGETALL", geoKey(date)]);
+    }
+    const results = await redisPipeline(cfg, commands);
+    openDates.forEach((date, i) => {
+      const open = dayFromHashes(
+        date,
+        hashToRecord(results[i * 2]),
+        hashToRecord(results[i * 2 + 1])
+      );
+      const existing = daysByDate.get(date);
+      if (existing) addDayInto(existing, open);
+      else daysByDate.set(date, open);
+    });
+  }
+  const subdivisionTotals: Record<string, HbCountryCounts> = {};
+  for (const [field, value] of Object.entries(hashToRecord(subFlat))) {
+    const cut = field.lastIndexOf(":");
+    if (cut <= 0) continue;
+    const code = field.slice(0, cut);
+    const which = field.slice(cut + 1);
+    if (which !== "read" && which !== "heard") continue;
+    (subdivisionTotals[code] ??= { read: 0, heard: 0 })[which] = toInt(value);
+  }
+  const seed = seedCounters();
+  return normalizeCounters({
+    since: meta.since || seed.since,
+    totals: {
+      chaptersRead: toInt(totalsRec.chaptersRead),
+      chaptersHeard: toInt(totalsRec.chaptersHeard),
+      listensCompleted: toInt(totalsRec.listensCompleted),
+      booksFinished: toInt(totalsRec.booksFinished),
+      listensMarked: toInt(totalsRec.listensMarked),
+    },
+    subdivisionTotals,
+    days: [...daysByDate.values()]
+      .sort((a, b) => (a.date < b.date ? -1 : 1))
+      .slice(-400),
+    updatedAt: meta.updatedAt || seed.updatedAt,
   });
 }
 
-function applyBeat(
-  c: HbCounters,
-  kind: BeatKind,
-  country: string | null,
-  subdivision: string | null
-): void {
+/** Close any open day older than today: assemble it into hb:days
+ *  (merging with a closed record for the same date if one stands),
+ *  then prune the closed history to its 400-day retention. Runs on
+ *  the beat path, after the beat has landed; in practice it fires
+ *  once a day. */
+async function rollover(cfg: RedisConfig): Promise<void> {
   const today = heartbeatToday();
-  let day = c.days.find((d) => d.date === today);
-  if (!day) {
-    day = emptyDay(today);
-    c.days.push(day);
-    c.days.sort((a, b) => (a.date < b.date ? -1 : 1));
-    c.days = c.days.slice(-400);
+  const openRaw = await redisCommand(cfg, ["SMEMBERS", OPEN]);
+  const openDates = Array.isArray(openRaw) ? openRaw.map(String) : [];
+  const old = openDates.filter((d) => d < today).sort();
+  for (const date of old) {
+    const [scalarsFlat, geoFlat, closedRaw] = await redisPipeline(cfg, [
+      ["HGETALL", dayKey(date)],
+      ["HGETALL", geoKey(date)],
+      ["HGET", DAYS, date],
+    ]);
+    const merged =
+      typeof closedRaw === "string" && closedRaw
+        ? parseDay(closedRaw, date)
+        : emptyDay(date);
+    addDayInto(
+      merged,
+      dayFromHashes(date, hashToRecord(scalarsFlat), hashToRecord(geoFlat))
+    );
+    await redisPipeline(cfg, [
+      ["HSET", DAYS, date, JSON.stringify(merged)],
+      ["SREM", OPEN, date],
+      ["DEL", dayKey(date)],
+      ["DEL", geoKey(date)],
+    ]);
   }
-  const bump = (cc: HbCountryCounts | undefined, field: "read" | "heard") => {
-    if (cc) cc[field] += 1;
-  };
-  const countryCounts = country
-    ? (day.countries[country] ??= { read: 0, heard: 0 })
-    : undefined;
-  // Subdivision counts ride along with read/listen beats only,
-  // exactly like country counts. `subdivision` arrives pre-sanitized
-  // from the route as a full ISO 3166-2 code ("US-FL") whose country
-  // part matches the beat's country — the route guarantees both.
-  const subdivisionCounts = subdivision
-    ? (day.subdivisions[subdivision] ??= { read: 0, heard: 0 })
-    : undefined;
-  const subdivisionTotalsCounts = subdivision
-    ? (c.subdivisionTotals[subdivision] ??= { read: 0, heard: 0 })
-    : undefined;
-  switch (kind) {
-    case "read":
-      c.totals.chaptersRead += 1;
-      day.chaptersRead += 1;
-      bump(countryCounts, "read");
-      bump(subdivisionCounts, "read");
-      bump(subdivisionTotalsCounts, "read");
-      break;
-    case "listen":
-      c.totals.chaptersHeard += 1;
-      day.chaptersHeard += 1;
-      bump(countryCounts, "heard");
-      bump(subdivisionCounts, "heard");
-      bump(subdivisionTotalsCounts, "heard");
-      break;
-    case "listen_complete":
-      c.totals.listensCompleted += 1;
-      break;
-    case "listened_marked":
-      // The reader's own word — its own total and its own day count,
-      // never folded into the measured listensCompleted, and (like
-      // listen_complete) no geography: the button records that a
-      // listener said they listened, nothing about where.
-      c.totals.listensMarked += 1;
-      day.listensMarked += 1;
-      break;
-    case "book":
-      c.totals.booksFinished += 1;
-      break;
+  if (old.length > 0) {
+    const keysRaw = await redisCommand(cfg, ["HKEYS", DAYS]);
+    const keys = (Array.isArray(keysRaw) ? keysRaw.map(String) : []).sort();
+    if (keys.length > 400) {
+      await redisCommand(cfg, ["HDEL", DAYS, ...keys.slice(0, keys.length - 400)]);
+    }
   }
-  c.updatedAt = new Date().toISOString();
+}
+
+interface LoadedCounters {
+  counters: HbCounters;
+  /** Kept for shape with the Blob days (an ETag); Redis increments
+   *  are atomic, so there is nothing to condition on — always null. */
+  etag: string | null;
+}
+
+/** Read the live counters (an untouched store seeds itself from
+ *  the verified record first). */
+export async function readCounters(): Promise<LoadedCounters | null> {
+  const cfg = redisConfig();
+  if (!cfg) return null;
+  await ensureSeeded(cfg);
+  return { counters: await loadCounters(cfg), etag: null };
 }
 
 /**
- * Increment one beat. Read-modify-write with optimistic concurrency:
- * the write is conditional on the ETag just read, and a lost race
- * retries against the fresh document. At this ministry's scale the
- * window is tiny; HEARTBEAT.md names the residual limit honestly.
- *
- * The rescue (Oct 20, 2026 — see HEARTBEAT.md, "The frozen store"):
- * if every conditional write fails on its precondition, the beat is
- * no longer dropped. One final attempt re-reads the document fresh
- * and writes it back unconditionally. A stored document whose ETag
- * can never match again would otherwise deadlock every future beat
- * silently — reads stay healthy, writes all "lose the race," and the
- * counters freeze while looking live. The rescue write also heals
- * the document: later beats read the ETag of the rescued write and
- * conditional writes work again. Every failure on the way is logged
- * (console.error) so the next failure carries its cause with it.
+ * Increment one beat — a small pipeline of atomic increments, no
+ * read-modify-write anywhere:
+ * the lifetime total, the open day's count (read/listen/marked
+ * beats only — listen_complete and book beats carry no day count,
+ * exactly as before), the day's country/subdivision counts
+ * (read/listen beats only, exactly as before), the lifetime
+ * subdivision total, and the updatedAt stamp. Then yesterday (if
+ * it just closed) is assembled into the history. Returns the
+ * updated counters, or null only when no store is configured.
+ * A store error propagates — the route logs it and answers 503,
+ * so a dropped beat is dropped loudly, never faked.
  */
 export async function incrementCounters(
   kind: BeatKind,
   country: string | null,
   subdivision: string | null = null
 ): Promise<HbCounters | null> {
-  if (!storeConfigured()) return null;
-  let preconditionFailures = 0;
-  for (let attempt = 0; attempt < 5; attempt++) {
-    const loaded = await readCounters();
-    if (!loaded) return null;
-    applyBeat(loaded.counters, kind, country, subdivision);
-    try {
-      await writeCounters(loaded.counters, loaded.etag);
-      return loaded.counters;
-    } catch (err) {
-      if (err instanceof BlobPreconditionFailedError) {
-        preconditionFailures += 1;
-        continue;
-      }
-      console.error(
-        `[heartbeat] conditional write failed (attempt ${attempt + 1}/5):`,
-        err
-      );
-      throw err;
+  const cfg = redisConfig();
+  if (!cfg) return null;
+  await ensureSeeded(cfg);
+  const today = heartbeatToday();
+  const commands: RedisCommand[] = [];
+  const totalsField: Record<BeatKind, string> = {
+    read: "chaptersRead",
+    listen: "chaptersHeard",
+    listen_complete: "listensCompleted",
+    book: "booksFinished",
+    listened_marked: "listensMarked",
+  };
+  commands.push(["HINCRBY", TOTALS, totalsField[kind], 1]);
+  if (kind === "read" || kind === "listen" || kind === "listened_marked") {
+    commands.push([
+      "HINCRBY",
+      dayKey(today),
+      kind === "read"
+        ? "chaptersRead"
+        : kind === "listen"
+          ? "chaptersHeard"
+          : "listensMarked",
+      1,
+    ]);
+  }
+  if (kind === "read" || kind === "listen") {
+    const field = kind === "read" ? "read" : "heard";
+    if (country) {
+      commands.push(["HINCRBY", geoKey(today), `c:${country}:${field}`, 1]);
+    }
+    if (subdivision) {
+      commands.push([
+        "HINCRBY",
+        geoKey(today),
+        `s:${subdivision}:${field}`,
+        1,
+      ]);
+      commands.push(["HINCRBY", SUBTOTALS, `${subdivision}:${field}`, 1]);
     }
   }
-  if (preconditionFailures > 0) {
-    console.error(
-      `[heartbeat] ${preconditionFailures} conditional writes lost their precondition; attempting one unconditional rescue write`
-    );
-    const loaded = await readCounters();
-    if (!loaded) return null;
-    applyBeat(loaded.counters, kind, country, subdivision);
-    await writeCounters(loaded.counters, null);
-    return loaded.counters;
-  }
-  return null; // five lost races in a row — the beat is dropped, never faked
+  commands.push(["SADD", OPEN, today]);
+  commands.push(["HSET", META, "updatedAt", new Date().toISOString()]);
+  await redisPipeline(cfg, commands);
+  await rollover(cfg);
+  return loadCounters(cfg);
 }
 
 /** The public shape the homepage reads: totals, today's bucket,

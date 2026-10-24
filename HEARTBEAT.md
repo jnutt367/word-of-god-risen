@@ -828,3 +828,67 @@ window onto it and makes sure the record endures.
   series is calendar-continuous: a day with no counted beat stands
   at zero rather than vanishing. Live history only — in snapshot
   fallback the section simply does not render, and sources never mix.
+
+## v4 — the count-keeper moves house (Oct 23, 2026)
+
+The Blob store ran out of month. On the evening of Oct 23 the
+homepage card fell back to its resting snapshot and beats began
+answering 503: the private Vercel Blob store holding both count
+documents had reached the Hobby plan's **advanced-operations
+ceiling (2,000/2,000)** — its per-beat ETag read-modify-write
+counted one advanced operation for the read plus one for the write,
+and the free month's allowance lasted eight days (Oct 15 → 23).
+Vercel's own banner in Jason's dashboard: "Access resumes on
+11/22/26." Waiting would only have re-broken the counter about
+eight days after the reset, on exactly the same math. Jason's
+ruling the same evening: **"Move the count-keeper to a free
+home."**
+
+- **The new home**: an Upstash Redis database, free tier — 500K
+  commands/month, 250 MB, no credit card, and no hard lock at the
+  edge (an over-limit free database is throttled and emailed about,
+  never frozen for a month or billed). Reached over its REST API by
+  `lib/redis-rest.ts` — no new package, no TCP from serverless.
+  Credentials arrive as env vars (`UPSTASH_REDIS_REST_URL` /
+  `UPSTASH_REDIS_REST_TOKEN`, or the `KV_REST_API_*` pair the
+  Vercel integration sets).
+- **The layout** (keys under `hb:` / `ar:`, detailed in the store
+  files' headers): lifetime totals in a hash, the open day in its
+  own hashes, closed days as JSON records in one hash. Every write
+  is an **atomic increment** — a beat costs ≈3–5 commands, a read
+  ≈7, flat at any history length (~50K commands/month at the
+  October 2026 scale, a tenth of the free allowance). The
+  whole-document read-modify-write is gone, and with it the
+  frozen-store failure class: increments have no precondition to
+  deadlock. `incrementCounters` / `incrementReports` keep their
+  names, shapes, and error semantics; both routes are untouched;
+  the public shapes are exactly v3.2's.
+- **The seed**: the Blob document's last verified state (Oct 23,
+  19:51 EDT — totals 163 read · 91 heard · 47 completed · 48
+  marked · 2 books, the full day-by-day record Oct 15–23, the
+  Bahamas' first light among them) is checked in as
+  `data/heartbeat-seed.json`; the reports' record likewise, plus
+  Jason's matthew:27 tap of ~19:49 EDT that evening (pre-lock,
+  confirmed by Jason and the flag ledger — 9 chapters in all). An
+  untouched store seeds itself from these on first touch, so the
+  counters resume from the truth and never below it;
+  `scripts/seed-count-store.mjs` is the operator's hand version,
+  with `--verify`.
+- **What the lock cost**: beats and report taps between the lock
+  (~19:52 EDT Oct 23) and the cutover were dropped by the live
+  door. The Analytics door heard the beats (it fires client-side,
+  behind the same dedupe), so the window is restored afterwards by
+  the merge rule below via `scripts/restore-outage-window.mjs` —
+  totals and per-day rows by max(analytics, live), and geography
+  by the same rule from this app's own Web Analytics geography for
+  the window days. **Report taps left no second record** (the tap
+  fires no Analytics event) and cannot be restored; said plainly.
+- **Jason's place-lighting ruling (Oct 23, 2026)**: "if we know
+  that there's someone reading in a state that hasn't lit up just
+  turn that light on." A restoration — and a roll-up — that learns
+  of reading in a place that has never lit **lights it in the
+  record**, it does not wait for a live beat to re-prove it. The
+  restore tool names every newly lit country and subdivision in
+  its output, so the prayer-greeting rhythm can welcome them.
+  Going forward this is the roll-up's rule too: known reading =
+  light on.
