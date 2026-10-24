@@ -9,6 +9,7 @@ import PlanContinue from "@/components/PlanContinue";
 import ListenDropdown from "@/components/ListenDropdown";
 import LatestShorts from "@/components/LatestShorts";
 import BodyHeartbeat from "@/components/BodyHeartbeat";
+import TaiwanPrayer from "@/components/TaiwanPrayer";
 import WordIntegrityNote from "@/components/WordIntegrityNote";
 import OpenDoor from "@/components/OpenDoor";
 
@@ -136,6 +137,10 @@ export default function Home() {
 
       {/* The Body, Reading — the Bible Heartbeat */}
       <BodyHeartbeat />
+
+      {/* One Chapter Is Enough — the Taiwan prayer Short, resting
+          directly under the heartbeat it was prayed over. */}
+      <TaiwanPrayer />
 
       {/* The Open Door — a quiet link out to the TruVINE Family Wall,
           resting beside the heartbeat. A plain outbound link only:
