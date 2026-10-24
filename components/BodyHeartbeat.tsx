@@ -808,6 +808,20 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 : "Each light is a country where the Word was opened."
               : "Country lights join as the count gathers them — each light will mark a country where the Word was opened."}
           </p>
+          {/* The tending note (Jason, Oct 23, 2026): while the live
+              count is unreachable and the card stands on its resting
+              snapshot, readers are told plainly that the lights are
+              being tended — reading and listening themselves never
+              pause. It renders ONLY in that fallback state (settled,
+              not live) and removes itself the moment real counts
+              return; it is never shown beside live numbers. */}
+          {settled && !liveActive && (
+            <p className="mx-auto mt-4 max-w-xl rounded-xl border border-gold-500/20 bg-vineyard-950/60 px-4 py-3 text-center text-sm leading-relaxed text-cream-100/90">
+              {
+                "The lights are resting while we tend them — reading and listening carry on as always, and the map will glow again soon."
+              }
+            </p>
+          )}
         </figure>
 
         {/* Counters */}
