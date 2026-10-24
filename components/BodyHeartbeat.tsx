@@ -86,6 +86,17 @@ import {
  * never polls, and never writes — see BodyHeartbeatProps and
  * HEARTBEAT.md's test-view section. Without a fixture (the
  * homepage), nothing about this component's behavior changes.
+ *
+ * DAY BROWSING (Oct 24, 2026, Jason's word — "they just click on
+ * the previous day and it shows that map, without crowding it too
+ * much"): while the live record is flowing, one slim row of
+ * controls under the map's caption steps the shown set back
+ * through the record a day at a time, rendering each past day from
+ * the payload's own history — same silhouettes, same ember rule,
+ * same honest naming, that day's counts only. Today is the default
+ * and is unchanged; a day with no recorded reading stands at rest
+ * at zero, never wearing another day's lights. Sources still never
+ * mix: browsing reads the live history only, never the snapshot.
  */
 
 interface HbTotals {
@@ -310,6 +321,11 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   // the `finally` below is what opens the gate; fixture mode is
   // settled by definition (its numbers are its own test data).
   const [settled, setSettled] = useState(Boolean(fixture));
+  // DAY BROWSING (Oct 24, 2026): the day shown on the map. null is
+  // today — the live default, rendering exactly as it always has.
+  // A date string is a past day from the live record, rendered from
+  // the payload's history below.
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     try {
@@ -354,55 +370,70 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   const allQuiet = totals.chaptersRead + totals.chaptersHeard === 0;
   const windowLabel = (hb.countriesWindow || "").trim();
 
-  // Today's live country rows (names resolved for display; positions
-  // resolve against the vendored geography in toMapCountry).
-  const liveRows: HbCountryRow[] =
-    liveActive && live
-      ? live.countries
-          .map((c) => ({
-            code: (c.code || "").toUpperCase(),
-            name: regionName((c.code || "").toUpperCase()),
-            read: c.read ?? 0,
-            heard: c.heard ?? 0,
-            total: c.total ?? (c.read ?? 0) + (c.heard ?? 0),
-          }))
-          .filter((c) => c.code && c.total > 0)
-          .sort((a, b) => b.total - a.total)
-      : [];
+  // Country rows from any day of the live record — today's, or a
+  // past day's from the history (day browsing) — resolve the same
+  // way: names resolved for display; positions resolve against the
+  // vendored geography in toMapCountry.
+  const normalizeCountryRows = (rows: LiveCountRow[]): HbCountryRow[] =>
+    rows
+      .map((c) => ({
+        code: (c.code || "").toUpperCase(),
+        name: regionName((c.code || "").toUpperCase()),
+        read: c.read ?? 0,
+        heard: c.heard ?? 0,
+        total: c.total ?? (c.read ?? 0) + (c.heard ?? 0),
+      }))
+      .filter((c) => c.code && c.total > 0)
+      .sort((a, b) => b.total - a.total);
 
-  // Today's live subdivision rows (v3.1) — names and positions
-  // resolve against the vendored subdivision geography, keyed by
-  // full ISO 3166-2 code; a counted subdivision always has a polygon
-  // there (the POST sanitizes against the same tables).
+  // Today's live country rows.
+  const liveRows: HbCountryRow[] =
+    liveActive && live ? normalizeCountryRows(live.countries) : [];
+
+  // Subdivision rows from any day of the live record (v3.1) — names
+  // and positions resolve against the vendored subdivision
+  // geography, keyed by full ISO 3166-2 code; a counted subdivision
+  // always has a polygon there (the POST sanitizes against the
+  // same tables).
   interface LiveSubdivisionDisplay extends HbCountryRow {
     country: string;
     geo: WorldCountry | null;
   }
+  const normalizeSubdivisionRows = (
+    rows: LiveSubdivisionRow[]
+  ): LiveSubdivisionDisplay[] =>
+    rows
+      .map((s) => {
+        const code = (s.code || "").toUpperCase();
+        const geo = world.subdivisions?.[code] ?? null;
+        return {
+          code,
+          name: s.name || geo?.name || code,
+          read: s.read ?? 0,
+          heard: s.heard ?? 0,
+          total: s.total ?? (s.read ?? 0) + (s.heard ?? 0),
+          country: (s.country || code.split("-")[0] || "").toUpperCase(),
+          geo,
+        };
+      })
+      .filter((s) => s.code && s.total > 0)
+      .sort((a, b) => b.total - a.total);
+
+  // Today's live subdivision rows (v3.1).
   const liveSubdivisionRows: LiveSubdivisionDisplay[] =
     liveActive && live
-      ? (live.subdivisions ?? [])
-          .map((s) => {
-            const code = (s.code || "").toUpperCase();
-            const geo = world.subdivisions?.[code] ?? null;
-            return {
-              code,
-              name: s.name || geo?.name || code,
-              read: s.read ?? 0,
-              heard: s.heard ?? 0,
-              total: s.total ?? (s.read ?? 0) + (s.heard ?? 0),
-              country: (s.country || code.split("-")[0] || "").toUpperCase(),
-              geo,
-            };
-          })
-          .filter((s) => s.code && s.total > 0)
-          .sort((a, b) => b.total - a.total)
+      ? normalizeSubdivisionRows(live.subdivisions ?? [])
       : [];
+  // The day words below speak for the SHOWN day (see day browsing):
+  // at the live default `shownWhen` is "today" and every phrase is
+  // word-for-word what it has always been; while browsing a past
+  // day the same phrases name that day instead.
   const subdivisionPhrase = (s: HbCountryRow) =>
-    `${s.name} — ${fmt(s.total)} ${s.total === 1 ? "chapter" : "chapters"} today`;
+    `${s.name} — ${fmt(s.total)} ${s.total === 1 ? "chapter" : "chapters"} ${shownWhen}`;
   // The honest phrase for an EMBER country (v3.1.1): reading is
   // recorded across it, but it is NOT lit — its divisions are.
   const emberPhrase = (c: HbCountryRow) =>
-    `${c.name} — reading recorded across the country today; divisions lit where recorded`;
+    `${c.name} — reading recorded across the country ${shownDayWord}; divisions lit where recorded`;
   // Subdivision rows grouped under their country for the list below
   // ("United States — by state"); only the US can appear in v3.1,
   // but the grouping itself is generic.
@@ -416,6 +447,95 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
     country === "US"
       ? "United States — by state"
       : `${regionName(country)} — by region`;
+
+  // Calendar helpers — day keys are the record's own "YYYY-MM-DD"
+  // strings, stepped in UTC so a step is always exactly one day.
+  // (Defined here, ahead of both day browsing and "The Vine Is
+  // Growing" below, which share them.)
+  const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const dayKeyToUTC = (iso: string) => {
+    const [y, m, d] = iso.split("-").map((n) => parseInt(n, 10));
+    return Date.UTC(y || 1970, (m || 1) - 1, d || 1);
+  };
+  const utcToDayKey = (t: number) => {
+    const dt = new Date(t);
+    return `${dt.getUTCFullYear()}-${String(dt.getUTCMonth() + 1).padStart(2, "0")}-${String(dt.getUTCDate()).padStart(2, "0")}`;
+  };
+  const weekdayOf = (iso: string) =>
+    WEEKDAYS[new Date(dayKeyToUTC(iso)).getUTCDay()] ?? "";
+  const dayOfMonth = (iso: string) => parseInt(iso.split("-")[2] ?? "", 10) || "";
+
+  // ── Day browsing (Oct 24, 2026) ────────────────────────────────
+  // The live payload's history already carries every day's counts
+  // AND that day's place rows, in the same shapes as today's. The
+  // browsable range is the whole live record — its first day
+  // through today. A day inside the range with no stored row is an
+  // honest zero day (the record has them, e.g. Oct 19, 2026): it
+  // renders at rest with its true zero counts, never dressed in
+  // today's lights.
+  const historyAsc: LiveDay[] =
+    liveActive && live?.history
+      ? [...live.history].sort((a, b) =>
+          a.date < b.date ? -1 : a.date > b.date ? 1 : 0
+        )
+      : [];
+  const historyByDate = new Map<string, LiveDay>(
+    historyAsc.map((d) => [d.date, d])
+  );
+  const recordStart = historyAsc[0]?.date ?? null;
+  const browsingAvailable = Boolean(
+    liveActive && live && recordStart && recordStart < live.today.date
+  );
+  // The day on the map: today's date at the live default, else the
+  // stepped-to past day, held inside the record's range.
+  const shownDate =
+    selectedDate &&
+    recordStart &&
+    live &&
+    selectedDate >= recordStart &&
+    selectedDate < live.today.date
+      ? selectedDate
+      : live?.today.date ?? today.date;
+  const browsing = Boolean(live && shownDate !== live.today.date);
+  const browsedRaw = browsing ? historyByDate.get(shownDate) : undefined;
+  interface ShownDay {
+    date: string;
+    chaptersRead: number;
+    chaptersHeard: number;
+    countries: HbCountryRow[];
+    subdivisions: LiveSubdivisionDisplay[];
+  }
+  const browsedDay: ShownDay | null = browsing
+    ? {
+        date: shownDate,
+        chaptersRead: browsedRaw?.chaptersRead ?? 0,
+        chaptersHeard: browsedRaw?.chaptersHeard ?? 0,
+        countries: normalizeCountryRows(browsedRaw?.countries ?? []),
+        subdivisions: normalizeSubdivisionRows(browsedRaw?.subdivisions ?? []),
+      }
+    : null;
+  const shownCount = browsedDay
+    ? browsedDay.chaptersRead + browsedDay.chaptersHeard
+    : todayCount;
+  const canStepBack = Boolean(
+    browsingAvailable && recordStart && shownDate > recordStart
+  );
+  const canStepForward = Boolean(
+    browsingAvailable && live && shownDate < live.today.date
+  );
+  const stepDay = (delta: number) => {
+    if (!live || !recordStart) return;
+    const next = utcToDayKey(dayKeyToUTC(shownDate) + delta * 86_400_000);
+    if (next < recordStart) return;
+    // Stepping forward onto today returns to the live default, so
+    // the map resumes its ordinary today behavior exactly.
+    if (next >= live.today.date) setSelectedDate(null);
+    else setSelectedDate(next);
+  };
+  // The day words the map's phrases speak — "today" at the live
+  // default, the browsed date itself while stepping back.
+  const shownWhen = browsedDay ? `on ${longDate(browsedDay.date)}` : "today";
+  const shownDayWord = browsedDay ? "that day" : "today";
 
   // Snapshot country rows — the daily record, with its own labeled
   // window. Normalized once; the garland below always speaks for them.
@@ -436,25 +556,40 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
 
   // The map carries ONE country set at a time so its meaning is never
   // blurred: today's live silhouettes while the live count is flowing,
-  // otherwise the daily record's. Both sets are always named in text.
-  const mapSource: "live" | "snapshot" =
-    liveActive && liveRows.length > 0 ? "live" : "snapshot";
-  const mapRows = (mapSource === "live" ? liveRows : snapRows)
+  // otherwise the daily record's. While day browsing, the shown set
+  // is the stepped-to day's own rows from the live history — never
+  // today's, never the snapshot's. Every set is always named in text.
+  const mapSource: "live" | "snapshot" | "history" = browsedDay
+    ? "history"
+    : liveActive && liveRows.length > 0
+      ? "live"
+      : "snapshot";
+  const mapRows = (
+    browsedDay
+      ? browsedDay.countries
+      : mapSource === "live"
+        ? liveRows
+        : snapRows
+  )
     .map(toMapCountry)
     .filter((c) => c.geo || c.centroid);
   const mapPhrase = (c: HbCountryRow) =>
-    mapSource === "live"
-      ? `${c.name} — ${fmt(c.total)} ${c.total === 1 ? "chapter" : "chapters"} today`
-      : `${c.name} — ${fmt(c.total)} ${c.total === 1 ? "chapter" : "chapters"}${windowLabel ? ` ${windowLabel}` : ""}`;
+    mapSource === "snapshot"
+      ? `${c.name} — ${fmt(c.total)} ${c.total === 1 ? "chapter" : "chapters"}${windowLabel ? ` ${windowLabel}` : ""}`
+      : `${c.name} — ${fmt(c.total)} ${c.total === 1 ? "chapter" : "chapters"} ${shownWhen}`;
 
   const garlandPhrase = (c: HbCountryRow) =>
     `${fmt(c.total)} ${c.total === 1 ? "chapter" : "chapters"}${windowLabel ? ` ${windowLabel}` : ""}`;
 
   // v3.1.1 — finest geography wins the light, decided against the
-  // SHOWN set: subdivision rows belong to today's live set only (the
-  // snapshot carries none), so in snapshot mode every country keeps
-  // its full v3 light.
-  const shownSubdivisions = mapSource === "live" ? liveSubdivisionRows : [];
+  // SHOWN set: subdivision rows belong to the live sets only —
+  // today's, or the browsed day's (the snapshot carries none), so
+  // in snapshot mode every country keeps its full v3 light.
+  const shownSubdivisions = browsedDay
+    ? browsedDay.subdivisions
+    : mapSource === "live"
+      ? liveSubdivisionRows
+      : [];
   const modeOf = (code: string) => lightModeForCountry(shownSubdivisions, code);
   const subsOf = (code: string) =>
     subdivisionsOfCountry(shownSubdivisions, code);
@@ -466,18 +601,24 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   const describeCountry = (c: MapCountry): string => {
     if (modeOf(c.code) === "ember") {
       const subs = subsOf(c.code);
-      return `reading recorded across ${c.name} — ${fmt(c.total)} ${c.total === 1 ? "chapter" : "chapters"} today; ${c.name} itself rests as a faint ember, not lit, and its divisions are lit where recorded: ${subs.map(subdivisionPhrase).join("; ")}`;
+      return `reading recorded across ${c.name} — ${fmt(c.total)} ${c.total === 1 ? "chapter" : "chapters"} ${shownWhen}; ${c.name} itself rests as a faint ember, not lit, and its divisions are lit where recorded: ${subs.map(subdivisionPhrase).join("; ")}`;
     }
     return `${mapPhrase(c)}, lit in its own shape`;
   };
 
   const figureLabel = gathering
     ? "A soft world map drawn as a disc, at rest while today's count gathers."
-    : mapRows.length > 0
-      ? `A soft world map drawn as a disc. ${fmt(todayCount)} ${todayCount === 1 ? "chapter was" : "chapters were"} read or heard today, ${longDate(today.date)}. Where the Word was opened${mapSource === "live" ? " today" : ""}: ${mapRows.map(describeCountry).join("; ")}.`
-      : todayCount > 0
-        ? `A soft world map drawn as a disc, with ${fmt(todayCount)} ${todayCount === 1 ? "chapter" : "chapters"} read or heard today, ${longDate(today.date)}. No country shapes are lit yet.`
-        : "A soft world map drawn as a disc, at rest in the early morning — the counting of chapters has only just begun, and no country shapes are lit yet.";
+    : browsedDay
+      ? mapRows.length > 0
+        ? `A soft world map drawn as a disc. ${fmt(shownCount)} ${shownCount === 1 ? "chapter was" : "chapters were"} read or heard on ${longDate(browsedDay.date)}. Where the Word was opened that day: ${mapRows.map(describeCountry).join("; ")}.`
+        : shownCount > 0
+          ? `A soft world map drawn as a disc, with ${fmt(shownCount)} ${shownCount === 1 ? "chapter" : "chapters"} read or heard on ${longDate(browsedDay.date)}. No country shapes are lit for that day.`
+          : `A soft world map drawn as a disc, at rest on ${longDate(browsedDay.date)} — no chapters were counted that day, and no country shapes are lit.`
+      : mapRows.length > 0
+        ? `A soft world map drawn as a disc. ${fmt(todayCount)} ${todayCount === 1 ? "chapter was" : "chapters were"} read or heard today, ${longDate(today.date)}. Where the Word was opened${mapSource === "live" ? " today" : ""}: ${mapRows.map(describeCountry).join("; ")}.`
+        : todayCount > 0
+          ? `A soft world map drawn as a disc, with ${fmt(todayCount)} ${todayCount === 1 ? "chapter" : "chapters"} read or heard today, ${longDate(today.date)}. No country shapes are lit yet.`
+          : "A soft world map drawn as a disc, at rest in the early morning — the counting of chapters has only just begun, and no country shapes are lit yet.";
 
   // "The Vine Is Growing" (Oct 21, 2026) — the day-by-day record,
   // turned into a growth story on the map's own card: a continuous
@@ -492,18 +633,9 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
     total: number;
     places: string[];
   }
-  const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  const dayKeyToUTC = (iso: string) => {
-    const [y, m, d] = iso.split("-").map((n) => parseInt(n, 10));
-    return Date.UTC(y || 1970, (m || 1) - 1, d || 1);
-  };
-  const utcToDayKey = (t: number) => {
-    const dt = new Date(t);
-    return `${dt.getUTCFullYear()}-${String(dt.getUTCMonth() + 1).padStart(2, "0")}-${String(dt.getUTCDate()).padStart(2, "0")}`;
-  };
-  const weekdayOf = (iso: string) =>
-    WEEKDAYS[new Date(dayKeyToUTC(iso)).getUTCDay()] ?? "";
-  const dayOfMonth = (iso: string) => parseInt(iso.split("-")[2] ?? "", 10) || "";
+  // (The calendar helpers — dayKeyToUTC, utcToDayKey, weekdayOf,
+  // dayOfMonth — are defined above, beside day browsing, and shared
+  // with this section.)
 
   const growthDays: GrowthDay[] = (() => {
     if (!liveActive || !live?.history || live.history.length === 0) return [];
@@ -693,44 +825,44 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               ) : null
             )}
             {/* lit subdivisions — the first-level regions carrying
-                counts today light in their own shapes at FULL
-                treatment (v3.1; ISO 3166-2 keying, the US states
-                today): glow, fill, breathing — and, since v3.1.1,
-                their own bright hearts, because the finest recorded
-                geography wins the light. Their country rests behind
-                them as an ember and shows no heart of its own. */}
-            {mapSource === "live" &&
-              liveSubdivisionRows.map((s, i) =>
-                s.geo ? (
-                  <g
-                    key={`sub-${s.code}`}
-                    className="hb-glow"
-                    style={{ animationDelay: `${((i + 2) % 5) * 0.9}s` }}
-                  >
-                    <title>{subdivisionPhrase(s)}</title>
-                    <path
-                      d={s.geo.path}
-                      fill="#ffdf8a"
-                      fillRule="evenodd"
-                      opacity={subdivisionGlow(s.total)}
-                      filter="url(#hb-soft)"
-                    />
-                    <path
-                      d={s.geo.path}
-                      fill="#ffdf8a"
-                      fillRule="evenodd"
-                      fillOpacity={subdivisionFill(s.total)}
-                      stroke="#ffe9b0"
-                      strokeWidth="0.7"
-                      strokeOpacity="0.55"
-                    />
-                    {/* the subdivision's heart — the bright core of
-                        its light, at its own center */}
-                    <circle cx={s.geo.cx} cy={s.geo.cy} r="6.5" fill="#ffdf8a" opacity="0.3" />
-                    <circle cx={s.geo.cx} cy={s.geo.cy} r="2.6" fill="#fff3c4" />
-                  </g>
-                ) : null
-              )}
+                counts in the SHOWN set (today's, or the browsed
+                day's) light in their own shapes at FULL treatment
+                (v3.1; ISO 3166-2 keying, the US states today): glow,
+                fill, breathing — and, since v3.1.1, their own bright
+                hearts, because the finest recorded geography wins
+                the light. Their country rests behind them as an
+                ember and shows no heart of its own. */}
+            {shownSubdivisions.map((s, i) =>
+              s.geo ? (
+                <g
+                  key={`sub-${s.code}`}
+                  className="hb-glow"
+                  style={{ animationDelay: `${((i + 2) % 5) * 0.9}s` }}
+                >
+                  <title>{subdivisionPhrase(s)}</title>
+                  <path
+                    d={s.geo.path}
+                    fill="#ffdf8a"
+                    fillRule="evenodd"
+                    opacity={subdivisionGlow(s.total)}
+                    filter="url(#hb-soft)"
+                  />
+                  <path
+                    d={s.geo.path}
+                    fill="#ffdf8a"
+                    fillRule="evenodd"
+                    fillOpacity={subdivisionFill(s.total)}
+                    stroke="#ffe9b0"
+                    strokeWidth="0.7"
+                    strokeOpacity="0.55"
+                  />
+                  {/* the subdivision's heart — the bright core of
+                      its light, at its own center */}
+                  <circle cx={s.geo.cx} cy={s.geo.cy} r="6.5" fill="#ffdf8a" opacity="0.3" />
+                  <circle cx={s.geo.cx} cy={s.geo.cy} r="2.6" fill="#fff3c4" />
+                </g>
+              ) : null
+            )}
             {/* country hearts — a small bright core at each lit
                 country's center; for a counted country with no
                 polygon, the heart carries a fuller halo and ring
@@ -790,6 +922,22 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
           <figcaption className="mt-2 text-center text-sm text-sage-300">
             {gathering ? (
               "Gathering today's count — the lights kindle as the count comes in."
+            ) : browsedDay ? (
+              shownCount > 0 ? (
+                <>
+                  {fmt(shownCount)}{" "}
+                  {shownCount === 1 ? "chapter" : "chapters"} read or heard
+                  on {longDate(browsedDay.date)} —{" "}
+                  {mapRows.length > 0
+                    ? "each light on the map, a neighbor."
+                    : "the place was not recorded that day."}
+                </>
+              ) : (
+                <>
+                  The world at rest on {longDate(browsedDay.date)} — no
+                  chapters were counted that day.
+                </>
+              )
             ) : todayCount > 0 ? (
               <>
                 {fmt(todayCount)}{" "}
@@ -808,6 +956,52 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 : "Each light is a country where the Word was opened."
               : "Country lights join as the count gathers them — each light will mark a country where the Word was opened."}
           </p>
+          {/* Day stepping (Oct 24, 2026) — one slim row under the
+              caption, in the card's own language: step back a day,
+              step forward, and a quiet way home to today. It renders
+              only while the live record is flowing and holds more
+              than today alone; the map above answers each step from
+              that day's own rows in the history. */}
+          {browsingAvailable && (
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+              <button
+                type="button"
+                onClick={() => stepDay(-1)}
+                disabled={!canStepBack}
+                aria-label="Show the previous day on the map"
+                className="min-h-11 rounded-full border border-gold-500/25 bg-vineyard-950/60 px-4 py-2 text-sm text-cream-100 transition-colors hover:border-gold-400/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                ‹ Previous day
+              </button>
+              <span
+                aria-live="polite"
+                className="min-w-44 text-center text-sm font-semibold text-cream-50"
+              >
+                {browsedDay
+                  ? `${weekdayOf(shownDate)}, ${longDate(shownDate)}`
+                  : `Today — ${weekdayOf(shownDate)}, ${longDate(shownDate)}`}
+              </span>
+              <button
+                type="button"
+                onClick={() => stepDay(1)}
+                disabled={!canStepForward}
+                aria-label="Show the next day on the map"
+                className="min-h-11 rounded-full border border-gold-500/25 bg-vineyard-950/60 px-4 py-2 text-sm text-cream-100 transition-colors hover:border-gold-400/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Next day ›
+              </button>
+              {browsedDay && (
+                <button
+                  type="button"
+                  onClick={() => setSelectedDate(null)}
+                  aria-label="Return the map to today"
+                  className="min-h-11 rounded-full border border-cream-100/20 px-4 py-2 text-sm text-sage-300 transition-colors hover:border-gold-400/60 hover:text-cream-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+                >
+                  Today
+                </button>
+              )}
+            </div>
+          )}
           {/* The tending note (Jason, Oct 23, 2026): while the live
               count is unreachable and the card stands on its resting
               snapshot, readers are told plainly that the lights are
