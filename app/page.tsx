@@ -12,6 +12,7 @@ import BodyHeartbeat from "@/components/BodyHeartbeat";
 import TaiwanPrayer from "@/components/TaiwanPrayer";
 import WordIntegrityNote from "@/components/WordIntegrityNote";
 import OpenDoor from "@/components/OpenDoor";
+import TeddyNote from "@/components/TeddyNote";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -127,6 +128,13 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* A note from Grandpa Teddy — his postscript directly under
+          the introduction (Jason, Oct 26, 2026): "hey, I have a
+          little bit more to tell you here." Points to the
+          "One Chapter Is Enough" film and tells visitors up front
+          that every reading is being tested word for word. */}
+      <TeddyNote />
 
       {/* Widgets */}
       <div className="mx-auto max-w-4xl space-y-5 px-4 py-10 sm:px-6">
