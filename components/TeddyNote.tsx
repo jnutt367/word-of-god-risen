@@ -11,8 +11,12 @@ import Link from "next/link";
  * that any chapter can be flagged from its own page.
  *
  * Kept to the house pattern (TaiwanPrayer): a heading, a few lines
- * in Teddy's voice, and a plain way to watch. The emblem is the
- * app's own shipped mark, shown whole.
+ * in Teddy's voice, and a plain way to watch. The card carries the
+ * film's own crowned thumbnail (Jason, Oct 26, 2026 — "if it's
+ * pointing to this video it should probably have the thumbnail on
+ * the app"), sized modestly inside the card so the page stays calm;
+ * the thumbnail itself carries the real emblem, so the card shows
+ * no second emblem above it.
  */
 
 // The film: "One Chapter Is Enough" (long-form, TruVINE channel).
@@ -25,14 +29,22 @@ export default function TeddyNote() {
       className="mx-auto max-w-6xl px-4 pt-5 sm:px-6"
     >
       <div className="rounded-2xl border border-gold-500/15 bg-vineyard-900 px-6 py-8 text-center sm:px-10">
-        <Image
-          src="/images/truvine-emblem.png"
-          alt=""
-          width={249}
-          height={192}
-          className="mx-auto h-14 w-auto object-contain"
-        />
-        <p className="mt-4 text-xs font-semibold uppercase tracking-[0.18em] text-gold-400">
+        <a
+          href={FILM_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Watch the story — One Chapter Is Enough, the film on YouTube"
+          className="group mx-auto block max-w-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold-300"
+        >
+          <Image
+            src="/images/one-chapter-film-thumb.webp"
+            alt="The film's thumbnail: Grandpa Teddy bowed in prayer at a table in lantern light, beneath the title One Chapter Is Enough"
+            width={960}
+            height={540}
+            className="w-full rounded-xl border border-gold-500/20 object-cover transition-colors group-hover:border-gold-400"
+          />
+        </a>
+        <p className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-gold-400">
           A note from Grandpa Teddy
         </p>
         <h2
