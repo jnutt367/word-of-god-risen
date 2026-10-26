@@ -74,6 +74,17 @@ export default function SiteFooter() {
             </a>{" "}
             (CC-BY)
           </p>
+          <p className="mt-3 text-xs text-sage-500">
+            Every door on the farm, on one ring.{" "}
+            <a
+              href="https://jnutt367.github.io/truvine/links/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gold-400 underline hover:text-gold-300"
+            >
+              The Key Ring
+            </a>
+          </p>
         </div>
       </div>
     </footer>
