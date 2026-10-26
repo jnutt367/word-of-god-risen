@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useVideoChoice, VideoChoiceModal } from "./VideoChoice";
 
 /**
  * One Chapter Is Enough — a small, quiet card under the Body
@@ -13,11 +16,23 @@ import Image from "next/image";
  * map it was prayed over.
  *
  * Kept quiet on purpose: a heading, one line, and a plain way to
- * watch. No commerce, no asks, nothing gathered — the card only
- * points outward to the prayer, and the emblem is the app's own
- * shipped mark, shown whole.
+ * watch. No commerce, no asks, nothing gathered — and the card
+ * follows the house law for every video door (Jason, Oct 20, 2026;
+ * his word again Oct 26, 2026, for the One Chapter film: videos
+ * must be watchable in the app): the tap asks first — "Watch here"
+ * plays the prayer in place, in this app; "Open in YouTube" is
+ * there only for readers who'd rather go. The emblem is the app's
+ * own shipped mark, shown whole.
  */
+
+// The prayer: "One Chapter Is Enough" Short (TruVINE channel).
+const SHORT_ID = "MM4Re8olRzY";
+const SHORT_URL = `https://youtube.com/shorts/${SHORT_ID}`;
+const SHORT_TITLE = "One Chapter Is Enough — the prayer over Taiwan";
+
 export default function TaiwanPrayer() {
+  const choice = useVideoChoice();
+
   return (
     <section
       aria-labelledby="taiwan-prayer-heading"
@@ -43,17 +58,26 @@ export default function TaiwanPrayer() {
           the prayer we prayed over that night.
         </p>
         <p className="mt-5">
-          <a
-            href="https://youtube.com/shorts/MM4Re8olRzY"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Watch the prayer — One Chapter Is Enough, a Short on YouTube"
-            className="inline-block rounded-lg border border-cream-100/25 px-5 py-2.5 text-sm font-semibold text-cream-100 transition-colors hover:border-gold-400 hover:text-gold-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+          <button
+            type="button"
+            onClick={choice.openChoice}
+            aria-haspopup="dialog"
+            aria-label="Watch the prayer — One Chapter Is Enough, a Short"
+            className="inline-block cursor-pointer rounded-lg border border-cream-100/25 px-5 py-2.5 text-sm font-semibold text-cream-100 transition-colors hover:border-gold-400 hover:text-gold-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
           >
             Watch the prayer
-          </a>
+          </button>
         </p>
       </div>
+      {choice.open && (
+        <VideoChoiceModal
+          onClose={choice.closeChoice}
+          videoId={SHORT_ID}
+          title={SHORT_TITLE}
+          youtubeUrl={SHORT_URL}
+          vertical
+        />
+      )}
     </section>
   );
 }

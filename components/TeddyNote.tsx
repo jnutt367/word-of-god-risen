@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useVideoChoice, VideoChoiceModal } from "./VideoChoice";
 
 /**
  * A note from Grandpa Teddy — resting directly under "Meet Grandpa
@@ -17,24 +20,34 @@ import Link from "next/link";
  * the app"), sized modestly inside the card so the page stays calm;
  * the thumbnail itself carries the real emblem, so the card shows
  * no second emblem above it.
+ *
+ * The tap asks first (VideoChoice, Jason's Oct 20 rule — and his
+ * word again on Oct 26, 2026: the film "needs to be able to be
+ * watched in the app"): "Watch here" plays the film in place, in
+ * this app; "Open in YouTube" remains for readers who'd rather go.
+ * Nobody is carried off to YouTube unasked.
  */
 
 // The film: "One Chapter Is Enough" (long-form, TruVINE channel).
-const FILM_URL = "https://www.youtube.com/watch?v=2ZF3agQryng";
+const FILM_ID = "2ZF3agQryng";
+const FILM_URL = `https://www.youtube.com/watch?v=${FILM_ID}`;
+const FILM_TITLE = "One Chapter Is Enough — the film";
 
 export default function TeddyNote() {
+  const choice = useVideoChoice();
+
   return (
     <section
       aria-labelledby="teddy-note-heading"
       className="mx-auto max-w-6xl px-4 pt-5 sm:px-6"
     >
       <div className="rounded-2xl border border-gold-500/15 bg-vineyard-900 px-6 py-8 text-center sm:px-10">
-        <a
-          href={FILM_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Watch the story — One Chapter Is Enough, the film on YouTube"
-          className="group mx-auto block max-w-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold-300"
+        <button
+          type="button"
+          onClick={choice.openChoice}
+          aria-haspopup="dialog"
+          aria-label="Watch the story — One Chapter Is Enough, the film"
+          className="group relative mx-auto block w-full max-w-xl cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold-300"
         >
           <Image
             src="/images/one-chapter-film-thumb.webp"
@@ -43,7 +56,19 @@ export default function TeddyNote() {
             height={540}
             className="w-full rounded-xl border border-gold-500/20 object-cover transition-colors group-hover:border-gold-400"
           />
-        </a>
+          <span className="absolute inset-0 flex items-center justify-center">
+            <span className="flex h-16 w-16 items-center justify-center rounded-full bg-gold-400 text-vineyard-950 shadow-[0_8px_30px_rgba(0,0,0,0.5)] ring-4 ring-gold-200/30 transition-transform duration-300 group-hover:scale-110">
+              <svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="ml-1 h-7 w-7"
+                aria-hidden="true"
+              >
+                <path d="M8 5.5v13l11-6.5-11-6.5z" />
+              </svg>
+            </span>
+          </span>
+        </button>
         <p className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-gold-400">
           A note from Grandpa Teddy
         </p>
@@ -62,15 +87,15 @@ export default function TeddyNote() {
           up Taiwan, and how one chapter is enough for God to begin.
         </p>
         <p className="mt-5">
-          <a
-            href={FILM_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Watch the story — One Chapter Is Enough, the film on YouTube"
-            className="inline-block rounded-lg bg-gold-500 px-5 py-2.5 text-sm font-semibold text-vineyard-950 transition-colors hover:bg-gold-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+          <button
+            type="button"
+            onClick={choice.openChoice}
+            aria-haspopup="dialog"
+            aria-label="Watch the story — One Chapter Is Enough, the film"
+            className="inline-block cursor-pointer rounded-lg bg-gold-500 px-5 py-2.5 text-sm font-semibold text-vineyard-950 transition-colors hover:bg-gold-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
           >
             Watch the story
-          </a>
+          </button>
         </p>
         <p className="mt-4 text-sm">
           <Link
@@ -81,6 +106,14 @@ export default function TeddyNote() {
           </Link>
         </p>
       </div>
+      {choice.open && (
+        <VideoChoiceModal
+          onClose={choice.closeChoice}
+          videoId={FILM_ID}
+          title={FILM_TITLE}
+          youtubeUrl={FILM_URL}
+        />
+      )}
     </section>
   );
 }
