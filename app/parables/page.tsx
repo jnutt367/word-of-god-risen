@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import ParableAudio from "@/components/ParableAudio";
 
 export const metadata: Metadata = {
   title: "Parables of Jesus · Word of God Risen",
@@ -46,6 +47,16 @@ const PARABLES: Parable[] = [
 ];
 
 const BASE = "https://pub-4ff11efe5fbe4087acc9ff74fc56f179.r2.dev";
+
+/** The Bible Heartbeat target for a parable's audio: the source
+ *  Gospel chapter the card's "Read in {Gospel} →" door points to —
+ *  playing the parable counts as listening to that chapter (Jason,
+ *  Oct 27, 2026). gospelHref is "/book/<slug>/<idx>" with a 0-based
+ *  chapter index; the heartbeat counts by 1-based chapter number. */
+function beatTarget(gospelHref: string): { bookSlug: string; chapterNum: number } {
+  const parts = gospelHref.split("/");
+  return { bookSlug: parts[2], chapterNum: Number(parts[3]) + 1 };
+}
 
 export default function ParablesPage() {
   return (
@@ -127,11 +138,9 @@ export default function ParablesPage() {
                   />
                 </div>
               ) : null}
-              <audio
-                controls
-                preload="none"
+              <ParableAudio
                 src={p.audioSrc ?? `${BASE}/audio/parables/${p.slug}.mp3`}
-                className="mt-3 w-full"
+                {...beatTarget(p.gospelHref)}
               />
             </div>
           </div>
