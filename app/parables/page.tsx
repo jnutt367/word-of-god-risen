@@ -11,6 +11,10 @@ interface Parable {
   ref: string;
   videoId?: string;
   audioSrc?: string;
+  /** Jason's rule (Oct 27, 2026): a card shows only when it has BOTH the
+   *  Teddy audio and the film. Parked cards keep their data here and come
+   *  back the moment their film is published and wired. */
+  parked?: boolean;
 }
 
 const PARABLES: Parable[] = [
@@ -20,18 +24,18 @@ const PARABLES: Parable[] = [
   { slug: "mustard-seed", title: "The Mustard Seed", ref: "Matthew 13:31–32", videoId: "uLQlOIS864I" },
   { slug: "hidden-treasure", title: "The Hidden Treasure", ref: "Matthew 13:44", videoId: "9od-dL2sgWY" },
   { slug: "pearl-of-great-price", title: "The Pearl of Great Price", ref: "Matthew 13:45–46", videoId: "bxtra5KWcmI" },
-  { slug: "unforgiving-servant", title: "The Unforgiving Servant", ref: "Matthew 18:23–35" },
-  { slug: "workers-in-the-vineyard", title: "The Workers in the Vineyard", ref: "Matthew 20:1–16" },
-  { slug: "wedding-feast", title: "The Wedding Feast", ref: "Matthew 22:1–14" },
-  { slug: "ten-virgins", title: "The Ten Virgins", ref: "Matthew 25:1–13" },
-  { slug: "talents", title: "The Talents", ref: "Matthew 25:14–30" },
-  { slug: "good-samaritan", title: "The Good Samaritan", ref: "Luke 10:30–37" },
-  { slug: "rich-fool", title: "The Rich Fool", ref: "Luke 12:16–21" },
-  { slug: "lost-sheep", title: "The Lost Sheep", ref: "Luke 15:4–7" },
-  { slug: "prodigal-son", title: "The Prodigal Son", ref: "Luke 15:11–32" },
-  { slug: "shrewd-manager", title: "The Shrewd Manager", ref: "Luke 16:1–13" },
-  { slug: "rich-man-and-lazarus", title: "The Rich Man and Lazarus", ref: "Luke 16:19–31" },
-  { slug: "pharisee-and-tax-collector", title: "The Pharisee and the Tax Collector", ref: "Luke 18:9–14" },
+  { slug: "unforgiving-servant", title: "The Unforgiving Servant", ref: "Matthew 18:23–35", parked: true },
+  { slug: "workers-in-the-vineyard", title: "The Workers in the Vineyard", ref: "Matthew 20:1–16", parked: true },
+  { slug: "wedding-feast", title: "The Wedding Feast", ref: "Matthew 22:1–14", parked: true },
+  { slug: "ten-virgins", title: "The Ten Virgins", ref: "Matthew 25:1–13", parked: true },
+  { slug: "talents", title: "The Talents", ref: "Matthew 25:14–30", parked: true },
+  { slug: "good-samaritan", title: "The Good Samaritan", ref: "Luke 10:30–37", videoId: "SvzeYQRektk" },
+  { slug: "rich-fool", title: "The Rich Fool", ref: "Luke 12:16–21", parked: true },
+  { slug: "lost-sheep", title: "The Lost Sheep", ref: "Luke 15:4–7", parked: true },
+  { slug: "prodigal-son", title: "The Prodigal Son", ref: "Luke 15:11–32", videoId: "7CkIfYz21lw" },
+  { slug: "shrewd-manager", title: "The Shrewd Manager", ref: "Luke 16:1–13", parked: true },
+  { slug: "rich-man-and-lazarus", title: "The Rich Man and Lazarus", ref: "Luke 16:19–31", parked: true },
+  { slug: "pharisee-and-tax-collector", title: "The Pharisee and the Tax Collector", ref: "Luke 18:9–14", parked: true },
 ];
 
 const BASE = "https://pub-4ff11efe5fbe4087acc9ff74fc56f179.r2.dev";
@@ -73,7 +77,7 @@ export default function ParablesPage() {
         Listen to each parable
       </h2>
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
-        {PARABLES.map((p) => (
+        {PARABLES.filter((p) => !p.parked).map((p) => (
           <div
             key={p.slug}
             className="overflow-hidden rounded-2xl border border-gold-500/15 bg-vineyard-900"
