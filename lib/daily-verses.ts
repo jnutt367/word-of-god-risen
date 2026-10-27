@@ -236,7 +236,7 @@ export const DAILY_VERSES: DailyVerse[] = [
   },
   {
     ref: "John 16:33",
-    text: "I have told you these things, that in me you may have peace. In the world you have oppression; but cheer up! I have overcome the world.”",
+    text: "I have told you these things, that in me you may have peace. In the world you have trouble; but cheer up! I have overcome the world.”",
     book: "John",
     chapter: 16,
     href: "/book/john/15",
