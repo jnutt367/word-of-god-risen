@@ -22,6 +22,7 @@ const PARABLES: Parable[] = [
   { slug: "true-vine", title: "I Am the True Vine", ref: "John 15:1–8", videoId: "-2vOTb-puBw", audioSrc: "/audio/parables/true-vine.mp3" },
   { slug: "wheat-and-tares", title: "The Wheat and the Tares", ref: "Matthew 13:24–30", videoId: "2WrO7EEckM8" },
   { slug: "mustard-seed", title: "The Mustard Seed", ref: "Matthew 13:31–32", videoId: "uLQlOIS864I" },
+  { slug: "leaven", title: "The Leaven", ref: "Matthew 13:33", videoId: "HH3SRIZO9ww", audioSrc: "/audio/parables/leaven.mp3" },
   { slug: "hidden-treasure", title: "The Hidden Treasure", ref: "Matthew 13:44", videoId: "9od-dL2sgWY" },
   { slug: "pearl-of-great-price", title: "The Pearl of Great Price", ref: "Matthew 13:45–46", videoId: "bxtra5KWcmI" },
   { slug: "unforgiving-servant", title: "The Unforgiving Servant", ref: "Matthew 18:23–35", parked: true },
