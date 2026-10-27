@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  GATHER THE FLOCK — the walking game (Newcomer Game #2)
+  Will's skin of the kit — built for Will, Jason's first sheep,
+  the night of October 26, 2026. Template: CONFIG names the
+  player; a future sheep's skin is a config change.
+  You walk the farm AS TEDDY and gather the scattered sheep
+  home to the fold. Every landmark tells one true thing.
+  House law: there's no way to lose — no enemies, no timer,
+  no fail state. Psalm 23 pace.
+  V2 (Jason's rulings from his own phone play, Oct 26, 2026):
+  Teddy WALKS — a little farmer drawn in code in the landmarks'
+  own flat style (straw hat, white beard, overalls), facing his
+  direction, legs stepping, a soft shadow at his feet. The sheep
+  are drawn sprites too — woolly bodies, heads, trotting legs.
+  No photo discs anywhere, no generations. And the cards are
+  full-width bottom sheets on a phone, big enough to read.
+  Teddy's VOICE: every card carries a line id (see LINES in
+  the script and audio/manifest.json). When his recorded
+  lines are ready, they drop into audio/ and play on their
+  cards — nothing else changes. Until then: his words on
+  screen, the way a storybook carries them.
+  The flock count is the Field Report's own figure, fetched
+  live and fail-soft — dated where it must be.
+  ============================================================
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Walk the Farm — Gather the Flock | Word of God Risen</title>
+<meta name="description" content="A walking game: walk the farm as Grandpa Teddy, gather the scattered sheep home, and hear one true thing at every landmark. There's no way to lose.">
+<meta name="theme-color" content="#0a2013">
+<style>
+  :root{
+    --green:#0a2013; --green2:#0e2a1b; --pasture:#2f6b3a;
+    --cream:#faf6e8; --gold:#d9a441; --gold-d:#8a6410; --ink:#24313d;
+    --paper:#fffdf4;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  [hidden]{ display:none !important; }
+  html{ scroll-behavior:smooth; }
+  body{
+    background:var(--green); color:var(--cream);
+    font-family:Georgia,'Times New Roman',serif;
+    -webkit-text-size-adjust:100%;
+  }
+  a{ color:var(--gold); }
+  a:focus-visible, button:focus-visible, canvas:focus-visible{
+    outline:3px solid var(--gold); outline-offset:3px; border-radius:8px;
+  }
+  .sr-only{
+    position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+    overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
+  }
+  .skip{
+    position:absolute; left:-9999px; top:0; background:var(--gold);
+    color:var(--green); padding:10px 18px; font-weight:700; z-index:30;
+  }
+  .skip:focus-visible{ left:12px; top:12px; }
+  .wrap{ max-width:1020px; margin:0 auto; padding:26px 16px 44px; }
+
+  /* ---------- header ---------- */
+  header{ text-align:center; }
+  header img.emblem{ width:138px; height:auto; }
+  .over{ margin-top:10px; font-size:13px; font-weight:700; letter-spacing:3px;
+    text-transform:uppercase; color:var(--gold); font-family:Arial,sans-serif; }
+  h1{ font-size:40px; line-height:1.1; margin-top:4px; }
+  .tag{ color:var(--gold); font-style:italic; font-size:18px; margin-top:6px; }
+  .howto{
+    max-width:720px; margin:18px auto 0; font-size:17px; line-height:1.6;
+    color:#e8e0c8;
+  }
+  .howto strong{ color:var(--cream); }
+
+  /* ---------- HUD ---------- */
+  .hud{
+    display:flex; flex-wrap:wrap; gap:10px; align-items:stretch;
+    max-width:960px; margin:20px auto 10px;
+  }
+  .chip{
+    flex:1 1 260px; background:var(--green2); border:1.5px solid #2c5238;
+    border-radius:12px; padding:10px 16px; font-size:16.5px; line-height:1.45;
+    display:flex; align-items:center; gap:10px;
+  }
+  .chip .big{ font-size:20px; font-weight:700; color:var(--gold); white-space:nowrap; }
+  .chip.board{ flex:1 1 320px; font-style:italic; color:#d9cfa9; }
+
+  /* ---------- the pasture ---------- */
+  .field{
+    position:relative; max-width:960px; margin:0 auto;
+    border:3px solid var(--gold); border-radius:16px; overflow:hidden;
+    box-shadow:0 10px 34px rgba(0,0,0,.45); background:var(--pasture);
+  }
+  canvas{ display:block; width:100%; height:auto; touch-action:none; }
+  .pad-note{
+    position:absolute; top:10px; left:50%; transform:translateX(-50%);
+    background:rgba(10,32,19,.92); color:var(--cream); border:1.5px solid var(--gold);
+    border-radius:999px; padding:8px 18px; font-size:15.5px; font-weight:700;
+    white-space:nowrap; z-index:5;
+  }
+
+  /* ---------- the card (Teddy's one true thing) ----------
+     Phone first (Jason's ruling): the veil covers the whole
+     screen and the card is a full-width sheet rising from the
+     bottom of it — the pasture alone is too short a room on a
+     phone, and a card that must be scrolled inside it is the
+     cramped box he ruled out. Type big enough to read at arm's
+     length, buttons tall enough for a thumb. On a wide screen it
+     settles back into a centered card — with the type stepped up
+     there too.
+     V2.1 (Jason's ruling, later the same night): every landmark
+     card carries a DOOR — one gold button to the very place the
+     landmark describes, opening in a new tab so the walk is
+     never lost (see DOORS beside CONFIG). */
+  .veil{
+    position:fixed; inset:0; z-index:40;
+    background:rgba(6,20,12,.45);
+    display:flex; align-items:flex-end; justify-content:center;
+    padding:0;
+  }
+  .card{
+    background:var(--paper); color:var(--ink);
+    border:2.5px solid var(--gold); border-bottom:none;
+    border-radius:20px 20px 0 0;
+    width:100%; max-width:100%;
+    padding:28px 22px calc(26px + env(safe-area-inset-bottom, 0px));
+    box-shadow:0 -12px 40px rgba(0,0,0,.5);
+    text-align:center; max-height:92%; overflow:auto;
+    animation:rise .3s ease-out;
+  }
+  @keyframes rise{ from{ transform:translateY(28px); opacity:.3; } to{ transform:none; opacity:1; } }
+  .card .kicker{
+    font-size:13px; font-weight:800; letter-spacing:2.4px;
+    text-transform:uppercase; color:var(--gold-d); font-family:Arial,sans-serif;
+  }
+  .card h2{ font-size:30px; line-height:1.2; margin-top:6px; color:#14532d; }
+  .card .verse{
+    margin-top:13px; font-size:21px; line-height:1.55; font-style:italic;
+    color:#33413a;
+  }
+  .card .verse .ref{ display:block; margin-top:6px; font-size:16px;
+    font-style:normal; font-weight:700; color:var(--gold-d); }
+  .card .line{ margin-top:12px; font-size:18px; line-height:1.62; }
+  .card .countline{ margin-top:10px; font-size:18px; font-weight:700; color:#14532d; }
+  .card .btns{ margin-top:20px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+  .btn{
+    font:inherit; font-size:18px; font-weight:700; cursor:pointer;
+    border-radius:999px; padding:14px 28px; min-height:56px; text-decoration:none;
+    background:#14532d; color:var(--cream); border:2px solid #14532d;
+    display:inline-flex; align-items:center; justify-content:center;
+  }
+  .btn:hover{ background:#1c6b3c; }
+  .btn.gold{ background:var(--gold); border-color:var(--gold); color:var(--green); }
+  .btn.gold:hover{ background:#e5b654; }
+  @media (max-width:699px){
+    .card .btns .btn{ flex:1 1 100%; }
+  }
+  @media (min-width:700px){
+    .veil{ align-items:center; padding:24px; }
+    .card{
+      max-width:660px; border-bottom:2.5px solid var(--gold);
+      border-radius:18px; padding:32px 36px 28px;
+      box-shadow:0 14px 40px rgba(0,0,0,.5);
+    }
+    .card h2{ font-size:33px; }
+    .card .verse{ font-size:22px; }
+    .card .line{ font-size:19px; }
+    .card .countline{ font-size:19px; }
+  }
+
+  /* ---------- touch joystick ---------- */
+  .joy{
+    position:absolute; left:16px; bottom:16px; z-index:6;
+    width:118px; height:118px; border-radius:50%;
+    background:rgba(10,32,19,.38); border:2px solid rgba(250,246,232,.55);
+    display:none; touch-action:none;
+  }
+  .joy .knob{
+    position:absolute; left:50%; top:50%; width:52px; height:52px;
+    border-radius:50%; background:rgba(250,246,232,.85);
+    border:2px solid var(--gold); transform:translate(-50%,-50%);
+  }
+  body.touch .joy{ display:block; }
+
+  /* ---------- under the field ---------- */
+  .controls-note{
+    max-width:960px; margin:14px auto 0; text-align:center;
+    font-size:15.5px; line-height:1.6; color:#cbbfa0;
+  }
+  .doors{
+    display:grid; grid-template-columns:1fr 1fr; gap:12px;
+    max-width:960px; margin:26px auto 0;
+  }
+  @media (max-width:640px){ .doors{ grid-template-columns:1fr; } }
+  a.door{
+    display:flex; align-items:center; gap:14px; background:var(--cream);
+    color:var(--ink); text-decoration:none; border-radius:14px;
+    padding:13px 17px; min-height:62px; box-shadow:0 2px 8px rgba(0,0,0,.35);
+  }
+  a.door:active{ transform:scale(.99); }
+  .badge{ flex:0 0 auto; width:44px; height:44px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-size:21px;
+    background:#14532d; color:#fff; }
+  .badge.b-game{ background:#7a4f16; }
+  .lbl{ font-size:18px; font-weight:bold; line-height:1.2; }
+  .sub{ font-size:14px; color:#5a5342; }
+  footer{ text-align:center; margin-top:32px; color:#b8ab84; font-style:italic;
+    font-size:15.5px; line-height:1.6; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ transition:none !important; animation:none !important; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#game">Skip to the game</a>
+<div class="wrap">
+
+  <header>
+    <img class="emblem" src="emblem.png" alt="The TruVINE emblem — a vine in a triangle">
+    <p class="over">A walking game</p>
+    <h1>Walk the Farm</h1>
+    <p class="tag">Walk the farm as Teddy. Bring every sheep home. There&rsquo;s no way to lose.</p>
+    <p class="howto">The flock is scattered across the farm tonight, <strong id="greetName">friend</strong> —
+      some by the well, some by the barn, some just out in the grass. Walk Teddy to a sheep and it
+      will fall in behind him; lead the whole train home through the <strong>gate of the fold</strong>.
+      Stop at each place on the farm — every one of them has <strong>one true thing</strong> to tell you.</p>
+  </header>
+
+  <div class="hud" aria-hidden="true">
+    <div class="chip"><span class="big" id="hudSheep">🐑 0 of 8 home</span><span id="hudFollow">none following yet</span></div>
+    <div class="chip board" id="hudBoard">The field board is counting the flock…</div>
+  </div>
+
+  <div class="field" id="game">
+    <canvas id="pasture" width="960" height="640" tabindex="0" role="img"
+      aria-label="The farm pasture. You walk as Grandpa Teddy, a little farmer in a straw hat and overalls. Eight sheep wait around the well, the barn, the field board, the porch and the open grass. The fenced fold with its gate waits at the lower right."></canvas>
+    <div class="pad-note" id="padNote" hidden>🎮 Controller connected — walk with the stick or D-pad, A keeps walking</div>
+
+    <div class="joy" id="joy" aria-hidden="true"><div class="knob" id="joyKnob"></div></div>
+
+    <div class="veil" id="veil">
+      <div class="card" role="dialog" aria-modal="false" aria-labelledby="cardTitle" id="card" data-line="greeting">
+        <p class="kicker" id="cardKicker">Grandpa Teddy</p>
+        <h2 id="cardTitle">Well hey, friend —</h2>
+        <p class="verse" id="cardVerse" hidden><span id="cardVerseText"></span><span class="ref" id="cardVerseRef"></span></p>
+        <p class="line" id="cardLine"></p>
+        <p class="countline" id="cardCount" hidden></p>
+        <div class="btns">
+          <a class="btn gold" id="cardDoor" href="https://word-of-god-risen.vercel.app/" hidden>Open the Bible app — free</a>
+          <button class="btn" id="cardAgain" type="button" hidden>Walk the farm again</button>
+          <button class="btn" id="cardGo" type="button">Start walking</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="controls-note">Play it your way: a <strong>plugged-in game controller</strong> on the TV
+    (stick or D-pad to walk, A to go on), the <strong>arrow keys or WASD</strong>, or the
+    <strong>thumb stick</strong> on a touch screen. No timer, no enemies, no losing — take all the time you like.</p>
+
+  <div class="doors">
+    <a class="door" href="https://word-of-god-risen.vercel.app/"><span class="badge">📖</span><span><span class="lbl">Word of God Risen</span><br><span class="sub">The whole Bible, read aloud by Grandpa Teddy — free</span></span></a>
+  </div>
+
+  <footer>
+    <p>&ldquo;I am the good shepherd. The good shepherd lays down his life for the sheep.&rdquo; — John 10:11 (WEB)</p>
+    <p style="margin-top:8px">Gather the Flock · Game #2 of the newcomer kit · TruVINE · October 26, 2026</p>
+  </footer>
+
+</div>
+<p class="sr-only" aria-live="polite" id="srStatus"></p>
+
+<script>
+"use strict";
+/* ================= CONFIG — the template skin =================
+   A future sheep's game is this same engine with a new CONFIG:
+   their name, their greeting, their flock. Nothing else changes. */
+var CONFIG = {
+  playerName: "friend",
+  flockFallback: { count: 841, asOf: "October 15, 2026" }  /* Will's barn-board figures */
+};
+
+/* ================= THE DOORS — every place opens somewhere =================
+   Each landmark card carries one gold door to the very place it
+   describes — the same doors on every skin; only the greeting
+   and the player change. A door opens in a new tab, so the
+   walk is never lost. The greeting card is the welcome, not a
+   place, and gets no door; the fold's closing card already
+   carries its own app door (see the card markup). */
+var DOORS = {
+  well:  { href:"https://word-of-god-risen.vercel.app/",        label:"Open the app" },
+  barn:  { href:"https://www.youtube.com/@TruVINE365",          label:"Watch the films" },
+  board: { href:"https://jnutt367.github.io/truvine/field-report/", label:"See the Field Report" },
+  gate:  { href:"https://jnutt367.github.io/truvine/links/",    label:"Open the Key Ring" },
+  porch: { href:"https://jnutt367.github.io/truvine/family-wall/",   label:"Visit the Family Wall" }
+};
+
+/* ================= THE LINES — Teddy's voice slots =================
+   Every card is a line. When Teddy's recorded voice is ready, each
+   line's file drops into audio/ and is listed in audio/manifest.json;
+   showCard() then plays it. Until then the words stand on screen. */
+var LINES = {
+  greeting: { place:"Grandpa Teddy", title:"Well hey, " + CONFIG.playerName + " —",
+    audio:"audio/greeting.mp3",
+    line:"The flock's scattered across the farm tonight, and every single one matters. Walk with me — we'll gather them home together. There's no way to lose, friend. The Shepherd made sure of that." },
+  well: { place:"The Well", title:"The Well — living water",
+    verse:"…but whoever drinks of the water that I will give him will never thirst again.",
+    ref:"John 4:14 (WEB)", audio:"audio/well.mp3",
+    line:"This is where the Bible app lives on the farm. Word of God Risen — the whole Bible, read out loud by Grandpa Teddy, free for anybody. Tap a book, tap a chapter, tap Listen. That's the whole of it." },
+  barn: { place:"The Barn", title:"The Barn — the stories",
+    verse:"So faith comes by hearing, and hearing by the word of God.",
+    ref:"Romans 10:17 (WEB)", audio:"audio/barn.mp3",
+    line:"The barn is where the films are kept — the TruVINE channel. Bible stories and whole chapters of Mark, told plain and warm, every one free to watch. This is the flock on the board, gathered from all over the world." },
+  board: { place:"The Field Board", title:"The Field Board — the counting",
+    verse:"When he has found it, he lays it on his shoulders, rejoicing.",
+    ref:"Luke 15:5 (WEB)", audio:"audio/board.mp3",
+    line:"This board is the Field Report — the farm's own counting, kept honest. It never counts a person; it counts the Word landing: chapters read, chapters heard, places lit. And it counts the flock — that's you, and everybody who keeps coming back." },
+  gate: { place:"The Gate", title:"The Gate — the way in",
+    verse:"I am the door. If anyone enters in by me, he will be saved.",
+    ref:"John 10:9 (WEB)", audio:"audio/gate.mp3",
+    line:"Every sheep comes home through the gate — there's no other way in, and the gate is never locked. Lead your train through here, into the fold. And if you're ever starting fresh yourself, friend, this gate is where the whole farm begins." },
+  porch: { place:"The Porch", title:"The Porch — the family's wall",
+    verse:"I have other sheep, which are not of this fold. I must bring them also, and they will hear my voice. They will become one flock with one shepherd.",
+    ref:"John 10:16 (WEB)", audio:"audio/porch.mp3",
+    line:"The porch looks out on the Family Wall, where the flock takes its place — a photo, a name, or quietly in prayer, always by their own choosing. A place on that wall is kept for you, friend, whenever. No hurry. The door's open." },
+  closing: { place:"The Fold", title:"Every one home",
+    verse:"I am the good shepherd. The good shepherd lays down his life for the sheep.",
+    ref:"John 10:11 (WEB)", audio:"audio/closing.mp3",
+    line:"You gathered your flock — now hear the Shepherd read." }
+};
+var voiceFiles = {};   /* filled from audio/manifest.json when Teddy's lines land */
+if (window.fetch) {
+  fetch('audio/manifest.json', { credentials:'same-origin' })
+    .then(function(r){ if (!r.ok) throw 0; return r.json(); })
+    .then(function(m){ if (m && m.lines) voiceFiles = m.lines; })
+    .catch(function(){ /* text-only until the voice arrives — by design */ });
+}
+function playLine(id){
+  var src = voiceFiles[id];
+  if (!src) return;
+  try { var a = new Audio(src); a.play(); } catch(e) {}
+}
+</script>
+<script>
+(function(){
+"use strict";
+var W = 960, H = 640;
+var REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+function fmt(n){ return n.toLocaleString('en-US'); }
+function pad2(n){ return (n < 10 ? '0' : '') + n; }
+function todayISO(){ var d = new Date(); return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()); }
+function longDate(iso){
+  if (!iso) return '';
+  var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso);
+  if (!m) return iso;
+  return MONTHS[+m[2] - 1] + ' ' + (+m[3]) + ', ' + m[1];
+}
+
+/* ---------- the flock's real count — the Field Report's own record,
+   fetched fail-soft exactly the way Will's trivia fetches it.
+   Any failure leaves the dated barn-board figure standing;
+   the game never waits on the wire. ---------- */
+var FIG = { count: CONFIG.flockFallback.count, asOf: CONFIG.flockFallback.asOf, asOfISO: null, fresh: false };
+function boardLine(){
+  if (FIG.fresh && FIG.asOfISO === todayISO())
+    return 'The flock tonight is ' + fmt(FIG.count) + ' — counted tonight, and every single one matters.';
+  if (FIG.fresh)
+    return 'The flock at the latest count (' + FIG.asOf + ') is ' + fmt(FIG.count) + ' — and every single one matters.';
+  return 'At the last count (' + FIG.asOf + ') the flock was ' + fmt(FIG.count) + ' — and it has only grown since.';
+}
+function boardChip(){
+  if (FIG.fresh && FIG.asOfISO === todayISO()) return 'The field board says: the flock tonight is ' + fmt(FIG.count) + '.';
+  if (FIG.fresh) return 'The field board says: ' + fmt(FIG.count) + ' in the flock (counted ' + FIG.asOf + ').';
+  return 'The field board says: ' + fmt(FIG.count) + ' in the flock (counted ' + FIG.asOf + ').';
+}
+function fetchFigures(){
+  if (!window.fetch || !window.DOMParser) return;
+  var ctl = ('AbortController' in window) ? new AbortController() : null;
+  var timer = ctl ? window.setTimeout(function(){ ctl.abort(); }, 6000) : null;
+  fetch('https://jnutt367.github.io/truvine/field-report/', { credentials:'same-origin', signal: ctl ? ctl.signal : undefined })
+    .then(function(r){ if (!r.ok) throw new Error('fetch failed'); return r.text(); })
+    .then(function(pageHtml){
+      var doc = new DOMParser().parseFromString(pageHtml, 'text/html');
+      var el = doc.querySelector('#fr-refresh-data');
+      if (!el) return;
+      var d = JSON.parse(el.textContent);
+      var subs = d && d.youtube ? +d.youtube.subs : NaN;
+      if (!isFinite(subs)) return;
+      FIG.count = subs;
+      FIG.asOfISO = (d.asOf && (d.asOf.run || d.asOf.youtube)) || null;
+      FIG.asOf = FIG.asOfISO ? longDate(FIG.asOfISO) : FIG.asOf;
+      FIG.fresh = true;
+      document.getElementById('hudBoard').textContent = boardChip();
+      if (cardId === 'board') document.getElementById('cardCount').textContent = boardLine();
+    })
+    .catch(function(){ /* the dated figure stands */ })
+    .then(function(){ if (timer) window.clearTimeout(timer); });
+}
+
+/* ---------- the world ---------- */
+var LANDMARKS = [
+  { id:'well',  x:118, y:118, r:88,  label:'THE WELL' },
+  { id:'barn',  x:838, y:112, r:98,  label:'THE BARN' },
+  { id:'porch', x:480, y:126, r:94,  label:'THE PORCH' },
+  { id:'board', x:128, y:512, r:90,  label:'THE FIELD BOARD' },
+  { id:'gate',  x:688, y:513, r:76,  label:'THE GATE' }
+];
+var PEN = { x0:688, y0:408, x1:936, y1:616, gateY0:478, gateY1:548 };
+var FENCES = [
+  [PEN.x0, PEN.y0, PEN.x1, PEN.y0], [PEN.x1, PEN.y0, PEN.x1, PEN.y1],
+  [PEN.x0, PEN.y1, PEN.x1, PEN.y1], [PEN.x0, PEN.y0, PEN.x0, PEN.gateY0],
+  [PEN.x0, PEN.gateY1, PEN.x0, PEN.y1]
+];
+var OBSTACLES = [
+  { x:118, y:118, r:37 }, { x:838, y:112, r:57 },
+  { x:480, y:66, r:62 },  { x:128, y:512, r:33 }
+];
+var SLOTS = [];
+[468, 556].forEach(function(y){ [738, 798, 858, 904].forEach(function(x){ SLOTS.push({ x:x, y:y }); }); });
+var SHEEP_HOME = [
+  { x:206, y:180 }, { x:86, y:238 },     /* by the well */
+  { x:748, y:204 }, { x:892, y:238 },    /* by the barn */
+  { x:566, y:200 },                      /* below the porch */
+  { x:224, y:446 },                      /* by the field board */
+  { x:428, y:376 }, { x:604, y:318 }     /* out in the grass */
+];
+
+var cv = document.getElementById('pasture');
+var ctx = cv.getContext('2d');
+/* v2: no photo tokens anywhere — Teddy and the sheep are drawn
+   sprites, shapes in the landmarks' own flat style (see draw). */
+
+var veil = document.getElementById('veil');
+var cardEl = document.getElementById('card');
+/* the closing card's own door, as written in the markup — kept
+   so a landmark's door never leaks onto the fold's card */
+var CLOSING_DOOR = (function(){
+  var el = document.getElementById('cardDoor');
+  return { href: el.getAttribute('href'), label: el.textContent };
+})();
+var srStatus = document.getElementById('srStatus');
+var hudSheep = document.getElementById('hudSheep');
+var hudFollow = document.getElementById('hudFollow');
+
+var teddy, trail, sheep, followers, homed, slotCursor, seen, cardId, won, pulses;
+function resetWorld(){
+  teddy = { x:480, y:228, moving:false, dir:'down', phase:0 };
+  trail = [{ x:teddy.x, y:teddy.y }];
+  sheep = SHEEP_HOME.map(function(p, i){
+    return { x:p.x, y:p.y, state:'wait', slot:null, phase:i * 1.37,
+             fx:0, fy:1, moving:false };
+  });
+  followers = []; homed = 0; slotCursor = 0; seen = {}; won = false; pulses = [];
+  updateHUD();
+}
+function announce(msg){ srStatus.textContent = msg; }
+function updateHUD(){
+  hudSheep.textContent = '🐑 ' + homed + ' of 8 home';
+  var n = followers.length;
+  hudFollow.textContent = n === 0 ? 'none following yet'
+    : n === 1 ? 'one sheep following you' : n + ' sheep following you';
+}
+
+/* ---------- the cards ---------- */
+function showCard(id){
+  var L = LINES[id];
+  if (!L) return;
+  cardId = id;
+  cardEl.setAttribute('data-line', id);
+  document.getElementById('cardKicker').textContent = L.place;
+  document.getElementById('cardTitle').textContent = L.title;
+  var v = document.getElementById('cardVerse');
+  if (L.verse) {
+    v.hidden = false;
+    document.getElementById('cardVerseText').textContent = '\u201C' + L.verse + '\u201D';
+    document.getElementById('cardVerseRef').textContent = '— ' + L.ref;
+  } else v.hidden = true;
+  document.getElementById('cardLine').textContent = L.line;
+  var c = document.getElementById('cardCount');
+  if (id === 'board') { c.hidden = false; c.textContent = boardLine(); }
+  else c.hidden = true;
+  var doorEl = document.getElementById('cardDoor');
+  if (DOORS[id]) {
+    /* a landmark's door: gold, to the very place it describes,
+       opening in a new tab so the walk is never lost */
+    doorEl.href = DOORS[id].href;
+    doorEl.textContent = DOORS[id].label;
+    doorEl.setAttribute('target', '_blank');
+    doorEl.setAttribute('rel', 'noopener noreferrer');
+    doorEl.hidden = false;
+  } else if (id === 'closing') {
+    /* the fold's own app door, restored exactly as it stands
+       in the markup (captured at load, before any landmark) */
+    doorEl.setAttribute('href', CLOSING_DOOR.href);
+    doorEl.textContent = CLOSING_DOOR.label;
+    doorEl.removeAttribute('target');
+    doorEl.removeAttribute('rel');
+    doorEl.hidden = false;
+  } else {
+    doorEl.hidden = true;   /* the greeting is the welcome, not a place */
+  }
+  document.getElementById('cardAgain').hidden = (id !== 'closing');
+  var go = document.getElementById('cardGo');
+  go.hidden = (id === 'closing');
+  go.textContent = (id === 'greeting') ? 'Start walking' : 'Keep walking';
+  veil.hidden = false;
+  playLine(id);
+  window.setTimeout(function(){ (id === 'closing' ? document.getElementById('cardDoor') : go).focus({ preventScroll:true }); }, 30);
+}
+function dismissCard(){
+  if (!cardId || cardId === 'closing') return;
+  veil.hidden = true;
+  cardId = null;
+  cv.focus({ preventScroll:true });
+}
+document.getElementById('cardGo').addEventListener('click', dismissCard);
+document.getElementById('cardAgain').addEventListener('click', function(){
+  veil.hidden = true; cardId = null; resetWorld(); showCard('greeting');
+});
+
+/* ---------- input: keys, touch stick, gamepad ---------- */
+var keys = {};
+window.addEventListener('keydown', function(e){
+  var k = e.key.toLowerCase();
+  if (['arrowup','arrowdown','arrowleft','arrowright',' '].indexOf(k) !== -1 &&
+      !/^(a|button)$/i.test(document.activeElement ? document.activeElement.tagName : '')) e.preventDefault();
+  keys[k] = true;
+  if (cardId && (k === 'enter' || k === ' ')) dismissCard();
+});
+window.addEventListener('keyup', function(e){ keys[e.key.toLowerCase()] = false; });
+
+var joyVec = { x:0, y:0 };
+var joy = document.getElementById('joy'), joyKnob = document.getElementById('joyKnob');
+if ('ontouchstart' in window || navigator.maxTouchPoints > 0) document.body.classList.add('touch');
+function joySet(dx, dy){
+  joyKnob.style.transform = 'translate(calc(-50% + ' + dx * 30 + 'px), calc(-50% + ' + dy * 30 + 'px))';
+}
+var joyId = null;
+function joyPoint(e){
+  var r = joy.getBoundingClientRect();
+  var dx = (e.clientX - (r.left + r.width / 2)) / (r.width / 2);
+  var dy = (e.clientY - (r.top + r.height / 2)) / (r.height / 2);
+  var len = Math.hypot(dx, dy);
+  if (len > 1) { dx /= len; dy /= len; }
+  joyVec = { x:dx, y:dy }; joySet(dx, dy);
+}
+joy.addEventListener('pointerdown', function(e){ joyId = e.pointerId; joy.setPointerCapture(joyId); joyPoint(e); });
+joy.addEventListener('pointermove', function(e){ if (e.pointerId === joyId) joyPoint(e); });
+function joyEnd(e){ if (e.pointerId === joyId) { joyId = null; joyVec = { x:0, y:0 }; joySet(0, 0); } }
+joy.addEventListener('pointerup', joyEnd);
+joy.addEventListener('pointercancel', joyEnd);
+
+/* gamepad — the house pattern from Will's trivia: rAF polling,
+   first real input reveals the note; stick past the deadzone walks */
+var pad = { engaged:false, prev:[], vec:{ x:0, y:0 } };
+var padNote = document.getElementById('padNote');
+function pollPad(){
+  pad.vec = { x:0, y:0 };
+  if (!('getGamepads' in navigator) || document.hidden) return;
+  var pads = navigator.getGamepads(), gp = null;
+  for (var i = 0; i < pads.length; i++) if (pads[i] && pads[i].connected) { gp = pads[i]; break; }
+  if (!gp) { pad.prev = []; return; }
+  var DEAD = 0.35, any = false;
+  var ax = gp.axes && gp.axes.length > 0 ? gp.axes[0] : 0;
+  var ay = gp.axes && gp.axes.length > 1 ? gp.axes[1] : 0;
+  if (Math.abs(ax) > DEAD || Math.abs(ay) > DEAD) {
+    pad.vec.x = Math.abs(ax) > DEAD ? ax : 0;
+    pad.vec.y = Math.abs(ay) > DEAD ? ay : 0;
+    any = true;
+  }
+  var b = gp.buttons || [];
+  function pressed(n){ return !!(b[n] && b[n].pressed); }
+  if (pressed(14)) { pad.vec.x = -1; any = true; }
+  if (pressed(15)) { pad.vec.x = 1; any = true; }
+  if (pressed(12)) { pad.vec.y = -1; any = true; }
+  if (pressed(13)) { pad.vec.y = 1; any = true; }
+  var aEdge = pressed(0) && !pad.prev[0];
+  if (pressed(0)) any = true;
+  pad.prev = [pressed(0)];
+  if (any && !pad.engaged) {
+    pad.engaged = true;
+    padNote.hidden = false;
+  }
+  if (aEdge && cardId) dismissCard();
+}
+function inputVector(){
+  var x = 0, y = 0;
+  if (keys['arrowleft'] || keys['a']) x -= 1;
+  if (keys['arrowright'] || keys['d']) x += 1;
+  if (keys['arrowup'] || keys['w']) y -= 1;
+  if (keys['arrowdown'] || keys['s']) y += 1;
+  if (x === 0 && y === 0 && (pad.vec.x || pad.vec.y)) { x = pad.vec.x; y = pad.vec.y; }
+  if (x === 0 && y === 0 && (joyVec.x || joyVec.y)) { x = joyVec.x; y = joyVec.y; }
+  var len = Math.hypot(x, y);
+  if (len > 1) { x /= len; y /= len; }
+  return { x:x, y:y };
+}
+
+/* ---------- movement & the train ---------- */
+function segPush(px, py, r, s){
+  var dx = s[2] - s[0], dy = s[3] - s[1];
+  var t = ((px - s[0]) * dx + (py - s[1]) * dy) / (dx * dx + dy * dy || 1);
+  t = Math.max(0, Math.min(1, t));
+  var cx = s[0] + dx * t, cy = s[1] + dy * t;
+  var ox = px - cx, oy = py - cy, d = Math.hypot(ox, oy);
+  if (d > 0.001 && d < r) { px = cx + ox / d * r; py = cy + oy / d * r; }
+  return { x:px, y:py };
+}
+function update(dt, now){
+  if (cardId) { teddy.moving = false; return; }
+  var iv = inputVector();
+  var SPEED = 170;
+  teddy.moving = (iv.x !== 0 || iv.y !== 0);
+  if (teddy.moving) {
+    /* he faces where he walks, and his legs keep the beat */
+    if (Math.abs(iv.x) > Math.abs(iv.y)) teddy.dir = iv.x < 0 ? 'left' : 'right';
+    else teddy.dir = iv.y < 0 ? 'up' : 'down';
+    teddy.phase += dt * 10.5;
+    teddy.x += iv.x * SPEED * dt;
+    teddy.y += iv.y * SPEED * dt;
+    teddy.x = Math.max(30, Math.min(W - 30, teddy.x));
+    teddy.y = Math.max(30, Math.min(H - 30, teddy.y));
+    for (var o = 0; o < OBSTACLES.length; o++) {
+      var ob = OBSTACLES[o], ox = teddy.x - ob.x, oy = teddy.y - ob.y, od = Math.hypot(ox, oy);
+      if (od > 0.001 && od < ob.r + 24) { teddy.x = ob.x + ox / od * (ob.r + 24); teddy.y = ob.y + oy / od * (ob.r + 24); }
+    }
+    for (var f = 0; f < FENCES.length; f++) {
+      var p = segPush(teddy.x, teddy.y, 26, FENCES[f]);
+      teddy.x = p.x; teddy.y = p.y;
+    }
+    var head = trail[0];
+    if (Math.hypot(teddy.x - head.x, teddy.y - head.y) >= 7) {
+      trail.unshift({ x:teddy.x, y:teddy.y });
+      if (trail.length > 600) trail.pop();
+    }
+  }
+  /* the train follows the shepherd's own path */
+  for (var i = followers.length - 1; i >= 0; i--) {
+    var s = followers[i];
+    var tp = trail[Math.min((i + 1) * 6, trail.length - 1)];
+    var dx = tp.x - s.x, dy = tp.y - s.y, d = Math.hypot(dx, dy);
+    s.moving = false;
+    if (d > 2) {
+      var sp = (SPEED + 80) * (d < 26 ? 0.35 + 0.65 * d / 26 : 1);
+      var step = Math.min(d, sp * dt);
+      s.x += dx / d * step; s.y += dy / d * step;
+      if (step > 0.05) { s.fx = dx / d; s.fy = dy / d; s.moving = true; s.phase += dt * 11; }
+    }
+    if (s.x > PEN.x0 + 16 && s.x < PEN.x1 - 16 && s.y > PEN.y0 + 16 && s.y < PEN.y1 - 16) {
+      followers.splice(i, 1);
+      s.state = 'homing';
+      s.slot = SLOTS[slotCursor++];
+      if (!REDUCE) pulses.push({ x:s.x, y:s.y, t:0 });
+    }
+  }
+  for (var j = 0; j < sheep.length; j++) {
+    var sh = sheep[j];
+    if (sh.state === 'homing') {
+      var hx = sh.slot.x - sh.x, hy = sh.slot.y - sh.y, hd = Math.hypot(hx, hy);
+      if (hd < 6) {
+        sh.state = 'home'; sh.moving = false; homed++;
+        if (!REDUCE) pulses.push({ x:sh.slot.x, y:sh.slot.y, t:0 });
+        announce(homed + ' of 8 sheep home in the fold.');
+        updateHUD();
+        if (homed === 8 && !won) {
+          won = true;
+          window.setTimeout(function(){ showCard('closing'); }, 900);
+        }
+      } else {
+        var hstep = Math.min(hd, 130 * dt);
+        sh.x += hx / hd * hstep; sh.y += hy / hd * hstep;
+        if (hd > 0.01) { sh.fx = hx / hd; sh.fy = hy / hd; }
+        sh.moving = true; sh.phase += dt * 11;
+      }
+    } else if (sh.state === 'wait') {
+      if (Math.hypot(teddy.x - sh.x, teddy.y - sh.y) < 44) {
+        sh.state = 'follow';
+        followers.push(sh);
+        if (!REDUCE) pulses.push({ x:sh.x, y:sh.y, t:0 });
+        announce('A sheep falls in behind Teddy — ' + followers.length + ' following, ' + homed + ' home.');
+        updateHUD();
+      }
+    }
+  }
+  /* landmarks — each tells its one true thing, once */
+  for (var l = 0; l < LANDMARKS.length; l++) {
+    var lm = LANDMARKS[l];
+    if (!seen[lm.id] && Math.hypot(teddy.x - lm.x, teddy.y - lm.y) < lm.r) {
+      seen[lm.id] = true;
+      showCard(lm.id);
+      break;
+    }
+  }
+  for (var q = pulses.length - 1; q >= 0; q--) {
+    pulses[q].t += dt;
+    if (pulses[q].t > 0.7) pulses.splice(q, 1);
+  }
+}
+
+/* ---------- drawing ---------- */
+function fit(){
+  var scale = (cv.clientWidth || W) / W;
+  var dpr = window.devicePixelRatio || 1;
+  cv.width = Math.round(W * scale * dpr);
+  cv.height = Math.round(H * scale * dpr);
+  ctx.setTransform(cv.width / W, 0, 0, cv.width / W, 0, 0);
+}
+window.addEventListener('resize', fit);
+
+function rr(x, y, w, h, r){
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+function label(x, y, text){
+  ctx.font = '700 13px Arial, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'rgba(10,32,19,.55)';
+  ctx.fillText(text, x + 1, y + 1);
+  ctx.fillStyle = '#faf6e8';
+  ctx.fillText(text, x, y);
+}
+function drawWell(){
+  ctx.fillStyle = '#6d7a68';
+  ctx.beginPath(); ctx.ellipse(118, 132, 40, 14, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#8b9684';
+  ctx.beginPath(); ctx.ellipse(118, 120, 38, 22, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#17301f';
+  ctx.beginPath(); ctx.ellipse(118, 118, 27, 15, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#4d7ea8';
+  ctx.beginPath(); ctx.ellipse(118, 117, 22, 11, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = '#8a5a2b'; ctx.lineWidth = 5;
+  ctx.beginPath(); ctx.moveTo(88, 118); ctx.lineTo(88, 74); ctx.moveTo(148, 118); ctx.lineTo(148, 74); ctx.stroke();
+  ctx.fillStyle = '#d9a441';
+  ctx.beginPath(); ctx.moveTo(78, 76); ctx.lineTo(158, 76); ctx.lineTo(118, 52); ctx.closePath(); ctx.fill();
+  label(118, 168, 'THE WELL');
+}
+function drawBarn(){
+  ctx.fillStyle = '#7a3b2e';
+  rr(776, 74, 124, 84, 4); ctx.fill();
+  ctx.fillStyle = '#5d2c21';
+  ctx.beginPath();
+  ctx.moveTo(764, 78); ctx.lineTo(800, 44); ctx.lineTo(872, 44); ctx.lineTo(912, 78); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = '#faf6e8';
+  rr(820, 106, 36, 52, 3); ctx.fill();
+  ctx.strokeStyle = '#7a3b2e'; ctx.lineWidth = 3;
+  ctx.strokeRect(823, 109, 30, 46);
+  ctx.beginPath(); ctx.moveTo(823, 109); ctx.lineTo(853, 155); ctx.moveTo(853, 109); ctx.lineTo(823, 155); ctx.stroke();
+  ctx.fillStyle = '#e8dcc0';
+  rr(788, 86, 22, 18, 2); ctx.fill(); rr(868, 86, 22, 18, 2); ctx.fill();
+  label(838, 186, 'THE BARN');
+}
+function drawPorch(){
+  ctx.fillStyle = '#e8dcc0';
+  rr(404, 22, 152, 78, 4); ctx.fill();
+  ctx.fillStyle = '#14532d';
+  ctx.beginPath();
+  ctx.moveTo(392, 26); ctx.lineTo(480, 2); ctx.lineTo(568, 26); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = '#8a5a2b';
+  rr(462, 52, 36, 48, 3); ctx.fill();
+  ctx.fillStyle = '#d9a441';
+  ctx.beginPath(); ctx.arc(492, 78, 3, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#f3ead2';
+  rr(420, 34, 26, 26, 2); ctx.fill(); rr(514, 34, 26, 26, 2); ctx.fill();
+  ctx.fillStyle = '#c9b489';
+  rr(398, 100, 164, 10, 3); ctx.fill();
+  rr(410, 110, 140, 8, 3); ctx.fill();
+  label(480, 140, 'THE PORCH');
+}
+function drawBoard(){
+  ctx.strokeStyle = '#8a5a2b'; ctx.lineWidth = 7;
+  ctx.beginPath(); ctx.moveTo(88, 478); ctx.lineTo(88, 548); ctx.moveTo(168, 478); ctx.lineTo(168, 548); ctx.stroke();
+  ctx.fillStyle = '#0e2a1b';
+  rr(66, 452, 124, 66, 6); ctx.fill();
+  ctx.strokeStyle = '#d9a441'; ctx.lineWidth = 3;
+  rr(66, 452, 124, 66, 6); ctx.stroke();
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#d9a441';
+  ctx.font = '700 11px Arial, sans-serif';
+  ctx.fillText('THE FLOCK', 128, 474);
+  ctx.fillStyle = '#faf6e8';
+  ctx.font = '800 26px Georgia, serif';
+  ctx.fillText(fmt(FIG.count), 128, 502);
+  ctx.font = '600 9.5px Arial, sans-serif';
+  ctx.fillStyle = '#cbbfa0';
+  ctx.fillText(FIG.fresh ? (FIG.asOfISO === todayISO() ? 'counted tonight' : 'counted ' + FIG.asOf) : 'counted ' + FIG.asOf, 128, 514);
+  label(128, 574, 'THE FIELD BOARD');
+}
+function drawFold(){
+  ctx.fillStyle = 'rgba(217,180,92,.15)';
+  ctx.fillRect(PEN.x0, PEN.y0, PEN.x1 - PEN.x0, PEN.y1 - PEN.y0);
+  ctx.strokeStyle = '#8a5a2b'; ctx.lineWidth = 4;
+  ctx.lineCap = 'round';
+  for (var i = 0; i < FENCES.length; i++) {
+    var s = FENCES[i];
+    ctx.beginPath(); ctx.moveTo(s[0], s[1] - 5); ctx.lineTo(s[2], s[3] - 5); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(s[0], s[1] + 6); ctx.lineTo(s[2], s[3] + 6); ctx.stroke();
+    var len = Math.hypot(s[2] - s[0], s[3] - s[1]);
+    var n = Math.max(2, Math.round(len / 38));
+    ctx.fillStyle = '#6e4520';
+    for (var k = 0; k <= n; k++) {
+      var px = s[0] + (s[2] - s[0]) * k / n, py = s[1] + (s[3] - s[1]) * k / n;
+      ctx.fillRect(px - 3.5, py - 10, 7, 20);
+    }
+  }
+  ctx.fillStyle = '#d9a441';
+  ctx.beginPath(); ctx.arc(PEN.x0, PEN.gateY0, 7, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(PEN.x0, PEN.gateY1, 7, 0, Math.PI * 2); ctx.fill();
+  label((PEN.x0 + PEN.x1) / 2, PEN.y0 - 14, 'THE FOLD');
+  label(PEN.x0 - 4, PEN.gateY1 + 34, 'THE GATE');
+}
+/* ---------- the sprites — drawn in code, in the landmarks' own
+   flat style. No photographs, no discs, no generations: a little
+   farmer and his sheep, standing in the field on their own
+   shadows, legs stepping and trotting as they go. ---------- */
+function drawSheepSprite(s, px, yOff){
+  var y = s.y + (yOff || 0);
+  var trotting = s.moving && !REDUCE;
+  var trot = trotting ? Math.sin(s.phase) : 0;
+  var bounce = trotting ? -Math.abs(Math.sin(s.phase)) * 2.2 : 0;
+  ctx.fillStyle = 'rgba(10,32,19,.28)';
+  ctx.beginPath(); ctx.ellipse(s.x, y + px * 0.36, px * 0.38, px * 0.12, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.save();
+  ctx.translate(s.x, y + bounce);
+  ctx.scale(px / 48, px / 48);
+  /* little legs, trotting in diagonal pairs */
+  ctx.fillStyle = '#4c443a';
+  rr(-15, 8 + trot * 2.4, 5.5, 11, 2.5); ctx.fill();
+  rr(10, 8 + trot * 2.4, 5.5, 11, 2.5); ctx.fill();
+  rr(-5, 9 - trot * 2.4, 5.5, 11, 2.5); ctx.fill();
+  rr(16, 9 - trot * 2.4, 5.5, 11, 2.5); ctx.fill();
+  /* the wool — a soft cloud of circles */
+  ctx.fillStyle = '#e9e1c8';
+  ctx.beginPath(); ctx.ellipse(0, 1, 21, 15, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#faf5e2';
+  var puffs = [[-13,-6,8],[-5,-10,9],[4,-10,9],[13,-6,8],[-16,2,7],[16,2,7],[-8,4,9],[7,4,9],[0,-3,10]];
+  for (var i = 0; i < puffs.length; i++) {
+    ctx.beginPath(); ctx.arc(puffs[i][0], puffs[i][1], puffs[i][2], 0, Math.PI * 2); ctx.fill();
+  }
+  /* a tail puff at the back */
+  ctx.fillStyle = '#e9e1c8';
+  ctx.beginPath(); ctx.arc(-s.fx * 19, -3 - s.fy * 5, 5, 0, Math.PI * 2); ctx.fill();
+  /* the head, turned the way she is walking */
+  var hx = s.fx * 16, hy = 5 + s.fy * 7;
+  ctx.fillStyle = '#ddd2b2';
+  ctx.beginPath(); ctx.ellipse(hx - 8, hy - 3, 4.6, 2.7, 0.5, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(hx + 8, hy - 3, 4.6, 2.7, -0.5, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#4c443a';
+  ctx.beginPath(); ctx.ellipse(hx, hy, 7.5, 6.5, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#faf5e2';
+  ctx.beginPath(); ctx.arc(hx - s.fx * 2, hy - 6, 4, 0, Math.PI * 2); ctx.fill();
+  if (s.fy > 0.2) {
+    ctx.fillStyle = '#faf6e8';
+    ctx.beginPath(); ctx.arc(hx - 3, hy - 1, 1.2, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(hx + 3, hy - 1, 1.2, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.restore();
+}
+function drawTeddySprite(){
+  var moving = teddy.moving && !REDUCE;
+  var step = moving ? Math.sin(teddy.phase) : 0;
+  var bob = moving ? -Math.abs(Math.cos(teddy.phase)) * 2 : 0;
+  /* the soft shadow at his feet — he stands IN the field */
+  ctx.fillStyle = 'rgba(10,32,19,.3)';
+  ctx.beginPath(); ctx.ellipse(teddy.x, teddy.y + 34, 25, 8.5, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.save();
+  ctx.translate(teddy.x, teddy.y + bob);
+  ctx.scale(1.12, 1.12);
+  var dir = teddy.dir;
+  if (dir === 'left') { ctx.scale(-1, 1); dir = 'right'; }
+  var HAT = '#dec27c', HAT2 = '#e8cd8a', BAND = '#8a5a2b',
+      SKIN = '#eec39b', SKIN2 = '#e0aa7e', BEARD = '#f7f3e8',
+      SHIRT = '#a84b38', DENIM = '#3d5a80', DENIM2 = '#4a6b99', BOOT = '#5d4028';
+  /* legs — pant legs and boots, stepping as he walks */
+  ctx.fillStyle = DENIM;
+  if (dir === 'right') {
+    rr(2 + step * 5 - 5, 10, 10, 13, 4); ctx.fill();
+    rr(-2 - step * 5 - 5, 10, 10, 13, 4); ctx.fill();
+    ctx.fillStyle = BOOT;
+    ctx.beginPath(); ctx.ellipse(3 + step * 5, 24, 6.5, 4, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(-3 - step * 5, 24, 6.5, 4, 0, 0, Math.PI * 2); ctx.fill();
+  } else {
+    rr(-13, 10 + step * 3.2, 10, 13, 4); ctx.fill();
+    rr(3, 10 - step * 3.2, 10, 13, 4); ctx.fill();
+    ctx.fillStyle = BOOT;
+    ctx.beginPath(); ctx.ellipse(-8, 24 + step * 3.2, 6.5, 4, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(8, 24 - step * 3.2, 6.5, 4, 0, 0, Math.PI * 2); ctx.fill();
+  }
+  /* torso — plaid shirt over overalls */
+  if (dir === 'right') {
+    ctx.fillStyle = SHIRT; rr(-12, -10, 25, 10, 4); ctx.fill();
+    ctx.fillStyle = DENIM; rr(-12, -2, 25, 20, 6); ctx.fill();
+    ctx.fillStyle = DENIM2; rr(0, -2, 13, 12, 3); ctx.fill();
+    /* one arm, swinging against the step */
+    ctx.fillStyle = SHIRT; rr(6 + step * 2.5, -4, 8.5, 16, 4); ctx.fill();
+    ctx.fillStyle = SKIN;
+    ctx.beginPath(); ctx.arc(10 + step * 2.5, 14, 4, 0, Math.PI * 2); ctx.fill();
+  } else {
+    ctx.fillStyle = SHIRT; rr(-17, -10, 34, 10, 4); ctx.fill();
+    ctx.fillStyle = DENIM; rr(-16, -2, 32, 20, 6); ctx.fill();
+    ctx.fillStyle = DENIM2; rr(-9, -2, 18, 12, 3); ctx.fill();
+    ctx.fillStyle = DENIM;
+    rr(-13, -10, 5, 9, 2); ctx.fill();
+    rr(8, -10, 5, 9, 2); ctx.fill();
+    ctx.fillStyle = '#d9a441';
+    ctx.beginPath(); ctx.arc(-8, 2, 1.7, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(8, 2, 1.7, 0, Math.PI * 2); ctx.fill();
+    /* arms at his sides, swinging as he walks */
+    ctx.fillStyle = SHIRT;
+    rr(-23.5, -6 - step * 3, 9, 17, 4); ctx.fill();
+    rr(14.5, -6 + step * 3, 9, 17, 4); ctx.fill();
+    ctx.fillStyle = SKIN;
+    ctx.beginPath(); ctx.arc(-19, 13 - step * 3, 4, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(19, 13 + step * 3, 4, 0, Math.PI * 2); ctx.fill();
+  }
+  /* the head — hat, face and beard, by the way he faces */
+  if (dir === 'up') {
+    ctx.fillStyle = SKIN; rr(-4, -10, 8, 7, 2); ctx.fill();
+    ctx.fillStyle = BEARD;
+    ctx.beginPath(); ctx.arc(-12.5, -11, 4.5, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(12.5, -11, 4.5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = HAT;
+    ctx.beginPath(); ctx.ellipse(0, -18, 22, 10.5, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = HAT2;
+    ctx.beginPath(); ctx.ellipse(0, -20, 11.5, 9, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = BAND; rr(-11.5, -23.5, 23, 4.5, 2); ctx.fill();
+  } else if (dir === 'right') {
+    ctx.fillStyle = SKIN;
+    ctx.beginPath(); ctx.arc(5, -17, 11.5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = BEARD;
+    ctx.beginPath(); ctx.ellipse(11, -11, 7, 9.5, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(7, -6, 5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = SKIN2;
+    ctx.beginPath(); ctx.arc(15.5, -16.5, 2.4, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#24313d';
+    ctx.beginPath(); ctx.arc(8, -19.5, 1.5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = HAT;
+    ctx.beginPath(); ctx.ellipse(3, -26, 19, 5.5, -0.06, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = HAT2;
+    ctx.beginPath(); ctx.arc(1, -26, 10, Math.PI, 0); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = BAND; rr(-9, -29, 20, 4, 2); ctx.fill();
+  } else { /* down — his face, the way the farm knows it */
+    ctx.fillStyle = SKIN;
+    ctx.beginPath(); ctx.arc(0, -17, 12.5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = BEARD;
+    ctx.beginPath(); ctx.arc(0, -17, 12.5, Math.PI * 0.18, Math.PI * 0.82); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(0, -10, 10, 6.5, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = SKIN2;
+    ctx.beginPath(); ctx.arc(0, -16, 2.1, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#24313d';
+    ctx.beginPath(); ctx.arc(-4.5, -19.5, 1.5, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(4.5, -19.5, 1.5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = HAT2;
+    ctx.beginPath(); ctx.arc(0, -27, 11, Math.PI, 0); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = BAND; rr(-11, -29.5, 22, 4, 2); ctx.fill();
+    ctx.fillStyle = HAT;
+    ctx.beginPath(); ctx.ellipse(0, -26.5, 21, 6, 0, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.restore();
+}
+function draw(now){
+  ctx.fillStyle = '#2f6b3a';
+  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = 'rgba(255,255,255,.035)';
+  for (var bx = 0; bx < W; bx += 96) if ((bx / 96) % 2 === 0) ctx.fillRect(bx, 0, 48, H);
+  /* the path: porch → heart of the field → the gate */
+  ctx.strokeStyle = 'rgba(250,246,232,.16)';
+  ctx.lineWidth = 36; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  ctx.beginPath();
+  ctx.moveTo(480, 150); ctx.quadraticCurveTo(470, 300, 545, 400);
+  ctx.quadraticCurveTo(600, 470, PEN.x0 - 6, 513);
+  ctx.stroke();
+  drawFold();
+  drawWell(); drawBarn(); drawPorch(); drawBoard();
+  var t = now / 1000;
+  for (var i = 0; i < sheep.length; i++) {
+    var s = sheep[i];
+    if (s.state === 'follow') continue;
+    var bob = (!REDUCE && s.state === 'wait') ? Math.sin(t * 2 + s.phase) * 2 : 0;
+    drawSheepSprite(s, s.state === 'home' ? 48 : 56, bob);
+  }
+  for (var f = followers.length - 1; f >= 0; f--) drawSheepSprite(followers[f], 52, 0);
+  /* pulses */
+  for (var p = 0; p < pulses.length; p++) {
+    var pu = pulses[p], pr = 8 + pu.t * 46;
+    ctx.strokeStyle = 'rgba(217,164,65,' + (0.85 * (1 - pu.t / 0.7)) + ')';
+    ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.arc(pu.x, pu.y, pr, 0, Math.PI * 2); ctx.stroke();
+  }
+  /* Teddy — the little farmer himself, walking */
+  drawTeddySprite();
+}
+
+/* ---------- the loop ---------- */
+var lastT = 0;
+function frame(now){
+  window.requestAnimationFrame(frame);
+  var dt = Math.min(0.033, (now - lastT) / 1000 || 0.016);
+  lastT = now;
+  pollPad();
+  update(dt, now);
+  draw(now);
+}
+
+/* ---------- test hooks (the harness drives the same public inputs;
+   warp only spares it the long walk across the grass) ---------- */
+window.GTF = {
+  state: function(){
+    return {
+      teddy: { x:Math.round(teddy.x), y:Math.round(teddy.y), dir:teddy.dir,
+               moving:teddy.moving, phase:+teddy.phase.toFixed(2) },
+      waiting: sheep.filter(function(s){ return s.state === 'wait'; }).length,
+      sheepPos: sheep.map(function(s){ return { x:Math.round(s.x), y:Math.round(s.y), state:s.state }; }),
+      following: followers.length,
+      homed: homed,
+      card: cardId,
+      fig: { count: FIG.count, fresh: FIG.fresh }
+    };
+  },
+  warp: function(x, y){ teddy.x = x; teddy.y = y; trail = [{ x:x, y:y }]; },
+  dismiss: function(){ dismissCard(); },
+  showCard: function(id){ showCard(id); }
+};
+
+/* ---------- go ---------- */
+document.getElementById('hudBoard').textContent = boardChip();
+resetWorld();
+fit();
+fetchFigures();
+showCard('greeting');
+window.requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

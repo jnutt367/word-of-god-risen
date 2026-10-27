@@ -13,6 +13,7 @@ import TaiwanPrayer from "@/components/TaiwanPrayer";
 import WordIntegrityNote from "@/components/WordIntegrityNote";
 import OpenDoor from "@/components/OpenDoor";
 import TeddyNote from "@/components/TeddyNote";
+import WalkTheFarm from "@/components/WalkTheFarm";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -198,6 +199,12 @@ export default function Home() {
 
         <LatestShorts />
       </section>
+
+      {/* Walk the Farm — the quiet last door on the page, below the
+          books and every other card (Jason, Oct 26, 2026): the
+          Gather the Flock walking game, everybody edition, living
+          inside the app at /walk-the-farm. */}
+      <WalkTheFarm />
     </div>
   );
 }
