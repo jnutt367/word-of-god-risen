@@ -20,7 +20,7 @@ import { track } from "@vercel/analytics";
 const SESSION_PREFIX = "hb:";
 const BOOK_DONE_KEY = "hb:bookdone:";
 
-type BeatKind = "read" | "listen" | "listen_complete" | "book" | "listened_marked";
+type BeatKind = "read" | "listen" | "listen_complete" | "book" | "listened_marked" | "open";
 
 /** Fire-and-forget beat to the live counter. The body is the beat kind
  *  and nothing else — no book, no chapter, no identity. */
@@ -66,6 +66,26 @@ export function beatRead(bookSlug: string, chapterIdx: number): void {
     /* analytics unavailable — the reading still happened */
   }
   beatLive("read");
+}
+
+/**
+ * The app itself was opened (Jason, Oct 27, 2026: "any open lights
+ * the map too"). Counted as its own beat kind, never folded into
+ * the read/heard counts; on the map an opens-only place rests as a
+ * faint ember — the full golden light stays the sign of the Word
+ * read or heard. Once per browser session, like every beat here.
+ * Fired from the root layout, so any entry page counts.
+ */
+export function beatOpen(): void {
+  const key = "open";
+  if (seen(key)) return;
+  markSeen(key);
+  try {
+    track("app_open");
+  } catch {
+    /* ignore */
+  }
+  beatLive("open");
 }
 
 /** Playback of a chapter began (Teddy MP3 or device TTS), from idle. Once per session per chapter. */

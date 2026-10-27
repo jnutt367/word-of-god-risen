@@ -109,6 +109,9 @@ interface HbTotals {
   chaptersHeard: number;
   listensCompleted: number;
   booksFinished: number;
+  /** App opens (Oct 27, 2026) — additive in the payload; the
+   *  tiles never show it and it is never folded into read/heard. */
+  opens?: number;
 }
 
 interface HbCountryRow {
@@ -117,6 +120,9 @@ interface HbCountryRow {
   read: number;
   heard: number;
   total: number;
+  /** Opens recorded for this place today (Oct 27, 2026). A row
+   *  with opens but no chapters rests on the map as an ember. */
+  opens: number;
 }
 
 interface HbSnapshotCountry {
@@ -154,6 +160,9 @@ interface LiveCountRow {
   read: number;
   heard: number;
   total: number;
+  /** Opens (Oct 27, 2026) — present in live payloads since the
+   *  open beat shipped; older payloads and fixtures omit it. */
+  opens?: number;
 }
 
 /** One live subdivision row from GET /api/heartbeat (v3.1) — `code`
@@ -173,6 +182,7 @@ interface LiveDay {
   chaptersRead: number;
   chaptersHeard: number;
   listensMarked?: number;
+  opens?: number;
   countries: LiveCountRow[];
   subdivisions?: LiveSubdivisionRow[];
 }
@@ -182,7 +192,12 @@ export interface LiveData {
   asOf: string | null;
   since: string;
   totals: HbTotals;
-  today: { date: string; chaptersRead: number; chaptersHeard: number };
+  today: {
+    date: string;
+    chaptersRead: number;
+    chaptersHeard: number;
+    opens?: number;
+  };
   countries: LiveCountRow[];
   /** Today's subdivision rows (v3.1), keyed by ISO 3166-2 code. */
   subdivisions?: LiveSubdivisionRow[];
@@ -387,9 +402,13 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
         read: c.read ?? 0,
         heard: c.heard ?? 0,
         total: c.total ?? (c.read ?? 0) + (c.heard ?? 0),
+        opens: c.opens ?? 0,
       }))
-      .filter((c) => c.code && c.total > 0)
-      .sort((a, b) => b.total - a.total);
+      // A place stands in the rows on ANY activity: chapters, or
+      // opens alone (Oct 27, 2026 — it rests on the map as an
+      // ember, so the rows, the list, and the disc all see it).
+      .filter((c) => c.code && (c.total > 0 || c.opens > 0))
+      .sort((a, b) => b.total - a.total || b.opens - a.opens);
 
   // Today's live country rows.
   const liveRows: HbCountryRow[] =
@@ -417,12 +436,13 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
           read: s.read ?? 0,
           heard: s.heard ?? 0,
           total: s.total ?? (s.read ?? 0) + (s.heard ?? 0),
+          opens: s.opens ?? 0,
           country: (s.country || code.split("-")[0] || "").toUpperCase(),
           geo,
         };
       })
-      .filter((s) => s.code && s.total > 0)
-      .sort((a, b) => b.total - a.total);
+      .filter((s) => s.code && (s.total > 0 || s.opens > 0))
+      .sort((a, b) => b.total - a.total || b.opens - a.opens);
 
   // Today's live subdivision rows (v3.1).
   const liveSubdivisionRows: LiveSubdivisionDisplay[] =
@@ -439,6 +459,14 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   // recorded across it, but it is NOT lit — its divisions are.
   const emberPhrase = (c: HbCountryRow) =>
     `${c.name} — reading recorded across the country ${shownDayWord}; divisions lit where recorded`;
+  // The honest phrases for an OPENS-ONLY place (Oct 27, 2026):
+  // the app was opened there — a knock on the door — and the
+  // place rests as a faint ember. It is never described as lit,
+  // and never in chapters: opens are named as opens.
+  const openPhrase = (c: HbCountryRow) =>
+    `${c.name} — the app was opened here ${shownWhen}; it rests as a faint ember until the Word is read or heard`;
+  const subdivisionOpenPhrase = (s: HbCountryRow) =>
+    `${s.name} — the app was opened here ${shownWhen}; it rests as a faint ember`;
   // (Subdivision rows are grouped under their country further
   // down, from the SHOWN set — see shownSubdivisionGroups beside
   // the day browsing — so the list below the map can follow the
@@ -555,6 +583,9 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
         read,
         heard,
         total: read + heard,
+        // The daily record predates the open beat — its rows are
+        // chapters only, so opens stands at zero here.
+        opens: 0,
       };
     })
     .filter((c) => c.name && c.total > 0)
@@ -597,9 +628,18 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
       ? liveSubdivisionRows
       : [];
   const modeOf = (code: string) => lightModeForCountry(shownSubdivisions, code);
+  // The light tiers (Oct 27, 2026): "full" and "ember" are the
+  // chapter tiers exactly as v3.1.1 settled them. "open" wears the
+  // ember treatment — the same faint, steady fill, no glow layer,
+  // no breathing, no heart — for a place whose shown activity is
+  // OPENS ONLY. Any chapter at all outranks the opens: where the
+  // Word was read or heard, the full light wins, exactly as now.
+  const opensOnly = (c: HbCountryRow) => c.total === 0 && c.opens > 0;
+  const tierOf = (c: HbCountryRow): "full" | "ember" | "open" =>
+    opensOnly(c) ? "open" : modeOf(c.code);
   const subsOf = (code: string) =>
     subdivisionsOfCountry(shownSubdivisions, code);
-  const anyEmber = mapRows.some((c) => modeOf(c.code) === "ember");
+  const anyEmber = mapRows.some((c) => tierOf(c) !== "full");
 
   // The "on the Vine" day list below the map follows the SHOWN day
   // (Jason, Oct 24, 2026): at the live default these are today's
@@ -624,6 +664,15 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   // never described as lit: reading was recorded across it, it rests
   // as a faint ember, and its divisions carry the light.
   const describeCountry = (c: MapCountry): string => {
+    if (tierOf(c) === "open") {
+      const subs = shownSubdivisions.filter(
+        (s) => s.country === c.code && s.opens > 0
+      );
+      const base = `the app was opened in ${c.name} ${shownWhen} — no chapters read or heard there yet; ${c.name} rests as a faint ember, not fully lit`;
+      return subs.length > 0
+        ? `${base}; its divisions rest as embers where recorded: ${subs.map(subdivisionOpenPhrase).join("; ")}`
+        : base;
+    }
     if (modeOf(c.code) === "ember") {
       const subs = subsOf(c.code);
       return `reading recorded across ${c.name} — ${fmt(c.total)} ${c.total === 1 ? "chapter" : "chapters"} ${shownWhen}; ${c.name} itself rests as a faint ember, not lit, and its divisions are lit where recorded: ${subs.map(subdivisionPhrase).join("; ")}`;
@@ -634,16 +683,20 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   const figureLabel = gathering
     ? "A soft world map drawn as a disc, at rest while today's count gathers."
     : browsedDay
-      ? mapRows.length > 0
+      ? mapRows.length > 0 && shownCount > 0
         ? `A soft world map drawn as a disc. ${fmt(shownCount)} ${shownCount === 1 ? "chapter was" : "chapters were"} read or heard on ${longDate(browsedDay.date)}. Where the Word was opened that day: ${mapRows.map(describeCountry).join("; ")}.`
-        : shownCount > 0
-          ? `A soft world map drawn as a disc, with ${fmt(shownCount)} ${shownCount === 1 ? "chapter" : "chapters"} read or heard on ${longDate(browsedDay.date)}. No country shapes are lit for that day.`
-          : `A soft world map drawn as a disc, at rest on ${longDate(browsedDay.date)} — no chapters were counted that day, and no country shapes are lit.`
-      : mapRows.length > 0
+        : mapRows.length > 0
+          ? `A soft world map drawn as a disc. No chapters were read or heard on ${longDate(browsedDay.date)} — the app was opened that day, and these places rest as faint embers: ${mapRows.map(describeCountry).join("; ")}.`
+          : shownCount > 0
+            ? `A soft world map drawn as a disc, with ${fmt(shownCount)} ${shownCount === 1 ? "chapter" : "chapters"} read or heard on ${longDate(browsedDay.date)}. No country shapes are lit for that day.`
+            : `A soft world map drawn as a disc, at rest on ${longDate(browsedDay.date)} — no chapters were counted that day, and no country shapes are lit.`
+      : mapRows.length > 0 && todayCount > 0
         ? `A soft world map drawn as a disc. ${fmt(todayCount)} ${todayCount === 1 ? "chapter was" : "chapters were"} read or heard today, ${longDate(today.date)}. Where the Word was opened${mapSource === "live" ? " today" : ""}: ${mapRows.map(describeCountry).join("; ")}.`
-        : todayCount > 0
-          ? `A soft world map drawn as a disc, with ${fmt(todayCount)} ${todayCount === 1 ? "chapter" : "chapters"} read or heard today, ${longDate(today.date)}. No country shapes are lit yet.`
-          : "A soft world map drawn as a disc, at rest in the early morning — the counting of chapters has only just begun, and no country shapes are lit yet.";
+        : mapRows.length > 0
+          ? `A soft world map drawn as a disc. No chapters have been read or heard yet today, ${longDate(today.date)} — the app has been opened, and these places rest as faint embers: ${mapRows.map(describeCountry).join("; ")}.`
+          : todayCount > 0
+            ? `A soft world map drawn as a disc, with ${fmt(todayCount)} ${todayCount === 1 ? "chapter" : "chapters"} read or heard today, ${longDate(today.date)}. No country shapes are lit yet.`
+            : "A soft world map drawn as a disc, at rest in the early morning — the counting of chapters has only just begun, and no country shapes are lit yet.";
 
   // "The Vine Is Growing" (Oct 21, 2026) — the day-by-day record,
   // turned into a growth story on the map's own card: a continuous
@@ -699,8 +752,13 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
     if (!liveActive || !live?.history) return 0;
     const seen = new Set<string>();
     for (const d of live.history) {
-      for (const c of d.countries) if (c.total > 0) seen.add(c.code);
-      for (const s of d.subdivisions ?? []) if (s.total > 0) seen.add(s.code);
+      // A place counts as lit on chapters, or on opens alone
+      // (Oct 27, 2026 — an opens-only place rests on the map as
+      // an ember, and the tile says "places lit": it is on it).
+      for (const c of d.countries)
+        if (c.total > 0 || (c.opens ?? 0) > 0) seen.add(c.code);
+      for (const s of d.subdivisions ?? [])
+        if (s.total > 0 || (s.opens ?? 0) > 0) seen.add(s.code);
     }
     return seen.size;
   })();
@@ -806,12 +864,17 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 subdivisions in this set) render instead as a faint,
                 still fill at one fixed low opacity: no glow layer,
                 no breathing. The light in them belongs to their
-                subdivisions, drawn next. */}
+                subdivisions, drawn next. OPENS-ONLY countries
+                (Oct 27, 2026) wear that same ember treatment —
+                tierOf(c) !== "full" — with their own honest title:
+                the app was opened there, nothing read or heard yet. */}
             {mapRows.map((c, i) =>
               c.geo ? (
-                modeOf(c.code) === "ember" ? (
+                tierOf(c) !== "full" ? (
                   <g key={`sil-${c.code}`}>
-                    <title>{emberPhrase(c)}</title>
+                    <title>
+                      {tierOf(c) === "open" ? openPhrase(c) : emberPhrase(c)}
+                    </title>
                     <path
                       d={c.geo.path}
                       fill="#e4b95c"
@@ -856,9 +919,13 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 fill, breathing — and, since v3.1.1, their own bright
                 hearts, because the finest recorded geography wins
                 the light. Their country rests behind them as an
-                ember and shows no heart of its own. */}
+                ember and shows no heart of its own. A subdivision
+                whose shown counts are OPENS ONLY (Oct 27, 2026)
+                renders as an ember instead — faint and steady,
+                no glow, no heart — in the branch below. */}
             {shownSubdivisions.map((s, i) =>
               s.geo ? (
+                s.total > 0 ? (
                 <g
                   key={`sub-${s.code}`}
                   className="hb-glow"
@@ -886,6 +953,24 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                   <circle cx={s.geo.cx} cy={s.geo.cy} r="6.5" fill="#ffdf8a" opacity="0.3" />
                   <circle cx={s.geo.cx} cy={s.geo.cy} r="2.6" fill="#fff3c4" />
                 </g>
+                ) : (
+                  // OPENS-ONLY subdivision (Oct 27, 2026): the
+                  // ember treatment in the subdivision's own
+                  // shape — one faint, steady fill; no glow
+                  // layer, no breathing, no heart.
+                  <g key={`sub-${s.code}`}>
+                    <title>{subdivisionOpenPhrase(s)}</title>
+                    <path
+                      d={s.geo.path}
+                      fill="#ffdf8a"
+                      fillRule="evenodd"
+                      fillOpacity={EMBER_FILL_OPACITY}
+                      stroke="#ffe9b0"
+                      strokeWidth="0.7"
+                      strokeOpacity="0.3"
+                    />
+                  </g>
+                )
               ) : null
             )}
             {/* country hearts — a small bright core at each lit
@@ -893,14 +978,18 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 polygon, the heart carries a fuller halo and ring
                 (the centroid-light fallback). An EMBER country
                 (v3.1.1) shows NO heart: its subdivisions hold the
-                hearts now. */}
+                hearts now. An OPENS-ONLY country (Oct 27, 2026)
+                shows no heart either — it rests as the same faint
+                disc an ember country leaves at a centroid. */}
             {mapRows.map((c, i) => {
               if (!c.centroid) return null;
-              if (modeOf(c.code) === "ember") {
+              if (tierOf(c) !== "full") {
                 if (c.geo) return null;
                 return (
                   <g key={`heart-${c.code}`}>
-                    <title>{emberPhrase(c)}</title>
+                    <title>
+                      {tierOf(c) === "open" ? openPhrase(c) : emberPhrase(c)}
+                    </title>
                     <circle
                       cx={c.centroid.cx}
                       cy={c.centroid.cy}
@@ -957,6 +1046,12 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                     ? "each light on the map, a neighbor."
                     : "the place was not recorded that day."}
                 </>
+              ) : mapRows.length > 0 ? (
+                <>
+                  No chapters were counted on {longDate(browsedDay.date)} —
+                  but the app was opened, and those places rest on the
+                  map as faint embers.
+                </>
               ) : (
                 <>
                   The world at rest on {longDate(browsedDay.date)} — no
@@ -969,6 +1064,12 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 {todayCount === 1 ? "chapter" : "chapters"} read or heard
                 today, {longDate(today.date)} — each light on the map,
                 a neighbor.
+              </>
+            ) : mapRows.length > 0 ? (
+              <>
+                No chapters counted yet today — but the app has been
+                opened, and those places rest on the map as faint
+                embers.
               </>
             ) : (
               "The world at rest — its lights kindle as neighbors read."
@@ -1095,20 +1196,41 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 >
                   {/* the row's light — breathing in step with its
                       silhouette on the map (v3.1.3); aria-hidden,
-                      the text beside it carries the meaning */}
-                  <span
-                    aria-hidden="true"
-                    className="hb-glow inline-block h-2 w-2 shrink-0 rounded-full bg-gold-300"
-                    style={{ animationDelay: `${(i % 5) * 0.9}s` }}
-                  />
+                      the text beside it carries the meaning. An
+                      OPENS-ONLY row (Oct 27, 2026) rests as an
+                      ember everywhere: its dot here is steady and
+                      dim, and its text names opens as opens. */}
+                  {opensOnly(c) ? (
+                    <span
+                      aria-hidden="true"
+                      className="inline-block h-2 w-2 shrink-0 rounded-full bg-gold-300/40"
+                    />
+                  ) : (
+                    <span
+                      aria-hidden="true"
+                      className="hb-glow inline-block h-2 w-2 shrink-0 rounded-full bg-gold-300"
+                      style={{ animationDelay: `${(i % 5) * 0.9}s` }}
+                    />
+                  )}
                   {c.name}{" "}
-                  <span className="text-gold-300">
-                    {fmt(c.total)} {c.total === 1 ? "chapter" : "chapters"} {shownWhen}
-                  </span>
+                  {c.total > 0 ? (
+                    <span className="text-gold-300">
+                      {fmt(c.total)} {c.total === 1 ? "chapter" : "chapters"} {shownWhen}
+                    </span>
+                  ) : (
+                    <span className="text-gold-300">opened {shownWhen}</span>
+                  )}
                   {c.heard > 0 && (
                     <span className="text-sage-300">
                       {" "}
                       · {fmt(c.read)} read · {fmt(c.heard)} heard
+                    </span>
+                  )}
+                  {c.opens > 0 && (
+                    <span className="text-sage-300">
+                      {" "}
+                      · opened {fmt(c.opens)}{" "}
+                      {c.opens === 1 ? "time" : "times"}
                     </span>
                   )}
                 </li>
@@ -1144,20 +1266,40 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                       >
                         {/* the row's light — breathing in step with
                             its silhouette on the map (v3.1.3);
-                            aria-hidden, the text carries the meaning */}
-                        <span
-                          aria-hidden="true"
-                          className="hb-glow inline-block h-2 w-2 shrink-0 rounded-full bg-gold-300"
-                          style={{ animationDelay: `${((i + 2) % 5) * 0.9}s` }}
-                        />
+                            aria-hidden, the text carries the meaning.
+                            An OPENS-ONLY row rests as an ember:
+                            steady dim dot, opens named as opens. */}
+                        {opensOnly(s) ? (
+                          <span
+                            aria-hidden="true"
+                            className="inline-block h-2 w-2 shrink-0 rounded-full bg-gold-300/40"
+                          />
+                        ) : (
+                          <span
+                            aria-hidden="true"
+                            className="hb-glow inline-block h-2 w-2 shrink-0 rounded-full bg-gold-300"
+                            style={{ animationDelay: `${((i + 2) % 5) * 0.9}s` }}
+                          />
+                        )}
                         {s.name}{" "}
-                        <span className="text-gold-300">
-                          {fmt(s.total)} {s.total === 1 ? "chapter" : "chapters"} {shownWhen}
-                        </span>
+                        {s.total > 0 ? (
+                          <span className="text-gold-300">
+                            {fmt(s.total)} {s.total === 1 ? "chapter" : "chapters"} {shownWhen}
+                          </span>
+                        ) : (
+                          <span className="text-gold-300">opened {shownWhen}</span>
+                        )}
                         {s.heard > 0 && (
                           <span className="text-sage-300">
                             {" "}
                             · {fmt(s.read)} read · {fmt(s.heard)} heard
+                          </span>
+                        )}
+                        {s.opens > 0 && (
+                          <span className="text-sage-300">
+                            {" "}
+                            · opened {fmt(s.opens)}{" "}
+                            {s.opens === 1 ? "time" : "times"}
                           </span>
                         )}
                       </li>

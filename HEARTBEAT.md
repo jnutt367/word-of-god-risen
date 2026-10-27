@@ -892,3 +892,45 @@ home."**
   its output, so the prayer-greeting rhythm can welcome them.
   Going forward this is the roll-up's rule too: known reading =
   light on.
+
+## The open — any open lights the map, as an ember (Oct 27, 2026)
+
+Jason's ruling: "We should really have something to show anytime
+someone engages" — and, refined the same evening, an open alone
+wears the EMBER, because the full light "reads not as true" for a
+mere open: the full golden light has always meant the Word was
+read or heard in a place; an open is a knock on the door.
+
+- **The beat**: a new kind, `open` (Analytics event `app_open`),
+  fired once per browser session by `beatOpen()` in
+  lib/heartbeat.ts — the same sessionStorage dedupe as every beat
+  — from `components/AppOpenBeat`, mounted in the root layout so
+  any entry page counts. The one exception: /heartbeat-test,
+  whose no-write guarantee stands (the component skips it).
+- **The store**: opens count in their own fields everywhere —
+  `totals.opens`, the day's `opens`, and per-place `opens` beside
+  read/heard in the day geo hashes (`c:US:opens`, `s:US-FL:opens`)
+  and lifetime subdivision subtotals. Never folded into
+  read/heard: a row's `total` stays chapters only, and the public
+  view now keeps a row whose only activity is opens
+  (`total + opens > 0`), so an opens-only place exists in the
+  data the map and the place-watches read. Records written before
+  this section normalize `opens` to 0 on read; no migration.
+- **The map**: tiers are `full` and `ember` as v3.1.1 settled
+  them, plus `open` — a place whose shown activity is opens only
+  renders with the ember treatment (the same `EMBER_FILL_OPACITY`
+  fill in its own shape; no glow layer, no breathing, no heart;
+  a centroid-only place leaves the same faint disc an ember
+  country leaves). An opens-only subdivision renders as an ember
+  in its own shape the same way, and does not by itself step its
+  country back — the step-back still keys on chapters alone. Any
+  chapter at all outranks the opens: a place with opens AND a
+  read/heard renders exactly as it always has. Every text surface
+  names opens as opens — the chips read "opened today · opened
+  N times" beside the chapter counts, the titles and the aria
+  description say the app was opened and the place rests as a
+  faint ember, and a zero-chapter day with embers on it says so
+  in the caption instead of claiming the world is at rest.
+- **Same-day prayer**: whether an ember-only first light calls
+  for the new-place prayer is Jason's pending choice; the watches
+  read the same place rows either way.

@@ -18,8 +18,12 @@ import snapshot from "@/data/heartbeat.json";
  *        unreachable or not configured, so the homepage never
  *        depends on the store.
  * POST → one anonymous beat: { "type": "read" | "listen" |
- *        "listen_complete" | "book" | "listened_marked" }. The body
- *        carries nothing else — no book, no chapter, no identity.
+ *        "listen_complete" | "book" | "listened_marked" |
+ *        "open" }. The body carries nothing else — no book, no
+ *        chapter, no identity. "open" is the app itself being
+ *        opened (Oct 27, 2026) — its own count beside read/heard,
+ *        never inside them; a place whose only beats are opens
+ *        rests on the map as an ember.
  *        "listened_marked" is the reader's own tap on "I listened to
  *        this chapter" — counted in its own total, never folded into
  *        the measured listen_complete count (see HEARTBEAT.md). The
@@ -44,6 +48,7 @@ const KINDS = new Set<BeatKind>([
   "listen_complete",
   "book",
   "listened_marked",
+  "open",
 ]);
 
 interface SnapshotShape {
@@ -55,8 +60,15 @@ interface SnapshotShape {
     booksFinished: number;
     /** The checked-in snapshot predates the marked count. */
     listensMarked?: number;
+    /** The checked-in snapshot predates the opens count. */
+    opens?: number;
   };
-  today: { date: string; chaptersRead: number; chaptersHeard: number };
+  today: {
+    date: string;
+    chaptersRead: number;
+    chaptersHeard: number;
+    opens?: number;
+  };
 }
 
 function snapshotFallback() {
@@ -66,8 +78,12 @@ function snapshotFallback() {
       live: false,
       asOf: null,
       since: snap.since,
-      totals: { ...snap.totals, listensMarked: snap.totals.listensMarked ?? 0 },
-      today: { ...snap.today, listensMarked: 0 },
+      totals: {
+        ...snap.totals,
+        listensMarked: snap.totals.listensMarked ?? 0,
+        opens: snap.totals.opens ?? 0,
+      },
+      today: { ...snap.today, listensMarked: 0, opens: snap.today.opens ?? 0 },
       countries: [],
       subdivisions: [],
     },
