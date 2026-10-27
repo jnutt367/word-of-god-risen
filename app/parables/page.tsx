@@ -5,9 +5,17 @@ export const metadata: Metadata = {
   description: "Listen to the parables of Jesus in Grandpa Teddy's voice — the Sower, the Prodigal Son, the Good Samaritan, and more.",
 };
 
-const PARABLES = [
+interface Parable {
+  slug: string;
+  title: string;
+  ref: string;
+  videoId?: string;
+  audioSrc?: string;
+}
+
+const PARABLES: Parable[] = [
   { slug: "sower", title: "The Sower", ref: "Matthew 13:3–9", videoId: "2GF8AFwXDp0" },
-  { slug: "true-vine", title: "I Am the True Vine", ref: "John 15:1–8", videoId: "-2vOTb-puBw" },
+  { slug: "true-vine", title: "I Am the True Vine", ref: "John 15:1–8", videoId: "-2vOTb-puBw", audioSrc: "/audio/parables/true-vine.mp3" },
   { slug: "wheat-and-tares", title: "The Wheat and the Tares", ref: "Matthew 13:24–30", videoId: "2WrO7EEckM8" },
   { slug: "mustard-seed", title: "The Mustard Seed", ref: "Matthew 13:31–32" },
   { slug: "hidden-treasure", title: "The Hidden Treasure", ref: "Matthew 13:44" },
@@ -95,7 +103,7 @@ export default function ParablesPage() {
               <audio
                 controls
                 preload="none"
-                src={`${BASE}/audio/parables/${p.slug}.mp3`}
+                src={p.audioSrc ?? `${BASE}/audio/parables/${p.slug}.mp3`}
                 className="mt-3 w-full"
               />
             </div>
