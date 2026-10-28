@@ -875,17 +875,19 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               <filter id="hb-soft" x="-40%" y="-40%" width="180%" height="180%">
                 <feGaussianBlur stdDeviation="7" />
               </filter>
-              {/* the sea — a deep-green radial depth (color pass,
-                  Jason, Oct 27, 2026): the disc's ground is the
-                  brand's own greens, lifted a touch at the center
-                  and settling to #0c1f16 at the rim. Kept dark on
-                  purpose: its brightest point stays well below the
-                  land fill above it, so land still reads as land
-                  and every light still reads as light. */}
+              {/* the sea — a deep teal-blue radial depth (water
+                  pass, Jason, Oct 27, 2026): the disc's ground is
+                  deep water, #175263 lifted at the center and
+                  settling to #0b2836 at the rim. Lighter and
+                  bluer than the greens it replaces, but still a
+                  night sea: unlit land composited over its
+                  brightest point stays below the faintest ember,
+                  so land still reads as land and every light
+                  still reads as light. */}
               <radialGradient id="hb-sea" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#16301f" />
-                <stop offset="55%" stopColor="#0f2417" />
-                <stop offset="100%" stopColor="#0c1f16" />
+                <stop offset="0%" stopColor="#175263" />
+                <stop offset="55%" stopColor="#10394a" />
+                <stop offset="100%" stopColor="#0b2836" />
               </radialGradient>
             </defs>
             {/* the disc's rim — a soft ring holding the world */}
