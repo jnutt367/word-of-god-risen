@@ -555,7 +555,10 @@ export default function ListenButton({
     fired: boolean;
     active: boolean;
     sawActivity: boolean;
-    startedAt: number;
+    /** Watchdog ticks (800 ms each) since this session started —
+     *  the drain fallback's startup grace, counted in ticks so no
+     *  clock read is needed here. */
+    ticks: number;
   } | null>(null);
   const ttsWatchdogRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const stopTtsWatchdog = () => {
@@ -585,6 +588,7 @@ export default function ListenButton({
         return;
       }
       if (!st.active) return; // paused — the queue is held, not drained
+      st.ticks += 1;
       const synth = window.speechSynthesis;
       if (synth.speaking || synth.pending) {
         st.sawActivity = true;
@@ -594,9 +598,9 @@ export default function ListenButton({
       // as the chapter spoken through ONLY when this session truly
       // ran (utterances were seen speaking, or completions arrived)
       // and the drain is not just the startup instant before the
-      // first utterance kicked in.
+      // first utterance kicked in (two ticks ≈ 1.6 s of grace).
       const ran = st.sawActivity || st.done > 0;
-      const settled = Date.now() - st.startedAt > 1500;
+      const settled = st.ticks >= 2;
       if (ran && settled) fireTtsComplete(mySession);
     }, 800);
   };
@@ -678,7 +682,7 @@ export default function ListenButton({
       fired: false,
       active: true,
       sawActivity: false,
-      startedAt: Date.now(),
+      ticks: 0,
     };
     parts.forEach((text) => {
       const u = new SpeechSynthesisUtterance(text);
