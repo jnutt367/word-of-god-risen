@@ -874,9 +874,21 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               <filter id="hb-soft" x="-40%" y="-40%" width="180%" height="180%">
                 <feGaussianBlur stdDeviation="7" />
               </filter>
+              {/* the sea — a deep-green radial depth (color pass,
+                  Jason, Oct 27, 2026): the disc's ground is the
+                  brand's own greens, lifted a touch at the center
+                  and settling to #0c1f16 at the rim. Kept dark on
+                  purpose: its brightest point stays well below the
+                  land fill above it, so land still reads as land
+                  and every light still reads as light. */}
+              <radialGradient id="hb-sea" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="#16301f" />
+                <stop offset="55%" stopColor="#0f2417" />
+                <stop offset="100%" stopColor="#0c1f16" />
+              </radialGradient>
             </defs>
             {/* the disc's rim — a soft ring holding the world */}
-            <circle cx="500" cy="500" r="497" fill="#e4b95c" opacity="0.04" />
+            <circle cx="500" cy="500" r="497" fill="url(#hb-sea)" />
             <circle
               cx="500"
               cy="500"
@@ -896,15 +908,22 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
             <g
               transform={`translate(500 500) scale(${MAP_SCALE}) translate(-500 -500)`}
             >
-            {/* ground layer — the world, soft and translucent */}
+            {/* ground layer — the world, soft and translucent.
+                Color pass (Jason, Oct 27, 2026): the land's
+                presence raised (fill 0.13 → 0.22, stroke 0.12 →
+                0.20, same cream) so the world reads as a place,
+                not a whisper — and held there on purpose: the
+                faintest ember silhouette layers its gold over
+                this land and stays clearly warmer and brighter,
+                so unlit land never competes with an ember. */}
             <path
               d={world.land}
               fill="#e8d9ae"
               fillRule="evenodd"
-              opacity="0.13"
+              opacity="0.22"
               stroke="#e8d9ae"
               strokeWidth="0.6"
-              strokeOpacity="0.12"
+              strokeOpacity="0.20"
             />
             {/* (No vine overlay — v3.1.3 removed it under Jason's
                 rule "if they stay they should look like what they
