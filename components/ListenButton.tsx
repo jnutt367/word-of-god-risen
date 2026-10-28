@@ -117,20 +117,97 @@ export default function ListenButton({
     lastPos: number;
     wall: number;
   } | null>(null);
-  /** Feed the open segment (up to `upto`) to the heartbeat; close it. */
+  /** The end of the element's genuinely-played TimeRange that
+   *  contains `pos` (within a small tolerance), or null when the
+   *  browser reports no such range. The played ranges are the
+   *  browser's own record of what actually sounded — they keep
+   *  filling even while timeupdate callbacks are throttled or
+   *  suspended on a locked/backgrounded phone (Oct 27, 2026 fix). */
+  const playedRangeEndFor = (pos: number): number | null => {
+    try {
+      const played = audioRef.current?.played;
+      if (!played || played.length === 0) return null;
+      for (let i = 0; i < played.length; i++) {
+        const s = played.start(i);
+        const e = played.end(i);
+        if (s - 0.5 <= pos && pos <= e + 0.05) return e;
+      }
+    } catch {
+      /* ranges unavailable — callers fall back to prior behavior */
+    }
+    return null;
+  };
+  /** Reconcile the open segment with the played TimeRanges: if the
+   *  sound genuinely continued past the last position a timeupdate
+   *  callback managed to report (starved callbacks on a locked
+   *  phone), extend the segment to the end of its own continuous
+   *  played range and feed the grown stretch. A seek shows up as a
+   *  DIFFERENT range, so jumped-over seconds still earn nothing. */
+  const reconcileFromPlayed = () => {
+    const seg = segRef.current;
+    const a = audioRef.current;
+    if (!seg || !a) return;
+    const rangeEnd = playedRangeEndFor(seg.start);
+    if (rangeEnd === null) return;
+    const d = a.duration;
+    if (!isFinite(d) || d <= 0) return;
+    const end = Math.min(rangeEnd, d);
+    if (end > seg.lastPos + 0.05) {
+      seg.lastPos = end;
+      seg.wall = Date.now() / 1000;
+      if (end - seg.start >= 5) {
+        notePlayedSpan(seg.slug, seg.num, seg.start, end, d);
+        seg.start = end;
+      }
+    }
+  };
+  const reconcileRef = useRef(reconcileFromPlayed);
+  useEffect(() => {
+    reconcileRef.current = reconcileFromPlayed;
+  });
+  /** Feed the open segment (up to `upto`) to the heartbeat; close it.
+   *  `upto` is capped at the end of the segment's own played range
+   *  when the browser reports one, so a playhead that was moved
+   *  (seek) while callbacks were starved cannot pull the jumped-over
+   *  gap into the count at flush time. */
   const flushSegment = (upto: number) => {
     const seg = segRef.current;
     if (!seg) return;
+    // Bank any sounded time the callbacks starved first.
+    reconcileFromPlayed();
+    const still = segRef.current;
+    if (!still) return;
     segRef.current = null;
     const d = audioRef.current?.duration;
     if (d && isFinite(d) && d > 0) {
-      notePlayedSpan(seg.slug, seg.num, seg.start, Math.min(upto, d), d);
+      let end = Math.min(upto, d);
+      const rangeEnd = playedRangeEndFor(still.start);
+      if (rangeEnd !== null && end > rangeEnd + 0.5) {
+        end = Math.min(rangeEnd, d);
+      }
+      // After a reconcile feed, still.start sits at the last banked
+      // point; closing at the further of that or the capped end
+      // keeps the final sounded stretch from being lost.
+      end = Math.max(end, Math.min(still.lastPos, d));
+      const cap = playedRangeEndFor(still.start);
+      if (cap !== null && end > cap + 0.5) end = Math.min(cap, d);
+      notePlayedSpan(still.slug, still.num, still.start, end, d);
     }
   };
   const flushRef = useRef(flushSegment);
   useEffect(() => {
     flushRef.current = flushSegment;
   });
+  // Locked/backgrounded phone: when the page hides mid-listen,
+  // reconcile immediately from the played ranges, so the sounded
+  // time is banked even if no further callback ever fires.
+  useEffect(() => {
+    const onVis = () => {
+      if (document.visibilityState === "hidden") reconcileRef.current();
+    };
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, []);
   // Teddy helper (floating mode): open state + the two ends of the
   // reader's path — the "Got it" button and the "New here?" link.
   const [helperOpen, setHelperOpen] = useState(false);
@@ -255,6 +332,10 @@ export default function ListenButton({
 
   const stopAll = () => {
     session.current += 1;
+    // TTS listened-through state dies with the session (Oct 27,
+    // 2026): the watchdog stops and no stale completion can fire.
+    stopTtsWatchdog();
+    ttsStateRef.current = null;
     // Close any open listened-through segment before teardown, so the
     // seconds already sounded are counted for their own chapter.
     flushRef.current(audioRef.current?.currentTime || 0);
@@ -361,7 +442,17 @@ export default function ListenButton({
           } else if (now !== seg.lastPos) {
             const dPos = now - seg.lastPos;
             const dWall = wall - seg.wall;
-            if (dPos > 0 && dPos <= dWall * 1.5 + 1) {
+            // Rate-aware (Oct 27, 2026 fix): the playhead honestly
+            // advances at playbackRate × wall time. The old test
+            // assumed 1×, so a listener at 1.75–2× had EVERY segment
+            // misread as a seek and banked ~0 played time forever —
+            // no listen-through ever registered. A real seek still
+            // fails: its jump dwarfs even the rate-scaled allowance.
+            const rate =
+              a!.playbackRate && isFinite(a!.playbackRate) && a!.playbackRate > 0
+                ? a!.playbackRate
+                : 1;
+            if (dPos > 0 && dPos <= dWall * rate * 1.5 + 1) {
               seg.lastPos = now;
               seg.wall = wall;
               // Feed long segments as they grow, so a tab closed
@@ -449,6 +540,67 @@ export default function ListenButton({
 
   /* ---------------- TTS fallback path ---------------- */
 
+  // "Listened through" on the TTS path (Oct 27, 2026 fix). The old
+  // rule hung the whole chapter's completion on the LAST utterance's
+  // onend alone; Android speechSynthesis drops that signal often
+  // enough (long queues, pause/resume, screen lock) that whole
+  // chapters Jason heard end-to-end banked nothing. Now every
+  // utterance's completion is counted AS IT ARRIVES, and a watchdog
+  // falls back to the queue having drained. Both routes fire through
+  // the same session-guarded, fire-once completion below.
+  const ttsStateRef = useRef<{
+    session: number;
+    total: number;
+    done: number;
+    fired: boolean;
+    active: boolean;
+    sawActivity: boolean;
+    startedAt: number;
+  } | null>(null);
+  const ttsWatchdogRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const stopTtsWatchdog = () => {
+    if (ttsWatchdogRef.current) {
+      clearInterval(ttsWatchdogRef.current);
+      ttsWatchdogRef.current = null;
+    }
+  };
+  const fireTtsComplete = (mySession: number) => {
+    const st = ttsStateRef.current;
+    if (!st || st.session !== mySession || st.fired) return;
+    if (session.current !== mySession) return; // stale session guard
+    st.fired = true;
+    st.active = false;
+    stopTtsWatchdog();
+    setStatus("idle");
+    beatListenComplete(bookSlug, chapterNum);
+    endedRef.current?.(true);
+  };
+  const startTtsWatchdog = (mySession: number) => {
+    stopTtsWatchdog();
+    ttsWatchdogRef.current = setInterval(() => {
+      const st = ttsStateRef.current;
+      // A stopped / superseded / already-fired session ends the watch.
+      if (!st || st.session !== mySession || st.fired || session.current !== mySession) {
+        stopTtsWatchdog();
+        return;
+      }
+      if (!st.active) return; // paused — the queue is held, not drained
+      const synth = window.speechSynthesis;
+      if (synth.speaking || synth.pending) {
+        st.sawActivity = true;
+        return;
+      }
+      // Queue drained: nothing speaking, nothing pending. Count it
+      // as the chapter spoken through ONLY when this session truly
+      // ran (utterances were seen speaking, or completions arrived)
+      // and the drain is not just the startup instant before the
+      // first utterance kicked in.
+      const ran = st.sawActivity || st.done > 0;
+      const settled = Date.now() - st.startedAt > 1500;
+      if (ran && settled) fireTtsComplete(mySession);
+    }, 800);
+  };
+
   const english = voices.filter((v) => v.lang?.startsWith("en"));
 
   /** Default: prefer a male English voice. */
@@ -513,7 +665,22 @@ export default function ListenButton({
       const t = v.text.trim();
       if (t) parts.push(t);
     }
-    parts.forEach((text, i) => {
+    // Count completions as they arrive (Oct 27, 2026 fix): EVERY
+    // utterance reports, and the chapter completes when the count
+    // reaches the final part under this session — no dependence on
+    // one fragile last-callback. If the platform drops end signals
+    // altogether, the watchdog's queue-drain fallback fires instead.
+    stopTtsWatchdog();
+    ttsStateRef.current = {
+      session: mySession,
+      total: parts.length,
+      done: 0,
+      fired: false,
+      active: true,
+      sawActivity: false,
+      startedAt: Date.now(),
+    };
+    parts.forEach((text) => {
       const u = new SpeechSynthesisUtterance(text);
       if (voice) u.voice = voice;
       u.rate = rate;
@@ -522,19 +689,20 @@ export default function ListenButton({
       // offer only unnamed voices the name-hints above can't sort, so
       // the narration is also deepened toward a man's register.
       u.pitch = 0.8;
-      if (i === parts.length - 1) {
-        u.onend = () => {
-          if (session.current === mySession) {
-            setStatus("idle");
-            beatListenComplete(bookSlug, chapterNum);
-            // Same read-only ended note as the MP3 path; the bed is
-            // untouched and keeps playing, exactly as before.
-            endedRef.current?.(true);
-          }
-        };
-      }
+      u.onstart = () => {
+        const st = ttsStateRef.current;
+        if (st && st.session === mySession) st.sawActivity = true;
+      };
+      u.onend = () => {
+        const st = ttsStateRef.current;
+        if (!st || st.session !== mySession) return;
+        if (session.current !== mySession) return; // stale session
+        st.done += 1;
+        if (st.done >= st.total) fireTtsComplete(mySession);
+      };
       synth.speak(u);
     });
+    startTtsWatchdog(mySession);
     ambientPlay();
     setStatus("playing");
     endedRef.current?.(false);
@@ -546,10 +714,14 @@ export default function ListenButton({
     if (status === "idle") startTts();
     else if (status === "playing") {
       synth.pause();
+      // The queue is HELD while paused, not drained — the watchdog
+      // must not mistake a pause for the chapter's end.
+      if (ttsStateRef.current) ttsStateRef.current.active = false;
       ambientPause();
       setStatus("paused");
     } else {
       synth.resume();
+      if (ttsStateRef.current) ttsStateRef.current.active = true;
       ambientPlay();
       setStatus("playing");
     }

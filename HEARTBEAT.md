@@ -627,6 +627,52 @@ exists on that path. TTS completions therefore remain what they
 were: the final utterance's end. Nothing was faked to make the two
 paths look alike.
 
+**The undercount fix (Oct 27, 2026).** Jason's own report: he
+listens to whole chapters and NONE register as listened-through.
+The 80% bar did not move (his Oct 20 ruling stands) and seeks
+still earn nothing — the measurement itself was dropping genuine
+listening in three places, all in `components/ListenButton.tsx`:
+
+- **Playback rate.** The MP3 segment test compared playhead
+  advance to wall-clock advance as if playback were always 1×
+  (`dPos <= dWall*1.5 + 1`), so a listener above ~1.5× had every
+  segment misread as a seek and banked ~0 forever. The test is
+  now rate-aware: `dPos <= dWall * playbackRate * 1.5 + 1`. A
+  real seek still fails it at any rate — the jump dwarfs the
+  rate-scaled allowance.
+- **Starved callbacks.** On a locked/backgrounded phone,
+  `timeupdate` throttles or suspends while the audio keeps
+  sounding, and the unreported stretch was lost. The player now
+  reconciles against the audio element's **played TimeRanges**
+  — the browser's own record of what actually sounded — on
+  pause, on end, and when the page hides: the open segment
+  extends to the end of its own continuous played range and
+  banks it. A seek lives in a different range, so reconciliation
+  cannot pull a jumped-over gap into the count, and the flush
+  that closes a segment caps itself at its range's end.
+- **TTS's single fragile callback.** Completion hung on the
+  LAST utterance's `onend` alone; Android drops that signal
+  (long queues, pause/resume, screen lock). Now every
+  utterance's completion is counted as it arrives, and the
+  chapter completes when the count reaches the final part
+  under the current session. If the platform gives no reliable
+  end at all, a watchdog fires the completion when the queue
+  has drained (nothing speaking, nothing pending, the session
+  still the playing one, and the session demonstrably ran) —
+  never while paused, never for a stale session.
+
+A node-side model of the exact acceptance rules passes 15/15:
+the old rule discards the 2× backgrounded segment the new rule
+banks; seeks of 30–60s are rejected at 1× and 2× alike; the
+reconcile extends only within a continuous played range; TTS
+fires on the counted final part, on the drain fallback when
+the last `onend` is dropped, and never from a pause or a stale
+session. What the fix cannot do, stated plainly: a phone that
+kills the page's timers AND its audio element's ranges in deep
+background may still under-report the final stretch (the ranges
+themselves are the last witness), and a rate changed mid-segment
+is judged at the rate in force when the callback lands.
+
 ## The reader's own word — "I listened" (Oct 20, 2026)
 
 Jason's direction: *"give it a listened to if the person selects
