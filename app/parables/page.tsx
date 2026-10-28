@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import ParableAudio from "@/components/ParableAudio";
+import VideoComing from "@/components/VideoComing";
 
 export const metadata: Metadata = {
   title: "Parables of Jesus · Word of God Risen",
@@ -12,10 +13,11 @@ interface Parable {
   ref: string;
   videoId?: string;
   audioSrc?: string;
-  /** Jason's rule (Oct 27, 2026): a card shows only when it has BOTH the
-   *  Teddy audio and the film. Parked cards keep their data here and come
-   *  back the moment their film is published and wired. */
-  parked?: boolean;
+  /** Jason's rule, amended by Jason (Oct 27, 2026 evening): every card
+   *  carries the Teddy audio; a card whose film isn't published yet
+   *  stands with a branded "Video coming" placeholder in the film's
+   *  place (components/VideoComing.tsx) until the film is published
+   *  and wired — then videoId is added and the placeholder retires. */
   /** The two doors (Jason, Oct 27, 2026): every card links to its source —
    *  the Gospel chapter it lives in, and its own page in the Parables of
    *  Jesus book where that book carries the parable. */
@@ -32,18 +34,18 @@ const PARABLES: Parable[] = [
   { slug: "leaven", title: "The Leaven", ref: "Matthew 13:33", videoId: "HH3SRIZO9ww", audioSrc: "/audio/parables/leaven.mp3", gospel: "Matthew 13", gospelHref: "/book/matthew/12", parablesHref: "/book/parables/10" },
   { slug: "hidden-treasure", title: "The Hidden Treasure", ref: "Matthew 13:44", videoId: "9od-dL2sgWY", gospel: "Matthew 13", gospelHref: "/book/matthew/12", parablesHref: "/book/parables/8" },
   { slug: "pearl-of-great-price", title: "The Pearl of Great Price", ref: "Matthew 13:45–46", videoId: "bxtra5KWcmI", gospel: "Matthew 13", gospelHref: "/book/matthew/12", parablesHref: "/book/parables/9" },
-  { slug: "unforgiving-servant", title: "The Unforgiving Servant", ref: "Matthew 18:23–35", parked: true, gospel: "Matthew 18", gospelHref: "/book/matthew/17", parablesHref: "/book/parables/13" },
-  { slug: "workers-in-the-vineyard", title: "The Workers in the Vineyard", ref: "Matthew 20:1–16", parked: true, gospel: "Matthew 20", gospelHref: "/book/matthew/19", parablesHref: "/book/parables/14" },
-  { slug: "wedding-feast", title: "The Wedding Feast", ref: "Matthew 22:1–14", parked: true, gospel: "Matthew 22", gospelHref: "/book/matthew/21", parablesHref: "/book/parables/17" },
-  { slug: "ten-virgins", title: "The Ten Virgins", ref: "Matthew 25:1–13", parked: true, gospel: "Matthew 25", gospelHref: "/book/matthew/24", parablesHref: "/book/parables/20" },
-  { slug: "talents", title: "The Talents", ref: "Matthew 25:14–30", parked: true, gospel: "Matthew 25", gospelHref: "/book/matthew/24" },
+  { slug: "unforgiving-servant", title: "The Unforgiving Servant", ref: "Matthew 18:23–35", gospel: "Matthew 18", gospelHref: "/book/matthew/17", parablesHref: "/book/parables/13" },
+  { slug: "workers-in-the-vineyard", title: "The Workers in the Vineyard", ref: "Matthew 20:1–16", gospel: "Matthew 20", gospelHref: "/book/matthew/19", parablesHref: "/book/parables/14" },
+  { slug: "wedding-feast", title: "The Wedding Feast", ref: "Matthew 22:1–14", gospel: "Matthew 22", gospelHref: "/book/matthew/21", parablesHref: "/book/parables/17" },
+  { slug: "ten-virgins", title: "The Ten Virgins", ref: "Matthew 25:1–13", gospel: "Matthew 25", gospelHref: "/book/matthew/24", parablesHref: "/book/parables/20" },
+  { slug: "talents", title: "The Talents", ref: "Matthew 25:14–30", gospel: "Matthew 25", gospelHref: "/book/matthew/24" },
   { slug: "good-samaritan", title: "The Good Samaritan", ref: "Luke 10:30–37", videoId: "SvzeYQRektk", gospel: "Luke 10", gospelHref: "/book/luke/9", parablesHref: "/book/parables/33" },
-  { slug: "rich-fool", title: "The Rich Fool", ref: "Luke 12:16–21", parked: true, gospel: "Luke 12", gospelHref: "/book/luke/11", parablesHref: "/book/parables/34" },
-  { slug: "lost-sheep", title: "The Lost Sheep", ref: "Luke 15:4–7", parked: true, gospel: "Luke 15", gospelHref: "/book/luke/14", parablesHref: "/book/parables/12" },
+  { slug: "rich-fool", title: "The Rich Fool", ref: "Luke 12:16–21", gospel: "Luke 12", gospelHref: "/book/luke/11", parablesHref: "/book/parables/34" },
+  { slug: "lost-sheep", title: "The Lost Sheep", ref: "Luke 15:4–7", gospel: "Luke 15", gospelHref: "/book/luke/14", parablesHref: "/book/parables/12" },
   { slug: "prodigal-son", title: "The Prodigal Son", ref: "Luke 15:11–32", videoId: "7CkIfYz21lw", gospel: "Luke 15", gospelHref: "/book/luke/14", parablesHref: "/book/parables/38" },
-  { slug: "shrewd-manager", title: "The Shrewd Manager", ref: "Luke 16:1–13", parked: true, gospel: "Luke 16", gospelHref: "/book/luke/15" },
-  { slug: "rich-man-and-lazarus", title: "The Rich Man and Lazarus", ref: "Luke 16:19–31", parked: true, gospel: "Luke 16", gospelHref: "/book/luke/15", parablesHref: "/book/parables/39" },
-  { slug: "pharisee-and-tax-collector", title: "The Pharisee and the Tax Collector", ref: "Luke 18:9–14", parked: true, gospel: "Luke 18", gospelHref: "/book/luke/17", parablesHref: "/book/parables/41" },
+  { slug: "shrewd-manager", title: "The Shrewd Manager", ref: "Luke 16:1–13", gospel: "Luke 16", gospelHref: "/book/luke/15" },
+  { slug: "rich-man-and-lazarus", title: "The Rich Man and Lazarus", ref: "Luke 16:19–31", gospel: "Luke 16", gospelHref: "/book/luke/15", parablesHref: "/book/parables/39" },
+  { slug: "pharisee-and-tax-collector", title: "The Pharisee and the Tax Collector", ref: "Luke 18:9–14", gospel: "Luke 18", gospelHref: "/book/luke/17", parablesHref: "/book/parables/41" },
 ];
 
 const BASE = "https://pub-4ff11efe5fbe4087acc9ff74fc56f179.r2.dev";
@@ -94,8 +96,15 @@ export default function ParablesPage() {
       <h2 className="mt-10 font-display text-2xl text-cream-100">
         Listen to each parable
       </h2>
-      <div className="mt-8 grid gap-4 sm:grid-cols-2">
-        {PARABLES.filter((p) => !p.parked).map((p) => (
+      <p className="mt-2 max-w-2xl text-sm leading-relaxed text-sage-400">
+        Every parable here can be heard in Grandpa Teddy&rsquo;s voice.{" "}
+        {PARABLES.filter((p) => p.videoId).length} also have their film
+        today; the other {PARABLES.filter((p) => !p.videoId).length} are
+        marked &ldquo;Video coming&rdquo; while their films are being
+        finished.
+      </p>
+      <div className="mt-6 grid gap-4 sm:grid-cols-2">
+        {PARABLES.map((p) => (
           <div
             key={p.slug}
             className="overflow-hidden rounded-2xl border border-gold-500/15 bg-vineyard-900"
@@ -127,7 +136,7 @@ export default function ParablesPage() {
                   </a>
                 ) : null}
               </div>
-              {"videoId" in p && p.videoId ? (
+              {p.videoId ? (
                 <div className="mt-3 aspect-video overflow-hidden rounded-xl">
                   <iframe
                     src={`https://www.youtube.com/embed/${p.videoId}`}
@@ -137,7 +146,9 @@ export default function ParablesPage() {
                     className="h-full w-full"
                   />
                 </div>
-              ) : null}
+              ) : (
+                <VideoComing title={p.title} />
+              )}
               <ParableAudio
                 src={p.audioSrc ?? `${BASE}/audio/parables/${p.slug}.mp3`}
                 {...beatTarget(p.gospelHref)}
