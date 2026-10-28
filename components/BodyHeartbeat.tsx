@@ -5,6 +5,7 @@ import heartbeat from "@/data/heartbeat.json";
 import worldMap from "@/lib/world-map.json";
 import {
   EMBER_FILL_OPACITY,
+  emberOpacityForOpens,
   lightModeForCountry,
   notRecordedLabel,
   subdivisionsOfCountry,
@@ -449,6 +450,33 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
     liveActive && live
       ? normalizeSubdivisionRows(live.subdivisions ?? [])
       : [];
+  // ALL-TIME opens per place (Oct 27, 2026 — Phase 2.5). The API's
+  // per-place rows are today's (and each history day's); the richest
+  // lifetime figure the payload carries is the sum of a place's
+  // opens across every day in the history (the store's own lifetime
+  // subdivision subtotals are not exposed per-place in the public
+  // view, and countries keep no separate lifetime geo total). The
+  // history includes today, so these sums are true all-time opens
+  // within the kept record. Fixture/snapshot payloads carry no
+  // history — the getters then fall back to the row's own opens.
+  const lifetimeOpensByCountry = new Map<string, number>();
+  const lifetimeOpensBySubdivision = new Map<string, number>();
+  if (liveActive && live?.history) {
+    for (const d of live.history) {
+      for (const c of d.countries ?? []) {
+        const code = (c.code || "").toUpperCase();
+        if (code) lifetimeOpensByCountry.set(code, (lifetimeOpensByCountry.get(code) ?? 0) + (c.opens ?? 0));
+      }
+      for (const s of d.subdivisions ?? []) {
+        const code = (s.code || "").toUpperCase();
+        if (code) lifetimeOpensBySubdivision.set(code, (lifetimeOpensBySubdivision.get(code) ?? 0) + (s.opens ?? 0));
+      }
+    }
+  }
+  const allTimeOpensOf = (c: HbCountryRow): number =>
+    Math.max(c.opens, lifetimeOpensByCountry.get(c.code) ?? 0);
+  const allTimeOpensOfSubdivision = (s: HbCountryRow): number =>
+    Math.max(s.opens, lifetimeOpensBySubdivision.get(s.code) ?? 0);
   // The day words below speak for the SHOWN day (see day browsing):
   // at the live default `shownWhen` is "today" and every phrase is
   // word-for-word what it has always been; while browsing a past
@@ -463,10 +491,14 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   // the app was opened there — a knock on the door — and the
   // place rests as a faint ember. It is never described as lit,
   // and never in chapters: opens are named as opens.
-  const openPhrase = (c: HbCountryRow) =>
-    `${c.name} — the app was opened here ${shownWhen}; it rests as a faint ember until the Word is read or heard`;
-  const subdivisionOpenPhrase = (s: HbCountryRow) =>
-    `${s.name} — the app was opened here ${shownWhen}; it rests as a faint ember`;
+  const openPhrase = (c: HbCountryRow) => {
+    const n = allTimeOpensOf(c);
+    return `${c.name} — the app was opened here ${shownWhen}; visited ${fmt(n)} ${n === 1 ? "time" : "times"} in all — it rests as a faint ember, glowing a little brighter with visits, until the Word is read or heard`;
+  };
+  const subdivisionOpenPhrase = (s: HbCountryRow) => {
+    const n = allTimeOpensOfSubdivision(s);
+    return `${s.name} — the app was opened here ${shownWhen}; visited ${fmt(n)} ${n === 1 ? "time" : "times"} in all — it rests as a faint ember, glowing a little brighter with visits`;
+  };
   // (Subdivision rows are grouped under their country further
   // down, from the SHOWN set — see shownSubdivisionGroups beside
   // the day browsing — so the list below the map can follow the
@@ -668,7 +700,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
       const subs = shownSubdivisions.filter(
         (s) => s.country === c.code && s.opens > 0
       );
-      const base = `the app was opened in ${c.name} ${shownWhen} — no chapters read or heard there yet; ${c.name} rests as a faint ember, not fully lit`;
+      const base = `the app was opened in ${c.name} ${shownWhen} — visited ${fmt(allTimeOpensOf(c))} ${allTimeOpensOf(c) === 1 ? "time" : "times"} in all, no chapters read or heard there yet; ${c.name} rests as a faint ember, glowing a little brighter with visits, not fully lit`;
       return subs.length > 0
         ? `${base}; its divisions rest as embers where recorded: ${subs.map(subdivisionOpenPhrase).join("; ")}`
         : base;
@@ -880,7 +912,11 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                       d={c.geo.path}
                       fill="#e4b95c"
                       fillRule="evenodd"
-                      fillOpacity={EMBER_FILL_OPACITY}
+                      fillOpacity={
+                        tierOf(c) === "open"
+                          ? emberOpacityForOpens(allTimeOpensOf(c))
+                          : EMBER_FILL_OPACITY
+                      }
                       stroke="#ffe1a1"
                       strokeWidth="0.8"
                       strokeOpacity="0.25"
@@ -965,7 +1001,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                       d={s.geo.path}
                       fill="#ffdf8a"
                       fillRule="evenodd"
-                      fillOpacity={EMBER_FILL_OPACITY}
+                      fillOpacity={emberOpacityForOpens(allTimeOpensOfSubdivision(s))}
                       stroke="#ffe9b0"
                       strokeWidth="0.7"
                       strokeOpacity="0.3"
@@ -996,7 +1032,11 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                       cy={c.centroid.cy}
                       r={lightRadius(c.total)}
                       fill="#e4b95c"
-                      fillOpacity={EMBER_FILL_OPACITY}
+                      fillOpacity={
+                        tierOf(c) === "open"
+                          ? emberOpacityForOpens(allTimeOpensOf(c))
+                          : EMBER_FILL_OPACITY
+                      }
                     />
                   </g>
                 );
@@ -1204,7 +1244,8 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                   {opensOnly(c) ? (
                     <span
                       aria-hidden="true"
-                      className="inline-block h-2 w-2 shrink-0 rounded-full bg-gold-300/40"
+                      className="inline-block h-2 w-2 shrink-0 rounded-full bg-gold-300"
+                      style={{ opacity: emberOpacityForOpens(allTimeOpensOf(c)) / 0.3 * 0.75 }}
                     />
                   ) : (
                     <span
@@ -1273,7 +1314,8 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                         {opensOnly(s) ? (
                           <span
                             aria-hidden="true"
-                            className="inline-block h-2 w-2 shrink-0 rounded-full bg-gold-300/40"
+                            className="inline-block h-2 w-2 shrink-0 rounded-full bg-gold-300"
+                            style={{ opacity: emberOpacityForOpens(allTimeOpensOfSubdivision(s)) / 0.3 * 0.75 }}
                           />
                         ) : (
                           <span

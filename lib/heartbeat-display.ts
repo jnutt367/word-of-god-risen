@@ -34,6 +34,25 @@ export type CountryLightMode = "full" | "ember";
  *  breathing — a coal at rest, not a light. */
 export const EMBER_FILL_OPACITY = 0.12;
 
+/** The brightest an OPENS-ONLY ember may ever burn (Oct 27, 2026,
+ *  Jason: "it should glow a little brighter each 10 visits").
+ *  Deliberately about half the full chapter light's presence
+ *  (country fills run 0.30–0.62), so no number of visits can make
+ *  a mere open read as the Word opened — and an ember never gains
+ *  the breathing glow or the heart at any brightness. */
+export const EMBER_MAX_OPACITY = 0.3;
+
+/** Graduated ember brightness for an opens-only place, by its
+ *  ALL-TIME opens count: the flat ember (0.12) until 10 visits,
+ *  then one small step (+0.03) at each further 10-visit threshold
+ *  (10, 20, 30, …), capped at EMBER_MAX_OPACITY. Pure function —
+ *  the component renders what this decides. */
+export function emberOpacityForOpens(opens: number): number {
+  const n = Number.isFinite(opens) ? Math.max(0, Math.floor(opens)) : 0;
+  const steps = Math.floor(n / 10);
+  return Math.min(EMBER_MAX_OPACITY, EMBER_FILL_OPACITY + 0.03 * steps);
+}
+
 /** The recorded subdivisions of one country within a shown set. */
 export function subdivisionsOfCountry<T extends SubdivisionCountLike>(
   subdivisions: readonly T[],

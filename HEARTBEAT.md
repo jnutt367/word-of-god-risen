@@ -934,3 +934,38 @@ read or heard in a place; an open is a knock on the door.
 - **Same-day prayer**: whether an ember-only first light calls
   for the new-place prayer is Jason's pending choice; the watches
   read the same place rows either way.
+
+### The ember brightens with visits (Oct 27, 2026 — Phase 2.5)
+
+Jason: "it should glow a little brighter each 10 visits." The
+opens-only ember is no longer one flat opacity:
+
+- **Graduated by all-time opens.** `emberOpacityForOpens` in
+  `lib/heartbeat-display.ts` (pure, like every display decision):
+  the flat ember 0.12 below 10 visits, then +0.03 at each 10-visit
+  threshold (10 → 0.15, 20 → 0.18, 30 → 0.21, …), **capped at
+  0.30** — about half the full chapter light's presence (country
+  fills run 0.30–0.62). The cap is the fence: no number of visits
+  makes a mere open read as the Word opened.
+- **Never the full light's marks.** At every brightness an ember
+  stays steady: no glow layer, no breathing (`.hb-glow`), no
+  heart. Those belong to a chapter opened, and only to that. A
+  place with any chapter activity renders exactly as before —
+  this touches opens-only places only (their silhouette fill,
+  their centroid disc, and their steady list dot). The v3.1.1
+  step-back ember (a country behind its lit subdivisions) is a
+  different ember and stays flat at 0.12.
+- **Which opens count.** The public view's per-place rows are
+  per-day; the component sums a place's `opens` across every day
+  in the payload's `history` (which includes today) — the richest
+  all-time per-place figure the API gives. (The store keeps
+  lifetime subdivision subtotals internally, but the public view
+  does not expose them per place, and countries keep no separate
+  lifetime geo total; the history sum is the honest all-time
+  figure within the record's 400-day keeping.) Fixture and
+  snapshot payloads carry no history, so the row's own opens
+  stand as the fallback there.
+- **Wording.** The opens-only titles and the figure's aria
+  description now name the all-time visit count and say the ember
+  is "glowing a little brighter with visits" — plain words, and
+  opens are still never described as chapters or as lit.
