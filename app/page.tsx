@@ -60,7 +60,8 @@ export default function Home() {
           </p>
           {/* The doors row (Jason, Oct 27, 2026): four named doors
               directly under the hero title — Read to the books, the
-              Earth Map to the heartbeat, Parables to their page, and
+              The Lights Are Coming On to the heartbeat, Parables to
+              their page, and
               One Is Enough to the featured film below the map. One
               calm row, nothing else. */}
           <nav
@@ -77,7 +78,7 @@ export default function Home() {
               href="#earth-map"
               className="rounded-full border border-cream-100/25 px-4 py-2.5 text-sm font-semibold text-cream-100 transition-colors hover:border-gold-400 hover:text-gold-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
             >
-              The Earth Map
+              The Lights Are Coming On
             </Link>
             <Link
               href="/parables"
