@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import CarvedDivider from "@/components/CarvedDivider";
 
 export const metadata: Metadata = {
   title: "Ministry Milestones",
@@ -131,9 +132,7 @@ export default function MilestonesPage() {
         </div>
       </div>
 
-      <div className="vine-divider my-10" aria-hidden="true">
-        <span>✦</span>
-      </div>
+      <CarvedDivider className="my-10" />
 
       <div className="space-y-4 font-scripture text-lg leading-relaxed text-cream-100/90">
         <p>

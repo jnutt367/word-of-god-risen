@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import VerseText from "@/components/VerseText";
 import CrossRefPanel from "@/components/CrossRefPanel";
+import CarvedDivider from "@/components/CarvedDivider";
 import WatchCard from "@/components/WatchCard";
 import FilmCard from "@/components/FilmCard";
 import ListenButton from "@/components/ListenButton";
@@ -331,9 +332,7 @@ export default function ReaderView({
         <h1 className="mt-2 font-scripture text-3xl text-[var(--reader-ink)] sm:text-4xl">
           {chapterTitle || `Chapter ${chapterNum}`}
         </h1>
-        <div className="vine-divider my-8" aria-hidden="true">
-          <span>✦</span>
-        </div>
+        <CarvedDivider className="my-8" />
 
         {/* The chapter's animated film, beside the Listen controls */}
         <FilmCard film={film} />

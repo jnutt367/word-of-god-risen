@@ -1,6 +1,7 @@
 "use client";
 
 import YouTubeThumb from "./YouTubeThumb";
+import CarvedDivider from "./CarvedDivider";
 import { useVideoChoice, VideoChoiceModal } from "./VideoChoice";
 import { shortsUrl, type ChapterVideo } from "@/lib/videos";
 
@@ -58,9 +59,7 @@ export default function WatchCard({ videos }: { videos: ChapterVideo[] }) {
 
   return (
     <section aria-label="Watch from TruVINE" className="mt-10">
-      <div className="vine-divider mb-5" aria-hidden="true">
-        <span>✦</span>
-      </div>
+      <CarvedDivider className="mb-5" />
       <h2 className="font-display text-xl text-[var(--reader-ink)]">
         Watch from <span className="text-truvine-gradient">TruVINE</span>
       </h2>

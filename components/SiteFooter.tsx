@@ -1,12 +1,11 @@
 import Link from "next/link";
+import CarvedDivider from "@/components/CarvedDivider";
 
 export default function SiteFooter() {
   return (
     <footer className="border-t border-gold-500/15 bg-vineyard-900/60">
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-        <div className="vine-divider mb-6" aria-hidden="true">
-          <span className="text-lg">✦</span>
-        </div>
+        <CarvedDivider className="mb-6" />
         <div className="flex flex-col items-center gap-3 text-center">
           <p className="font-display text-xl text-cream-100">
             &ldquo;Thy word is a lamp unto my feet, and a light unto my

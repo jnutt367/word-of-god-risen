@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import WordIntegrityNote from "@/components/WordIntegrityNote";
+import CarvedDivider from "@/components/CarvedDivider";
 
 export const metadata: Metadata = {
   title: "About",
@@ -73,9 +74,7 @@ export default function AboutPage() {
         </p>
       </div>
 
-      <div className="vine-divider my-10" aria-hidden="true">
-        <span>✦</span>
-      </div>
+      <CarvedDivider className="my-10" />
 
       <div className="rounded-2xl border border-gold-500/15 bg-vineyard-900 p-6">
         <div className="flex gap-4">

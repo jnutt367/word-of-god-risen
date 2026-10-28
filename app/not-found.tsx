@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import BuildersArt from "@/components/BuildersArt";
 import BuildersSubline from "@/components/BuildersSubline";
+import CarvedDivider from "@/components/CarvedDivider";
 
 export const metadata: Metadata = {
   title: "Page not found",
@@ -37,8 +38,8 @@ export default function NotFound() {
         </Link>
       </div>
 
-      <div className="vine-divider mx-auto mt-12 max-w-xs" aria-hidden="true">
-        <span className="text-sm">✦</span>
+      <div className="mx-auto mt-12 max-w-xs">
+        <CarvedDivider />
       </div>
       <p className="mt-4 font-scripture text-base italic text-cream-100/80">
         &ldquo;Thy word is a lamp unto my feet, and a light unto my
