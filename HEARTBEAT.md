@@ -1098,14 +1098,27 @@ score.)
   he finished a book today, from Florida. Per-place finish
   dates did not exist anywhere before this build, so nothing
   in the system could already hold it; Florida's
-  last-book-finish date was therefore seeded as 2026-10-28
-  in the day's geo counts (`c:US:books` and `s:US-FL:books`,
-  +1 each) FROM JASON'S OWN STATEMENT — recorded here and in
-  the commit message as a seed from his report, not
-  telemetry. The lifetime `booksFinished` total was NOT
-  touched by the seed: his real beat, if it landed, already
-  stands in it, and the seed claims only the place and the
-  day he himself named. No other place's date was seeded.
+  last-book-finish date is therefore seeded as 2026-10-28 in
+  the day's geo counts (`c:US:books` and `s:US-FL:books`, +1
+  each, plus the US-FL subtotal) FROM JASON'S OWN STATEMENT —
+  a seed from his report, not telemetry. The lifetime
+  `booksFinished` total is NOT touched by the seed: his real
+  beat, if it landed, already stands in it, and the seed
+  claims only the place and the day he himself named. No
+  other place's date is seeded. **Status at ship time:** the
+  seed write itself waits on the store credentials, which
+  reach operator scripts only through the Secure Vault route
+  (the Vercel connector returns these integration-managed
+  secrets undecrypted — the same standing wall the
+  outage-window restoration waits behind). The seed stands
+  prepared and idempotent as
+  `seed-florida-book-finish-2026-10-28.mjs` in the goal's
+  hidden_files, ready to run the moment the credentials are
+  in hand; until it runs, the payload honestly reads
+  Florida's `bookFinishedOn` as null and no ring is worn.
+  (An earlier draft of this section spoke of the seed in the
+  past tense before it had run; corrected the same day —
+  the record says what is true.)
 - **Verification (Oct 28, 2026).** `tsc --noEmit` clean,
   ESLint clean on the touched files, production build clean.
   Fixture checks against the compiled display logic pass
@@ -1119,6 +1132,8 @@ score.)
   chapter counts untouched, and `publicView` derives
   `bookFinishedOn` = today from it; a country-only finish
   lands with no subdivision and does not stand a row up.
-  Production verification (payload field, Florida's ring
-  date, the served bundle's ring code) is recorded in the
-  build record under the goal's hidden_files.
+  Production verification — the payload carrying the new
+  field on every row, and the served client chunk containing
+  the ring rendering and its copy — is recorded in the build
+  record under the goal's hidden_files; Florida's ring date
+  itself verifies there once the seed above has run.
