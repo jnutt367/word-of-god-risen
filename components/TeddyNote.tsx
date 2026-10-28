@@ -41,8 +41,9 @@ export default function TeddyNote() {
 
   return (
     <section
+      id="film"
       aria-labelledby="teddy-note-heading"
-      className="mx-auto max-w-6xl px-4 pt-5 sm:px-6"
+      className="mx-auto max-w-6xl scroll-mt-20 px-4 pt-5 sm:px-6"
     >
       <div className="rounded-2xl border border-gold-500/15 bg-vineyard-900 px-6 py-8 text-center sm:px-10">
         <button

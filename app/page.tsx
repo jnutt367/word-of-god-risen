@@ -47,7 +47,7 @@ export default function Home() {
           />
           <div className="absolute inset-0 bg-gradient-to-b from-vineyard-950/70 via-vineyard-950/55 to-vineyard-950" />
         </div>
-        <div className="relative mx-auto max-w-4xl px-4 py-24 text-center sm:px-6 sm:py-32">
+        <div className="relative mx-auto max-w-4xl px-4 py-14 text-center sm:px-6 sm:py-20">
           <p className="text-sm font-semibold uppercase tracking-[0.22em] text-gold-300">
             Centered on the King, not the crowds
           </p>
@@ -58,9 +58,44 @@ export default function Home() {
           <p className="mx-auto mt-5 max-w-xl font-scripture text-lg italic text-cream-100/90 sm:text-xl">
             &ldquo;I am the way, the truth, and the life.&rdquo;
           </p>
-          <p className="mx-auto mt-4 max-w-xl text-sage-300">
-            Read full chapters, follow cross-references, and watch your
-            reading grow — one chapter at a time.
+          {/* The doors row (Jason, Oct 27, 2026): four named doors
+              directly under the hero title — Read to the books, the
+              Earth Map to the heartbeat, Parables to their page, and
+              Watch the Film to the featured film below the map. One
+              calm row, nothing else. */}
+          <nav
+            aria-label="Explore"
+            className="mt-7 flex flex-wrap items-center justify-center gap-2.5"
+          >
+            <Link
+              href="#books"
+              className="rounded-full border border-cream-100/25 px-4 py-2.5 text-sm font-semibold text-cream-100 transition-colors hover:border-gold-400 hover:text-gold-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+            >
+              Read
+            </Link>
+            <Link
+              href="#earth-map"
+              className="rounded-full border border-cream-100/25 px-4 py-2.5 text-sm font-semibold text-cream-100 transition-colors hover:border-gold-400 hover:text-gold-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+            >
+              The Earth Map
+            </Link>
+            <Link
+              href="/parables"
+              className="rounded-full border border-cream-100/25 px-4 py-2.5 text-sm font-semibold text-cream-100 transition-colors hover:border-gold-400 hover:text-gold-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+            >
+              Parables
+            </Link>
+            <Link
+              href="#film"
+              className="rounded-full border border-cream-100/25 px-4 py-2.5 text-sm font-semibold text-cream-100 transition-colors hover:border-gold-400 hover:text-gold-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+            >
+              Watch the Film
+            </Link>
+          </nav>
+          <p className="mx-auto mt-5 max-w-xl text-sage-300">
+            The whole Bible, read out loud by Grandpa Teddy — every
+            chapter free. No account, no password: tap a book, tap a
+            chapter, tap Listen.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Link

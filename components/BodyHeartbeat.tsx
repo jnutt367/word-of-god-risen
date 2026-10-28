@@ -793,8 +793,9 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
 
   return (
     <section
+      id="earth-map"
       aria-labelledby="heartbeat-heading"
-      className="mx-auto max-w-6xl px-4 pb-4 pt-6 sm:px-6"
+      className="mx-auto max-w-6xl scroll-mt-20 px-4 pb-4 pt-6 sm:px-6"
     >
       <div className="overflow-hidden rounded-2xl border border-gold-500/15 bg-vineyard-900 px-6 py-10 sm:px-10">
         <p className="text-center text-xs font-semibold uppercase tracking-[0.18em] text-gold-400">

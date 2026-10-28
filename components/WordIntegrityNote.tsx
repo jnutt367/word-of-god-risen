@@ -27,7 +27,7 @@ export default function WordIntegrityNote({
   const card = (
     <section
       aria-labelledby="word-integrity-heading"
-      className="rounded-2xl border border-gold-500/15 bg-vineyard-900 px-6 py-8 sm:px-10"
+      className="rounded-2xl border border-gold-500/15 bg-vineyard-900 px-6 py-6 sm:px-10"
     >
       <p className="text-center font-display text-lg text-gold-300" aria-hidden="true">
         ✦
@@ -41,14 +41,11 @@ export default function WordIntegrityNote({
       <p className="mx-auto mt-3 max-w-xl text-center leading-relaxed text-cream-100/85">
         The accuracy of God&rsquo;s Word matters here. We are checking
         every Grandpa Teddy reading against the written Word, word for
-        word. If a chapter doesn&rsquo;t match, Teddy&rsquo;s recording
-        comes down right away and a backup voice reads the chapter until
-        a corrected reading passes the check.
-      </p>
-      <p className="mx-auto mt-3 max-w-xl text-center leading-relaxed text-cream-100/85">
-        If you hear something that sounds wrong, tap &lsquo;Something
-        sounds wrong&rsquo; — wherever you are in the world, we act first
-        and verify right away.
+        word — if a chapter doesn&rsquo;t match, it comes down right
+        away and a backup voice reads it until a corrected reading
+        passes. Hear something that sounds wrong? Tap &lsquo;Something
+        sounds wrong&rsquo;: wherever you are in the world, we act
+        first and verify right away.
       </p>
     </section>
   );
