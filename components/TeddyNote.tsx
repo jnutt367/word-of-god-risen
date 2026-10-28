@@ -5,13 +5,16 @@ import Link from "next/link";
 import { useVideoChoice, VideoChoiceModal } from "./VideoChoice";
 
 /**
- * A note from Grandpa Teddy — resting directly under "Meet Grandpa
- * Teddy" on the home page (Jason, Oct 26, 2026). Not a replacement
- * for the introduction: a postscript from Teddy himself — "hey, I
- * have a little bit more to tell you here" — pointing to the
- * long-form film "One Chapter Is Enough" and telling every visitor,
- * up front, that the readings are being tested word for word and
- * that any chapter can be flagged from its own page.
+ * A note from Grandpa Teddy — born as his postscript under "Meet
+ * Grandpa Teddy" (Jason, Oct 26, 2026): "hey, I have a little bit
+ * more to tell you here" — pointing to the long-form film
+ * "One Chapter Is Enough" and telling every visitor, up front,
+ * that the readings are being tested word for word and that any
+ * chapter can be flagged from its own page. On Oct 27, 2026 Jason
+ * moved the full film into the homepage's featured spot — directly
+ * under the Body Heartbeat, where the Taiwan prayer Short's card
+ * rested until that day — so this note, the film's one presence on
+ * the page, rests there now.
  *
  * Kept to the house pattern (TaiwanPrayer): a heading, a few lines
  * in Teddy's voice, and a plain way to watch. The card carries the

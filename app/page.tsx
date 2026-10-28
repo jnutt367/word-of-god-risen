@@ -9,7 +9,6 @@ import PlanContinue from "@/components/PlanContinue";
 import ListenDropdown from "@/components/ListenDropdown";
 import LatestShorts from "@/components/LatestShorts";
 import BodyHeartbeat from "@/components/BodyHeartbeat";
-import TaiwanPrayer from "@/components/TaiwanPrayer";
 import WordIntegrityNote from "@/components/WordIntegrityNote";
 import OpenDoor from "@/components/OpenDoor";
 import TeddyNote from "@/components/TeddyNote";
@@ -130,13 +129,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* A note from Grandpa Teddy — his postscript directly under
-          the introduction (Jason, Oct 26, 2026): "hey, I have a
-          little bit more to tell you here." Points to the
-          "One Chapter Is Enough" film and tells visitors up front
-          that every reading is being tested word for word. */}
-      <TeddyNote />
-
       {/* Widgets */}
       <div className="mx-auto max-w-4xl space-y-5 px-4 py-10 sm:px-6">
         <VerseOfDay />
@@ -147,9 +139,18 @@ export default function Home() {
       {/* The Body, Reading — the Bible Heartbeat */}
       <BodyHeartbeat />
 
-      {/* One Chapter Is Enough — the Taiwan prayer Short, resting
-          directly under the heartbeat it was prayed over. */}
-      <TaiwanPrayer />
+      {/* One Chapter Is Enough — the full film, featured directly
+          under the heartbeat. Until Oct 27, 2026 this spot held the
+          Taiwan prayer Short; Jason's word that day: the Short's
+          card comes off the homepage and the full-length film is
+          the featured film presence here. So Grandpa Teddy's note
+          (Oct 26, 2026 — "hey, I have a little bit more to tell
+          you here"), which carries the film, moved down from under
+          "Meet Grandpa Teddy" to this spot: one clear presence for
+          the film, still through VideoChoice — "Watch here" plays
+          it in the app; nobody is carried to YouTube unasked. The
+          Short itself is untouched on the channel. */}
+      <TeddyNote />
 
       {/* The Open Door — a quiet link out to the TruVINE Family Wall,
           resting beside the heartbeat. A plain outbound link only:
