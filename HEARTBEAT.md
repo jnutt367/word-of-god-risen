@@ -926,8 +926,11 @@ read or heard in a place; an open is a knock on the door.
   country back — the step-back still keys on chapters alone. Any
   chapter at all outranks the opens: a place with opens AND a
   read/heard renders exactly as it always has. Every text surface
-  names opens as opens — the chips read "opened today · opened
-  N times" beside the chapter counts, the titles and the aria
+  names the count plainly — the chips carry a terse "· N visits"
+  suffix beside the chapter counts (Jason's copy ruling, Oct 27,
+  2026: "visits," never "opened N times" and never "N opens" —
+  display copy only; the API fields and the `open` beat kind keep
+  their names), the titles and the aria
   description say the app was opened and the place rests as a
   faint ember, and a zero-chapter day with embers on it says so
   in the caption instead of claiming the world is at rest.
@@ -966,6 +969,8 @@ opens-only ember is no longer one flat opacity:
   snapshot payloads carry no history, so the row's own opens
   stand as the fallback there.
 - **Wording.** The opens-only titles and the figure's aria
-  description now name the all-time visit count and say the ember
-  is "glowing a little brighter with visits" — plain words, and
-  opens are still never described as chapters or as lit.
+  description now name the all-time count as "N visits" and say
+  the ember is "glowing a little brighter with visits"; the aria
+  description says plainly, once, that the Word has not been
+  opened there yet. Chips stay terse — a "· N visits" suffix.
+  Opens are still never described as chapters or as lit.

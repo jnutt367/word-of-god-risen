@@ -493,11 +493,11 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   // and never in chapters: opens are named as opens.
   const openPhrase = (c: HbCountryRow) => {
     const n = allTimeOpensOf(c);
-    return `${c.name} — the app was opened here ${shownWhen}; visited ${fmt(n)} ${n === 1 ? "time" : "times"} in all — it rests as a faint ember, glowing a little brighter with visits, until the Word is read or heard`;
+    return `${c.name} — the app was opened here ${shownWhen}; ${fmt(n)} ${n === 1 ? "visit" : "visits"} in all — it rests as a faint ember, glowing a little brighter with visits, until the Word is read or heard`;
   };
   const subdivisionOpenPhrase = (s: HbCountryRow) => {
     const n = allTimeOpensOfSubdivision(s);
-    return `${s.name} — the app was opened here ${shownWhen}; visited ${fmt(n)} ${n === 1 ? "time" : "times"} in all — it rests as a faint ember, glowing a little brighter with visits`;
+    return `${s.name} — the app was opened here ${shownWhen}; ${fmt(n)} ${n === 1 ? "visit" : "visits"} in all — it rests as a faint ember, glowing a little brighter with visits`;
   };
   // (Subdivision rows are grouped under their country further
   // down, from the SHOWN set — see shownSubdivisionGroups beside
@@ -700,7 +700,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
       const subs = shownSubdivisions.filter(
         (s) => s.country === c.code && s.opens > 0
       );
-      const base = `the app was opened in ${c.name} ${shownWhen} — visited ${fmt(allTimeOpensOf(c))} ${allTimeOpensOf(c) === 1 ? "time" : "times"} in all, no chapters read or heard there yet; ${c.name} rests as a faint ember, glowing a little brighter with visits, not fully lit`;
+      const base = `the app was opened in ${c.name} ${shownWhen} — ${fmt(allTimeOpensOf(c))} ${allTimeOpensOf(c) === 1 ? "visit" : "visits"} in all, and the Word has not been opened there yet; ${c.name} rests as a faint ember, glowing a little brighter with visits, not fully lit`;
       return subs.length > 0
         ? `${base}; its divisions rest as embers where recorded: ${subs.map(subdivisionOpenPhrase).join("; ")}`
         : base;
@@ -1271,8 +1271,8 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                   {c.opens > 0 && (
                     <span className="text-sage-300">
                       {" "}
-                      · opened {fmt(c.opens)}{" "}
-                      {c.opens === 1 ? "time" : "times"}
+                      · {fmt(c.opens)}{" "}
+                      {c.opens === 1 ? "visit" : "visits"}
                     </span>
                   )}
                 </li>
@@ -1341,8 +1341,8 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                         {s.opens > 0 && (
                           <span className="text-sage-300">
                             {" "}
-                            · opened {fmt(s.opens)}{" "}
-                            {s.opens === 1 ? "time" : "times"}
+                            · {fmt(s.opens)}{" "}
+                            {s.opens === 1 ? "visit" : "visits"}
                           </span>
                         )}
                       </li>
