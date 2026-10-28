@@ -120,3 +120,49 @@ export function notRecordedLabel(
     ? `${countryName} — state not recorded`
     : `${countryName} — division not recorded`;
 }
+
+/** A place row that may carry its last book-finish date (Oct 28,
+ *  2026) — the shape the payload's rows carry as `bookFinishedOn`. */
+export interface BookFinishRowLike {
+  total: number;
+  /** The place's last book-finish date ("YYYY-MM-DD"), or null
+   *  when no finish stands in the record for it. */
+  bookFinishedOn?: string | null;
+}
+
+/** THE GOLD RING (Jason, Oct 28, 2026): when a whole book of the
+ *  Bible is finished in a place, that place wears a soft gold
+ *  halo for the rest of that day, then settles back to its
+ *  ordinary light. The ring is on when the place's last finish
+ *  date IS today and the place carries chapters in the shown
+ *  set — a finish is a book read or heard through, so the ring
+ *  always rests on a full light, never on an opens-only ember.
+ *  No names, no counts, nothing permanent — a ring for the day.
+ *  Pure function — the component renders what this decides. */
+export function bookHaloOn(
+  row: BookFinishRowLike,
+  todayDate: string | null
+): boolean {
+  return (
+    todayDate !== null &&
+    row.total > 0 &&
+    row.bookFinishedOn != null &&
+    row.bookFinishedOn === todayDate
+  );
+}
+
+/** A country's own ring steps back when one of its subdivisions
+ *  wears the ring that day — the finest recorded geography
+ *  carries the sign, exactly as it carries the light (v3.1.1).
+ *  A country whose finish was recorded with no subdivision
+ *  keeps its own ring. */
+export function countryBookHaloOn(
+  row: BookFinishRowLike & { code: string },
+  subdivisions: readonly (SubdivisionCountLike & BookFinishRowLike)[],
+  todayDate: string | null
+): boolean {
+  if (!bookHaloOn(row, todayDate)) return false;
+  return !subdivisionsOfCountry(subdivisions, row.code).some((s) =>
+    bookHaloOn(s, todayDate)
+  );
+}

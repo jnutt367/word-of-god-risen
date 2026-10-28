@@ -1038,3 +1038,87 @@ opens-only ember is no longer one flat opacity:
   ember's outline stays flat and faint exactly as before, and
   the opens-only titles now say "its rim brightening too"
   beside the fill's brightening.
+
+## The gold ring — a book finished here today (Oct 28, 2026)
+
+Jason's question in the morning chat — "What can we do for
+showing someone finished a book of the Bible — on the map — or
+should we even?" — and his ruling on the offered shape: when a
+whole book of the Bible is finished in a place, that place
+wears a **soft gold halo for the rest of that day**, then
+settles back to its ordinary light. No names, no counts,
+nothing permanent — a ring for the day, in the map's existing
+language of light. (Philippians 2:3 governs the copy: the ring
+celebrates a neighbor's walk through a book, and keeps no
+score.)
+
+- **The finish gains a place.** Until today the `book` beat
+  carried no geography at all: it moved only the lifetime
+  `booksFinished` total, so no record existed of WHERE a book
+  was finished. The beat now records its place exactly the way
+  read/listen/open beats do — a fourth field kind, `books`,
+  in the day's geo counts (`c:US:books`, `s:US-FL:books`) and
+  the lifetime subdivision subtotals — counted beside the
+  chapters like opens, never inside them: a row's `total`
+  stays chapters only, and the row-standing rule is unchanged
+  (a finish alone still does not stand a place up in the
+  rows). Records written before this field normalize it to 0;
+  no migration, and finishes before Oct 28, 2026 have no place
+  record — none is invented for them.
+- **The payload.** `publicView` derives each place's last
+  book-finish date from the day records — the latest day whose
+  geo counts hold a finish for it — and carries it on the
+  place's rows as `bookFinishedOn` (null when the place has no
+  finish in the record). The day record stays the only source:
+  a finish is never claimed for a place or a day the count
+  does not hold.
+- **The ring.** The decisions are pure functions in
+  `lib/heartbeat-display.ts` (`bookHaloOn`,
+  `countryBookHaloOn`): the ring is on when the place's last
+  finish date is today AND the place carries chapters in the
+  shown set — a finish is a book read or heard through, so
+  the ring always rests on a full light, never on an
+  opens-only ember. A subdivision's ring steps its country's
+  own ring back, the finest geography carrying the sign
+  exactly as it carries the light (v3.1.1); a finish recorded
+  with no subdivision keeps the country's ring. The component
+  draws the ring last, over the lights it honors — traced
+  around a silhouette (a wide faint stroke under a narrower
+  clear one, `#ffd977`), or as a circle around a centroid
+  light — and it is STEADY: no `.hb-glow`, no breathing, no
+  flare. The sign belongs to today: at the live default only,
+  never while day browsing. Every text surface names it in
+  the same voice: the legend gains "A gold ring — a whole
+  book of the Bible was finished here today" on days a ring
+  is worn; the place chips carry "· a book finished here
+  today"; the ring's `<title>` and the figure's aria summary
+  say it too.
+- **The first ring is Jason's own, seeded honestly.** Jason
+  told us in chat that same morning, "I just finished one" —
+  he finished a book today, from Florida. Per-place finish
+  dates did not exist anywhere before this build, so nothing
+  in the system could already hold it; Florida's
+  last-book-finish date was therefore seeded as 2026-10-28
+  in the day's geo counts (`c:US:books` and `s:US-FL:books`,
+  +1 each) FROM JASON'S OWN STATEMENT — recorded here and in
+  the commit message as a seed from his report, not
+  telemetry. The lifetime `booksFinished` total was NOT
+  touched by the seed: his real beat, if it landed, already
+  stands in it, and the seed claims only the place and the
+  day he himself named. No other place's date was seeded.
+- **Verification (Oct 28, 2026).** `tsc --noEmit` clean,
+  ESLint clean on the touched files, production build clean.
+  Fixture checks against the compiled display logic pass
+  (ring on for a finish today with chapters; off for an
+  earlier finish, an opens-only place, a null date, and
+  while browsing; the country's ring stepping back to its
+  subdivision's and standing for an unrecorded-division
+  finish). A stubbed-store harness (in-memory Redis REST)
+  drove the real store code: a book beat lands its country
+  and subdivision finish counts and its subtotal, leaves the
+  chapter counts untouched, and `publicView` derives
+  `bookFinishedOn` = today from it; a country-only finish
+  lands with no subdivision and does not stand a row up.
+  Production verification (payload field, Florida's ring
+  date, the served bundle's ring code) is recorded in the
+  build record under the goal's hidden_files.
