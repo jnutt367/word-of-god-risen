@@ -6,6 +6,7 @@ import worldMap from "@/lib/world-map.json";
 import {
   EMBER_FILL_OPACITY,
   emberOpacityForOpens,
+  emberStrokeForOpens,
   lightModeForCountry,
   notRecordedLabel,
   subdivisionsOfCountry,
@@ -505,11 +506,11 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   // and never in chapters: opens are named as opens.
   const openPhrase = (c: HbCountryRow) => {
     const n = allTimeOpensOf(c);
-    return `${c.name} — the app was opened here ${shownWhen}; ${fmt(n)} ${n === 1 ? "visit" : "visits"} in all — it rests as a faint ember, glowing a little brighter with visits, until the Word is read or heard`;
+    return `${c.name} — the app was opened here ${shownWhen}; ${fmt(n)} ${n === 1 ? "visit" : "visits"} in all — it rests as a faint ember, glowing a little brighter with visits, its rim brightening too, until the Word is read or heard`;
   };
   const subdivisionOpenPhrase = (s: HbCountryRow) => {
     const n = allTimeOpensOfSubdivision(s);
-    return `${s.name} — the app was opened here ${shownWhen}; ${fmt(n)} ${n === 1 ? "visit" : "visits"} in all — it rests as a faint ember, glowing a little brighter with visits`;
+    return `${s.name} — the app was opened here ${shownWhen}; ${fmt(n)} ${n === 1 ? "visit" : "visits"} in all — it rests as a faint ember, glowing a little brighter with visits, its rim brightening too`;
   };
   // (Subdivision rows are grouped under their country further
   // down, from the SHOWN set — see shownSubdivisionGroups beside
@@ -941,7 +942,10 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 subdivisions, drawn next. OPENS-ONLY countries
                 (Oct 27, 2026) wear that same ember treatment —
                 tierOf(c) !== "full" — with their own honest title:
-                the app was opened there, nothing read or heard yet. */}
+                the app was opened there, nothing read or heard
+                yet; their RIM brightens with visits (Jason's rim
+                rule, Oct 27) while the v3.1.1 ember beside them
+                keeps its flat, faint outline exactly as before. */}
             {mapRows.map((c, i) =>
               c.geo ? (
                 tierOf(c) !== "full" ? (
@@ -959,8 +963,12 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                           : EMBER_FILL_OPACITY
                       }
                       stroke="#ffe1a1"
-                      strokeWidth="0.8"
-                      strokeOpacity="0.25"
+                      strokeWidth={tierOf(c) === "open" ? 1.1 : 0.8}
+                      strokeOpacity={
+                        tierOf(c) === "open"
+                          ? emberStrokeForOpens(allTimeOpensOf(c))
+                          : 0.25
+                      }
                     />
                   </g>
                 ) : (
@@ -1035,7 +1043,10 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                   // OPENS-ONLY subdivision (Oct 27, 2026): the
                   // ember treatment in the subdivision's own
                   // shape — one faint, steady fill; no glow
-                  // layer, no breathing, no heart.
+                  // layer, no breathing, no heart. Its RIM
+                  // brightens with visits (Jason's rim rule,
+                  // Oct 27): the outline traces the shape
+                  // steadily, brighter as the visits gather.
                   <g key={`sub-${s.code}`}>
                     <title>{subdivisionOpenPhrase(s)}</title>
                     <path
@@ -1044,8 +1055,8 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                       fillRule="evenodd"
                       fillOpacity={emberOpacityForOpens(allTimeOpensOfSubdivision(s))}
                       stroke="#ffe9b0"
-                      strokeWidth="0.7"
-                      strokeOpacity="0.3"
+                      strokeWidth="1.0"
+                      strokeOpacity={emberStrokeForOpens(allTimeOpensOfSubdivision(s))}
                     />
                   </g>
                 )
@@ -1077,6 +1088,13 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                         tierOf(c) === "open"
                           ? emberOpacityForOpens(allTimeOpensOf(c))
                           : EMBER_FILL_OPACITY
+                      }
+                      stroke={tierOf(c) === "open" ? "#ffe1a1" : "none"}
+                      strokeWidth={tierOf(c) === "open" ? 1.2 : 0}
+                      strokeOpacity={
+                        tierOf(c) === "open"
+                          ? emberStrokeForOpens(allTimeOpensOf(c))
+                          : 0
                       }
                     />
                   </g>

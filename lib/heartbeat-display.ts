@@ -53,6 +53,27 @@ export function emberOpacityForOpens(opens: number): number {
   return Math.min(EMBER_MAX_OPACITY, EMBER_FILL_OPACITY + 0.03 * steps);
 }
 
+/** The brightest an opens-only ember's RIM may stand (Oct 27, 2026,
+ *  Jason's rim rule — see emberStrokeForOpens). The rim may trace a
+ *  place's shape clearly long before its fill could ever be
+ *  mistaken for a light: the fill is the claim, the rim only says
+ *  someone is here, looking. */
+export const EMBER_STROKE_MAX_OPACITY = 0.94;
+
+/** Jason's rim rule (Oct 27, 2026): "36 visits should get you a
+ *  good light rim." An opens-only place's OUTLINE brightens with
+ *  visits, the way its fill does (emberOpacityForOpens) — a STEADY
+ *  stroke opacity: 0.55 for 1–9 visits, then +0.13 at each 10-visit
+ *  step (10 → 0.68, 20 → 0.81, 30 and beyond → the 0.94 cap). The
+ *  rim is steady at every brightness — no glow layer, no breathing,
+ *  no heart; those belong to a chapter opened, and only to that.
+ *  Pure function — the component renders what this decides. */
+export function emberStrokeForOpens(opens: number): number {
+  const n = Number.isFinite(opens) ? Math.max(0, Math.floor(opens)) : 0;
+  const steps = Math.floor(n / 10);
+  return Math.min(EMBER_STROKE_MAX_OPACITY, 0.55 + 0.13 * steps);
+}
+
 /** The recorded subdivisions of one country within a shown set. */
 export function subdivisionsOfCountry<T extends SubdivisionCountLike>(
   subdivisions: readonly T[],

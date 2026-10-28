@@ -1020,3 +1020,21 @@ opens-only ember is no longer one flat opacity:
   description says plainly, once, that the Word has not been
   opened there yet. Chips stay terse — a "· N visits" suffix.
   Opens are still never described as chapters or as lit.
+- **The rim brightens too (Jason's rim rule, Oct 27, 2026).**
+  Jason, watching California rest as an ember at 36 visits: "36
+  visits should get you a good light rim." The fill was fine —
+  the place's shape didn't trace on a phone. So an opens-only
+  place's OUTLINE now brightens with visits alongside its fill:
+  `emberStrokeForOpens` in `lib/heartbeat-display.ts` gives a
+  steady stroke opacity of 0.55 for 1–9 all-time visits, +0.13
+  at each 10-visit step (10 → 0.68, 20 → 0.81, 30+ → the 0.94
+  cap), drawn a touch wider (countries 1.1, subdivisions 1.0,
+  centroid rings 1.2). The rim is the honest half of the sign:
+  the fill is the claim (still an ember, still capped), the rim
+  only says someone is here, looking — so it may trace the
+  shape clearly without ever reading as a light. Steady at
+  every brightness: no glow layer, no breathing, no heart.
+  This touches opens-only places only; the v3.1.1 step-back
+  ember's outline stays flat and faint exactly as before, and
+  the opens-only titles now say "its rim brightening too"
+  beside the fill's brightening.
