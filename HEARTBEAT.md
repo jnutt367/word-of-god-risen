@@ -1039,13 +1039,13 @@ opens-only ember is no longer one flat opacity:
   the opens-only titles now say "its rim brightening too"
   beside the fill's brightening.
 
-## The gold ring — a book finished here today (Oct 28, 2026)
+## The ivory ring — book finished (Oct 28, 2026)
 
 Jason's question in the morning chat — "What can we do for
 showing someone finished a book of the Bible — on the map — or
 should we even?" — and his ruling on the offered shape: when a
 whole book of the Bible is finished in a place, that place
-wears a **soft gold halo for the rest of that day**, then
+wears a **soft ivory-white halo for the rest of that day**, then
 settles back to its ordinary light. No names, no counts,
 nothing permanent — a ring for the day, in the map's existing
 language of light. (Philippians 2:3 governs the copy: the ring
@@ -1084,15 +1084,14 @@ score.)
   with no subdivision keeps the country's ring. The component
   draws the ring last, over the lights it honors — traced
   around a silhouette (a wide faint stroke under a narrower
-  clear one, `#ffd977`), or as a circle around a centroid
+  clear one, `#fffff0`), or as a circle around a centroid
   light — and it is STEADY: no `.hb-glow`, no breathing, no
   flare. The sign belongs to today: at the live default only,
   never while day browsing. Every text surface names it in
-  the same voice: the legend gains "A gold ring — a whole
-  book of the Bible was finished here today" on days a ring
-  is worn; the place chips carry "· a book finished here
-  today"; the ring's `<title>` and the figure's aria summary
-  say it too.
+  the same voice: the legend gains "A white ring — book
+  finished here today" on days a ring is worn; the place
+  chips carry "· book finished"; the ring's `<title>` and
+  the figure's aria summary say it too.
 - **The first ring is Jason's own, seeded honestly.** Jason
   told us in chat that same morning, "I just finished one" —
   he finished a book today, from Florida. Per-place finish
@@ -1119,6 +1118,22 @@ score.)
   (An earlier draft of this section spoke of the seed in the
   past tense before it had run; corrected the same day —
   the record says what is true.)
+- **Same-day amendments (Oct 28, 2026, afternoon).** (1) THE
+  SEED NEVER RAN — IT DIDN'T NEED TO: a real Florida book
+  beat landed in the app after this build shipped, and the
+  payload now carries `bookFinishedOn` 2026-10-28 for US-FL
+  and US from the record itself (lifetime `booksFinished`
+  reads 4). Florida wears its ring from the true beat; the
+  prepared seed script stands unused, and the Secure Vault
+  console pass is closed. (2) THE COLOR: the ring shipped
+  gold (`#ffd977`); Jason, seeing it live, ruled the same
+  day that gold already belongs to the visit lights (a
+  well-visited place glows gold too) — a finished book gets
+  its own color: **ivory-white, `#fffff0`**, visits keeping
+  the gold glow. (3) THE WORDS, shortened at Jason's word:
+  the place chips read "· book finished" and the legend
+  "A white ring — book finished here today" (the ring's
+  `<title>` and aria voices match).
 - **Verification (Oct 28, 2026).** `tsc --noEmit` clean,
   ESLint clean on the touched files, production build clean.
   Fixture checks against the compiled display logic pass

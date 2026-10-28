@@ -107,9 +107,9 @@ import {
  * places with that day's counts; the lifetime tiles above it never
  * follow, and stepping home restores "Today on the vine" exactly.
  *
- * THE GOLD RING (Oct 28, 2026, Jason's ruling): when a whole book
+ * THE IVORY RING (Oct 28, 2026, Jason's ruling): when a whole book
  * of the Bible is finished in a place, that place wears a soft
- * gold ring for the rest of that day — traced around its
+ * ivory-white ring for the rest of that day — traced around its
  * silhouette, or around its centroid light — then settles back
  * to its ordinary light. No names, no counts, nothing permanent.
  * The finish has been counted in the day's geo record beside
@@ -122,7 +122,10 @@ import {
  * heard through. The finest geography carries it, as with the
  * light: a subdivision's ring steps its country's own ring back.
  * The decisions live in lib/heartbeat-display.ts; see
- * HEARTBEAT.md, "The gold ring".
+ * HEARTBEAT.md, "The ivory ring". (The ring shipped gold that
+ * morning; Jason ruled ivory-white the same day, because gold
+ * already belongs to the visit lights — a finished book gets
+ * its own color.)
  */
 
 interface HbTotals {
@@ -146,7 +149,7 @@ interface HbCountryRow {
   opens: number;
   /** The place's last book-finish date (Oct 28, 2026), or null —
    *  live rows carry it from the payload; the snapshot's rows
-   *  predate it and leave it undefined. The gold ring reads it. */
+   *  predate it and leave it undefined. The ivory ring reads it. */
   bookFinishedOn?: string | null;
 }
 
@@ -189,7 +192,7 @@ interface LiveCountRow {
    *  open beat shipped; older payloads and fixtures omit it. */
   opens?: number;
   /** The place's last book-finish date (Oct 28, 2026) — present
-   *  in live payloads since the gold ring shipped; older
+   *  in live payloads since the ivory ring shipped; older
    *  payloads and fixtures omit it, and no ring is worn. */
   bookFinishedOn?: string | null;
 }
@@ -729,8 +732,8 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
     mapRows.some((c) => countryHaloOn(c)) ||
     shownSubdivisions.some((s) => subHaloOn(s));
   const haloTitle = (name: string) =>
-    `${name} — a gold ring: a whole book of the Bible was finished here today`;
-  // The aria voice of the gold ring: the places within this
+    `${name} — a white ring: book finished here today`;
+  // The aria voice of the ivory ring: the places within this
   // country that wear it today, named plainly. (In the opens-only
   // branch of describeCountry it can never speak — a ring needs
   // chapters, and an opens-only country has none, its
@@ -741,7 +744,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
     if (countryHaloOn(c)) names.push(c.name);
     for (const s of subsOf(c.code)) if (subHaloOn(s)) names.push(s.name);
     return names.length
-      ? `; a gold ring marks ${names.join(" and ")} — a whole book of the Bible was finished there today`
+      ? `; a white ring marks ${names.join(" and ")} — book finished there today`
       : "";
   };
 
@@ -1081,7 +1084,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                   <title>
                     {subdivisionPhrase(s)}
                     {subHaloOn(s)
-                      ? " — a whole book of the Bible was finished here today; a gold ring marks it"
+                      ? " — book finished here today; a white ring marks it"
                       : ""}
                   </title>
                   <path
@@ -1198,8 +1201,8 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 </g>
               );
             })}
-            {/* THE GOLD RING (Oct 28, 2026) — drawn last, over
-                the lights it honors: a soft gold ring traced
+            {/* THE IVORY RING (Oct 28, 2026) — drawn last, over
+                the lights it honors: a soft ivory-white ring traced
                 around the mark of a place where a whole book of
                 the Bible was finished TODAY — around a country's
                 silhouette, around a subdivision's silhouette, or
@@ -1219,14 +1222,14 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                     <path
                       d={c.geo.path}
                       fill="none"
-                      stroke="#ffd977"
+                      stroke="#fffff0"
                       strokeWidth="3.4"
                       strokeOpacity="0.22"
                     />
                     <path
                       d={c.geo.path}
                       fill="none"
-                      stroke="#ffd977"
+                      stroke="#fffff0"
                       strokeWidth="1.5"
                       strokeOpacity="0.9"
                     />
@@ -1239,7 +1242,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                       cy={c.centroid.cy}
                       r={lightRadius(c.total) * 2.1 + 5}
                       fill="none"
-                      stroke="#ffd977"
+                      stroke="#fffff0"
                       strokeWidth="1.5"
                       strokeOpacity="0.9"
                     />
@@ -1254,14 +1257,14 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                   <path
                     d={s.geo.path}
                     fill="none"
-                    stroke="#ffd977"
+                    stroke="#fffff0"
                     strokeWidth="3.4"
                     strokeOpacity="0.22"
                   />
                   <path
                     d={s.geo.path}
                     fill="none"
-                    stroke="#ffd977"
+                    stroke="#fffff0"
                     strokeWidth="1.5"
                     strokeOpacity="0.9"
                   />
@@ -1319,7 +1322,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 : "Each light is a country where the Word was opened."
               : "Country lights join as the count gathers them — each light will mark a country where the Word was opened."}
             {anyHalo
-              ? " A gold ring — a whole book of the Bible was finished here today."
+              ? " A white ring — book finished here today."
               : ""}
           </p>
           {/* Day stepping (Oct 24, 2026) — one slim row under the
@@ -1477,7 +1480,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                   {countryHaloOn(c) && (
                     <span className="text-sage-300">
                       {" "}
-                      · a book finished here today
+                      · book finished
                     </span>
                   )}
                 </li>
@@ -1553,7 +1556,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                         {subHaloOn(s) && (
                           <span className="text-sage-300">
                             {" "}
-                            · a book finished here today
+                            · book finished
                           </span>
                         )}
                       </li>

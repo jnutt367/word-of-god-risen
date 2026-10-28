@@ -119,7 +119,7 @@ export interface HbCountryCounts {
    *  2026) — the book beat's geography, counted beside the
    *  chapters exactly like opens, never inside them. From these
    *  day counts the public view derives the place's last
-   *  book-finish date, which the map wears as a gold ring for
+   *  book-finish date, which the map wears as an ivory-white ring for
    *  that day. Records written before this field existed
    *  normalize it to 0 (see normalizePlaceCounts). */
   books: number;
@@ -583,7 +583,7 @@ export function publicView(c: HbCounters) {
    *  is the only source, so a finish is never claimed for a
    *  place or a day the count does not hold — and carried on the
    *  place's rows as `bookFinishedOn` (null when the place has
-   *  no finish in the record). The map wears it as a gold ring
+   *  no finish in the record). The map wears it as an ivory-white ring
    *  for that one day; nothing else about the rows changes, and
    *  the finish counts themselves never fold into read/heard. */
   const lastFinishDates = (
