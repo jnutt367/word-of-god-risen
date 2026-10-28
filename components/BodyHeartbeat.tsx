@@ -314,6 +314,16 @@ function subdivisionGlow(total: number): number {
   return Math.min(0.26, 0.12 + 0.05 * Math.log10(1 + total));
 }
 
+/** The whole map group — land, lit silhouettes, embers, hearts —
+ *  drawn a tad larger inside its rim (Jason, Oct 27, 2026: the
+ *  Earth read a little small on mobile). ONE scale, applied to a
+ *  single wrapper around every map layer at once, so each light
+ *  stays exactly on its geography; the rim circles and the card
+ *  around them are the frame and do not move. 1.06 keeps the
+ *  land's farthest reach (r≈456 in viewBox units) at r≈484 —
+ *  still inside the disc face (r=486). */
+const MAP_SCALE = 1.06;
+
 interface MapCountry extends HbCountryRow {
   geo: WorldCountry | null;
   centroid: { cx: number; cy: number } | null;
@@ -874,6 +884,16 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               strokeWidth="1"
               opacity="0.18"
             />
+            {/* The map group — every layer of the world itself
+                (land, lights, embers, hearts) inside ONE wrapper,
+                scaled a tad up about the disc's center (MAP_SCALE,
+                Jason, Oct 27, 2026) so the Earth reads clearer on
+                mobile. The rim circles above stay unscaled: they
+                are the frame. Because the scale wraps all layers
+                together, no light can drift off its geography. */}
+            <g
+              transform={`translate(500 500) scale(${MAP_SCALE}) translate(-500 -500)`}
+            >
             {/* ground layer — the world, soft and translucent */}
             <path
               d={world.land}
@@ -1073,6 +1093,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 </g>
               );
             })}
+            </g>
           </svg>
           <figcaption className="mt-2 text-center text-sm text-sage-300">
             {gathering ? (
