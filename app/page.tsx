@@ -11,6 +11,7 @@ import LatestShorts from "@/components/LatestShorts";
 import BodyHeartbeat from "@/components/BodyHeartbeat";
 import WordIntegrityNote from "@/components/WordIntegrityNote";
 import OpenDoor from "@/components/OpenDoor";
+import CarvedDivider from "@/components/CarvedDivider";
 import TeddyNote from "@/components/TeddyNote";
 import WalkTheFarm from "@/components/WalkTheFarm";
 
@@ -194,9 +195,10 @@ export default function Home() {
 
       {/* Book grid */}
       <section id="books" className="mx-auto max-w-6xl scroll-mt-20 px-4 pb-20 sm:px-6">
-        <div className="vine-divider mb-8" aria-hidden="true">
-          <span className="font-display text-lg tracking-wide">✦</span>
-        </div>
+        {/* The Carved Divider (Jason, crowned Oct 27, 2026): the
+            Temple-language pomegranate band replaces the plain
+            vine-divider above the book grid. Pure decoration. */}
+        <CarvedDivider className="mb-8" />
 
         <div id="old-testament" className="scroll-mt-20">
           <h2 className="font-display text-2xl text-cream-100 sm:text-3xl">
