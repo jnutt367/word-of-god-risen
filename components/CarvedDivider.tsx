@@ -13,8 +13,9 @@
  * not carried; the band is transparent and rests on the page ground.
  *
  * Pure decoration: aria-hidden, no text, no title, never focusable.
- * It replaces the plain vine-divider above the homepage book grid;
- * other vine-divider instances are untouched for now.
+ * It replaces the plain vine-divider everywhere that divider lived:
+ * above the homepage book grid, the footer, watch cards, the reader,
+ * and the About, Milestones, and not-found pages (rollout Oct 27, 2026).
  */
 export default function CarvedDivider({
   className = "",
