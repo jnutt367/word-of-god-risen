@@ -61,7 +61,7 @@ export default function Home() {
           {/* The doors row (Jason, Oct 27, 2026): four named doors
               directly under the hero title — Read to the books, the
               Earth Map to the heartbeat, Parables to their page, and
-              Watch the Film to the featured film below the map. One
+              One Is Enough to the featured film below the map. One
               calm row, nothing else. */}
           <nav
             aria-label="Explore"
@@ -89,7 +89,7 @@ export default function Home() {
               href="#film"
               className="rounded-full border border-cream-100/25 px-4 py-2.5 text-sm font-semibold text-cream-100 transition-colors hover:border-gold-400 hover:text-gold-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
             >
-              Watch the Film
+              One Is Enough
             </Link>
           </nav>
           <p className="mx-auto mt-5 max-w-xl text-sage-300">
