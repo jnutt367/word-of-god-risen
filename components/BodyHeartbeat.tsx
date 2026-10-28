@@ -319,9 +319,11 @@ function subdivisionGlow(total: number): number {
  *  Earth read a little small on mobile). ONE scale, applied to a
  *  single wrapper around every map layer at once, so each light
  *  stays exactly on its geography; the rim circles and the card
- *  around them are the frame and do not move. 1.06 keeps the
+ *  around them are the frame and do not scale. 1.06 puts the
  *  land's farthest reach (r≈456 in viewBox units) at r≈484 —
- *  still inside the disc face (r=486). */
+ *  at Jason's word the same evening the rim itself grew a tad
+ *  (hairline ring r=490, disc face r=497) so the ring once again
+ *  holds the whole scaled world with a small breathing margin. */
 const MAP_SCALE = 1.06;
 
 interface MapCountry extends HbCountryRow {
@@ -874,11 +876,11 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               </filter>
             </defs>
             {/* the disc's rim — a soft ring holding the world */}
-            <circle cx="500" cy="500" r="486" fill="#e4b95c" opacity="0.04" />
+            <circle cx="500" cy="500" r="497" fill="#e4b95c" opacity="0.04" />
             <circle
               cx="500"
               cy="500"
-              r="470"
+              r="490"
               fill="none"
               stroke="#e8d9ae"
               strokeWidth="1"
