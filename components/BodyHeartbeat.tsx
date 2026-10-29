@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import heartbeat from "@/data/heartbeat.json";
 import worldMap from "@/lib/world-map.json";
 import {
@@ -875,6 +875,23 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
     ? `Day-by-day chapters read and heard, ${longDate(growthDays[0].date)} through ${longDate(growthDays[growthDays.length - 1].date)}. Last 7 days: ${fmt(growthLast7)} chapters. The 7 days before: ${fmt(growthPrev7)}. Last 30 days: ${fmt(growthLast30)}. ${fmt(growthPlaces)} places have lit up on the map in this record.`
     : "";
 
+  // THE DAY CHART SCROLLS SIDEWAYS (Jason, Oct 29, 2026 — his phone
+  // screenshot: fourteen flex-1 bars squeezed until the newest days
+  // fell off the right edge). The chart below gives every day a
+  // fixed, comfortable width inside a horizontally scrollable row,
+  // and the first time it appears it opens already scrolled to the
+  // newest day at the right end — the days a neighbor most likely
+  // came to see. Once only: the live refresh must never yank the
+  // row back while someone is looking at an earlier day.
+  const chartScrollRef = useRef<HTMLDivElement | null>(null);
+  const chartScrolledOnce = useRef(false);
+  useEffect(() => {
+    const el = chartScrollRef.current;
+    if (!el || chartScrolledOnce.current || growthChart.length === 0) return;
+    el.scrollLeft = el.scrollWidth;
+    chartScrolledOnce.current = true;
+  }, [growthChart.length]);
+
   const tiles: { label: string; value: number | null; sub: string }[] = [
     {
       label: "Chapters read",
@@ -1711,39 +1728,45 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
             </ul>
             <figure className="mt-8">
               <div
-                role="img"
-                aria-label={growthLabel}
-                className="flex items-end gap-1.5 sm:gap-2"
+                ref={chartScrollRef}
+                className="overflow-x-auto pb-2"
               >
-                {growthChart.map((d) => (
-                  <div
-                    key={d.date}
-                    aria-hidden="true"
-                    className="flex flex-1 flex-col items-center gap-1.5"
-                    title={`${longDate(d.date)} — ${fmt(d.total)} ${d.total === 1 ? "chapter" : "chapters"}`}
-                  >
-                    <span className="min-h-4 text-[11px] font-semibold text-gold-300">
-                      {d.total > 0 ? fmt(d.total) : ""}
-                    </span>
-                    <div className="flex h-28 w-full items-end border-b border-cream-100/15">
-                      <div
-                        className="w-full rounded-t bg-gold-400/80"
-                        style={{
-                          height: `${d.total > 0 ? Math.max(4, (d.total / growthMax) * 100) : 0}%`,
-                        }}
-                      />
+                <div
+                  role="img"
+                  aria-label={growthLabel}
+                  className="flex w-max min-w-full items-end gap-1.5 sm:gap-2"
+                >
+                  {growthChart.map((d) => (
+                    <div
+                      key={d.date}
+                      aria-hidden="true"
+                      className="flex min-w-11 flex-1 flex-col items-center gap-1.5"
+                      title={`${longDate(d.date)} — ${fmt(d.total)} ${d.total === 1 ? "chapter" : "chapters"}`}
+                    >
+                      <span className="min-h-4 text-[11px] font-semibold text-gold-300">
+                        {d.total > 0 ? fmt(d.total) : ""}
+                      </span>
+                      <div className="flex h-28 w-full items-end border-b border-cream-100/15">
+                        <div
+                          className="w-full rounded-t bg-gold-400/80"
+                          style={{
+                            height: `${d.total > 0 ? Math.max(4, (d.total / growthMax) * 100) : 0}%`,
+                          }}
+                        />
+                      </div>
+                      <span className="text-center text-[10px] leading-tight text-sage-300">
+                        {weekdayOf(d.date)}
+                        <br />
+                        {dayOfMonth(d.date)}
+                      </span>
                     </div>
-                    <span className="text-center text-[10px] leading-tight text-sage-300">
-                      {weekdayOf(d.date)}
-                      <br />
-                      {dayOfMonth(d.date)}
-                    </span>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
               <figcaption className="mt-3 text-center text-sm text-sage-300">
                 Each bar is a day — chapters read and heard over the
-                last two weeks.
+                last two weeks. On a small screen, swipe the chart
+                sideways to see every day.
               </figcaption>
             </figure>
             <details className="mt-6">
