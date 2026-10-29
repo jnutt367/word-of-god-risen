@@ -14,6 +14,7 @@
  * the app promo stay off (non-canon Teddy / unverified footage).
  */
 export const CANON_SHORT_IDS: readonly string[] = [
+  "-oRYl9jBWKg", // One Chapter Is Enough | Mark 1 — the welcome film's funnel (Oct 29, 2026)
   "MM4Re8olRzY", // One Chapter Is Enough — the Prayer Short (Taiwan) | from the film
   "Jo2qZIZoaxU", // The Whole City at the Door | Mark 1:33
   "l7bk9mzjboc", // "With authority..." | Mark 1:27
