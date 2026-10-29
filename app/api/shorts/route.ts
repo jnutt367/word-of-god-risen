@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import snapshot from "@/data/shorts-snapshot.json";
+import { isCanonShort } from "@/lib/canon-shorts";
 
 export const revalidate = 3600; // refresh the feed hourly
 
@@ -51,10 +52,14 @@ async function fromRss(): Promise<ShortItem[]> {
  * back to a checked-in snapshot (YouTube sometimes throttles datacenter IPs).
  */
 export async function GET() {
+  // Canon-only (Jason's law, Oct 28, 2026): whichever source answers,
+  // only canon film Shorts (lib/canon-shorts.ts) may reach the site.
   try {
-    return NextResponse.json({ items: await fromRss(), live: true });
+    const items = (await fromRss()).filter((i) => isCanonShort(i.id));
+    return NextResponse.json({ items, live: true });
   } catch {
     const items = (snapshot as { items: { id: string; title: string }[] }).items
+      .filter((s) => isCanonShort(s.id))
       .slice(0, 15)
       .map((s) => ({ id: s.id, title: s.title, published: "" }));
     return NextResponse.json({ items, live: false });

@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import YouTubeThumb from "./YouTubeThumb";
 import { useVideoChoice, VideoChoiceModal } from "./VideoChoice";
 import snapshot from "@/data/shorts-snapshot.json";
+import { isCanonShort } from "@/lib/canon-shorts";
 
 interface ShortItem {
   id: string;
@@ -52,9 +53,12 @@ function ShortGridItem({ v }: { v: ShortItem }) {
   );
 }
 
-const ALL: ShortItem[] = (snapshot as { items: ShortItem[] }).items;
+const ALL: ShortItem[] = (snapshot as { items: ShortItem[] }).items.filter(
+  (s) => isCanonShort(s.id),
+);
 
-/** Browsable archive of every TruVINE Short, with search. */
+/** Browsable archive of the site's canon Shorts (Jason's canon-only
+ * law, Oct 28, 2026 — only the locked canon cast appears), with search. */
 export default function ShortsGrid() {
   const [query, setQuery] = useState("");
 

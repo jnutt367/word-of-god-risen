@@ -139,13 +139,16 @@ export default function Home() {
       <section className="mx-auto max-w-6xl px-4 pt-8 sm:px-6">
         <div className="overflow-hidden rounded-2xl border border-gold-500/15 bg-vineyard-900">
           <div className="grid gap-0 md:grid-cols-2">
-            <div className="aspect-video md:aspect-auto md:min-h-[280px]">
-              <iframe
-                src="https://www.youtube.com/embed/25A7EQBDeI0"
-                title="Welcome to Word of God Risen — Meet Grandpa Teddy"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="h-full w-full"
+            <div className="flex items-center justify-center bg-vineyard-950/40 p-6 md:min-h-[280px]">
+              {/* Canon-only law (Jason, Oct 28, 2026): the old welcome
+                  video showed a pre-package Teddy, so it came off the
+                  site. In its place stands the locked canon portrait
+                  itself — the real Grandpa Teddy, exactly as made. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/characters/teddy.webp"
+                alt="Grandpa Teddy — your guide through the Word"
+                className="aspect-square w-56 rounded-2xl border border-gold-500/20 object-cover sm:w-64"
               />
             </div>
             <div className="flex flex-col justify-center p-6 sm:p-8">

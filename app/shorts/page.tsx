@@ -4,7 +4,7 @@ import ShortsGrid from "@/components/ShortsGrid";
 export const metadata: Metadata = {
   title: "TruVINE Shorts",
   description:
-    "Every Short from Jason's TruVINE YouTube channel — short films on Scripture, searchable by word or verse.",
+    "Film clips from TruVINE's animated Gospel films — the canon cast, straight from the movies, searchable by word or verse.",
 };
 
 export default function ShortsPage() {
@@ -17,8 +17,8 @@ export default function ShortsPage() {
         TruVINE <span className="text-truvine-gradient">Shorts</span>
       </h1>
       <p className="mt-2 max-w-2xl text-sm leading-relaxed text-sage-300">
-        Short films on Scripture from Jason&apos;s YouTube channel — watch any
-        of them right here, or{" "}
+        Short clips from the animated Gospel films — every face here is one
+        of the canon characters. Watch any of them right here, or{" "}
         <a
           href="https://www.youtube.com/@TruVINE365"
           target="_blank"

@@ -53,8 +53,9 @@ function ShortShelfItem({ v }: { v: ShortItem }) {
 }
 
 /**
- * Horizontal shelf of Jason's latest YouTube Shorts, auto-updating from
- * the channel RSS feed (via /api/shorts). Zero maintenance.
+ * Horizontal shelf of canon film Shorts, served by /api/shorts, which
+ * filters the channel feed to the canon list (lib/canon-shorts.ts) —
+ * Jason's canon-only law, Oct 28, 2026.
  */
 export default function LatestShorts() {
   const [items, setItems] = useState<ShortItem[] | null>(null);
@@ -69,15 +70,15 @@ export default function LatestShorts() {
   if (!items || items.length === 0) return null;
 
   return (
-    <section aria-label="Latest Shorts from TruVINE" className="mt-16">
+    <section aria-label="Shorts from the Gospel films" className="mt-16">
       <div className="mb-5 flex items-end justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold-400">
-            From the channel
+            From the films
           </p>
           <h2 className="mt-1 font-display text-2xl text-cream-100 sm:text-3xl">
-            Latest Shorts from{" "}
-            <span className="text-truvine-gradient">TruVINE</span>
+            Shorts from the{" "}
+            <span className="text-truvine-gradient">Gospel Films</span>
           </h2>
         </div>
         <a
