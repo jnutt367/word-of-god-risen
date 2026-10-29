@@ -10,6 +10,7 @@ import ListenDropdown from "@/components/ListenDropdown";
 import LatestShorts from "@/components/LatestShorts";
 import BodyHeartbeat from "@/components/BodyHeartbeat";
 import WordIntegrityNote from "@/components/WordIntegrityNote";
+import WelcomeFilm from "@/components/WelcomeFilm";
 import OpenDoor from "@/components/OpenDoor";
 import CarvedDivider from "@/components/CarvedDivider";
 import TeddyNote from "@/components/TeddyNote";
@@ -139,17 +140,14 @@ export default function Home() {
       <section className="mx-auto max-w-6xl px-4 pt-8 sm:px-6">
         <div className="overflow-hidden rounded-2xl border border-gold-500/15 bg-vineyard-900">
           <div className="grid gap-0 md:grid-cols-2">
-            <div className="flex items-center justify-center bg-vineyard-950/40 p-6 md:min-h-[280px]">
+            <div className="flex flex-col justify-center bg-vineyard-950/40 p-4 sm:p-5">
               {/* Canon-only law (Jason, Oct 28, 2026): the old welcome
                   video showed a pre-package Teddy, so it came off the
-                  site. In its place stands the locked canon portrait
-                  itself — the real Grandpa Teddy, exactly as made. */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/characters/teddy.webp"
-                alt="Grandpa Teddy — your guide through the Word"
-                className="aspect-square w-56 rounded-2xl border border-gold-500/20 object-cover sm:w-64"
-              />
+                  site and the canon portrait stood here one night.
+                  The new welcome film (canon throughout, blessed by
+                  Jason Oct 29, 2026) now holds this spot — and when
+                  it ends, the Mark 1 reader opens right here. */}
+              <WelcomeFilm />
             </div>
             <div className="flex flex-col justify-center p-6 sm:p-8">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold-400">
@@ -160,8 +158,8 @@ export default function Home() {
               </h2>
               <p className="mt-3 text-cream-100/85">
                 Grandpa Teddy reads every chapter aloud in his warm, unhurried voice —
-                the whole Bible, the lost books, and the parables. Pull up a chair
-                and let's hear the Word together.
+                the whole Bible, the lost books, and the parables. Pull up a chair,
+                friend — he&rsquo;ll read it to you.
               </p>
             </div>
           </div>

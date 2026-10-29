@@ -6,8 +6,15 @@
  * verified against the canon package before being listed. Anything
  * not on this list does not appear on the site, however recent it is
  * on the channel.
+ *
+ * Oct 29, 2026 (Jason's word): the shelf widened beyond the Gospel
+ * films — MM4Re8olRzY is cut from the "One Chapter Is Enough" film
+ * (canon Teddy and Jason throughout; the Taiwan story), and the
+ * welcome film's funnel Short joins when it publishes. Open Door and
+ * the app promo stay off (non-canon Teddy / unverified footage).
  */
 export const CANON_SHORT_IDS: readonly string[] = [
+  "MM4Re8olRzY", // One Chapter Is Enough — the Prayer Short (Taiwan) | from the film
   "Jo2qZIZoaxU", // The Whole City at the Door | Mark 1:33
   "l7bk9mzjboc", // "With authority..." | Mark 1:27
   "cCTtwhthMgU", // Jesus Heals a Leper | Mark 1:40-42 (Film Clip)

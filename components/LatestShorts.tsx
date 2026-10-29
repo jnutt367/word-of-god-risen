@@ -70,15 +70,15 @@ export default function LatestShorts() {
   if (!items || items.length === 0) return null;
 
   return (
-    <section aria-label="Shorts from the Gospel films" className="mt-16">
+    <section aria-label="Shorts from the farm" className="mt-16">
       <div className="mb-5 flex items-end justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold-400">
-            From the films
+            From the farm
           </p>
           <h2 className="mt-1 font-display text-2xl text-cream-100 sm:text-3xl">
             Shorts from the{" "}
-            <span className="text-truvine-gradient">Gospel Films</span>
+            <span className="text-truvine-gradient">Farm</span>
           </h2>
         </div>
         <a
