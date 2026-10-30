@@ -909,7 +909,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   // THE BLUE INNER TRACE (Oct 29, 2026) — a video watched
   // in the app traces the watcher's place from inside. Its voices (title/aria
   // only — Jason's ruling: no visible count words anywhere; the
-  // ocean legend's "Video watched" row is the only words it
+  // legend's "Video watched" row is the only words it
   // carries). The clause is honest about what a watch is: a
   // video watched — never a chapter, never a light.
   const watchClause = (r: HbCountryRow): string =>
@@ -1592,139 +1592,30 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               ) : null
             )}
             </g>
-            {/* THE LEGEND (Oct 29, 2026, Jason's crown — "Build the
-                legend in the ocean"): a small visual key ON the disc,
-                riding over empty sea in the upper-left quadrant — the
-                Pacific-side water between the Asian and North American
-                silhouettes. The patch was verified against the RENDERED
-                geometry (every country and subdivision path, MAP_SCALE
-                applied, sampled on a 2-unit grid): the panel's rect
-                (x 140–398, y 166–400) touches no land at all, and its
-                rounded corners stay inside the disc's rim. It is drawn
-                OUTSIDE the scaled map group, so it can never drift onto
-                a light, and it changes no light, ember, rim, ring, or
-                sea value — it only names them. An SVG panel (not an
-                HTML overlay) on purpose: a fixed-pixel panel would
-                swell to cover real geography as the map shrinks to
-                phone width, while this panel scales with the disc and
-                holds the same patch of ocean at every width. Each
-                meaning is told in two short lines so the words stay as
-                large as the patch allows. The disc's prose and aria
-                label already carry these meanings, so the legend is
-                reinforcement, not the sole carrier — and it is not
-                interactive.
-                The FOURTH row (Oct 29, 2026, later the same night)
-                is the blue inner trace — "Video watched" — the only
-                words the watch count carries anywhere (Jason's
-                ruling). The FIFTH row (same night, minutes later)
-                is kindling — "Kindled — 75 visits in a day" — in
-                the warm red of the kindled ember itself. Both rows
-                were added by tightening the rows' spacing INSIDE
-                the same verified rect (x 140–398, y 166–400): the
-                panel never grew, so the patch of ocean it rides is
-                the very one sampled empty above, and its corners
-                stay inside the rim as before. */}
-            <g aria-hidden="true">
-              <rect
-                x="140"
-                y="166"
-                width="258"
-                height="234"
-                rx="20"
-                fill="#0b2836"
-                fillOpacity="0.85"
-                stroke="#e8d9ae"
-                strokeWidth="1.5"
-                strokeOpacity="0.30"
-              />
-              <text
-                x="162"
-                y="190"
-                fontSize="19"
-                fontWeight="600"
-                fill="#e8d9ae"
-              >
-                How to read this map:
-              </text>
-              {/* full golden light — golden fill, bright heart */}
-              <circle cx="170" cy="224" r="10.5" fill="#e4b95c" fillOpacity="0.55" stroke="#ffe1a1" strokeWidth="1" strokeOpacity="0.6" />
-              <circle cx="170" cy="224" r="4" fill="#fff3c4" />
-              <text x="198" y="217" fontSize="22" fill="#f6efdb">
-                Word read or
-              </text>
-              <text x="198" y="240" fontSize="22" fill="#f6efdb">
-                heard here
-              </text>
-              {/* faint ember — a dim fill whose rim brightens with
-                  visits; no heart, no breathing */}
-              <circle cx="170" cy="262" r="10.5" fill="#e4b95c" fillOpacity="0.18" stroke="#ffe1a1" strokeWidth="1.2" strokeOpacity="0.68" />
-              <text x="198" y="255" fontSize="22" fill="#f6efdb">
-                App opened here
-              </text>
-              <text
-                x="198"
-                y="278"
-                fontSize="21"
-                fill="#f6efdb"
-                textLength="186"
-                lengthAdjust="spacingAndGlyphs"
-              >
-                brightens with visits
-              </text>
-              {/* the ivory ring — the same double stroke the ring
-                  itself wears on the map */}
-              <circle cx="170" cy="300" r="10" fill="none" stroke="#fffff0" strokeWidth="4" strokeOpacity="0.22" />
-              <circle cx="170" cy="300" r="10" fill="none" stroke="#fffff0" strokeWidth="1.8" strokeOpacity="0.9" />
-              <text x="198" y="293" fontSize="22" fill="#f6efdb">
-                Book finished
-              </text>
-              <text x="198" y="316" fontSize="22" fill="#f6efdb">
-                here today
-              </text>
-              {/* the blue inner trace — a small outline wearing
-                  its own trace inside, like a place on the map */}
-              <rect
-                x="159"
-                y="325"
-                width="22"
-                height="22"
-                rx="4"
-                fill="none"
-                stroke="#e8d9ae"
-                strokeWidth="1.4"
-                strokeOpacity="0.8"
-              />
-              <rect
-                x="162"
-                y="328"
-                width="16"
-                height="16"
-                rx="3"
-                fill="none"
-                stroke="#8fd8ff"
-                strokeWidth="1.8"
-              />
-              <text x="198" y="343" fontSize="22" fill="#f6efdb">
-                Video watched
-              </text>
-              {/* kindling — the ember's own dot turned warm red,
-                  at the kindled strength: a place visited 75 or
-                  more times in a day, the Word not yet opened */}
-              <circle cx="170" cy="372" r="10.5" fill="#d9482f" fillOpacity="0.35" stroke="#f0664a" strokeWidth="1.4" strokeOpacity="0.94" />
-              <text
-                x="198"
-                y="365"
-                fontSize="21"
-                fill="#f6efdb"
-                textLength="184"
-                lengthAdjust="spacingAndGlyphs"
-              >
-                Kindled — 75 visits
-              </text>
-              <text x="198" y="388" fontSize="22" fill="#f6efdb">
-                in a day
-              </text>
-            </g>
+            {/* THE LEGEND (Oct 29, 2026, Jason's crown — built
+                first ON the disc, riding the Pacific water of the
+                upper-left quadrant; MOVED the same night to a
+                deep-sea strip directly beneath the disc, at
+                Jason's word, when the fifth meaning — kindling —
+                made five honest rows outgrow the ocean). The
+                water was re-proven before the move: sampled
+                against every country and subdivision path
+                (MAP_SCALE applied, on a 2-unit grid), the largest
+                empty rectangle in that patch runs ~260x256 units
+                (the long way, ~304x204), while five rows at the
+                legend's own 22-unit type with honest air between
+                them need ~284 wide x ~320 tall — and the kindled
+                line alone measures 289 wide at 22 units. On the
+                disc the rows had to squeeze (two lines were set
+                with textLength, a horizontal crush), and Jason,
+                looking at his phone, saw the words crowd and
+                overlap. So the key now stands under the disc at
+                full map-column width — same #0b2836 panel, same
+                gold border — where every meaning gets its own
+                line at full size and nothing is crushed. The
+                disc's prose and aria label carry these meanings
+                too, so the legend is reinforcement, not the sole
+                carrier. */}
           </svg>
           <figcaption className="mt-2 text-center text-sm text-sage-300">
             {gathering ? (
@@ -1839,6 +1730,97 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
             </p>
           )}
         </figure>
+
+        {/* THE LEGEND STRIP (Oct 29, 2026) — the map's key,
+            standing in its own deep-sea panel directly beneath
+            the disc (moved off the disc the same night it gained
+            its fifth row; see the note inside the SVG above for
+            the proven geometry). The same five meanings, each on
+            its own line at full size, in a tidy grid that wraps
+            with the column — no squeezed lines, no overlap at
+            any width. The swatches are the marks themselves in
+            miniature: the golden light with its bright heart,
+            the steady ember, the ivory ring's double stroke, a
+            small outline wearing its own blue inner trace, and
+            the ember turned warm red for kindling. */}
+        <div
+          className="mx-auto mt-6 max-w-2xl rounded-2xl border border-gold-500/25 px-5 py-5 sm:px-6"
+          style={{ backgroundColor: "#0b2836" }}
+        >
+          <h3 className="text-base font-semibold text-[#e8d9ae]">
+            How to read this map:
+          </h3>
+          <ul className="mt-4 grid gap-x-8 gap-y-3.5 sm:grid-cols-2">
+            <li className="flex items-center gap-3">
+              <svg
+                viewBox="0 0 26 26"
+                aria-hidden="true"
+                focusable="false"
+                className="h-[26px] w-[26px] shrink-0"
+              >
+                <circle cx="13" cy="13" r="10" fill="#e4b95c" fillOpacity="0.55" stroke="#ffe1a1" strokeWidth="1" strokeOpacity="0.6" />
+                <circle cx="13" cy="13" r="3.8" fill="#fff3c4" />
+              </svg>
+              <span className="text-[15px] leading-snug text-[#f6efdb]">
+                Word read or heard here
+              </span>
+            </li>
+            <li className="flex items-center gap-3">
+              <svg
+                viewBox="0 0 26 26"
+                aria-hidden="true"
+                focusable="false"
+                className="h-[26px] w-[26px] shrink-0"
+              >
+                <circle cx="13" cy="13" r="10" fill="#e4b95c" fillOpacity="0.18" stroke="#ffe1a1" strokeWidth="1.2" strokeOpacity="0.68" />
+              </svg>
+              <span className="text-[15px] leading-snug text-[#f6efdb]">
+                App opened here — brightens with visits
+              </span>
+            </li>
+            <li className="flex items-center gap-3">
+              <svg
+                viewBox="0 0 26 26"
+                aria-hidden="true"
+                focusable="false"
+                className="h-[26px] w-[26px] shrink-0"
+              >
+                <circle cx="13" cy="13" r="9.5" fill="none" stroke="#fffff0" strokeWidth="3.4" strokeOpacity="0.22" />
+                <circle cx="13" cy="13" r="9.5" fill="none" stroke="#fffff0" strokeWidth="1.7" strokeOpacity="0.9" />
+              </svg>
+              <span className="text-[15px] leading-snug text-[#f6efdb]">
+                Book finished here today
+              </span>
+            </li>
+            <li className="flex items-center gap-3">
+              <svg
+                viewBox="0 0 26 26"
+                aria-hidden="true"
+                focusable="false"
+                className="h-[26px] w-[26px] shrink-0"
+              >
+                <rect x="3" y="3" width="20" height="20" rx="4" fill="none" stroke="#e8d9ae" strokeWidth="1.4" strokeOpacity="0.8" />
+                <rect x="6" y="6" width="14" height="14" rx="3" fill="none" stroke="#8fd8ff" strokeWidth="1.8" />
+              </svg>
+              <span className="text-[15px] leading-snug text-[#f6efdb]">
+                Video watched
+              </span>
+            </li>
+            <li className="flex items-center gap-3">
+              <svg
+                viewBox="0 0 26 26"
+                aria-hidden="true"
+                focusable="false"
+                className="h-[26px] w-[26px] shrink-0"
+              >
+                <circle cx="13" cy="13" r="10" fill="#d9482f" fillOpacity="0.35" stroke="#f0664a" strokeWidth="1.4" strokeOpacity="0.94" />
+              </svg>
+              <span className="text-[15px] leading-snug text-[#f6efdb]">
+                Kindled — 75 visits in a day
+              </span>
+            </li>
+          </ul>
+        </div>
 
         {/* A CLOSER LOOK (Oct 29, 2026, Jason's crown — see
             US_PANEL_VIEWBOX above): the United States enlarged
@@ -1995,8 +1977,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               </g>
             </svg>
             <figcaption className="mt-3 text-center text-sm text-sage-300">
-              Drawn larger so the states can be seen — the one place
-              recorded state by state.
+              The same states, closer — recorded state by state.
             </figcaption>
           </figure>
         </div>
