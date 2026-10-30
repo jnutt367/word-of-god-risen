@@ -139,7 +139,7 @@ interface HbTotals {
   /** Video watches (Oct 29, 2026) — additive in the payload; the
    *  tiles never show it (Jason's ruling: no count words, no
    *  clutter) and it is never folded into read/heard. The map's
-   *  gold play marks read the per-place rows, not this total. */
+   *  blue inner traces read the per-place rows, not this total. */
   videosWatched?: number;
 }
 
@@ -153,7 +153,7 @@ interface HbCountryRow {
    *  with opens but no chapters rests on the map as an ember. */
   opens: number;
   /** Video watches recorded for this place in the shown day
-   *  (Oct 29, 2026). A row with watches wears a gold play pin beside
+   *  (Oct 29, 2026). A row with watches wears a blue inner trace inside
    *  the map; watches never enter `total`, so a watch is never
    *  chapter activity anywhere. Snapshot rows predate the
    *  field and carry 0. */
@@ -378,58 +378,78 @@ interface MapCountry extends HbCountryRow {
   centroid: { cx: number; cy: number } | null;
 }
 
-/** THE VIDEO-WATCH MARK glyph (Oct 29, 2026; shape crowned by
- *  Jason the same night). The mark began as a gold heart, but at
- *  the size a state can carry, a heart reads "love" before it
- *  reads "watched" — so Jason crowned the GOLD PLAY PIN: a gold
- *  ring (r 8.5) with a gold play triangle inside, in the lights'
- *  gold (#e4b95c, rimmed #ffe1a1). Gold, never red: red is
- *  reserved for a kindling mark not yet built (and a red pin
- *  would spend it). The pin is drawn beside the place's center
- *  (offset from the centroid, never over the light's small round
- *  core), and a bright gold DOT (r 3) is pinned exactly on the
- *  place's centroid with a hairline leader from dot to pin —
- *  the dot says WHICH place; the pin says WHAT happened. It is
- *  STEADY — no .hb-glow, no breathing — a kept sign for the day,
- *  like the ivory ring. */
-function WatchPlayMark({
+/** THE VIDEO-WATCH MARK (Oct 29, 2026; final shape is Jason's
+ *  own design, crowned the same night). The mark went heart →
+ *  gold play pin → this, each step corrected by Jason's eye:
+ *  beside-the-place marks are either too big or unattributable.
+ *  Jason's fix: trace the place ITSELF — an inner outline in
+ *  pale screen blue (#8fd8ff, the light a video screen casts, a
+ *  color the map spends nowhere else) drawn just INSIDE the
+ *  place's own border. It cannot point at the wrong place, and
+ *  it scales with the place: a state wears a state-sized trace,
+ *  a country a country-sized one. Drawn by clipping a wide
+ *  stroke to the silhouette, so only the stroke's inner half
+ *  shows — a band hugging the inside of the border. It is the
+ *  ivory ring's sibling: the ring traces OUTSIDE for a book
+ *  finished; this trace runs INSIDE for a video watched; a
+ *  place that earned both wears them nested. STEADY — no
+ *  .hb-glow, no breathing — a kept sign for the day. A place
+ *  with no silhouette (centroid light only) wears a blue ring
+ *  around its light instead. */
+function WatchTraceMark({
+  idKey,
+  d,
   cx,
   cy,
-  px,
-  py,
+  fallbackR,
   label,
 }: {
-  cx: number;
-  cy: number;
-  px: number;
-  py: number;
+  idKey: string;
+  d?: string;
+  cx?: number;
+  cy?: number;
+  fallbackR?: number;
   label: string;
 }) {
+  if (!d) {
+    if (cx === undefined || cy === undefined) return null;
+    return (
+      <g>
+        <title>{label}</title>
+        <circle
+          cx={cx}
+          cy={cy}
+          r={fallbackR ?? 10}
+          fill="none"
+          stroke="#8fd8ff"
+          strokeWidth="1.6"
+          strokeOpacity="0.95"
+        />
+      </g>
+    );
+  }
+  const clipId = `watchtrace-${idKey.replace(/[^A-Za-z0-9-]/g, "")}`;
   return (
     <g>
       <title>{label}</title>
-      <line
-        x1={px}
-        y1={py}
-        x2={cx}
-        y2={cy}
-        stroke="#e4b95c"
-        strokeWidth="0.8"
-        strokeOpacity="0.5"
-      />
-      <circle cx={px} cy={py} r="3" fill="#ffe1a1" stroke="#e4b95c" strokeWidth="0.8" />
-      <circle
-        cx={cx}
-        cy={cy}
-        r="8.5"
-        fill="#10394a"
-        fillOpacity="0.9"
-        stroke="#e4b95c"
-        strokeWidth="2"
+      <clipPath id={clipId}>
+        <path d={d} />
+      </clipPath>
+      <path
+        d={d}
+        fill="none"
+        stroke="#8fd8ff"
+        strokeWidth="5"
+        strokeOpacity="0.25"
+        clipPath={`url(#${clipId})`}
       />
       <path
-        d={`M ${cx - 3} ${cy - 4.6} L ${cx - 3} ${cy + 4.6} L ${cx + 4.2} ${cy} Z`}
-        fill="#e4b95c"
+        d={d}
+        fill="none"
+        stroke="#8fd8ff"
+        strokeWidth="3"
+        strokeOpacity="0.95"
+        clipPath={`url(#${clipId})`}
       />
     </g>
   );
@@ -526,7 +546,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
       // A place stands in the rows on ANY activity: chapters,
       // opens alone (Oct 27, 2026 — it rests on the map as an
       // ember, so the rows, the list, and the disc all see it),
-      // or watches alone (Oct 29, 2026 — its gold play pin must be
+      // or watches alone (Oct 29, 2026 — its blue inner trace must be
       // drawn, so the disc must see the row).
       .filter((c) => c.code && (c.total > 0 || c.opens > 0 || c.watches > 0))
       .sort(
@@ -800,7 +820,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   // whatever its activity — opens (Oct 27, 2026) or watches alone
   // (Oct 29, 2026: a watch is not the Word read or heard, so a
   // watches-only place must never wear the full light; it rests
-  // as an ember and carries its gold play pin beside it).
+  // as an ember and carries its blue inner trace inside it).
   const tierOf = (c: HbCountryRow): "full" | "ember" | "open" =>
     c.total === 0 ? "open" : modeOf(c.code);
   const subsOf = (code: string) =>
@@ -837,22 +857,22 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
       : "";
   };
 
-  // THE GOLD PLAY MARK (Oct 29, 2026) — a video watched in
-  // the app sets a gold play pin beside the watcher's place. Its voices (title/aria
+  // THE BLUE INNER TRACE (Oct 29, 2026) — a video watched
+  // in the app traces the watcher's place from inside. Its voices (title/aria
   // only — Jason's ruling: no visible count words anywhere; the
   // ocean legend's "Video watched" row is the only words it
   // carries). The clause is honest about what a watch is: a
   // video watched — never a chapter, never a light.
   const watchClause = (r: HbCountryRow): string =>
     r.watches > 0
-      ? `; a gold play mark marks ${r.name} — a video was watched here ${shownWhen}`
+      ? `; a blue inner trace marks ${r.name} — a video was watched here ${shownWhen}`
       : "";
   const watchTitle = (r: HbCountryRow): string =>
     r.watches > 0
-      ? ` — a gold play mark: a video was watched here ${shownWhen}`
+      ? ` — a blue inner trace: a video was watched here ${shownWhen}`
       : "";
-  // The finest geography carries the play pin, as it carries the
-  // light (v3.1.1): a country's own pin stands only when none
+  // The finest geography carries the trace, as it carries the
+  // light (v3.1.1): a country's own trace stands only when none
   // of its shown subdivisions carries one.
   const countryWatchHeartOn = (c: HbCountryRow): boolean =>
     c.watches > 0 &&
@@ -1347,48 +1367,50 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 </g>
               );
             })}
-            {/* THE GOLD PLAY PINS (Oct 29, 2026) — a video
-                watched in the app sets a gold play pin beside
-                the watcher's place for the shown day, with a
-                bright dot pinned exactly on the place's center
-                and a hairline from dot to pin — never over the
-                light's small round core, which stays exactly as
-                it was — and it is steady, like the ring. The
-                finest geography carries it, as it carries the
-                light: a subdivision's pin stands for its
-                country's watches; the country's own pin stands
-                only when no shown subdivision carries one. A
-                place with watches but no chapters keeps its
-                ember (or its quiet land) — the pin is its only
-                bright mark, and it never makes a light. Drawn
-                before the rings, so a ring for the day still
-                rests over everything it honors. */}
+            {/* THE BLUE INNER TRACES (Oct 29, 2026) — a video
+                watched in the app traces the watcher's place
+                for the shown day: a pale screen-blue outline
+                just inside the place's own border (Jason's
+                design — the trace IS the place, so it can never
+                be mistaken for another). The finest geography
+                carries it, as it carries the light: a
+                subdivision's trace stands for its country's
+                watches; the country's own trace stands only
+                when no shown subdivision carries one. A place
+                with watches but no chapters keeps its ember (or
+                its quiet land) — the trace is its only bright
+                mark, and it never makes a light. Drawn before
+                the ivory rings, so a ring for the day still
+                rests outside everything it honors. */}
             {shownSubdivisions.map((s) =>
               s.watches > 0 && s.geo ? (
-                <WatchPlayMark
+                <WatchTraceMark
                   key={`watch-${s.code}`}
-                  cx={s.geo.cx + 19}
-                  cy={s.geo.cy + 15}
-                  px={s.geo.cx}
-                  py={s.geo.cy}
-                  label={`${s.name} — a gold play mark: a video was watched here ${shownWhen}`}
+                  idKey={s.code}
+                  d={s.geo.path}
+                  label={`${s.name} — a blue inner trace: a video was watched here ${shownWhen}`}
                 />
               ) : null
             )}
             {mapRows.map((c) =>
-              countryWatchHeartOn(c) && c.centroid ? (
-                <WatchPlayMark
-                  key={`watch-${c.code}`}
-                  cx={
-                    c.geo
-                      ? c.centroid.cx + 19
-                      : c.centroid.cx + lightRadius(c.total) * 2.1 + 18
-                  }
-                  cy={c.geo ? c.centroid.cy + 15 : c.centroid.cy}
-                  px={c.centroid.cx}
-                  py={c.centroid.cy}
-                  label={`${c.name} — a gold play mark: a video was watched here ${shownWhen}`}
-                />
+              countryWatchHeartOn(c) ? (
+                c.geo ? (
+                  <WatchTraceMark
+                    key={`watch-${c.code}`}
+                    idKey={c.code}
+                    d={c.geo.path}
+                    label={`${c.name} — a blue inner trace: a video was watched here ${shownWhen}`}
+                  />
+                ) : c.centroid ? (
+                  <WatchTraceMark
+                    key={`watch-${c.code}`}
+                    idKey={c.code}
+                    cx={c.centroid.cx}
+                    cy={c.centroid.cy}
+                    fallbackR={lightRadius(c.total) * 2.1 + 2}
+                    label={`${c.name} — a blue inner trace: a video was watched here ${shownWhen}`}
+                  />
+                ) : null
               ) : null
             )}
             {/* THE IVORY RING (Oct 28, 2026) — drawn last, over
@@ -1485,7 +1507,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 interactive. (No kindling-red row: that mark is not
                 built yet, and the legend names only real things.)
                 The FOURTH row (Oct 29, 2026, later the same night)
-                is the gold play pin — "Video watched" — the only
+                is the blue inner trace — "Video watched" — the only
                 words the watch count carries anywhere (Jason's
                 ruling). It was added by tightening the rows'
                 spacing INSIDE the same verified rect (x 140–398,
@@ -1549,18 +1571,29 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               <text x="198" y="345" fontSize="22" fill="#f6efdb">
                 here today
               </text>
-              {/* the gold play pin — the same glyph the watch
-                  mark wears on the map, at swatch size */}
-              <circle
-                cx="170"
-                cy="377"
-                r="8.5"
-                fill="#10394a"
-                fillOpacity="0.9"
-                stroke="#e4b95c"
-                strokeWidth="2"
+              {/* the blue inner trace — a small outline wearing
+                  its own trace inside, like a place on the map */}
+              <rect
+                x="157"
+                y="364"
+                width="26"
+                height="26"
+                rx="5"
+                fill="none"
+                stroke="#e8d9ae"
+                strokeWidth="1.4"
+                strokeOpacity="0.8"
               />
-              <path d="M 167 372.4 L 167 381.6 L 174.2 377 Z" fill="#e4b95c" />
+              <rect
+                x="160.5"
+                y="367.5"
+                width="19"
+                height="19"
+                rx="3.5"
+                fill="none"
+                stroke="#8fd8ff"
+                strokeWidth="1.8"
+              />
               <text x="198" y="385" fontSize="22" fill="#f6efdb">
                 Video watched
               </text>
