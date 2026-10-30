@@ -483,8 +483,8 @@ function WatchTraceMark({
         d={d}
         fill="none"
         stroke="#8fd8ff"
-        strokeWidth="5"
-        strokeOpacity="0.25"
+        strokeWidth="6"
+        strokeOpacity="0.40"
         clipPath={`url(#${clipId})`}
       />
       <path
