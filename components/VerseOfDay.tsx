@@ -14,6 +14,18 @@ import { dailyVerse, type DailyVerse } from "@/lib/daily-verses";
  * verse on the same day — no randomness, no external fetch.
  *
  * The whole card is a door: tapping it opens that verse's chapter.
+ *
+ * The card also RESERVES its settled height from first paint (the
+ * min-heights on the section below). The shell that paints first is
+ * ~310px shorter than the loaded card, and everything under it —
+ * including the Earth map that shared links point at (#earth-map) —
+ * would be shoved down by that growth after the browser's one-time
+ * fragment jump, landing readers well past the map. The steps are the
+ * tallest settled height of any verse in the rotation, measured from
+ * the rendered card at each width band (the height only changes when
+ * the longest verse gains or loses a wrapped line), plus 2px of
+ * rounding headroom — so the card never grows after load, on any day.
+ * The verse block centers in the reserved space on shorter days.
  */
 
 /* The calendar date is the external store here: it never changes during
@@ -54,7 +66,7 @@ export default function VerseOfDay() {
   return (
     <section
       aria-label="Verse of the day"
-      className="group relative overflow-hidden rounded-2xl border border-gold-500/25 shadow-[0_10px_36px_rgba(0,0,0,0.35)]"
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-gold-500/25 shadow-[0_10px_36px_rgba(0,0,0,0.35)] min-h-[508px] min-[350px]:min-h-[475.5px] min-[380px]:min-h-[443px] min-[430px]:min-h-[410.5px] min-[520px]:min-h-[378px] min-[640px]:min-h-[459px] min-[660px]:min-h-[420px]"
     >
       {/* Scene art + readability veil, the share card's own treatment */}
       <div aria-hidden="true" className="absolute inset-0 bg-vineyard-950">
@@ -77,7 +89,7 @@ export default function VerseOfDay() {
         <Link
           href={verse.href}
           aria-label={`Verse of the day, ${verse.ref}. Read ${verse.book} chapter ${verse.chapter}.`}
-          className="relative block px-6 py-8 text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gold-300 sm:px-10 sm:py-10"
+          className="relative my-auto block px-6 py-8 text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gold-300 sm:px-10 sm:py-10"
         >
           <Image
             src="/images/truvine-emblem.png"
@@ -101,7 +113,7 @@ export default function VerseOfDay() {
           </p>
         </Link>
       ) : (
-        <div className="relative px-6 py-8 text-center sm:px-10 sm:py-10">
+        <div className="relative my-auto px-6 py-8 text-center sm:px-10 sm:py-10">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gold-400">
             Verse of the day
           </p>
