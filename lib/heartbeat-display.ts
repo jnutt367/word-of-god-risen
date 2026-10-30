@@ -74,6 +74,28 @@ export function emberStrokeForOpens(opens: number): number {
   return Math.min(EMBER_STROKE_MAX_OPACITY, 0.55 + 0.13 * steps);
 }
 
+/** KINDLING (Jason, Oct 29, 2026 — "75 in a day"): a place whose
+ *  shown day brought 75 or more VISITS (opens) and no chapters yet
+ *  kindles — the ember ladder's crown. The trigger reads the SHOWN
+ *  day's own opens (the row's `opens`), never the all-time sum, so
+ *  a past day browsed in the record kindles on its own day count,
+ *  exactly as it did that day. A place with chapters never
+ *  kindles: its light is its own, and kindling never recolors a
+ *  light. Pure function — both the disc and the closer-look panel
+ *  render what this decides, so the two surfaces always agree. */
+export const KINDLING_OPENS_THRESHOLD = 75;
+
+export function kindled(row: { opens?: number; total: number }): boolean {
+  return row.total === 0 && (row.opens ?? 0) >= KINDLING_OPENS_THRESHOLD;
+}
+
+/** The kindled ember's colors: a warm red, steady — fill at an
+ *  ember-like strength a step above the gold ember's base, rim at
+ *  the graduated rim's top strength (EMBER_STROKE_MAX_OPACITY). */
+export const KINDLING_FILL = "#d9482f";
+export const KINDLING_RIM = "#f0664a";
+export const KINDLING_FILL_OPACITY = 0.22;
+
 /** The recorded subdivisions of one country within a shown set. */
 export function subdivisionsOfCountry<T extends SubdivisionCountLike>(
   subdivisions: readonly T[],

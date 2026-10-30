@@ -5,10 +5,15 @@ import heartbeat from "@/data/heartbeat.json";
 import worldMap from "@/lib/world-map.json";
 import {
   EMBER_FILL_OPACITY,
+  EMBER_STROKE_MAX_OPACITY,
+  KINDLING_FILL,
+  KINDLING_FILL_OPACITY,
+  KINDLING_RIM,
   bookHaloOn,
   countryBookHaloOn,
   emberOpacityForOpens,
   emberStrokeForOpens,
+  kindled,
   lightModeForCountry,
   notRecordedLabel,
   subdivisionsOfCountry,
@@ -915,6 +920,12 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
     r.watches > 0
       ? ` — a blue inner trace: a video was watched here ${shownWhen}`
       : "";
+  // KINDLING (Oct 29, 2026) — the voice of the warm-red ember:
+  // 75 or more visits in the shown day, and no chapters yet. The
+  // decision is kindled() in lib/heartbeat-display.ts, shared by
+  // the disc and the closer-look panel so they always agree.
+  const kindledClause = (r: HbCountryRow): string =>
+    kindled(r) ? ` — kindled: 75 or more visits ${shownWhen}` : "";
   // The finest geography carries the trace, as it carries the
   // light (v3.1.1): a country's own trace stands only when none
   // of its shown subdivisions carries one.
@@ -941,8 +952,8 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               (s.total > 0
                 ? subdivisionPhrase(s)
                 : s.opens > 0
-                  ? subdivisionOpenPhrase(s)
-                  : `${s.name} — a video was watched here ${shownWhen}; it rests as a faint ember, not fully lit`) +
+                  ? subdivisionOpenPhrase(s) + kindledClause(s)
+                  : `${s.name} — a video was watched here ${shownWhen}; it rests as a faint ember, not fully lit${kindledClause(s)}`) +
               (subHaloOn(s)
                 ? "; a white ring marks it — book finished here today"
                 : "") +
@@ -978,13 +989,13 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
       const subs = shownSubdivisions.filter(
         (s) => s.country === c.code && (s.opens > 0 || s.watches > 0)
       );
-      const base = `the app was opened in ${c.name} ${shownWhen} — ${fmt(allTimeOpensOf(c))} ${allTimeOpensOf(c) === 1 ? "visit" : "visits"} in all, and the Word has not been opened there yet; ${c.name} rests as a faint ember, glowing a little brighter with visits, not fully lit${countryWatchHeartOn(c) ? watchClause(c) : ""}`;
+      const base = `the app was opened in ${c.name} ${shownWhen} — ${fmt(allTimeOpensOf(c))} ${allTimeOpensOf(c) === 1 ? "visit" : "visits"} in all, and the Word has not been opened there yet; ${c.name} rests as a faint ember, glowing a little brighter with visits, not fully lit${kindledClause(c)}${countryWatchHeartOn(c) ? watchClause(c) : ""}`;
       return subs.length > 0
         ? `${base}; its divisions rest as embers where recorded: ${subs
             .map((s) =>
               s.opens > 0
-                ? subdivisionOpenPhrase(s) + watchClause(s)
-                : `${s.name} — a video was watched here ${shownWhen}; ${s.name} rests as a faint ember, not fully lit`
+                ? subdivisionOpenPhrase(s) + kindledClause(s) + watchClause(s)
+                : `${s.name} — a video was watched here ${shownWhen}; ${s.name} rests as a faint ember, not fully lit${kindledClause(s)}`
             )
             .join("; ")}`
         : base;
@@ -1242,23 +1253,28 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                   <g key={`sil-${c.code}`}>
                     <title>
                       {tierOf(c) === "open" ? openPhrase(c) : emberPhrase(c)}
+                      {kindledClause(c)}
                       {countryWatchHeartOn(c) ? watchTitle(c) : ""}
                     </title>
                     <path
                       d={c.geo.path}
-                      fill="#e4b95c"
+                      fill={kindled(c) ? KINDLING_FILL : "#e4b95c"}
                       fillRule="evenodd"
                       fillOpacity={
-                        tierOf(c) === "open"
-                          ? emberOpacityForOpens(allTimeOpensOf(c))
-                          : EMBER_FILL_OPACITY
+                        kindled(c)
+                          ? KINDLING_FILL_OPACITY
+                          : tierOf(c) === "open"
+                            ? emberOpacityForOpens(allTimeOpensOf(c))
+                            : EMBER_FILL_OPACITY
                       }
-                      stroke="#ffe1a1"
+                      stroke={kindled(c) ? KINDLING_RIM : "#ffe1a1"}
                       strokeWidth={tierOf(c) === "open" ? 1.1 : 0.8}
                       strokeOpacity={
-                        tierOf(c) === "open"
-                          ? emberStrokeForOpens(allTimeOpensOf(c))
-                          : 0.25
+                        kindled(c)
+                          ? EMBER_STROKE_MAX_OPACITY
+                          : tierOf(c) === "open"
+                            ? emberStrokeForOpens(allTimeOpensOf(c))
+                            : 0.25
                       }
                     />
                   </g>
@@ -1350,17 +1366,25 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                   <g key={`sub-${s.code}`}>
                     <title>
                       {s.opens > 0
-                        ? subdivisionOpenPhrase(s) + watchTitle(s)
-                        : `${s.name} — a video was watched here ${shownWhen}; it rests as a faint ember, glowing a little brighter with visits, its rim brightening too`}
+                        ? subdivisionOpenPhrase(s) + kindledClause(s) + watchTitle(s)
+                        : `${s.name} — a video was watched here ${shownWhen}; it rests as a faint ember, glowing a little brighter with visits, its rim brightening too${kindledClause(s)}`}
                     </title>
                     <path
                       d={s.geo.path}
-                      fill="#ffdf8a"
+                      fill={kindled(s) ? KINDLING_FILL : "#ffdf8a"}
                       fillRule="evenodd"
-                      fillOpacity={emberOpacityForOpens(allTimeOpensOfSubdivision(s))}
-                      stroke="#ffe9b0"
+                      fillOpacity={
+                        kindled(s)
+                          ? KINDLING_FILL_OPACITY
+                          : emberOpacityForOpens(allTimeOpensOfSubdivision(s))
+                      }
+                      stroke={kindled(s) ? KINDLING_RIM : "#ffe9b0"}
                       strokeWidth="1.0"
-                      strokeOpacity={emberStrokeForOpens(allTimeOpensOfSubdivision(s))}
+                      strokeOpacity={
+                        kindled(s)
+                          ? EMBER_STROKE_MAX_OPACITY
+                          : emberStrokeForOpens(allTimeOpensOfSubdivision(s))
+                      }
                     />
                   </g>
                 )
@@ -1382,24 +1406,35 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                   <g key={`heart-${c.code}`}>
                     <title>
                       {tierOf(c) === "open" ? openPhrase(c) : emberPhrase(c)}
+                      {kindledClause(c)}
                       {countryWatchHeartOn(c) ? watchTitle(c) : ""}
                     </title>
                     <circle
                       cx={c.centroid.cx}
                       cy={c.centroid.cy}
                       r={lightRadius(c.total)}
-                      fill="#e4b95c"
+                      fill={kindled(c) ? KINDLING_FILL : "#e4b95c"}
                       fillOpacity={
-                        tierOf(c) === "open"
-                          ? emberOpacityForOpens(allTimeOpensOf(c))
-                          : EMBER_FILL_OPACITY
+                        kindled(c)
+                          ? KINDLING_FILL_OPACITY
+                          : tierOf(c) === "open"
+                            ? emberOpacityForOpens(allTimeOpensOf(c))
+                            : EMBER_FILL_OPACITY
                       }
-                      stroke={tierOf(c) === "open" ? "#ffe1a1" : "none"}
-                      strokeWidth={tierOf(c) === "open" ? 1.2 : 0}
+                      stroke={
+                        kindled(c)
+                          ? KINDLING_RIM
+                          : tierOf(c) === "open"
+                            ? "#ffe1a1"
+                            : "none"
+                      }
+                      strokeWidth={tierOf(c) === "open" || kindled(c) ? 1.2 : 0}
                       strokeOpacity={
-                        tierOf(c) === "open"
-                          ? emberStrokeForOpens(allTimeOpensOf(c))
-                          : 0
+                        kindled(c)
+                          ? EMBER_STROKE_MAX_OPACITY
+                          : tierOf(c) === "open"
+                            ? emberStrokeForOpens(allTimeOpensOf(c))
+                            : 0
                       }
                     />
                   </g>
@@ -1577,16 +1612,18 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 large as the patch allows. The disc's prose and aria
                 label already carry these meanings, so the legend is
                 reinforcement, not the sole carrier — and it is not
-                interactive. (No kindling-red row: that mark is not
-                built yet, and the legend names only real things.)
+                interactive.
                 The FOURTH row (Oct 29, 2026, later the same night)
                 is the blue inner trace — "Video watched" — the only
                 words the watch count carries anywhere (Jason's
-                ruling). It was added by tightening the rows'
-                spacing INSIDE the same verified rect (x 140–398,
-                y 166–400): the panel did not grow, so the patch of
-                ocean it rides is the very one sampled empty above,
-                and its corners stay inside the rim as before. */}
+                ruling). The FIFTH row (same night, minutes later)
+                is kindling — "Kindled — 75 visits in a day" — in
+                the warm red of the kindled ember itself. Both rows
+                were added by tightening the rows' spacing INSIDE
+                the same verified rect (x 140–398, y 166–400): the
+                panel never grew, so the patch of ocean it rides is
+                the very one sampled empty above, and its corners
+                stay inside the rim as before. */}
             <g aria-hidden="true">
               <rect
                 x="140"
@@ -1602,7 +1639,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               />
               <text
                 x="162"
-                y="193"
+                y="190"
                 fontSize="19"
                 fontWeight="600"
                 fill="#e8d9ae"
@@ -1610,23 +1647,23 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 How to read this map:
               </text>
               {/* full golden light — golden fill, bright heart */}
-              <circle cx="170" cy="233" r="12" fill="#e4b95c" fillOpacity="0.55" stroke="#ffe1a1" strokeWidth="1" strokeOpacity="0.6" />
-              <circle cx="170" cy="233" r="4.5" fill="#fff3c4" />
-              <text x="198" y="225" fontSize="22" fill="#f6efdb">
+              <circle cx="170" cy="224" r="10.5" fill="#e4b95c" fillOpacity="0.55" stroke="#ffe1a1" strokeWidth="1" strokeOpacity="0.6" />
+              <circle cx="170" cy="224" r="4" fill="#fff3c4" />
+              <text x="198" y="217" fontSize="22" fill="#f6efdb">
                 Word read or
               </text>
-              <text x="198" y="249" fontSize="22" fill="#f6efdb">
+              <text x="198" y="240" fontSize="22" fill="#f6efdb">
                 heard here
               </text>
               {/* faint ember — a dim fill whose rim brightens with
                   visits; no heart, no breathing */}
-              <circle cx="170" cy="281" r="12" fill="#e4b95c" fillOpacity="0.18" stroke="#ffe1a1" strokeWidth="1.2" strokeOpacity="0.68" />
-              <text x="198" y="273" fontSize="22" fill="#f6efdb">
+              <circle cx="170" cy="262" r="10.5" fill="#e4b95c" fillOpacity="0.18" stroke="#ffe1a1" strokeWidth="1.2" strokeOpacity="0.68" />
+              <text x="198" y="255" fontSize="22" fill="#f6efdb">
                 App opened here
               </text>
               <text
                 x="198"
-                y="297"
+                y="278"
                 fontSize="21"
                 fill="#f6efdb"
                 textLength="186"
@@ -1636,39 +1673,56 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               </text>
               {/* the ivory ring — the same double stroke the ring
                   itself wears on the map */}
-              <circle cx="170" cy="329" r="11" fill="none" stroke="#fffff0" strokeWidth="4.5" strokeOpacity="0.22" />
-              <circle cx="170" cy="329" r="11" fill="none" stroke="#fffff0" strokeWidth="2" strokeOpacity="0.9" />
-              <text x="198" y="321" fontSize="22" fill="#f6efdb">
+              <circle cx="170" cy="300" r="10" fill="none" stroke="#fffff0" strokeWidth="4" strokeOpacity="0.22" />
+              <circle cx="170" cy="300" r="10" fill="none" stroke="#fffff0" strokeWidth="1.8" strokeOpacity="0.9" />
+              <text x="198" y="293" fontSize="22" fill="#f6efdb">
                 Book finished
               </text>
-              <text x="198" y="345" fontSize="22" fill="#f6efdb">
+              <text x="198" y="316" fontSize="22" fill="#f6efdb">
                 here today
               </text>
               {/* the blue inner trace — a small outline wearing
                   its own trace inside, like a place on the map */}
               <rect
-                x="157"
-                y="364"
-                width="26"
-                height="26"
-                rx="5"
+                x="159"
+                y="325"
+                width="22"
+                height="22"
+                rx="4"
                 fill="none"
                 stroke="#e8d9ae"
                 strokeWidth="1.4"
                 strokeOpacity="0.8"
               />
               <rect
-                x="160.5"
-                y="367.5"
-                width="19"
-                height="19"
-                rx="3.5"
+                x="162"
+                y="328"
+                width="16"
+                height="16"
+                rx="3"
                 fill="none"
                 stroke="#8fd8ff"
                 strokeWidth="1.8"
               />
-              <text x="198" y="385" fontSize="22" fill="#f6efdb">
+              <text x="198" y="343" fontSize="22" fill="#f6efdb">
                 Video watched
+              </text>
+              {/* kindling — the ember's own dot turned warm red,
+                  at the kindled strength: a place visited 75 or
+                  more times in a day, the Word not yet opened */}
+              <circle cx="170" cy="372" r="10.5" fill="#d9482f" fillOpacity="0.35" stroke="#f0664a" strokeWidth="1.4" strokeOpacity="0.94" />
+              <text
+                x="198"
+                y="365"
+                fontSize="21"
+                fill="#f6efdb"
+                textLength="184"
+                lengthAdjust="spacingAndGlyphs"
+              >
+                Kindled — 75 visits
+              </text>
+              <text x="198" y="388" fontSize="22" fill="#f6efdb">
+                in a day
               </text>
             </g>
           </svg>
@@ -1880,17 +1934,25 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                     <g key={`us-ember-${s.code}`}>
                       <title>
                         {s.opens > 0
-                          ? subdivisionOpenPhrase(s) + watchTitle(s)
-                          : `${s.name} — a video was watched here ${shownWhen}; it rests as a faint ember, glowing a little brighter with visits, its rim brightening too`}
+                          ? subdivisionOpenPhrase(s) + kindledClause(s) + watchTitle(s)
+                          : `${s.name} — a video was watched here ${shownWhen}; it rests as a faint ember, glowing a little brighter with visits, its rim brightening too${kindledClause(s)}`}
                       </title>
                       <path
                         d={s.geo.path}
-                        fill="#ffdf8a"
+                        fill={kindled(s) ? KINDLING_FILL : "#ffdf8a"}
                         fillRule="evenodd"
-                        fillOpacity={emberOpacityForOpens(allTimeOpensOfSubdivision(s))}
-                        stroke="#ffe9b0"
+                        fillOpacity={
+                          kindled(s)
+                            ? KINDLING_FILL_OPACITY
+                            : emberOpacityForOpens(allTimeOpensOfSubdivision(s))
+                        }
+                        stroke={kindled(s) ? KINDLING_RIM : "#ffe9b0"}
                         strokeWidth="1.0"
-                        strokeOpacity={emberStrokeForOpens(allTimeOpensOfSubdivision(s))}
+                        strokeOpacity={
+                          kindled(s)
+                            ? EMBER_STROKE_MAX_OPACITY
+                            : emberStrokeForOpens(allTimeOpensOfSubdivision(s))
+                        }
                       />
                     </g>
                   ) : null
