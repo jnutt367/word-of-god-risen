@@ -1289,6 +1289,86 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               ) : null
             )}
             </g>
+            {/* THE LEGEND (Oct 29, 2026, Jason's crown — "Build the
+                legend in the ocean"): a small visual key ON the disc,
+                riding over empty sea in the upper-left quadrant — the
+                Pacific-side water between the Asian and North American
+                silhouettes. The patch was verified against the RENDERED
+                geometry (every country and subdivision path, MAP_SCALE
+                applied, sampled on a 2-unit grid): the panel's rect
+                (x 140–398, y 166–400) touches no land at all, and its
+                rounded corners stay inside the disc's rim. It is drawn
+                OUTSIDE the scaled map group, so it can never drift onto
+                a light, and it changes no light, ember, rim, ring, or
+                sea value — it only names them. An SVG panel (not an
+                HTML overlay) on purpose: a fixed-pixel panel would
+                swell to cover real geography as the map shrinks to
+                phone width, while this panel scales with the disc and
+                holds the same patch of ocean at every width. Each
+                meaning is told in two short lines so the words stay as
+                large as the patch allows. The disc's prose and aria
+                label already carry these meanings, so the legend is
+                reinforcement, not the sole carrier — and it is not
+                interactive. (No kindling-red row: that mark is not
+                built yet, and the legend names only real things.) */}
+            <g aria-hidden="true">
+              <rect
+                x="140"
+                y="166"
+                width="258"
+                height="234"
+                rx="20"
+                fill="#0b2836"
+                fillOpacity="0.85"
+                stroke="#e8d9ae"
+                strokeWidth="1.5"
+                strokeOpacity="0.30"
+              />
+              <text
+                x="162"
+                y="201"
+                fontSize="23"
+                fontWeight="600"
+                fill="#e8d9ae"
+              >
+                The lights mean:
+              </text>
+              {/* full golden light — golden fill, bright heart */}
+              <circle cx="170" cy="247" r="12" fill="#e4b95c" fillOpacity="0.55" stroke="#ffe1a1" strokeWidth="1" strokeOpacity="0.6" />
+              <circle cx="170" cy="247" r="4.5" fill="#fff3c4" />
+              <text x="198" y="239" fontSize="22" fill="#f6efdb">
+                Word read or
+              </text>
+              <text x="198" y="264" fontSize="22" fill="#f6efdb">
+                heard here
+              </text>
+              {/* faint ember — a dim fill whose rim brightens with
+                  visits; no heart, no breathing */}
+              <circle cx="170" cy="305" r="12" fill="#e4b95c" fillOpacity="0.18" stroke="#ffe1a1" strokeWidth="1.2" strokeOpacity="0.68" />
+              <text x="198" y="297" fontSize="22" fill="#f6efdb">
+                App opened here
+              </text>
+              <text
+                x="198"
+                y="322"
+                fontSize="21"
+                fill="#f6efdb"
+                textLength="186"
+                lengthAdjust="spacingAndGlyphs"
+              >
+                brightens with visits
+              </text>
+              {/* the ivory ring — the same double stroke the ring
+                  itself wears on the map */}
+              <circle cx="170" cy="363" r="11" fill="none" stroke="#fffff0" strokeWidth="4.5" strokeOpacity="0.22" />
+              <circle cx="170" cy="363" r="11" fill="none" stroke="#fffff0" strokeWidth="2" strokeOpacity="0.9" />
+              <text x="198" y="355" fontSize="22" fill="#f6efdb">
+                Book finished
+              </text>
+              <text x="198" y="380" fontSize="22" fill="#f6efdb">
+                here today
+              </text>
+            </g>
           </svg>
           <figcaption className="mt-2 text-center text-sm text-sage-300">
             {gathering ? (
