@@ -136,6 +136,11 @@ interface HbTotals {
   /** App opens (Oct 27, 2026) — additive in the payload; the
    *  tiles never show it and it is never folded into read/heard. */
   opens?: number;
+  /** Video watches (Oct 29, 2026) — additive in the payload; the
+   *  tiles never show it (Jason's ruling: no count words, no
+   *  clutter) and it is never folded into read/heard. The map's
+   *  gold hearts read the per-place rows, not this total. */
+  videosWatched?: number;
 }
 
 interface HbCountryRow {
@@ -147,6 +152,12 @@ interface HbCountryRow {
   /** Opens recorded for this place today (Oct 27, 2026). A row
    *  with opens but no chapters rests on the map as an ember. */
   opens: number;
+  /** Video watches recorded for this place in the shown day
+   *  (Oct 29, 2026). A row with watches wears a gold heart on
+   *  the map; watches never enter `total`, so a watch is never
+   *  chapter activity anywhere. Snapshot rows predate the
+   *  field and carry 0. */
+  watches: number;
   /** The place's last book-finish date (Oct 28, 2026), or null —
    *  live rows carry it from the payload; the snapshot's rows
    *  predate it and leave it undefined. The ivory ring reads it. */
@@ -191,6 +202,10 @@ interface LiveCountRow {
   /** Opens (Oct 27, 2026) — present in live payloads since the
    *  open beat shipped; older payloads and fixtures omit it. */
   opens?: number;
+  /** Video watches (Oct 29, 2026) — present in live payloads
+   *  since the watch beat shipped; older payloads and fixtures
+   *  omit it, and no heart is worn. */
+  watches?: number;
   /** The place's last book-finish date (Oct 28, 2026) — present
    *  in live payloads since the ivory ring shipped; older
    *  payloads and fixtures omit it, and no ring is worn. */
@@ -215,6 +230,7 @@ interface LiveDay {
   chaptersHeard: number;
   listensMarked?: number;
   opens?: number;
+  videosWatched?: number;
   countries: LiveCountRow[];
   subdivisions?: LiveSubdivisionRow[];
 }
@@ -362,6 +378,46 @@ interface MapCountry extends HbCountryRow {
   centroid: { cx: number; cy: number } | null;
 }
 
+/** THE VIDEO-WATCH HEART glyph (Oct 29, 2026). A heart SHAPE, in
+ *  the lights' gold (#e4b95c, rimmed #ffe1a1) — deliberately not
+ *  the full light's bright core, which is a small round dot
+ *  (r 3) at a lit place's center and reads as the hot middle of
+ *  a glow, not as a glyph. The watch heart is drawn beside that
+ *  core (offset from the centroid, never over it), so a place
+ *  that is both lit and watched carries two plainly different
+ *  marks; a place that is only watched carries the heart alone
+ *  over its ember. It is STEADY — no .hb-glow, no breathing —
+ *  a kept sign for the day, like the ivory ring. (Gold, never
+ *  red: red is reserved for a kindling mark not yet built.)
+ *  The path is a heart drawn in a 24-unit box, scaled 1.3. */
+const WATCH_HEART_PATH =
+  "M12 21s-8-5.5-10.5-10C.7 7 2.5 3.5 6 3.5c2 0 3.5 1 4.5 2.5C13 4.5 14.5 3.5 16.5 3.5c3.5 0 5.3 3.5 4 7.5C20 15.5 12 21 12 21z";
+
+function WatchHeartMark({
+  cx,
+  cy,
+  label,
+}: {
+  cx: number;
+  cy: number;
+  label: string;
+}) {
+  return (
+    <g>
+      <title>{label}</title>
+      <path
+        d={WATCH_HEART_PATH}
+        transform={`translate(${cx - 15.6} ${cy - 15.6}) scale(1.3)`}
+        fill="#e4b95c"
+        fillOpacity="0.95"
+        stroke="#ffe1a1"
+        strokeWidth="0.9"
+        strokeOpacity="0.85"
+      />
+    </g>
+  );
+}
+
 function toMapCountry(row: HbCountryRow): MapCountry {
   const geo = world.countries[row.code] ?? null;
   const extra = geo ? null : world.extraCentroids?.[row.code] ?? null;
@@ -447,13 +503,19 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
         heard: c.heard ?? 0,
         total: c.total ?? (c.read ?? 0) + (c.heard ?? 0),
         opens: c.opens ?? 0,
+        watches: c.watches ?? 0,
         bookFinishedOn: c.bookFinishedOn ?? null,
       }))
-      // A place stands in the rows on ANY activity: chapters, or
+      // A place stands in the rows on ANY activity: chapters,
       // opens alone (Oct 27, 2026 — it rests on the map as an
-      // ember, so the rows, the list, and the disc all see it).
-      .filter((c) => c.code && (c.total > 0 || c.opens > 0))
-      .sort((a, b) => b.total - a.total || b.opens - a.opens);
+      // ember, so the rows, the list, and the disc all see it),
+      // or watches alone (Oct 29, 2026 — its gold heart must be
+      // drawn, so the disc must see the row).
+      .filter((c) => c.code && (c.total > 0 || c.opens > 0 || c.watches > 0))
+      .sort(
+        (a, b) =>
+          b.total - a.total || b.opens - a.opens || b.watches - a.watches
+      );
 
   // Today's live country rows.
   const liveRows: HbCountryRow[] =
@@ -482,13 +544,17 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
           heard: s.heard ?? 0,
           total: s.total ?? (s.read ?? 0) + (s.heard ?? 0),
           opens: s.opens ?? 0,
+          watches: s.watches ?? 0,
           bookFinishedOn: s.bookFinishedOn ?? null,
           country: (s.country || code.split("-")[0] || "").toUpperCase(),
           geo,
         };
       })
-      .filter((s) => s.code && (s.total > 0 || s.opens > 0))
-      .sort((a, b) => b.total - a.total || b.opens - a.opens);
+      .filter((s) => s.code && (s.total > 0 || s.opens > 0 || s.watches > 0))
+      .sort(
+        (a, b) =>
+          b.total - a.total || b.opens - a.opens || b.watches - a.watches
+      );
 
   // Today's live subdivision rows (v3.1).
   const liveSubdivisionRows: LiveSubdivisionDisplay[] =
@@ -661,8 +727,10 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
         heard,
         total: read + heard,
         // The daily record predates the open beat — its rows are
-        // chapters only, so opens stands at zero here.
+        // chapters only, so opens stands at zero here. It likewise
+        // predates the watch beat — watches stands at zero too.
         opens: 0,
+        watches: 0,
       };
     })
     .filter((c) => c.name && c.total > 0)
@@ -711,9 +779,13 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   // no breathing, no heart — for a place whose shown activity is
   // OPENS ONLY. Any chapter at all outranks the opens: where the
   // Word was read or heard, the full light wins, exactly as now.
-  const opensOnly = (c: HbCountryRow) => c.total === 0 && c.opens > 0;
+  // A place with NO chapters at all wears the ember treatment,
+  // whatever its activity — opens (Oct 27, 2026) or watches alone
+  // (Oct 29, 2026: a watch is not the Word read or heard, so a
+  // watches-only place must never wear the full light; it rests
+  // as an ember and carries its gold heart beside it).
   const tierOf = (c: HbCountryRow): "full" | "ember" | "open" =>
-    opensOnly(c) ? "open" : modeOf(c.code);
+    c.total === 0 ? "open" : modeOf(c.code);
   const subsOf = (code: string) =>
     subdivisionsOfCountry(shownSubdivisions, code);
   const anyEmber = mapRows.some((c) => tierOf(c) !== "full");
@@ -748,6 +820,27 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
       : "";
   };
 
+  // THE GOLD HEART (Oct 29, 2026) — a video watched in the app
+  // sets a heart on the watcher's place. Its voices (title/aria
+  // only — Jason's ruling: no visible count words anywhere; the
+  // ocean legend's "Video watched" row is the only words it
+  // carries). The clause is honest about what a watch is: a
+  // video watched — never a chapter, never a light.
+  const watchClause = (r: HbCountryRow): string =>
+    r.watches > 0
+      ? `; a gold heart marks ${r.name} — a video was watched here ${shownWhen}`
+      : "";
+  const watchTitle = (r: HbCountryRow): string =>
+    r.watches > 0
+      ? ` — a gold heart: a video was watched here ${shownWhen}`
+      : "";
+  // The finest geography carries the heart, as it carries the
+  // light (v3.1.1): a country's own heart stands only when none
+  // of its shown subdivisions carries one.
+  const countryWatchHeartOn = (c: HbCountryRow): boolean =>
+    c.watches > 0 &&
+    !shownSubdivisions.some((s) => s.country === c.code && s.watches > 0);
+
   // The "on the Vine" day list below the map follows the SHOWN day
   // (Jason, Oct 24, 2026): at the live default these are today's
   // rows and the block renders exactly as it always has; while
@@ -773,18 +866,24 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   const describeCountry = (c: MapCountry): string => {
     if (tierOf(c) === "open") {
       const subs = shownSubdivisions.filter(
-        (s) => s.country === c.code && s.opens > 0
+        (s) => s.country === c.code && (s.opens > 0 || s.watches > 0)
       );
-      const base = `the app was opened in ${c.name} ${shownWhen} — ${fmt(allTimeOpensOf(c))} ${allTimeOpensOf(c) === 1 ? "visit" : "visits"} in all, and the Word has not been opened there yet; ${c.name} rests as a faint ember, glowing a little brighter with visits, not fully lit`;
+      const base = `the app was opened in ${c.name} ${shownWhen} — ${fmt(allTimeOpensOf(c))} ${allTimeOpensOf(c) === 1 ? "visit" : "visits"} in all, and the Word has not been opened there yet; ${c.name} rests as a faint ember, glowing a little brighter with visits, not fully lit${countryWatchHeartOn(c) ? watchClause(c) : ""}`;
       return subs.length > 0
-        ? `${base}; its divisions rest as embers where recorded: ${subs.map(subdivisionOpenPhrase).join("; ")}`
+        ? `${base}; its divisions rest as embers where recorded: ${subs
+            .map((s) =>
+              s.opens > 0
+                ? subdivisionOpenPhrase(s) + watchClause(s)
+                : `${s.name} — a video was watched here ${shownWhen}; ${s.name} rests as a faint ember, not fully lit`
+            )
+            .join("; ")}`
         : base;
     }
     if (modeOf(c.code) === "ember") {
       const subs = subsOf(c.code);
-      return `reading recorded across ${c.name} — ${fmt(c.total)} ${c.total === 1 ? "chapter" : "chapters"} ${shownWhen}; ${c.name} itself rests as a faint ember, not lit, and its divisions are lit where recorded: ${subs.map(subdivisionPhrase).join("; ")}${ringClause(c)}`;
+      return `reading recorded across ${c.name} — ${fmt(c.total)} ${c.total === 1 ? "chapter" : "chapters"} ${shownWhen}; ${c.name} itself rests as a faint ember, not lit, and its divisions are lit where recorded: ${subs.map((s) => subdivisionPhrase(s) + watchClause(s)).join("; ")}${ringClause(c)}${countryWatchHeartOn(c) ? watchClause(c) : ""}`;
     }
-    return `${mapPhrase(c)}, lit in its own shape${ringClause(c)}`;
+    return `${mapPhrase(c)}, lit in its own shape${ringClause(c)}${watchClause(c)}`;
   };
 
   const figureLabel = gathering
@@ -1033,6 +1132,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                   <g key={`sil-${c.code}`}>
                     <title>
                       {tierOf(c) === "open" ? openPhrase(c) : emberPhrase(c)}
+                      {countryWatchHeartOn(c) ? watchTitle(c) : ""}
                     </title>
                     <path
                       d={c.geo.path}
@@ -1058,7 +1158,10 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                     className="hb-glow"
                     style={{ animationDelay: `${(i % 5) * 0.9}s` }}
                   >
-                    <title>{mapPhrase(c)}</title>
+                    <title>
+                      {mapPhrase(c)}
+                      {countryWatchHeartOn(c) ? watchTitle(c) : ""}
+                    </title>
                     <path
                       d={c.geo.path}
                       fill="#e4b95c"
@@ -1103,6 +1206,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                     {subHaloOn(s)
                       ? " — book finished here today; a white ring marks it"
                       : ""}
+                    {watchTitle(s)}
                   </title>
                   <path
                     d={s.geo.path}
@@ -1134,7 +1238,11 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                   // Oct 27): the outline traces the shape
                   // steadily, brighter as the visits gather.
                   <g key={`sub-${s.code}`}>
-                    <title>{subdivisionOpenPhrase(s)}</title>
+                    <title>
+                      {s.opens > 0
+                        ? subdivisionOpenPhrase(s) + watchTitle(s)
+                        : `${s.name} — a video was watched here ${shownWhen}; it rests as a faint ember, glowing a little brighter with visits, its rim brightening too`}
+                    </title>
                     <path
                       d={s.geo.path}
                       fill="#ffdf8a"
@@ -1164,6 +1272,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                   <g key={`heart-${c.code}`}>
                     <title>
                       {tierOf(c) === "open" ? openPhrase(c) : emberPhrase(c)}
+                      {countryWatchHeartOn(c) ? watchTitle(c) : ""}
                     </title>
                     <circle
                       cx={c.centroid.cx}
@@ -1193,7 +1302,10 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                   className="hb-glow"
                   style={{ animationDelay: `${(i % 5) * 0.9}s` }}
                 >
-                  <title>{mapPhrase(c)}</title>
+                  <title>
+                    {mapPhrase(c)}
+                    {countryWatchHeartOn(c) ? watchTitle(c) : ""}
+                  </title>
                   {c.geo ? (
                     <>
                       <circle cx={c.centroid.cx} cy={c.centroid.cy} r="7" fill="#e4b95c" opacity="0.25" />
@@ -1218,6 +1330,45 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 </g>
               );
             })}
+            {/* THE GOLD HEARTS (Oct 29, 2026) — a video watched
+                in the app sets a heart on the watcher's place
+                for the shown day. The heart is a SHAPE, in gold,
+                set beside the place's center — never over the
+                light's small round core, which stays exactly as
+                it was — and it is steady, like the ring. The
+                finest geography carries it, as it carries the
+                light: a subdivision's heart stands for its
+                country's watches; the country's own heart stands
+                only when no shown subdivision carries one. A
+                place with watches but no chapters keeps its
+                ember (or its quiet land) — the heart is its only
+                bright mark, and it never makes a light. Drawn
+                before the rings, so a ring for the day still
+                rests over everything it honors. */}
+            {shownSubdivisions.map((s) =>
+              s.watches > 0 && s.geo ? (
+                <WatchHeartMark
+                  key={`watch-${s.code}`}
+                  cx={s.geo.cx + 19}
+                  cy={s.geo.cy + 15}
+                  label={`${s.name} — a gold heart: a video was watched here ${shownWhen}`}
+                />
+              ) : null
+            )}
+            {mapRows.map((c) =>
+              countryWatchHeartOn(c) && c.centroid ? (
+                <WatchHeartMark
+                  key={`watch-${c.code}`}
+                  cx={
+                    c.geo
+                      ? c.centroid.cx + 19
+                      : c.centroid.cx + lightRadius(c.total) * 2.1 + 18
+                  }
+                  cy={c.geo ? c.centroid.cy + 15 : c.centroid.cy}
+                  label={`${c.name} — a gold heart: a video was watched here ${shownWhen}`}
+                />
+              ) : null
+            )}
             {/* THE IVORY RING (Oct 28, 2026) — drawn last, over
                 the lights it honors: a soft ivory-white ring traced
                 around the mark of a place where a whole book of
@@ -1310,7 +1461,15 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 label already carry these meanings, so the legend is
                 reinforcement, not the sole carrier — and it is not
                 interactive. (No kindling-red row: that mark is not
-                built yet, and the legend names only real things.) */}
+                built yet, and the legend names only real things.)
+                The FOURTH row (Oct 29, 2026, later the same night)
+                is the gold heart — "Video watched" — the only
+                words the watch count carries anywhere (Jason's
+                ruling). It was added by tightening the rows'
+                spacing INSIDE the same verified rect (x 140–398,
+                y 166–400): the panel did not grow, so the patch of
+                ocean it rides is the very one sampled empty above,
+                and its corners stay inside the rim as before. */}
             <g aria-hidden="true">
               <rect
                 x="140"
@@ -1326,31 +1485,31 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               />
               <text
                 x="162"
-                y="201"
-                fontSize="23"
+                y="193"
+                fontSize="21"
                 fontWeight="600"
                 fill="#e8d9ae"
               >
                 The lights mean:
               </text>
               {/* full golden light — golden fill, bright heart */}
-              <circle cx="170" cy="247" r="12" fill="#e4b95c" fillOpacity="0.55" stroke="#ffe1a1" strokeWidth="1" strokeOpacity="0.6" />
-              <circle cx="170" cy="247" r="4.5" fill="#fff3c4" />
-              <text x="198" y="239" fontSize="22" fill="#f6efdb">
+              <circle cx="170" cy="233" r="12" fill="#e4b95c" fillOpacity="0.55" stroke="#ffe1a1" strokeWidth="1" strokeOpacity="0.6" />
+              <circle cx="170" cy="233" r="4.5" fill="#fff3c4" />
+              <text x="198" y="225" fontSize="22" fill="#f6efdb">
                 Word read or
               </text>
-              <text x="198" y="264" fontSize="22" fill="#f6efdb">
+              <text x="198" y="249" fontSize="22" fill="#f6efdb">
                 heard here
               </text>
               {/* faint ember — a dim fill whose rim brightens with
                   visits; no heart, no breathing */}
-              <circle cx="170" cy="305" r="12" fill="#e4b95c" fillOpacity="0.18" stroke="#ffe1a1" strokeWidth="1.2" strokeOpacity="0.68" />
-              <text x="198" y="297" fontSize="22" fill="#f6efdb">
+              <circle cx="170" cy="281" r="12" fill="#e4b95c" fillOpacity="0.18" stroke="#ffe1a1" strokeWidth="1.2" strokeOpacity="0.68" />
+              <text x="198" y="273" fontSize="22" fill="#f6efdb">
                 App opened here
               </text>
               <text
                 x="198"
-                y="322"
+                y="297"
                 fontSize="21"
                 fill="#f6efdb"
                 textLength="186"
@@ -1360,13 +1519,27 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               </text>
               {/* the ivory ring — the same double stroke the ring
                   itself wears on the map */}
-              <circle cx="170" cy="363" r="11" fill="none" stroke="#fffff0" strokeWidth="4.5" strokeOpacity="0.22" />
-              <circle cx="170" cy="363" r="11" fill="none" stroke="#fffff0" strokeWidth="2" strokeOpacity="0.9" />
-              <text x="198" y="355" fontSize="22" fill="#f6efdb">
+              <circle cx="170" cy="329" r="11" fill="none" stroke="#fffff0" strokeWidth="4.5" strokeOpacity="0.22" />
+              <circle cx="170" cy="329" r="11" fill="none" stroke="#fffff0" strokeWidth="2" strokeOpacity="0.9" />
+              <text x="198" y="321" fontSize="22" fill="#f6efdb">
                 Book finished
               </text>
-              <text x="198" y="380" fontSize="22" fill="#f6efdb">
+              <text x="198" y="345" fontSize="22" fill="#f6efdb">
                 here today
+              </text>
+              {/* the gold heart — the same glyph the watch heart
+                  wears on the map, at swatch size */}
+              <path
+                d={WATCH_HEART_PATH}
+                transform="translate(158.6 365.6) scale(0.95)"
+                fill="#e4b95c"
+                fillOpacity="0.95"
+                stroke="#ffe1a1"
+                strokeWidth="0.9"
+                strokeOpacity="0.85"
+              />
+              <text x="198" y="385" fontSize="22" fill="#f6efdb">
+                Video watched
               </text>
             </g>
           </svg>
@@ -1539,8 +1712,13 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                       the text beside it carries the meaning. An
                       OPENS-ONLY row (Oct 27, 2026) rests as an
                       ember everywhere: its dot here is steady and
-                      dim, and its text names opens as opens. */}
-                  {opensOnly(c) ? (
+                      dim, and its text names opens as opens. A
+                      WATCHES-ONLY row (Oct 29, 2026) rests as an
+                      ember too — steady dot, and NO words at all
+                      beside its name: the heart on the map and
+                      the legend are its only telling (Jason's
+                      ruling: no count words, no clutter). */}
+                  {c.total === 0 ? (
                     <span
                       aria-hidden="true"
                       className="inline-block h-2 w-2 shrink-0 rounded-full bg-gold-300"
@@ -1558,9 +1736,9 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                     <span className="text-gold-300">
                       {fmt(c.total)} {c.total === 1 ? "chapter" : "chapters"} {shownWhen}
                     </span>
-                  ) : (
+                  ) : c.opens > 0 ? (
                     <span className="text-gold-300">opened {shownWhen}</span>
-                  )}
+                  ) : null}
                   {c.heard > 0 && (
                     <span className="text-sage-300">
                       {" "}
@@ -1615,8 +1793,11 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                             its silhouette on the map (v3.1.3);
                             aria-hidden, the text carries the meaning.
                             An OPENS-ONLY row rests as an ember:
-                            steady dim dot, opens named as opens. */}
-                        {opensOnly(s) ? (
+                            steady dim dot, opens named as opens. A
+                            WATCHES-ONLY row (Oct 29, 2026) rests as
+                            an ember too — steady dot, no words
+                            beside its name (see the country chips). */}
+                        {s.total === 0 ? (
                           <span
                             aria-hidden="true"
                             className="inline-block h-2 w-2 shrink-0 rounded-full bg-gold-300"
@@ -1634,9 +1815,9 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                           <span className="text-gold-300">
                             {fmt(s.total)} {s.total === 1 ? "chapter" : "chapters"} {shownWhen}
                           </span>
-                        ) : (
+                        ) : s.opens > 0 ? (
                           <span className="text-gold-300">opened {shownWhen}</span>
-                        )}
+                        ) : null}
                         {s.heard > 0 && (
                           <span className="text-sage-300">
                             {" "}

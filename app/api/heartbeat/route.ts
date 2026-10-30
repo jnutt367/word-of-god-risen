@@ -19,11 +19,18 @@ import snapshot from "@/data/heartbeat.json";
  *        depends on the store.
  * POST → one anonymous beat: { "type": "read" | "listen" |
  *        "listen_complete" | "book" | "listened_marked" |
- *        "open" }. The body carries nothing else — no book, no
- *        chapter, no identity. "open" is the app itself being
- *        opened (Oct 27, 2026) — its own count beside read/heard,
- *        never inside them; a place whose only beats are opens
- *        rests on the map as an ember.
+ *        "open" | "watch" }. The body carries nothing else — no
+ *        book, no chapter, no identity. "open" is the app itself
+ *        being opened (Oct 27, 2026) — its own count beside
+ *        read/heard, never inside them; a place whose only beats
+ *        are opens rests on the map as an ember.
+ *        "watch" is a video actually playing in the app
+ *        (Oct 29, 2026) — its own count beside read/heard, never
+ *        inside them, attributed to its place like a read; on
+ *        the map a place with watches wears a gold heart, never
+ *        a light, and a row's chapter total excludes watches, so
+ *        a watch is never chapter activity (the new-place prayer
+ *        trigger included).
  *        "listened_marked" is the reader's own tap on "I listened to
  *        this chapter" — counted in its own total, never folded into
  *        the measured listen_complete count (see HEARTBEAT.md). The
@@ -49,6 +56,7 @@ const KINDS = new Set<BeatKind>([
   "book",
   "listened_marked",
   "open",
+  "watch",
 ]);
 
 interface SnapshotShape {
@@ -62,12 +70,15 @@ interface SnapshotShape {
     listensMarked?: number;
     /** The checked-in snapshot predates the opens count. */
     opens?: number;
+    /** The checked-in snapshot predates the watch count. */
+    videosWatched?: number;
   };
   today: {
     date: string;
     chaptersRead: number;
     chaptersHeard: number;
     opens?: number;
+    videosWatched?: number;
   };
 }
 
@@ -82,8 +93,14 @@ function snapshotFallback() {
         ...snap.totals,
         listensMarked: snap.totals.listensMarked ?? 0,
         opens: snap.totals.opens ?? 0,
+        videosWatched: snap.totals.videosWatched ?? 0,
       },
-      today: { ...snap.today, listensMarked: 0, opens: snap.today.opens ?? 0 },
+      today: {
+        ...snap.today,
+        listensMarked: 0,
+        opens: snap.today.opens ?? 0,
+        videosWatched: snap.today.videosWatched ?? 0,
+      },
       countries: [],
       subdivisions: [],
     },

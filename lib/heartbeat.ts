@@ -20,7 +20,7 @@ import { track } from "@vercel/analytics";
 const SESSION_PREFIX = "hb:";
 const BOOK_DONE_KEY = "hb:bookdone:";
 
-type BeatKind = "read" | "listen" | "listen_complete" | "book" | "listened_marked" | "open";
+type BeatKind = "read" | "listen" | "listen_complete" | "book" | "listened_marked" | "open" | "watch";
 
 /** Fire-and-forget beat to the live counter. The body is the beat kind
  *  and nothing else — no book, no chapter, no identity. */
@@ -86,6 +86,33 @@ export function beatOpen(): void {
     /* ignore */
   }
   beatLive("open");
+}
+
+/**
+ * A video actually PLAYED in the app (Jason, Oct 29, 2026 — the
+ * video-watch heart). Until tonight a video watch fired nothing at
+ * all: an overview, a parable film, the welcome film, the featured
+ * film — none of them left a mark anywhere, while chapters read,
+ * chapters heard, and even mere opens all did. A watch is its OWN
+ * beat kind and its own count: it is not a chapter read or heard,
+ * it never folds into those totals, and it never lights a place —
+ * on the map it sets a gold heart on the watcher's place instead,
+ * and the ocean legend's "Video watched" row is the only words it
+ * carries (Jason's ruling: no count words on the page — no clutter).
+ * Fired only from a player's PLAYING state — never on a page view,
+ * never on a door tap alone. Same gentle dedupe as every beat:
+ * once per browser session PER VIDEO.
+ */
+export function beatWatch(videoId: string): void {
+  const key = `watch:${videoId}`;
+  if (seen(key)) return;
+  markSeen(key);
+  try {
+    track("video_watched", { video: videoId });
+  } catch {
+    /* ignore */
+  }
+  beatLive("watch");
 }
 
 /** Playback of a chapter began (Teddy MP3 or device TTS), from idle. Once per session per chapter. */

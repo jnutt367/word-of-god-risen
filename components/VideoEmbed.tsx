@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { VideoChoiceModal } from "./VideoChoice";
+import WatchPlayer from "./WatchPlayer";
 
 /**
  * Polished click-to-play YouTube embed.
@@ -54,14 +55,10 @@ export default function VideoEmbed({
       <div className="overflow-hidden rounded-[15px] bg-vineyard-950">
         <div ref={playerRef} tabIndex={-1} className="relative aspect-video w-full">
           {playing ? (
-            <iframe
-              className="h-full w-full"
-              src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`}
-              title={title}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-            />
+            // WatchPlayer, not a plain iframe, so the watch can be
+            // counted — the video-watch heart (Oct 29, 2026) fires
+            // from its PLAYING state.
+            <WatchPlayer videoId={videoId} title={title} />
           ) : (
             <button
               type="button"

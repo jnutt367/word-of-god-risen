@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import ParableAudio from "@/components/ParableAudio";
 import ParablePanel from "@/components/ParablePanel";
 import VideoComing from "@/components/VideoComing";
+import WatchPlayer from "@/components/WatchPlayer";
 
 export const metadata: Metadata = {
   title: "Parables of Jesus · Word of God Risen",
@@ -108,12 +109,14 @@ export default function ParablesPage() {
 
       <div className="mt-8 overflow-hidden rounded-2xl border border-gold-500/15 bg-vineyard-900">
         <div className="aspect-video">
-          <iframe
-            src="https://www.youtube.com/embed/QCF-t91FnQE"
+          {/* WatchPlayer, not a plain iframe, so the watch can be
+              counted — the video-watch heart (Oct 29, 2026) fires
+              from its PLAYING state. It waits for its own tap,
+              exactly as the iframe did. */}
+          <WatchPlayer
+            videoId="QCF-t91FnQE"
             title="Why Jesus Spoke in Parables"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            className="h-full w-full"
+            autoplay={false}
           />
         </div>
         <div className="p-5">
@@ -175,12 +178,14 @@ export default function ParablesPage() {
               </div>
               {p.videoId ? (
                 <div className="mt-3 aspect-video overflow-hidden rounded-xl">
-                  <iframe
-                    src={`https://www.youtube.com/embed/${p.videoId}`}
+                  {/* WatchPlayer, not a plain iframe — the
+                      video-watch heart (Oct 29, 2026) fires from
+                      its PLAYING state when the film actually
+                      plays. */}
+                  <WatchPlayer
+                    videoId={p.videoId}
                     title={`${p.title} — Parable Short`}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="h-full w-full"
+                    autoplay={false}
                   />
                 </div>
               ) : (

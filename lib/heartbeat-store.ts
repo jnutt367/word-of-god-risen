@@ -36,7 +36,13 @@
  *                 total, leaving no record of where it happened.
  *                 It counts beside the chapters exactly like opens
  *                 does, never inside them (a row's `total` stays
- *                 chapters only).
+ *                 chapters only). Since Oct 29, 2026 a fifth
+ *                 field, watches, counts VIDEO WATCHES in the
+ *                 place that day — the watch beat's geography.
+ *                 A watch is not a chapter read or heard: it
+ *                 counts beside the chapters exactly like opens
+ *                 and books do, never inside them, and on the map
+ *                 it wears a gold heart, never a light.
  * A day is assembled into hb:days when it closes (the first beat of
  * a later day rolls it over), so a read assembles the public view
  * from a flat handful of commands however long the history grows —
@@ -89,7 +95,8 @@ export type BeatKind =
   | "listen_complete"
   | "book"
   | "listened_marked"
-  | "open";
+  | "open"
+  | "watch";
 
 export interface HbTotals {
   chaptersRead: number;
@@ -107,6 +114,12 @@ export interface HbTotals {
    *  counts — on the map an opens-only place rests as an ember;
    *  the full light stays the sign of the Word read or heard. */
   opens: number;
+  /** Video watches (Oct 29, 2026): a video actually played in the
+   *  app. Its own count, never folded into the read/heard counts
+   *  and never displayed as words on the homepage (Jason's ruling:
+   *  no clutter) — on the map a watch sets a gold heart on the
+   *  watcher's place, and the ocean legend names it. */
+  videosWatched: number;
 }
 
 export interface HbCountryCounts {
@@ -123,6 +136,15 @@ export interface HbCountryCounts {
    *  that day. Records written before this field existed
    *  normalize it to 0 (see normalizePlaceCounts). */
   books: number;
+  /** Video watches recorded for this place (Oct 29, 2026) —
+   *  counted beside read/heard exactly like opens and books,
+   *  never inside them: a row's `total` stays chapters only, so
+   *  a watch never counts as chapter activity anywhere (the
+   *  new-place prayer trigger included). On the map a place
+   *  with watches wears a gold heart for the day. Records
+   *  written before this field existed normalize it to 0 (see
+   *  normalizePlaceCounts). */
+  watches: number;
 }
 
 export interface HbDay {
@@ -138,6 +160,11 @@ export interface HbDay {
    *  so a place whose only activity is opens still stands in the
    *  day's rows and rests on the map as an ember. */
   opens: number;
+  /** Videos watched that day (Oct 29, 2026) — a day count like
+   *  the others, with per-place attribution in
+   *  countries/subdivisions, so a place whose day holds a watch
+   *  can wear its gold heart. Never a chapter count. */
+  videosWatched: number;
   countries: Record<string, HbCountryCounts>;
   /** Subdivision counts for the day (v3.1), keyed by full ISO 3166-2
    *  code ("US-FL"). Only beats whose country has subdivision
@@ -171,6 +198,7 @@ function emptyDay(date: string): HbDay {
     chaptersHeard: 0,
     listensMarked: 0,
     opens: 0,
+    videosWatched: 0,
     countries: {},
     subdivisions: {},
   };
@@ -198,12 +226,14 @@ export function seedCounters(): HbCounters {
  * data by hand.
  */
 /** Place records written before Oct 27, 2026 carry no `opens`
- *  field, and those before Oct 28, 2026 carry no `books` field —
- *  default both wherever a stored record is read back. */
+ *  field, those before Oct 28, 2026 carry no `books` field, and
+ *  those before Oct 29, 2026 carry no `watches` field — default
+ *  all three wherever a stored record is read back. */
 function normalizePlaceCounts(rec: Record<string, HbCountryCounts>): void {
   for (const v of Object.values(rec)) {
     v.opens ??= 0;
     v.books ??= 0;
+    v.watches ??= 0;
   }
 }
 
@@ -212,11 +242,13 @@ function normalizeCounters(c: HbCounters): HbCounters {
   normalizePlaceCounts(c.subdivisionTotals);
   c.totals.listensMarked ??= 0;
   c.totals.opens ??= 0;
+  c.totals.videosWatched ??= 0;
   for (const day of c.days) {
     day.countries ??= {};
     day.subdivisions ??= {};
     day.listensMarked ??= 0;
     day.opens ??= 0;
+    day.videosWatched ??= 0;
     normalizePlaceCounts(day.countries);
     normalizePlaceCounts(day.subdivisions);
   }
@@ -231,6 +263,7 @@ function parseDay(json: string, date: string): HbDay {
     day.subdivisions ??= {};
     day.listensMarked ??= 0;
     day.opens ??= 0;
+    day.videosWatched ??= 0;
     normalizePlaceCounts(day.countries);
     normalizePlaceCounts(day.subdivisions);
     return day;
@@ -250,6 +283,7 @@ function dayFromHashes(
   day.chaptersHeard = toInt(scalars.chaptersHeard);
   day.listensMarked = toInt(scalars.listensMarked);
   day.opens = toInt(scalars.opens);
+  day.videosWatched = toInt(scalars.videosWatched);
   for (const [field, value] of Object.entries(geo)) {
     const parts = field.split(":");
     if (parts.length !== 3) continue;
@@ -258,14 +292,27 @@ function dayFromHashes(
       which !== "read" &&
       which !== "heard" &&
       which !== "opens" &&
-      which !== "books"
+      which !== "books" &&
+      which !== "watches"
     )
       continue;
     const rec =
       scope === "c"
-        ? (day.countries[code] ??= { read: 0, heard: 0, opens: 0, books: 0 })
+        ? (day.countries[code] ??= {
+            read: 0,
+            heard: 0,
+            opens: 0,
+            books: 0,
+            watches: 0,
+          })
         : scope === "s"
-          ? (day.subdivisions[code] ??= { read: 0, heard: 0, opens: 0, books: 0 })
+          ? (day.subdivisions[code] ??= {
+              read: 0,
+              heard: 0,
+              opens: 0,
+              books: 0,
+              watches: 0,
+            })
           : null;
     if (rec) rec[which] = toInt(value);
   }
@@ -277,19 +324,34 @@ function addDayInto(target: HbDay, add: HbDay): void {
   target.chaptersHeard += add.chaptersHeard;
   target.listensMarked += add.listensMarked;
   target.opens += add.opens ?? 0;
+  target.videosWatched += add.videosWatched ?? 0;
   for (const [code, v] of Object.entries(add.countries)) {
-    const t = (target.countries[code] ??= { read: 0, heard: 0, opens: 0, books: 0 });
+    const t = (target.countries[code] ??= {
+      read: 0,
+      heard: 0,
+      opens: 0,
+      books: 0,
+      watches: 0,
+    });
     t.read += v.read;
     t.heard += v.heard;
     t.opens += v.opens ?? 0;
     t.books += v.books ?? 0;
+    t.watches += v.watches ?? 0;
   }
   for (const [code, v] of Object.entries(add.subdivisions)) {
-    const t = (target.subdivisions[code] ??= { read: 0, heard: 0, opens: 0, books: 0 });
+    const t = (target.subdivisions[code] ??= {
+      read: 0,
+      heard: 0,
+      opens: 0,
+      books: 0,
+      watches: 0,
+    });
     t.read += v.read;
     t.heard += v.heard;
     t.opens += v.opens ?? 0;
     t.books += v.books ?? 0;
+    t.watches += v.watches ?? 0;
   }
 }
 
@@ -302,7 +364,8 @@ function flattenCounts(
       `${code}:read`, v.read,
       `${code}:heard`, v.heard,
       `${code}:opens`, v.opens ?? 0,
-      `${code}:books`, v.books ?? 0
+      `${code}:books`, v.books ?? 0,
+      `${code}:watches`, v.watches ?? 0
     );
   }
   return out;
@@ -338,6 +401,8 @@ function seedCommands(c: HbCounters): RedisCommand[] {
       c.totals.listensMarked,
       "opens",
       c.totals.opens ?? 0,
+      "videosWatched",
+      c.totals.videosWatched ?? 0,
     ],
   ];
   const subs = flattenCounts(c.subdivisionTotals);
@@ -405,12 +470,17 @@ async function loadCounters(cfg: RedisConfig): Promise<HbCounters> {
       which !== "read" &&
       which !== "heard" &&
       which !== "opens" &&
-      which !== "books"
+      which !== "books" &&
+      which !== "watches"
     )
       continue;
-    (subdivisionTotals[code] ??= { read: 0, heard: 0, opens: 0, books: 0 })[
-      which
-    ] = toInt(value);
+    (subdivisionTotals[code] ??= {
+      read: 0,
+      heard: 0,
+      opens: 0,
+      books: 0,
+      watches: 0,
+    })[which] = toInt(value);
   }
   const seed = seedCounters();
   return normalizeCounters({
@@ -422,6 +492,7 @@ async function loadCounters(cfg: RedisConfig): Promise<HbCounters> {
       booksFinished: toInt(totalsRec.booksFinished),
       listensMarked: toInt(totalsRec.listensMarked),
       opens: toInt(totalsRec.opens),
+      videosWatched: toInt(totalsRec.videosWatched),
     },
     subdivisionTotals,
     days: [...daysByDate.values()]
@@ -491,11 +562,12 @@ export async function readCounters(): Promise<LoadedCounters | null> {
  * Increment one beat — a small pipeline of atomic increments, no
  * read-modify-write anywhere:
  * the lifetime total, the open day's count (read/listen/marked/
- * open beats only — listen_complete and book beats carry no day
- * count, exactly as before), the day's country/subdivision counts
- * (read/listen/open beats, and book beats as a finish count —
- * the finish's place, recorded since Oct 28, 2026), the lifetime
- * subdivision total, and
+ * open/watch beats only — listen_complete and book beats carry
+ * no day count, exactly as before), the day's country/subdivision
+ * counts (read/listen/open beats, book beats as a finish count —
+ * the finish's place, recorded since Oct 28, 2026 — and watch
+ * beats as a watch count, the watch's place, recorded since
+ * Oct 29, 2026), the lifetime subdivision total, and
  * the updatedAt stamp. Then yesterday (if it just closed) is
  * assembled into the history. Returns the updated counters, or
  * null only when no store is configured.
@@ -519,6 +591,7 @@ export async function incrementCounters(
     book: "booksFinished",
     listened_marked: "listensMarked",
     open: "opens",
+    watch: "videosWatched",
   };
   commands.push(["HINCRBY", TOTALS, totalsField[kind], 1]);
   const dayField =
@@ -530,7 +603,9 @@ export async function incrementCounters(
           ? "listensMarked"
           : kind === "open"
             ? "opens"
-            : null;
+            : kind === "watch"
+              ? "videosWatched"
+              : null;
   if (dayField) {
     commands.push(["HINCRBY", dayKey(today), dayField, 1]);
   }
@@ -538,7 +613,8 @@ export async function incrementCounters(
     kind === "read" ||
     kind === "listen" ||
     kind === "open" ||
-    kind === "book"
+    kind === "book" ||
+    kind === "watch"
   ) {
     const field =
       kind === "read"
@@ -547,7 +623,9 @@ export async function incrementCounters(
           ? "heard"
           : kind === "open"
             ? "opens"
-            : "books";
+            : kind === "book"
+              ? "books"
+              : "watches";
     if (country) {
       commands.push(["HINCRBY", geoKey(today), `c:${country}:${field}`, 1]);
     }
@@ -573,7 +651,12 @@ export async function incrementCounters(
  *  3166-2 codes, with country/region parts and a display name) —
  *  nothing else leaves the store. Since Oct 28, 2026 each place
  *  row also carries `bookFinishedOn`: the place's last
- *  book-finish date in the record, or null. */
+ *  book-finish date in the record, or null. Since Oct 29, 2026
+ *  each place row also carries `watches`: the videos watched
+ *  from that place that day, in their own field beside the
+ *  chapters — a row's `total` stays chapters only, so watches
+ *  never count as chapter activity in anything that reads the
+ *  rows (the new-place prayer trigger included). */
 export function publicView(c: HbCounters) {
   const todayKey = heartbeatToday();
   const today = c.days.find((d) => d.date === todayKey) ?? emptyDay(todayKey);
@@ -611,16 +694,22 @@ export function publicView(c: HbCounters) {
         read: v.read,
         heard: v.heard,
         opens: v.opens ?? 0,
+        watches: v.watches ?? 0,
         total: v.read + v.heard,
         bookFinishedOn: finish.get(code) ?? null,
       }))
       // A row stands when the place has ANY activity — chapters,
-      // or opens alone (Oct 27, 2026: an opens-only place rests on
-      // the map as an ember, so it must be in the rows to be seen).
-      // `total` stays chapters only: opens are their own number,
-      // never folded into read/heard.
-      .filter((r) => r.total + r.opens > 0)
-      .sort((a, b) => b.total - a.total || b.opens - a.opens);
+      // opens alone (Oct 27, 2026: an opens-only place rests on
+      // the map as an ember, so it must be in the rows to be
+      // seen), or watches alone (Oct 29, 2026: a watches-only
+      // place must be in the rows for its gold heart to be
+      // drawn). `total` stays chapters only: opens and watches
+      // are their own numbers, never folded into read/heard.
+      .filter((r) => r.total + r.opens + r.watches > 0)
+      .sort(
+        (a, b) =>
+          b.total - a.total || b.opens - a.opens || b.watches - a.watches
+      );
   const namedSubdivisions = (rec: Record<string, HbCountryCounts>) =>
     rows(rec, subdivisionFinish).map((r) => {
       const parts = splitSubdivision(r.code);
@@ -642,6 +731,7 @@ export function publicView(c: HbCounters) {
       chaptersHeard: today.chaptersHeard,
       listensMarked: today.listensMarked ?? 0,
       opens: today.opens ?? 0,
+      videosWatched: today.videosWatched ?? 0,
     },
     countries: rows(today.countries, countryFinish),
     subdivisions: namedSubdivisions(today.subdivisions ?? {}),
@@ -658,6 +748,7 @@ export function publicView(c: HbCounters) {
       chaptersHeard: d.chaptersHeard,
       listensMarked: d.listensMarked ?? 0,
       opens: d.opens ?? 0,
+      videosWatched: d.videosWatched ?? 0,
       countries: rows(d.countries ?? {}, countryFinish),
       subdivisions: namedSubdivisions(d.subdivisions ?? {}),
     })),

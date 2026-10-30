@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useVideoChoice, VideoChoiceModal } from "./VideoChoice";
+import { loadYouTubeApi } from "./WatchPlayer";
+import { beatWatch } from "@/lib/heartbeat";
 
 /**
  * The welcome film, home at last (Jason blessed the release
@@ -29,31 +31,10 @@ const FILM_URL = `https://www.youtube.com/watch?v=${FILM_ID}`;
 const FILM_TITLE = "Welcome to the Farm | Grandpa Teddy Reads the Bible Aloud";
 const MARK1_HREF = "/book/mark/0";
 
-// The YouTube IFrame API, loaded once per page. It is the only way
-// to hear the film end (a plain iframe keeps that to itself).
-let ytApiPromise: Promise<void> | null = null;
-function loadYouTubeApi(): Promise<void> {
-  if (ytApiPromise) return ytApiPromise;
-  ytApiPromise = new Promise((resolve) => {
-    const w = window as unknown as {
-      YT?: { Player: unknown };
-      onYouTubeIframeAPIReady?: () => void;
-    };
-    if (w.YT && typeof w.YT.Player === "function") {
-      resolve();
-      return;
-    }
-    const prev = w.onYouTubeIframeAPIReady;
-    w.onYouTubeIframeAPIReady = () => {
-      prev?.();
-      resolve();
-    };
-    const tag = document.createElement("script");
-    tag.src = "https://www.youtube.com/iframe_api";
-    document.head.appendChild(tag);
-  });
-  return ytApiPromise;
-}
+// The YouTube IFrame API is the only way to hear the film end (a
+// plain iframe keeps that to itself). Its loader is shared now —
+// components/WatchPlayer.tsx owns it, so every player on the page
+// shares the one load.
 
 function FilmPlayer({ onEnded }: { onEnded: () => void }) {
   const hostRef = useRef<HTMLDivElement>(null);
@@ -72,7 +53,7 @@ function FilmPlayer({ onEnded }: { onEnded: () => void }) {
             el: HTMLElement,
             opts: Record<string, unknown>
           ) => { destroy: () => void };
-          PlayerState: { ENDED: number };
+          PlayerState: { ENDED: number; PLAYING: number };
         };
       };
       // The API swaps its target element for the iframe — give it a
@@ -86,6 +67,10 @@ function FilmPlayer({ onEnded }: { onEnded: () => void }) {
         playerVars: { autoplay: 1, rel: 0, playsinline: 1 },
         events: {
           onStateChange: (e: { data: number }) => {
+            // The video-watch heart (Oct 29, 2026): the film
+            // actually playing is a watch, counted in its own
+            // beat — never as a chapter read or heard.
+            if (e.data === w.YT.PlayerState.PLAYING) beatWatch(FILM_ID);
             if (e.data === w.YT.PlayerState.ENDED) endedRef.current();
           },
         },

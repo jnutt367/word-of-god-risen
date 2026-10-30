@@ -9,6 +9,7 @@ import {
   type SyntheticEvent,
 } from "react";
 import { createPortal } from "react-dom";
+import WatchPlayer from "./WatchPlayer";
 
 /**
  * The video choice — Jason's rule (Oct 20, 2026): tapping a video in
@@ -216,14 +217,12 @@ export function VideoChoiceModal({
                   : "aspect-video w-full overflow-hidden rounded-xl bg-vineyard-950"
               }
             >
-              <iframe
-                className="h-full w-full"
-                src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`}
-                title={title}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerPolicy="strict-origin-when-cross-origin"
-                allowFullScreen
-              />
+              {/* The player is WatchPlayer, not a plain iframe, so
+                  a watch in this dialog can be counted — the
+                  video-watch heart (Oct 29, 2026) fires from its
+                  PLAYING state. Full-screen rides the player's
+                  own controls, as it did on the iframe. */}
+              <WatchPlayer videoId={videoId} title={title} />
             </div>
             <div className="mt-3 flex items-center justify-between gap-4 px-1 pb-1">
               <p className="min-w-0 truncate text-sm text-sage-300">

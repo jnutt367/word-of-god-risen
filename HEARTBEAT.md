@@ -24,10 +24,12 @@ heartbeat operator through the Vercel connector:
 | `chapter_listen_complete` | The listener has heard the chapter **through**: accumulated genuinely played time crosses a multiple of 80% of the chapter (played seconds only — seeks never count — and repeats add, so a second listen-through counts again). Device TTS offers no played-proportion signal, so its completion stays the final utterance's end | once per 80% crossing per browser session per chapter (TTS: once per session per chapter) |
 | `book_complete` | Marked-read chapters complete a whole book | once per device per book |
 | `chapter_listened_marked` | The reader taps "✓ I listened to this chapter" — their own word, counted in its OWN total (`listensMarked`), never folded into the measured `chapter_listen_complete` count (see "The reader's own word") | once per browser session per chapter |
+| `video_watched` | A video actually starts playing in the app — a book overview, a parable film, the welcome film, the featured film, a Short — fired from the shared player's PLAYING state, never on a page view or a door tap alone (see "The video-watch heart") | once per browser session per video |
 
 Instrumentation points: `components/ReaderView.tsx` (open, mark-read,
 book completion), `components/ListenButton.tsx` (start/complete for both
-the MP3 and TTS paths). Reading-plan check-offs that never open a
+the MP3 and TTS paths), `components/WatchPlayer.tsx` (every in-app video
+play — see "The video-watch heart"). Reading-plan check-offs that never open a
 chapter page are not counted — the totals are a floor, not a census.
 
 ## Where the display numbers live
@@ -1152,3 +1154,83 @@ score.)
   the ring rendering and its copy — is recorded in the build
   record under the goal's hidden_files; Florida's ring date
   itself verifies there once the seed above has run.
+
+## The video-watch heart (Oct 29, 2026)
+
+Jason, in the evening voice call: "We don't have anything for
+showing if somebody watched an overview on the app… or watch
+the terrible video… parable. I can't believe we didn't think
+about that" — and "I think there's a lot of people watching
+them." He was right: every video in the app played in silence
+as far as the count was concerned — the book overviews carried
+only a local "mark as watched" check on the visitor's own
+phone (`lib/media-progress.ts`), and no beat existed for any
+film. His design, settled the same night: a watch puts a
+**gold heart on the watcher's place** on the Earth map; **no
+visible count words anywhere** (no tile, chip, or list row —
+"that would clutter things up"); the ocean legend carries the
+only words. Gold first; never red (red is reserved for a
+kindling mark not yet built).
+
+- **The beat.** A new kind, `watch`, beside the others: fired
+  by `beatWatch(videoId)` in `lib/heartbeat.ts` (the
+  `video_watched` Analytics event carries the video id; the
+  live POST body stays `{type}` only, like every beat) when a
+  video **actually starts playing** — the YouTube player's
+  PLAYING state, never a page view, never a door tap alone.
+  Dedup: once per browser session **per video**, keyed
+  `hb:watch:<videoId>` in sessionStorage. The player is one
+  shared component, `components/WatchPlayer.tsx` (the YT
+  IFrame API loader and the throwaway-mount-div pattern moved
+  out of `WelcomeFilm.tsx`, which now imports both from it),
+  and every in-app video surface rides it: `VideoEmbed`
+  (book overviews), `VideoChoice`'s modal stage (the featured
+  film, the Shorts shelf, and every other ask-first door),
+  `WelcomeFilm` itself, and the Parables page (its intro and
+  each film). `VideoChoice`'s ask-first law is untouched —
+  the beat fires only after the visitor's own tap plays.
+- **The store.** Watches are counted exactly the way opens
+  and finishes are: beside the chapters, never inside them.
+  A fifth field kind, `watches`, in the day's geo counts
+  (`c:US:watches`, `s:US-FL:watches`) and the lifetime
+  subdivision subtotals; `totals.videosWatched` and the day's
+  `videosWatched` walk beside `opens`. `publicView` carries
+  `watches` on the country, subdivision, today, and history
+  rows (history carries it, so a heart is worn while day
+  browsing too, for any day the record holds). A row's
+  `total` stays read+heard only — **a watch is never chapter
+  activity**: it cannot light a place, cannot finish a book,
+  and cannot trigger the new-place prayer. The one row-rule
+  change: a row now also stands on watches alone (the map
+  must see the row to draw its heart). Records written before
+  this field normalize it to 0; no migration.
+- **The heart.** In `components/BodyHeartbeat.tsx`: a heart
+  *shape* in the lights' gold (`#e4b95c`, rimmed `#ffe1a1`),
+  steady — no breathing — drawn beside the place's center.
+  The full light's bright core is a small round dot and stays
+  exactly as it was; the two marks never merge: a lit place
+  with watches wears its glow *and* a heart glyph offset from
+  its centroid; an unwatched-chapters place with watches
+  keeps its ember (or its quiet land) and wears the heart
+  alone. Tier law: a place with no chapters wears the ember
+  treatment whatever its activity. The finest geography
+  carries the heart, as it carries the light and the ring:
+  a subdivision's heart stands for its country's watches.
+  Place chips carry no watch words (a watches-only chip is a
+  name and a steady ember dot, nothing more); the heart's
+  meaning is spoken in `<title>`s and the figure's aria
+  summary, and shown in the ocean legend's fourth row —
+  a gold heart swatch, "Video watched" — added inside the
+  legend's existing verified ocean rect (x 140–398,
+  y 166–400) by tightening the rows' spacing; the panel did
+  not grow, so the zero-land survey of that patch stands.
+- **The honest edges.** The daily roll-up does not reconcile
+  `videosWatched` into the checked-in snapshot (`data/
+  heartbeat.json` predates the field; the route's fallback
+  defaults it to 0) — the live store is the count's record,
+  like opens. Before this build, no watch was ever counted:
+  hearts begin with the first plays after it ships, and no
+  earlier watching is invented. Verification at ship time is
+  by code, typecheck, lint, production build, and the
+  deployed payload's shape — no test beats are fired into the
+  live counters (a sandbox beat carries no geography anyway).
