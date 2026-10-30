@@ -800,6 +800,39 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   const shownWhen = browsedDay ? `on ${longDate(browsedDay.date)}` : "today";
   const shownDayWord = browsedDay ? "that day" : "today";
 
+  // ── Day deep-link (Oct 30, 2026) ─────────────────────────────
+  // A shared link may name the day — ?day=YYYY-MM-DD — so a story
+  // can open the map as it stood that night (the California
+  // kindling post points at 2026-10-29). Read once, client-side,
+  // when the live record first arrives: a real past day inside
+  // the record enters day browsing exactly as if the reader had
+  // stepped back to it — same rows, same counts, same Today
+  // button home. A malformed, future, pre-record, or same-day
+  // value is ignored silently; with no param, nothing changes.
+  // (window.location read, after GrandmaReset's house pattern —
+  // no router state, no SSR, so the ordinary visit is untouched.)
+  const dayLinkApplied = useRef(false);
+  useEffect(() => {
+    if (dayLinkApplied.current || fixture) return;
+    if (!liveActive || !live || !recordStart) return;
+    dayLinkApplied.current = true;
+    let day: string | null = null;
+    try {
+      day = new URLSearchParams(window.location.search).get("day");
+    } catch {
+      day = null;
+    }
+    if (!day || !/^\d{4}-\d{2}-\d{2}$/.test(day)) return;
+    // A real calendar day, not just the shape of one: a date like
+    // 2026-02-31 rolls forward when parsed and fails the round trip.
+    if (utcToDayKey(dayKeyToUTC(day)) !== day) return;
+    if (day < recordStart || day >= live.today.date) return;
+    // Syncing one piece of state from the address bar, once, when
+    // the record it must be checked against has arrived.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setSelectedDate(day);
+  }, [live, liveActive, recordStart, fixture]);
+
   // Snapshot country rows — the daily record, with its own labeled
   // window. Normalized once; the garland below always speaks for them.
   const snapRows: HbCountryRow[] = hb.countries
@@ -1137,11 +1170,20 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
 
   return (
     <section
-      id="earth-map"
       aria-labelledby="heartbeat-heading"
-      className="mx-auto max-w-6xl scroll-mt-20 px-4 pb-4 pt-6 sm:px-6"
+      className="mx-auto max-w-6xl px-4 pb-4 pt-6 sm:px-6"
     >
-      <div className="overflow-hidden rounded-2xl border border-gold-500/15 bg-vineyard-900 px-6 py-10 sm:px-10">
+      {/* The #earth-map anchor lands on the card itself (Oct 30,
+          2026): on the section, the jump stopped at an 80px scroll
+          margin — 15px more than the 65px sticky header needs —
+          plus the section's own 24px top padding above the card,
+          so the view settled a little above the map. On the card
+          with a 72px margin (the header + a breath of air), the
+          landing settles on the panel: heading and disc in frame. */}
+      <div
+        id="earth-map"
+        className="scroll-mt-[4.5rem] overflow-hidden rounded-2xl border border-gold-500/15 bg-vineyard-900 px-6 py-10 sm:px-10"
+      >
         <p className="text-center text-xs font-semibold uppercase tracking-[0.18em] text-gold-400">
           The Body, Reading
         </p>
