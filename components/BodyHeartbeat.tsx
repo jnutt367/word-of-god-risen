@@ -1486,11 +1486,11 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               <text
                 x="162"
                 y="193"
-                fontSize="21"
+                fontSize="19"
                 fontWeight="600"
                 fill="#e8d9ae"
               >
-                The lights mean:
+                How to read this map:
               </text>
               {/* full golden light — golden fill, bright heart */}
               <circle cx="170" cy="233" r="12" fill="#e4b95c" fillOpacity="0.55" stroke="#ffe1a1" strokeWidth="1" strokeOpacity="0.6" />
