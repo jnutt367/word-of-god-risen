@@ -139,7 +139,7 @@ interface HbTotals {
   /** Video watches (Oct 29, 2026) — additive in the payload; the
    *  tiles never show it (Jason's ruling: no count words, no
    *  clutter) and it is never folded into read/heard. The map's
-   *  gold hearts read the per-place rows, not this total. */
+   *  gold play marks read the per-place rows, not this total. */
   videosWatched?: number;
 }
 
@@ -153,7 +153,7 @@ interface HbCountryRow {
    *  with opens but no chapters rests on the map as an ember. */
   opens: number;
   /** Video watches recorded for this place in the shown day
-   *  (Oct 29, 2026). A row with watches wears a gold heart on
+   *  (Oct 29, 2026). A row with watches wears a gold play pin beside
    *  the map; watches never enter `total`, so a watch is never
    *  chapter activity anywhere. Snapshot rows predate the
    *  field and carry 0. */
@@ -378,41 +378,58 @@ interface MapCountry extends HbCountryRow {
   centroid: { cx: number; cy: number } | null;
 }
 
-/** THE VIDEO-WATCH HEART glyph (Oct 29, 2026). A heart SHAPE, in
- *  the lights' gold (#e4b95c, rimmed #ffe1a1) — deliberately not
- *  the full light's bright core, which is a small round dot
- *  (r 3) at a lit place's center and reads as the hot middle of
- *  a glow, not as a glyph. The watch heart is drawn beside that
- *  core (offset from the centroid, never over it), so a place
- *  that is both lit and watched carries two plainly different
- *  marks; a place that is only watched carries the heart alone
- *  over its ember. It is STEADY — no .hb-glow, no breathing —
- *  a kept sign for the day, like the ivory ring. (Gold, never
- *  red: red is reserved for a kindling mark not yet built.)
- *  The path is a heart drawn in a 24-unit box, scaled 1.3. */
-const WATCH_HEART_PATH =
-  "M12 21s-8-5.5-10.5-10C.7 7 2.5 3.5 6 3.5c2 0 3.5 1 4.5 2.5C13 4.5 14.5 3.5 16.5 3.5c3.5 0 5.3 3.5 4 7.5C20 15.5 12 21 12 21z";
-
-function WatchHeartMark({
+/** THE VIDEO-WATCH MARK glyph (Oct 29, 2026; shape crowned by
+ *  Jason the same night). The mark began as a gold heart, but at
+ *  the size a state can carry, a heart reads "love" before it
+ *  reads "watched" — so Jason crowned the GOLD PLAY PIN: a gold
+ *  ring (r 8.5) with a gold play triangle inside, in the lights'
+ *  gold (#e4b95c, rimmed #ffe1a1). Gold, never red: red is
+ *  reserved for a kindling mark not yet built (and a red pin
+ *  would spend it). The pin is drawn beside the place's center
+ *  (offset from the centroid, never over the light's small round
+ *  core), and a bright gold DOT (r 3) is pinned exactly on the
+ *  place's centroid with a hairline leader from dot to pin —
+ *  the dot says WHICH place; the pin says WHAT happened. It is
+ *  STEADY — no .hb-glow, no breathing — a kept sign for the day,
+ *  like the ivory ring. */
+function WatchPlayMark({
   cx,
   cy,
+  px,
+  py,
   label,
 }: {
   cx: number;
   cy: number;
+  px: number;
+  py: number;
   label: string;
 }) {
   return (
     <g>
       <title>{label}</title>
+      <line
+        x1={px}
+        y1={py}
+        x2={cx}
+        y2={cy}
+        stroke="#e4b95c"
+        strokeWidth="0.8"
+        strokeOpacity="0.5"
+      />
+      <circle cx={px} cy={py} r="3" fill="#ffe1a1" stroke="#e4b95c" strokeWidth="0.8" />
+      <circle
+        cx={cx}
+        cy={cy}
+        r="8.5"
+        fill="#10394a"
+        fillOpacity="0.9"
+        stroke="#e4b95c"
+        strokeWidth="2"
+      />
       <path
-        d={WATCH_HEART_PATH}
-        transform={`translate(${cx - 15.6} ${cy - 15.6}) scale(1.3)`}
+        d={`M ${cx - 3} ${cy - 4.6} L ${cx - 3} ${cy + 4.6} L ${cx + 4.2} ${cy} Z`}
         fill="#e4b95c"
-        fillOpacity="0.95"
-        stroke="#ffe1a1"
-        strokeWidth="0.9"
-        strokeOpacity="0.85"
       />
     </g>
   );
@@ -509,7 +526,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
       // A place stands in the rows on ANY activity: chapters,
       // opens alone (Oct 27, 2026 — it rests on the map as an
       // ember, so the rows, the list, and the disc all see it),
-      // or watches alone (Oct 29, 2026 — its gold heart must be
+      // or watches alone (Oct 29, 2026 — its gold play pin must be
       // drawn, so the disc must see the row).
       .filter((c) => c.code && (c.total > 0 || c.opens > 0 || c.watches > 0))
       .sort(
@@ -783,7 +800,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   // whatever its activity — opens (Oct 27, 2026) or watches alone
   // (Oct 29, 2026: a watch is not the Word read or heard, so a
   // watches-only place must never wear the full light; it rests
-  // as an ember and carries its gold heart beside it).
+  // as an ember and carries its gold play pin beside it).
   const tierOf = (c: HbCountryRow): "full" | "ember" | "open" =>
     c.total === 0 ? "open" : modeOf(c.code);
   const subsOf = (code: string) =>
@@ -820,22 +837,22 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
       : "";
   };
 
-  // THE GOLD HEART (Oct 29, 2026) — a video watched in the app
-  // sets a heart on the watcher's place. Its voices (title/aria
+  // THE GOLD PLAY MARK (Oct 29, 2026) — a video watched in
+  // the app sets a gold play pin beside the watcher's place. Its voices (title/aria
   // only — Jason's ruling: no visible count words anywhere; the
   // ocean legend's "Video watched" row is the only words it
   // carries). The clause is honest about what a watch is: a
   // video watched — never a chapter, never a light.
   const watchClause = (r: HbCountryRow): string =>
     r.watches > 0
-      ? `; a gold heart marks ${r.name} — a video was watched here ${shownWhen}`
+      ? `; a gold play mark marks ${r.name} — a video was watched here ${shownWhen}`
       : "";
   const watchTitle = (r: HbCountryRow): string =>
     r.watches > 0
-      ? ` — a gold heart: a video was watched here ${shownWhen}`
+      ? ` — a gold play mark: a video was watched here ${shownWhen}`
       : "";
-  // The finest geography carries the heart, as it carries the
-  // light (v3.1.1): a country's own heart stands only when none
+  // The finest geography carries the play pin, as it carries the
+  // light (v3.1.1): a country's own pin stands only when none
   // of its shown subdivisions carries one.
   const countryWatchHeartOn = (c: HbCountryRow): boolean =>
     c.watches > 0 &&
@@ -1330,34 +1347,37 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 </g>
               );
             })}
-            {/* THE GOLD HEARTS (Oct 29, 2026) — a video watched
-                in the app sets a heart on the watcher's place
-                for the shown day. The heart is a SHAPE, in gold,
-                set beside the place's center — never over the
+            {/* THE GOLD PLAY PINS (Oct 29, 2026) — a video
+                watched in the app sets a gold play pin beside
+                the watcher's place for the shown day, with a
+                bright dot pinned exactly on the place's center
+                and a hairline from dot to pin — never over the
                 light's small round core, which stays exactly as
                 it was — and it is steady, like the ring. The
                 finest geography carries it, as it carries the
-                light: a subdivision's heart stands for its
-                country's watches; the country's own heart stands
+                light: a subdivision's pin stands for its
+                country's watches; the country's own pin stands
                 only when no shown subdivision carries one. A
                 place with watches but no chapters keeps its
-                ember (or its quiet land) — the heart is its only
+                ember (or its quiet land) — the pin is its only
                 bright mark, and it never makes a light. Drawn
                 before the rings, so a ring for the day still
                 rests over everything it honors. */}
             {shownSubdivisions.map((s) =>
               s.watches > 0 && s.geo ? (
-                <WatchHeartMark
+                <WatchPlayMark
                   key={`watch-${s.code}`}
                   cx={s.geo.cx + 19}
                   cy={s.geo.cy + 15}
-                  label={`${s.name} — a gold heart: a video was watched here ${shownWhen}`}
+                  px={s.geo.cx}
+                  py={s.geo.cy}
+                  label={`${s.name} — a gold play mark: a video was watched here ${shownWhen}`}
                 />
               ) : null
             )}
             {mapRows.map((c) =>
               countryWatchHeartOn(c) && c.centroid ? (
-                <WatchHeartMark
+                <WatchPlayMark
                   key={`watch-${c.code}`}
                   cx={
                     c.geo
@@ -1365,7 +1385,9 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                       : c.centroid.cx + lightRadius(c.total) * 2.1 + 18
                   }
                   cy={c.geo ? c.centroid.cy + 15 : c.centroid.cy}
-                  label={`${c.name} — a gold heart: a video was watched here ${shownWhen}`}
+                  px={c.centroid.cx}
+                  py={c.centroid.cy}
+                  label={`${c.name} — a gold play mark: a video was watched here ${shownWhen}`}
                 />
               ) : null
             )}
@@ -1463,7 +1485,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 interactive. (No kindling-red row: that mark is not
                 built yet, and the legend names only real things.)
                 The FOURTH row (Oct 29, 2026, later the same night)
-                is the gold heart — "Video watched" — the only
+                is the gold play pin — "Video watched" — the only
                 words the watch count carries anywhere (Jason's
                 ruling). It was added by tightening the rows'
                 spacing INSIDE the same verified rect (x 140–398,
@@ -1527,17 +1549,18 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               <text x="198" y="345" fontSize="22" fill="#f6efdb">
                 here today
               </text>
-              {/* the gold heart — the same glyph the watch heart
-                  wears on the map, at swatch size */}
-              <path
-                d={WATCH_HEART_PATH}
-                transform="translate(158.6 365.6) scale(0.95)"
-                fill="#e4b95c"
-                fillOpacity="0.95"
-                stroke="#ffe1a1"
-                strokeWidth="0.9"
-                strokeOpacity="0.85"
+              {/* the gold play pin — the same glyph the watch
+                  mark wears on the map, at swatch size */}
+              <circle
+                cx="170"
+                cy="377"
+                r="8.5"
+                fill="#10394a"
+                fillOpacity="0.9"
+                stroke="#e4b95c"
+                strokeWidth="2"
               />
+              <path d="M 167 372.4 L 167 381.6 L 174.2 377 Z" fill="#e4b95c" />
               <text x="198" y="385" fontSize="22" fill="#f6efdb">
                 Video watched
               </text>
