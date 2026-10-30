@@ -373,6 +373,50 @@ function subdivisionGlow(total: number): number {
  *  holds the whole scaled world with a small breathing margin. */
 const MAP_SCALE = 1.06;
 
+/** A CLOSER LOOK (Oct 29, 2026, Jason's crown — built first as a
+ *  picture, prototype v2, and crowned from it the same night): the
+ *  United States drawn larger and turned HORIZONTAL in its own
+ *  panel under the disc, because on the disc's pole-centered
+ *  turning the states run in a tall wedge and the southeast —
+ *  where most of the lights are — crowds too small to read. The
+ *  panel is a plain cartographic inset, the way printed maps set
+ *  Alaska and Hawaii apart: the disc itself stays true, and the
+ *  panel's caption says why it exists — the one place recorded
+ *  state by state. NO flag, NO red/white/blue, no patriotic
+ *  dressing of any kind (Jason's hard rule: "I don't want to look
+ *  like a Christian nationalist at all, because that's not it at
+ *  all what I'm doing") — the family colors only: sea, gold,
+ *  cream, screen blue.
+ *
+ *  THE GEOMETRY: the panel draws the vendored subdivision paths
+ *  themselves (the very shapes the disc lights), inside one
+ *  rotated group — rotation ONLY, never a mirror: rotate(263.24°
+ *  about the US centroid (342.6, 477.2)), the angle the prototype
+ *  verified. Alaska and Hawaii are not in the panel: under this
+ *  rotation they land far outside the horizontal cluster (Alaska
+ *  ~120 units north of it, Hawaii ~120 west), exactly as the
+ *  crowned prototype showed the mainland alone. The shapes drawn
+ *  are the 48 mainland states + DC (49 shapes). The rotated
+ *  cluster's bounds were computed from the path vertices (the
+ *  paths are pure M/L/Z, so the vertex bounds are exact):
+ *  x 274.2–417.1, y 433.3–518.9. The viewBox below is those
+ *  bounds with a ~7-unit margin. Orientation verified by the
+ *  rotated named centroids, normalized in the cluster: California
+ *  x 0.07 (far west) · Washington (0.13, 0.08) top-left · Texas
+ *  (0.44, 0.80) bottom-center · Florida (0.81, 0.86) bottom-right
+ *  · Maine (0.97, 0.11) top-right · Georgia directly above
+ *  Florida. */
+const US_PANEL_VIEWBOX = "267 426 157 100";
+const US_PANEL_TRANSFORM = "rotate(263.24 342.6 477.2)";
+const US_PANEL_STATES: { code: string; geo: WorldCountry }[] = Object.entries(
+  world.subdivisions ?? {}
+)
+  .filter(
+    ([code]) => code.startsWith("US-") && code !== "US-AK" && code !== "US-HI"
+  )
+  .map(([code, geo]) => ({ code, geo }))
+  .sort((a, b) => a.code.localeCompare(b.code));
+
 interface MapCountry extends HbCountryRow {
   geo: WorldCountry | null;
   centroid: { cx: number; cy: number } | null;
@@ -877,6 +921,35 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   const countryWatchHeartOn = (c: HbCountryRow): boolean =>
     c.watches > 0 &&
     !shownSubdivisions.some((s) => s.country === c.code && s.watches > 0);
+
+  // A CLOSER LOOK (Oct 29, 2026) — the enlarged, horizontal
+  // United States panel under the disc reads the SAME shown set
+  // as the disc (shownSubdivisions — today's rows at the live
+  // default, the browsed day's while stepping back): no second
+  // fetch, no second data path, so the panel can never disagree
+  // with the disc above it. Its aria voice is built from the
+  // disc's own phrases.
+  const usShownSubdivisions = shownSubdivisions.filter(
+    (s) => s.country === "US"
+  );
+  const closerLookLabel = gathering
+    ? "An enlarged map of the United States, drawn horizontally so the states can be seen, at rest while today's count gathers."
+    : usShownSubdivisions.length > 0
+      ? `An enlarged map of the United States, drawn horizontally so the states can be seen. ${usShownSubdivisions
+          .map(
+            (s) =>
+              (s.total > 0
+                ? subdivisionPhrase(s)
+                : s.opens > 0
+                  ? subdivisionOpenPhrase(s)
+                  : `${s.name} — a video was watched here ${shownWhen}; it rests as a faint ember, not fully lit`) +
+              (subHaloOn(s)
+                ? "; a white ring marks it — book finished here today"
+                : "") +
+              watchClause(s)
+          )
+          .join("; ")}.`
+      : `An enlarged map of the United States, drawn horizontally so the states can be seen. No state carries a count ${shownWhen}.`;
 
   // The "on the Vine" day list below the map follows the SHOWN day
   // (Jason, Oct 24, 2026): at the live default these are today's
@@ -1712,6 +1785,159 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
             </p>
           )}
         </figure>
+
+        {/* A CLOSER LOOK (Oct 29, 2026, Jason's crown — see
+            US_PANEL_VIEWBOX above): the United States enlarged
+            and horizontal in its own deep-sea panel directly
+            under the disc, carrying the shown day's own marks —
+            the same rows, the same treatments, the same helpers
+            as the disc (full golden light with its bright core,
+            the opens-only ember with its graduated rim, the blue
+            inner trace, the ivory ring), so stepping the day
+            steps the panel too. The panel names data resolution
+            as its only reason; it carries no flag and no
+            patriotic dressing (Jason's hard rule). */}
+        <div
+          className="mx-auto mt-10 max-w-3xl rounded-2xl border border-gold-500/25 px-4 py-6 sm:px-6"
+          style={{ backgroundColor: "#0b2836" }}
+        >
+          <h3 className="text-center font-display text-xl text-cream-50">
+            A closer look: the United States
+          </h3>
+          <figure role="img" aria-label={closerLookLabel} className="mt-4">
+            <svg
+              viewBox={US_PANEL_VIEWBOX}
+              aria-hidden="true"
+              focusable="false"
+              className="w-full"
+            >
+              <defs>
+                <filter id="hb-soft-us" x="-40%" y="-40%" width="180%" height="180%">
+                  <feGaussianBlur stdDeviation="7" />
+                </filter>
+              </defs>
+              <g transform={US_PANEL_TRANSFORM}>
+                {/* every mainland state + DC, quiet — the same
+                    parchment presence the disc's land wears */}
+                {US_PANEL_STATES.map(({ code, geo }) => (
+                  <g key={`us-base-${code}`}>
+                    <title>{geo.name}</title>
+                    <path
+                      d={geo.path}
+                      fill="#e8d9ae"
+                      fillRule="evenodd"
+                      fillOpacity="0.22"
+                      stroke="#e8d9ae"
+                      strokeWidth="0.6"
+                      strokeOpacity="0.20"
+                    />
+                  </g>
+                ))}
+                {/* the shown day's lit states — the disc's full
+                    treatment at this larger scale: glow, golden
+                    fill, breathing, and the bright core at the
+                    state's own center */}
+                {usShownSubdivisions.map((s, i) =>
+                  s.geo && s.total > 0 ? (
+                    <g
+                      key={`us-sub-${s.code}`}
+                      className="hb-glow"
+                      style={{ animationDelay: `${((i + 2) % 5) * 0.9}s` }}
+                    >
+                      <title>
+                        {subdivisionPhrase(s)}
+                        {subHaloOn(s)
+                          ? " — book finished here today; a white ring marks it"
+                          : ""}
+                        {watchTitle(s)}
+                      </title>
+                      <path
+                        d={s.geo.path}
+                        fill="#ffdf8a"
+                        fillRule="evenodd"
+                        opacity={subdivisionGlow(s.total)}
+                        filter="url(#hb-soft-us)"
+                      />
+                      <path
+                        d={s.geo.path}
+                        fill="#ffdf8a"
+                        fillRule="evenodd"
+                        fillOpacity={subdivisionFill(s.total)}
+                        stroke="#ffe9b0"
+                        strokeWidth="0.7"
+                        strokeOpacity="0.55"
+                      />
+                      <circle cx={s.geo.cx} cy={s.geo.cy} r="6.5" fill="#ffdf8a" opacity="0.3" />
+                      <circle cx={s.geo.cx} cy={s.geo.cy} r="2.6" fill="#fff3c4" />
+                    </g>
+                  ) : null
+                )}
+                {/* opens/watch-only states — the disc's ember:
+                    faint and steady, its rim brightening with
+                    visits; no glow, no breathing, no heart */}
+                {usShownSubdivisions.map((s) =>
+                  s.geo && s.total === 0 ? (
+                    <g key={`us-ember-${s.code}`}>
+                      <title>
+                        {s.opens > 0
+                          ? subdivisionOpenPhrase(s) + watchTitle(s)
+                          : `${s.name} — a video was watched here ${shownWhen}; it rests as a faint ember, glowing a little brighter with visits, its rim brightening too`}
+                      </title>
+                      <path
+                        d={s.geo.path}
+                        fill="#ffdf8a"
+                        fillRule="evenodd"
+                        fillOpacity={emberOpacityForOpens(allTimeOpensOfSubdivision(s))}
+                        stroke="#ffe9b0"
+                        strokeWidth="1.0"
+                        strokeOpacity={emberStrokeForOpens(allTimeOpensOfSubdivision(s))}
+                      />
+                    </g>
+                  ) : null
+                )}
+                {/* the blue inner traces — the disc's own mark,
+                    under its own clip ids for this panel */}
+                {usShownSubdivisions.map((s) =>
+                  s.watches > 0 && s.geo ? (
+                    <WatchTraceMark
+                      key={`us-watch-${s.code}`}
+                      idKey={`panel-${s.code}`}
+                      d={s.geo.path}
+                      label={`${s.name} — a blue inner trace: a video was watched here ${shownWhen}`}
+                    />
+                  ) : null
+                )}
+                {/* the ivory rings — the disc's double stroke,
+                    resting outside the lights they honor */}
+                {usShownSubdivisions.map((s) =>
+                  subHaloOn(s) && s.geo ? (
+                    <g key={`us-halo-${s.code}`}>
+                      <title>{haloTitle(s.name)}</title>
+                      <path
+                        d={s.geo.path}
+                        fill="none"
+                        stroke="#fffff0"
+                        strokeWidth="3.4"
+                        strokeOpacity="0.22"
+                      />
+                      <path
+                        d={s.geo.path}
+                        fill="none"
+                        stroke="#fffff0"
+                        strokeWidth="1.5"
+                        strokeOpacity="0.9"
+                      />
+                    </g>
+                  ) : null
+                )}
+              </g>
+            </svg>
+            <figcaption className="mt-3 text-center text-sm text-sage-300">
+              Drawn larger so the states can be seen — the one place
+              recorded state by state.
+            </figcaption>
+          </figure>
+        </div>
 
         {/* Counters */}
         <ul className="mx-auto mt-8 grid max-w-3xl grid-cols-2 gap-4 lg:grid-cols-4">
