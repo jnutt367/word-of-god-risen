@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 function CharacterCard({ c }: { c: Character }) {
   return (
     <Link
-      href={`/characters/mark/${c.slug}`}
+      href={c.group === "heavenly" ? `/characters/heavenly/${c.slug}` : `/characters/mark/${c.slug}`}
       className="group overflow-hidden rounded-2xl border border-gold-500/15 bg-vineyard-900 transition-transform hover:-translate-y-1 hover:border-gold-500/40"
     >
       <div className="aspect-square w-full overflow-hidden">
@@ -82,9 +82,9 @@ export default function CharactersPage() {
         Characters of the Bible
       </h1>
       <p className="mt-3 max-w-2xl font-scripture text-lg italic leading-relaxed text-sage-300">
-        Every person Mark introduces — fishermen and rulers, the healed and the
-        hurting. Each one met Jesus. Every fact below is from Scripture, with
-        verse references.
+        Fishermen and rulers, the healed and the hurting — and the two angels
+        Heaven names. Every fact below is from Scripture, with verse
+        references.
       </p>
 
       {/* Book selector — future books slot in here */}

@@ -30,7 +30,10 @@ export async function generateMetadata({
   if (!c) return { title: "Character" };
   return {
     title: `${c.name} · Characters · Word of God Risen`,
-    description: `${c.name} — ${c.subtitle}. Key moments from the Gospel of Mark with verse references.`,
+    description:
+      c.group === "heavenly"
+        ? `${c.name} — ${c.subtitle}. Key moments from Scripture with verse references.`
+        : `${c.name} — ${c.subtitle}. Key moments from the Gospel of Mark with verse references.`,
   };
 }
 
@@ -82,7 +85,7 @@ export default async function CharacterPage({
       {/* Key moments */}
       <section className="mt-10">
         <h2 className="font-display text-2xl text-cream-100">
-          In Mark&rsquo;s Gospel
+          {c.group === "heavenly" ? "In Scripture" : "In Mark’s Gospel"}
         </h2>
         <ul className="mt-4 space-y-4">
           {c.facts.map((f, i) => (
@@ -122,8 +125,25 @@ export default async function CharacterPage({
         </section>
       )}
 
-      {/* Read in Scripture */}
-      {c.chapters.length > 0 && (
+      {/* Read in Scripture — book links for figures outside Mark */}
+      {c.readings && c.readings.length > 0 ? (
+        <section className="mt-10">
+          <h2 className="font-display text-2xl text-cream-100">
+            Read about them
+          </h2>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {c.readings.map((r) => (
+              <Link
+                key={r.href}
+                href={r.href}
+                className="rounded-full border border-gold-500/30 px-4 py-2 text-sm font-medium text-cream-100 transition-colors hover:border-gold-400 hover:text-gold-300"
+              >
+                {r.label}
+              </Link>
+            ))}
+          </div>
+        </section>
+      ) : c.chapters.length > 0 ? (
         <section className="mt-10">
           <h2 className="font-display text-2xl text-cream-100">
             Read about them
@@ -140,7 +160,7 @@ export default async function CharacterPage({
             ))}
           </div>
         </section>
-      )}
+      ) : null}
 
       {/* Faces of Faith showcase */}
       {(() => {
