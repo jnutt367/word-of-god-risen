@@ -661,12 +661,30 @@ function HundredfoldRingMark({
  *  purple keeps its outside; for a centroid light, a blurred
  *  purple circle wider than the light's own halo, over a
  *  faint steady disc of the same purple. STEADY — no
- *  .hb-glow, no breathing — a kept sign for the day. */
+ *  .hb-glow, no breathing — a kept sign for the day.
+ *
+ *  THE SUBDIVISION HALO (Oct 30, 2026, later still — Jason's
+ *  eye ruled the shape alone did not read): Florida, the
+ *  first true wearer (102 visits), showed NO visible purple
+ *  on the disc — a small state's filled shape under the
+ *  map's brightest gold light, with the ivory and gold rings
+ *  resting on its border, washed the fringe out entirely.
+ *  So a subdivision's glow now ALSO carries a true halo: a
+ *  soft purple disc at the state's own centroid, sized to
+ *  bloom clearly past the outermost ring, drawn first inside
+ *  this mark (still under every light), built exactly as the
+ *  centroid branch below — a faint steady disc under a
+ *  stronger blurred one. The shape fill and rim stay as
+ *  they were, and country callers pass no halo: their
+ *  rendering is untouched. */
 function StillKnockingGlowMark({
   d,
   cx,
   cy,
   r,
+  haloCx,
+  haloCy,
+  haloR,
   label,
   filterId,
 }: {
@@ -674,6 +692,9 @@ function StillKnockingGlowMark({
   cx?: number;
   cy?: number;
   r?: number;
+  haloCx?: number;
+  haloCy?: number;
+  haloR?: number;
   label: string;
   filterId: string;
 }) {
@@ -703,6 +724,25 @@ function StillKnockingGlowMark({
   return (
     <g>
       <title>{label}</title>
+      {haloCx !== undefined && haloCy !== undefined && haloR !== undefined ? (
+        <>
+          <circle
+            cx={haloCx}
+            cy={haloCy}
+            r={haloR}
+            fill={STILL_KNOCKING_GLOW}
+            fillOpacity="0.18"
+          />
+          <circle
+            cx={haloCx}
+            cy={haloCy}
+            r={haloR}
+            fill={STILL_KNOCKING_GLOW}
+            fillOpacity="0.55"
+            filter={`url(#${filterId})`}
+          />
+        </>
+      ) : null}
       <path
         d={d}
         fill={STILL_KNOCKING_GLOW}
@@ -1735,11 +1775,22 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 ) : null
               ) : null
             )}
+            {/* A subdivision's glow carries its halo here
+                (Oct 30, 2026, Jason's eye): the disc's states
+                are small and their lights the map's brightest,
+                so the halo radius takes the country glow's
+                measure and a wider margin still —
+                lightRadius * 2.1 + 14 — enough bloom to stand
+                clear of the gold ring on every side at phone
+                size. */}
             {shownSubdivisions.map((s) =>
               subStillKnockingOn(s) && s.geo ? (
                 <StillKnockingGlowMark
                   key={`knocking-${s.code}`}
                   d={s.geo.path}
+                  haloCx={s.geo.cx}
+                  haloCy={s.geo.cy}
+                  haloR={lightRadius(s.total) * 2.1 + 14}
                   label={stillKnockingTitle(s.name)}
                   filterId="hb-soft"
                 />
@@ -2464,12 +2515,19 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 {/* still knocking — the disc's purple glow,
                     under the panel's lights as on the disc:
                     a hundred or more visits in the shown day,
-                    steady, in any chapter state */}
+                    steady, in any chapter state. The halo rides
+                    here too (Oct 30, 2026): the panel draws its
+                    states far larger, so the country glow's own
+                    measure — lightRadius * 2.1 + 6 — already
+                    blooms well past the gold ring. */}
                 {usShownSubdivisions.map((s) =>
                   subStillKnockingOn(s) && s.geo ? (
                     <StillKnockingGlowMark
                       key={`us-knocking-${s.code}`}
                       d={s.geo.path}
+                      haloCx={s.geo.cx}
+                      haloCy={s.geo.cy}
+                      haloR={lightRadius(s.total) * 2.1 + 6}
                       label={stillKnockingTitle(s.name)}
                       filterId="hb-soft-us"
                     />
