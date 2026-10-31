@@ -1464,3 +1464,49 @@ governs the copy, as with every mark on this map.)
   "we'll hold off for the thousand visits that's a bit
   much" — it is not built, and the legend does not carry
   it.
+- **The hold lifted — the unsaid deep tier (Oct 30,
+  2026, later still, the same night).** Jason returned
+  to the idea within the hour and ruled it in, on one
+  condition that defines it: "We can give the US a deep
+  purple glow when it reaches a thousand visits but it
+  doesn't have to go on the legend just unsaid." So the
+  tier is built, and this internal book is its only
+  record — no public surface names it. **The rule:**
+  when a country WITH recorded subdivisions brings a
+  thousand or more visits in its shown day — the whole
+  country's summed knocks — its light on the disc wears
+  a **deep purple glow**, `#7e22ce`, the still-knocking
+  royal purple at a distinctly deeper register, drawn
+  with the mark's own construction (the shape filled and
+  passed through the soft blur, a rim pass over it),
+  first among the disc's marks and under every light.
+  STEADY, like its lighter sibling. The decisions are
+  pure functions beside the others (`countryStill
+  KnockingDeepOn`, the threshold named as `STILL_
+  KNOCKING_COUNTRY_OPENS_THRESHOLD` = 1000).
+  **What it is not:** the state-by-state correction
+  stands untouched — a divided country NEVER wears the
+  light glow (`#a855f7`) on summed visits, at 104 or at
+  999; the deep tier is the only country-level form, and
+  it asks ten times the count before it speaks at all.
+  An undivided country is a single place and keeps only
+  its own hundred-visit mark — a thousand visits there
+  deepens nothing. The two glows are independent: on a
+  thousand-visit day, a state at its own hundred wears
+  the light glow inside the country's deep one, each on
+  its own count. **Unsaid, in full:** no legend row (the
+  legend still ends its visit marks with kindling and
+  still knocking), no chip honor, no `<title>`, no aria,
+  no caption — the glow mark itself renders without a
+  title element, the only mark on the map with no voice
+  at all. It belongs to the disc alone; the closer-look
+  panel holds states, not the country. Shown-day, like
+  every mark: a browsed past day wears it on that day's
+  own thousand, exactly as it stood.
+  **No wearer yet, and none close:** the United States'
+  summed visits tonight stand near 116–120 — the count
+  that caused the state-by-state ruling — a tenth of the
+  threshold. The deep glow waits in the code for a day
+  no place has come near; when it first stands, this
+  book will record it, and nothing on the app will say
+  a word.
