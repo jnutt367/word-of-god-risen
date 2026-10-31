@@ -11,6 +11,7 @@ import BodyHeartbeat from "@/components/BodyHeartbeat";
 import WordIntegrityNote from "@/components/WordIntegrityNote";
 import WelcomeFilm from "@/components/WelcomeFilm";
 import HeroCycle from "@/components/HeroCycle";
+import WatchBubble from "@/components/WatchBubble";
 import OpenDoor from "@/components/OpenDoor";
 import CarvedDivider from "@/components/CarvedDivider";
 import TeddyNote from "@/components/TeddyNote";
@@ -102,8 +103,12 @@ export default function Home() {
                 The bubble on its corner is the speaker bubble's
                 twin (Jason, Oct 31, 2026): a little player in
                 channel colors — gold screen, vineyard play mark,
-                never YouTube red — one tap to the Mark chapter 1
-                film itself. The button reads; the bubble watches. */}
+                never YouTube red. It began as a link out to
+                YouTube; Jason corrected it the same morning —
+                "it should be able to play here" — so the bubble
+                (components/WatchBubble.tsx) opens the Mark
+                chapter 1 film in the app's own player, right on
+                this page. The button reads; the bubble watches. */}
             <span className="relative inline-block">
               <Link
                 href="/book/genesis/0"
@@ -111,34 +116,7 @@ export default function Home() {
               >
                 Start reading
               </Link>
-              <Link
-                href="https://www.youtube.com/watch?v=z9pwCVw7Rf0"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Start watching — the Mark chapter 1 film"
-                title="Start watching — Mark 1, the film"
-                className="absolute -top-2.5 -right-2.5 z-10 grid h-9 w-9 place-items-center rounded-full border border-gold-400/70 bg-vineyard-900 shadow-lg transition-colors hover:border-gold-300 hover:bg-vineyard-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  className="h-5 w-5"
-                  aria-hidden="true"
-                  focusable="false"
-                >
-                  <rect
-                    x="2.5"
-                    y="6"
-                    width="19"
-                    height="12"
-                    rx="3"
-                    fill="var(--color-gold-400)"
-                  />
-                  <path
-                    d="M10.4 9.4 L10.4 14.6 L15.1 12 Z"
-                    fill="var(--color-vineyard-950)"
-                  />
-                </svg>
-              </Link>
+              <WatchBubble />
             </span>
             {/* The first door, minimized (Jason, Oct 31, 2026): the
                 "Hear one chapter" door began the morning as a full
