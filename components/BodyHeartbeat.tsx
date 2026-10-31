@@ -250,7 +250,12 @@ interface HeartbeatData {
   updatedThrough: string;
   totals: HbTotals;
   library: { books: number; audioChapters: number };
-  today: { date: string; chaptersRead: number; chaptersHeard: number };
+  today: {
+    date: string;
+    chaptersRead: number;
+    chaptersHeard: number;
+    booksFinished?: number;
+  };
   countries: HbSnapshotCountry[];
   countriesSource?: string;
   /** Window the snapshot country rows cover, e.g. "this week". */
@@ -295,6 +300,7 @@ interface LiveDay {
   listensMarked?: number;
   opens?: number;
   videosWatched?: number;
+  booksFinished?: number;
   countries: LiveCountRow[];
   subdivisions?: LiveSubdivisionRow[];
 }
@@ -309,6 +315,7 @@ export interface LiveData {
     chaptersRead: number;
     chaptersHeard: number;
     opens?: number;
+    booksFinished?: number;
   };
   countries: LiveCountRow[];
   /** Today's subdivision rows (v3.1), keyed by ISO 3166-2 code. */
@@ -1241,6 +1248,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
         date: shownDate,
         chaptersRead: browsedRaw?.chaptersRead ?? 0,
         chaptersHeard: browsedRaw?.chaptersHeard ?? 0,
+        booksFinished: browsedRaw?.booksFinished ?? 0,
         countries: normalizeCountryRows(browsedRaw?.countries ?? []),
         subdivisions: normalizeSubdivisionRows(browsedRaw?.subdivisions ?? []),
       }
@@ -1248,6 +1256,9 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   const shownCount = browsedDay
     ? browsedDay.chaptersRead + browsedDay.chaptersHeard
     : todayCount;
+  const shownBooks = browsedDay
+    ? browsedDay.booksFinished
+    : (today.booksFinished ?? 0);
   const canStepBack = Boolean(
     browsingAvailable && recordStart && shownDate > recordStart
   );
@@ -1359,6 +1370,24 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
     : mapSource === "live"
       ? liveSubdivisionRows
       : [];
+  // THE DAY TOLD AS A SENTENCE (Jason, Oct 31, 2026 — the first of
+  // three tellings he crowned together): the caption under the disc
+  // learns to say how many PLACES the shown day's chapters were
+  // opened in, counted exactly as the growth record counts places
+  // (growthPlaces): every country and every subdivision standing
+  // in the shown day with chapters or opens.
+  const shownPlaces = (() => {
+    const seen = new Set<string>();
+    const cs = browsedDay
+      ? browsedDay.countries
+      : mapSource === "live"
+        ? liveRows
+        : snapRows;
+    for (const c of cs) if (c.total > 0 || (c.opens ?? 0) > 0) seen.add(c.code);
+    for (const s of shownSubdivisions)
+      if (s.total > 0 || (s.opens ?? 0) > 0) seen.add(s.code);
+    return seen.size;
+  })();
   const modeOf = (code: string) => lightModeForCountry(shownSubdivisions, code);
   // The light tiers (Oct 27, 2026): "full" and "ember" are the
   // chapter tiers exactly as v3.1.1 settled them. "open" wears the
@@ -2388,7 +2417,22 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 <>
                   {fmt(shownCount)}{" "}
                   {shownCount === 1 ? "chapter" : "chapters"} read or heard
-                  on {longDate(browsedDay.date)} —{" "}
+                  on {longDate(browsedDay.date)}
+                  {shownPlaces > 0 && (
+                    <>
+                      {" "}
+                      in {fmt(shownPlaces)}{" "}
+                      {shownPlaces === 1 ? "place" : "places"}
+                    </>
+                  )}
+                  {shownBooks > 0 && (
+                    <>
+                      {" "}
+                      — and {fmt(shownBooks)} whole{" "}
+                      {shownBooks === 1 ? "book" : "books"} finished
+                    </>
+                  )}{" "}
+                  —{" "}
                   {mapRows.length > 0
                     ? "each light on the map, a neighbor."
                     : "the place was not recorded that day."}
@@ -2409,8 +2453,22 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               <>
                 {fmt(todayCount)}{" "}
                 {todayCount === 1 ? "chapter" : "chapters"} read or heard
-                today, {longDate(today.date)} — each light on the map,
-                a neighbor.
+                today, {longDate(today.date)}
+                {shownPlaces > 0 && (
+                  <>
+                    {" "}
+                    in {fmt(shownPlaces)}{" "}
+                    {shownPlaces === 1 ? "place" : "places"}
+                  </>
+                )}
+                {shownBooks > 0 && (
+                  <>
+                    {" "}
+                    — and {fmt(shownBooks)} whole{" "}
+                    {shownBooks === 1 ? "book" : "books"} finished
+                  </>
+                )}{" "}
+                — each light on the map, a neighbor.
               </>
             ) : mapRows.length > 0 ? (
               <>
