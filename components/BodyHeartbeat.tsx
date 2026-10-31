@@ -10,15 +10,18 @@ import {
   KINDLING_FILL,
   KINDLING_FILL_OPACITY,
   KINDLING_RIM,
+  STILL_KNOCKING_GLOW,
   bookHaloOn,
   countryBookHaloOn,
   countryHundredfoldOn,
+  countryStillKnockingOn,
   emberOpacityForOpens,
   emberStrokeForOpens,
   hundredfold,
   kindled,
   lightModeForCountry,
   notRecordedLabel,
+  stillKnocking,
   subdivisionsOfCountry,
   unrecordedChapters,
 } from "@/lib/heartbeat-display";
@@ -154,6 +157,26 @@ import {
  * open. Florida is its first wearer: 101 chapters on the very
  * night it was crowned, a book finished there the same day, so
  * the first gold ring stands nested outside an ivory one.
+ *
+ * STILL KNOCKING (Oct 30, 2026, later the same night —
+ * Jason: "I think 100 visits should get you something too",
+ * and the name is his crown from Luke 11, the friend at
+ * midnight who would not stop knocking): when a place's
+ * shown day brings a hundred or more VISITS, that place's
+ * light wears a SOFT PURPLE GLOW — a steady halo around the
+ * light, not a ring: rings belong to the Word's feats
+ * (ivory for a book, gold for a hundred chapters), and
+ * visits are the seeking family, so they live in the glow.
+ * The purple is a royal purple (#a855f7), a hue the map
+ * spends nowhere else. Any chapter state qualifies — a
+ * kindled place at a hundred visits wears its red ember
+ * inside the purple glow; a hundredfold place wears its
+ * gold ring inside it too. The decision is stillKnocking()
+ * in lib/heartbeat-display.ts, read off the SHOWN day's own
+ * rows, so a past day browsed in the record (or opened by
+ * its ?day= link) wears the glow it earned that day. The
+ * finest geography carries it, as with every sign here: a
+ * subdivision's glow steps its country's own glow back.
  */
 
 interface HbTotals {
@@ -614,6 +637,82 @@ function HundredfoldRingMark({
   );
 }
 
+/** STILL KNOCKING (Oct 30, 2026) — a SOFT PURPLE GLOW for a
+ *  place whose shown day brought a hundred or more visits
+ *  (the decision is stillKnocking() in
+ *  lib/heartbeat-display.ts). Not a ring — rings belong to
+ *  the Word's feats; visits are the seeking family and live
+ *  in the glow. The construction is the light's own: the
+ *  place's shape filled with royal purple (STILL_KNOCKING_
+ *  GLOW, #a855f7 — a hue the map spends nowhere else) and
+ *  passed through the map's soft blur, with a second blurred
+ *  pass along its rim, so the color blooms past the border
+ *  as a halo around the light. The layer is drawn UNDER the
+ *  lights themselves, so gold keeps a place's inside and
+ *  purple keeps its outside; for a centroid light, a blurred
+ *  purple circle wider than the light's own halo, over a
+ *  faint steady disc of the same purple. STEADY — no
+ *  .hb-glow, no breathing — a kept sign for the day. */
+function StillKnockingGlowMark({
+  d,
+  cx,
+  cy,
+  r,
+  label,
+  filterId,
+}: {
+  d?: string;
+  cx?: number;
+  cy?: number;
+  r?: number;
+  label: string;
+  filterId: string;
+}) {
+  if (!d) {
+    if (cx === undefined || cy === undefined || r === undefined) return null;
+    return (
+      <g>
+        <title>{label}</title>
+        <circle
+          cx={cx}
+          cy={cy}
+          r={r}
+          fill={STILL_KNOCKING_GLOW}
+          fillOpacity="0.18"
+        />
+        <circle
+          cx={cx}
+          cy={cy}
+          r={r}
+          fill={STILL_KNOCKING_GLOW}
+          fillOpacity="0.55"
+          filter={`url(#${filterId})`}
+        />
+      </g>
+    );
+  }
+  return (
+    <g>
+      <title>{label}</title>
+      <path
+        d={d}
+        fill={STILL_KNOCKING_GLOW}
+        fillRule="evenodd"
+        fillOpacity="0.55"
+        filter={`url(#${filterId})`}
+      />
+      <path
+        d={d}
+        fill="none"
+        stroke={STILL_KNOCKING_GLOW}
+        strokeWidth="2.5"
+        strokeOpacity="0.3"
+        filter={`url(#${filterId})`}
+      />
+    </g>
+  );
+}
+
 function toMapCountry(row: HbCountryRow): MapCountry {
   const geo = world.countries[row.code] ?? null;
   const extra = geo ? null : world.extraCentroids?.[row.code] ?? null;
@@ -1050,6 +1149,42 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
     shownSubdivisions.some((s) => subHundredfoldOn(s));
   const hundredfoldTitle = (name: string) =>
     `${name} — a gold ring: the hundredfold — a hundred chapters read or heard here ${shownWhen}`;
+  // STILL KNOCKING (Oct 30, 2026) — decided against the SHOWN
+  // set on the rows themselves, like the hundredfold: each
+  // shown row IS its day's row, so the purple glow is true at
+  // the live default and for a browsed day alike. No date
+  // gate — stillKnocking() in lib/heartbeat-display.ts reads
+  // the row's own opens, visits only, in any chapter state,
+  // and a country's own glow steps back to a subdivision's,
+  // exactly as its light and its rings do.
+  const subStillKnockingOn = (s: LiveSubdivisionDisplay) => stillKnocking(s);
+  const countryStillKnockingSignOn = (c: HbCountryRow) =>
+    countryStillKnockingOn(c, shownSubdivisions);
+  const anyStillKnocking =
+    mapRows.some((c) => countryStillKnockingSignOn(c)) ||
+    shownSubdivisions.some((s) => subStillKnockingOn(s));
+  const stillKnockingTitle = (name: string) =>
+    `${name} — a purple glow: still knocking — a hundred visits here ${shownWhen}`;
+  // The per-row voice of the purple glow, in kindledClause's
+  // own shape. Visits are its whole substance, so unlike the
+  // ring clauses it can speak anywhere — an opens-only place
+  // carries it too.
+  const stillKnockingClause = (r: HbCountryRow): string =>
+    stillKnocking(r)
+      ? ` — still knocking: a hundred or more visits ${shownWhen}`
+      : "";
+  // The aria voice of the purple glow, in hundredfoldClause's
+  // own shape: the places within this country that wear it in
+  // the shown day, named plainly.
+  const knockingClause = (c: HbCountryRow): string => {
+    const names: string[] = [];
+    if (countryStillKnockingSignOn(c)) names.push(c.name);
+    for (const s of subsOf(c.code))
+      if (subStillKnockingOn(s)) names.push(s.name);
+    return names.length
+      ? `; a purple glow marks ${names.join(" and ")} — still knocking: a hundred visits there ${shownWhen}`
+      : "";
+  };
   // The aria voice of the ivory ring: the places within this
   // country that wear it today, named plainly. (In the opens-only
   // branch of describeCountry it can never speak — a ring needs
@@ -1125,13 +1260,16 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               (s.total > 0
                 ? subdivisionPhrase(s)
                 : s.opens > 0
-                  ? subdivisionOpenPhrase(s) + kindledClause(s)
-                  : `${s.name} — a video was watched here ${shownWhen}; it rests as a faint ember, not fully lit${kindledClause(s)}`) +
+                  ? subdivisionOpenPhrase(s) + kindledClause(s) + stillKnockingClause(s)
+                  : `${s.name} — a video was watched here ${shownWhen}; it rests as a faint ember, not fully lit${kindledClause(s)}${stillKnockingClause(s)}`) +
               (subHaloOn(s)
                 ? "; a white ring marks it — book finished here today"
                 : "") +
               (subHundredfoldOn(s)
                 ? `; a gold ring marks it — the hundredfold: a hundred chapters read or heard here ${shownWhen}`
+                : "") +
+              (subStillKnockingOn(s)
+                ? `; a purple glow marks it — still knocking: a hundred visits here ${shownWhen}`
                 : "") +
               watchClause(s)
           )
@@ -1165,22 +1303,22 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
       const subs = shownSubdivisions.filter(
         (s) => s.country === c.code && (s.opens > 0 || s.watches > 0)
       );
-      const base = `the app was opened in ${c.name} ${shownWhen} — ${fmt(allTimeOpensOf(c))} ${allTimeOpensOf(c) === 1 ? "visit" : "visits"} in all, and the Word has not been opened there yet; ${c.name} rests as a faint ember, glowing a little brighter with visits, not fully lit${kindledClause(c)}${countryWatchHeartOn(c) ? watchClause(c) : ""}`;
+      const base = `the app was opened in ${c.name} ${shownWhen} — ${fmt(allTimeOpensOf(c))} ${allTimeOpensOf(c) === 1 ? "visit" : "visits"} in all, and the Word has not been opened there yet; ${c.name} rests as a faint ember, glowing a little brighter with visits, not fully lit${kindledClause(c)}${stillKnockingClause(c)}${countryWatchHeartOn(c) ? watchClause(c) : ""}`;
       return subs.length > 0
         ? `${base}; its divisions rest as embers where recorded: ${subs
             .map((s) =>
               s.opens > 0
-                ? subdivisionOpenPhrase(s) + kindledClause(s) + watchClause(s)
-                : `${s.name} — a video was watched here ${shownWhen}; ${s.name} rests as a faint ember, not fully lit${kindledClause(s)}`
+                ? subdivisionOpenPhrase(s) + kindledClause(s) + stillKnockingClause(s) + watchClause(s)
+                : `${s.name} — a video was watched here ${shownWhen}; ${s.name} rests as a faint ember, not fully lit${kindledClause(s)}${stillKnockingClause(s)}`
             )
             .join("; ")}`
         : base;
     }
     if (modeOf(c.code) === "ember") {
       const subs = subsOf(c.code);
-      return `reading recorded across ${c.name} — ${fmt(c.total)} ${c.total === 1 ? "chapter" : "chapters"} ${shownWhen}; ${c.name} itself rests as a faint ember, not lit, and its divisions are lit where recorded: ${subs.map((s) => subdivisionPhrase(s) + watchClause(s)).join("; ")}${ringClause(c)}${hundredfoldClause(c)}${countryWatchHeartOn(c) ? watchClause(c) : ""}`;
+      return `reading recorded across ${c.name} — ${fmt(c.total)} ${c.total === 1 ? "chapter" : "chapters"} ${shownWhen}; ${c.name} itself rests as a faint ember, not lit, and its divisions are lit where recorded: ${subs.map((s) => subdivisionPhrase(s) + watchClause(s)).join("; ")}${ringClause(c)}${hundredfoldClause(c)}${knockingClause(c)}${countryWatchHeartOn(c) ? watchClause(c) : ""}`;
     }
-    return `${mapPhrase(c)}, lit in its own shape${ringClause(c)}${hundredfoldClause(c)}${watchClause(c)}`;
+    return `${mapPhrase(c)}, lit in its own shape${ringClause(c)}${hundredfoldClause(c)}${knockingClause(c)}${watchClause(c)}`;
   };
 
   const figureLabel = gathering
@@ -1432,6 +1570,50 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 yet; their RIM brightens with visits (Jason's rim
                 rule, Oct 27) while the v3.1.1 ember beside them
                 keeps its flat, faint outline exactly as before. */}
+            {/* STILL KNOCKING (Oct 30, 2026) — a soft purple
+                glow for a place whose shown day brought a
+                hundred or more visits, drawn FIRST among the
+                marks, under the lights themselves: gold keeps
+                a place's inside, purple blooms past its border
+                as a halo around the light. Any chapter state
+                wears it — a kindled ember's red inside the
+                purple, a hundredfold light's gold ring inside
+                it too — and it is STEADY: no .hb-glow, no
+                breathing, a kept sign for the day. A country's
+                own glow steps back when one of its subdivisions
+                wears the glow (countryStillKnockingOn), as its
+                light does. */}
+            {mapRows.map((c) =>
+              countryStillKnockingSignOn(c) ? (
+                c.geo ? (
+                  <StillKnockingGlowMark
+                    key={`knocking-${c.code}`}
+                    d={c.geo.path}
+                    label={stillKnockingTitle(c.name)}
+                    filterId="hb-soft"
+                  />
+                ) : c.centroid ? (
+                  <StillKnockingGlowMark
+                    key={`knocking-${c.code}`}
+                    cx={c.centroid.cx}
+                    cy={c.centroid.cy}
+                    r={lightRadius(c.total) * 2.1 + 6}
+                    label={stillKnockingTitle(c.name)}
+                    filterId="hb-soft"
+                  />
+                ) : null
+              ) : null
+            )}
+            {shownSubdivisions.map((s) =>
+              subStillKnockingOn(s) && s.geo ? (
+                <StillKnockingGlowMark
+                  key={`knocking-${s.code}`}
+                  d={s.geo.path}
+                  label={stillKnockingTitle(s.name)}
+                  filterId="hb-soft"
+                />
+              ) : null
+            )}
             {mapRows.map((c, i) =>
               c.geo ? (
                 tierOf(c) !== "full" ? (
@@ -1439,6 +1621,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                     <title>
                       {tierOf(c) === "open" ? openPhrase(c) : emberPhrase(c)}
                       {kindledClause(c)}
+                      {stillKnockingClause(c)}
                       {countryWatchHeartOn(c) ? watchTitle(c) : ""}
                     </title>
                     <path
@@ -1520,6 +1703,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                     {subHundredfoldOn(s)
                       ? ` — the hundredfold: a hundred chapters read or heard here ${shownWhen}; a gold ring marks it`
                       : ""}
+                    {stillKnockingClause(s)}
                     {watchTitle(s)}
                   </title>
                   <path
@@ -1554,8 +1738,8 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                   <g key={`sub-${s.code}`}>
                     <title>
                       {s.opens > 0
-                        ? subdivisionOpenPhrase(s) + kindledClause(s) + watchTitle(s)
-                        : `${s.name} — a video was watched here ${shownWhen}; it rests as a faint ember, glowing a little brighter with visits, its rim brightening too${kindledClause(s)}`}
+                        ? subdivisionOpenPhrase(s) + kindledClause(s) + stillKnockingClause(s) + watchTitle(s)
+                        : `${s.name} — a video was watched here ${shownWhen}; it rests as a faint ember, glowing a little brighter with visits, its rim brightening too${kindledClause(s)}${stillKnockingClause(s)}`}
                     </title>
                     <path
                       d={s.geo.path}
@@ -1595,6 +1779,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                     <title>
                       {tierOf(c) === "open" ? openPhrase(c) : emberPhrase(c)}
                       {kindledClause(c)}
+                      {stillKnockingClause(c)}
                       {countryWatchHeartOn(c) ? watchTitle(c) : ""}
                     </title>
                     <circle
@@ -1903,6 +2088,9 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
             {anyHundredfold
               ? ` A gold ring — the hundredfold: 100 chapters read or heard here ${shownWhen}.`
               : ""}
+            {anyStillKnocking
+              ? ` A purple glow — still knocking: 100 visits here ${shownWhen}.`
+              : ""}
           </p>
           {/* Day stepping (Oct 24, 2026) — one slim row under the
               caption, in the card's own language: step back a day,
@@ -1971,17 +2159,21 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
             the disc (moved off the disc the same night it gained
             its fifth row; see the note inside the SVG above for
             the proven geometry). The meanings — five from
-            Oct 29, 2026, and a sixth, the hundredfold's gold
-            ring, from Oct 30, 2026 — each on its own line at
-            full size, in a tidy grid that wraps with the
-            column — no squeezed lines, no overlap at any
-            width. The swatches are the marks themselves in
-            miniature: the golden light with its bright heart,
-            the steady ember, the ivory ring's double stroke,
-            the same double stroke in the lights' gold for the
-            hundredfold, a small outline wearing its own blue
-            inner trace, and the ember turned warm red for
-            kindling. */}
+            Oct 29, 2026, a sixth, the hundredfold's gold ring,
+            from Oct 30, 2026, and a seventh, still knocking's
+            purple glow, from later that same night — each on
+            its own line at full size, in a tidy grid that
+            wraps with the column — no squeezed lines, no
+            overlap at any width. The swatches are the marks
+            themselves in miniature: the golden light with its
+            bright heart, the steady ember, the ivory ring's
+            double stroke, the same double stroke in the
+            lights' gold for the hundredfold, a soft purple
+            glow for still knocking, the ember turned warm red
+            for kindling, and a small outline wearing its own
+            blue inner trace. Still knocking stands beside
+            kindled — the two visit marks together, the
+            seeking family's two thresholds (75 and 100). */}
         <div
           className="mx-auto mt-6 max-w-2xl rounded-2xl border border-gold-500/25 px-5 py-5 sm:px-6"
           style={{ backgroundColor: "#0b2836" }}
@@ -2052,11 +2244,11 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 focusable="false"
                 className="h-[26px] w-[26px] shrink-0"
               >
-                <rect x="3" y="3" width="20" height="20" rx="4" fill="none" stroke="#e8d9ae" strokeWidth="1.4" strokeOpacity="0.8" />
-                <rect x="6" y="6" width="14" height="14" rx="3" fill="none" stroke="#8fd8ff" strokeWidth="1.8" />
+                <circle cx="13" cy="13" r="10.5" fill="#a855f7" fillOpacity="0.22" />
+                <circle cx="13" cy="13" r="7" fill="#a855f7" fillOpacity="0.5" stroke="#c084fc" strokeWidth="1.2" strokeOpacity="0.9" />
               </svg>
               <span className="text-[15px] leading-snug text-[#f6efdb]">
-                Video watched
+                Still Knocking — 100 visits in a day
               </span>
             </li>
             <li className="flex items-center gap-3">
@@ -2072,6 +2264,20 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 Kindled — 75 visits in a day
               </span>
             </li>
+            <li className="flex items-center gap-3">
+              <svg
+                viewBox="0 0 26 26"
+                aria-hidden="true"
+                focusable="false"
+                className="h-[26px] w-[26px] shrink-0"
+              >
+                <rect x="3" y="3" width="20" height="20" rx="4" fill="none" stroke="#e8d9ae" strokeWidth="1.4" strokeOpacity="0.8" />
+                <rect x="6" y="6" width="14" height="14" rx="3" fill="none" stroke="#8fd8ff" strokeWidth="1.8" />
+              </svg>
+              <span className="text-[15px] leading-snug text-[#f6efdb]">
+                Video watched
+              </span>
+            </li>
           </ul>
         </div>
 
@@ -2083,7 +2289,8 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
             as the disc (full golden light with its bright core,
             the opens-only ember with its graduated rim, the blue
             inner trace, the ivory ring, the hundredfold's gold
-            ring), so stepping the day steps the panel too. The
+            ring, the still-knocking purple glow), so stepping
+            the day steps the panel too. The
             panel names data resolution
             as its only reason; it carries no flag and no
             patriotic dressing (Jason's hard rule). */}
@@ -2123,6 +2330,20 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                     />
                   </g>
                 ))}
+                {/* still knocking — the disc's purple glow,
+                    under the panel's lights as on the disc:
+                    a hundred or more visits in the shown day,
+                    steady, in any chapter state */}
+                {usShownSubdivisions.map((s) =>
+                  subStillKnockingOn(s) && s.geo ? (
+                    <StillKnockingGlowMark
+                      key={`us-knocking-${s.code}`}
+                      d={s.geo.path}
+                      label={stillKnockingTitle(s.name)}
+                      filterId="hb-soft-us"
+                    />
+                  ) : null
+                )}
                 {/* the shown day's lit states — the disc's full
                     treatment at this larger scale: glow, golden
                     fill, breathing, and the bright core at the
@@ -2142,6 +2363,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                         {subHundredfoldOn(s)
                           ? ` — the hundredfold: a hundred chapters read or heard here ${shownWhen}; a gold ring marks it`
                           : ""}
+                        {stillKnockingClause(s)}
                         {watchTitle(s)}
                       </title>
                       <path
@@ -2173,8 +2395,8 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                     <g key={`us-ember-${s.code}`}>
                       <title>
                         {s.opens > 0
-                          ? subdivisionOpenPhrase(s) + kindledClause(s) + watchTitle(s)
-                          : `${s.name} — a video was watched here ${shownWhen}; it rests as a faint ember, glowing a little brighter with visits, its rim brightening too${kindledClause(s)}`}
+                          ? subdivisionOpenPhrase(s) + kindledClause(s) + stillKnockingClause(s) + watchTitle(s)
+                          : `${s.name} — a video was watched here ${shownWhen}; it rests as a faint ember, glowing a little brighter with visits, its rim brightening too${kindledClause(s)}${stillKnockingClause(s)}`}
                       </title>
                       <path
                         d={s.geo.path}
@@ -2301,11 +2523,12 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               {vineRows.map((c, i) => {
                 // THE TWO-LINE CHIP (Oct 30, 2026, Jason's approved
                 // fix): a chip carrying honor badges — book
-                // finished, hundredfold, or both — sets its stats
-                // on the first line and its honors on a line of
-                // their own below, in their rings' own colors
+                // finished, hundredfold, still knocking — sets its
+                // stats on the first line and its honors on a line
+                // of their own below, in their marks' own colors
                 // (ivory for the book finished, the hundredfold
-                // gold). One line holding all six segments
+                // gold, the still-knocking purple). One line
+                // holding all six segments
                 // overflowed the phone's width and clipped the
                 // place's own name — Florida, the first
                 // hundredfold, read "lorida". Badgeless chips keep
@@ -2314,7 +2537,8 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 // no chip can run off the edge again.
                 const bookFinished = countryHaloOn(c);
                 const hundredfoldSign = countryHundredfoldSignOn(c);
-                const honored = bookFinished || hundredfoldSign;
+                const knockingSign = countryStillKnockingSignOn(c);
+                const honored = bookFinished || hundredfoldSign || knockingSign;
                 return (
                 <li
                   key={c.code}
@@ -2379,6 +2603,9 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                       {hundredfoldSign && (
                         <span className="text-[#e4b95c]">· hundredfold</span>
                       )}
+                      {knockingSign && (
+                        <span className="text-[#a855f7]">· still knocking</span>
+                      )}
                     </span>
                   )}
                 </li>
@@ -2411,10 +2638,11 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                     {rows.map((s, i) => {
                       // The two-line chip, as on the country chips
                       // above: honors on their own line below the
-                      // stats, in their rings' own colors.
+                      // stats, in their marks' own colors.
                       const bookFinished = subHaloOn(s);
                       const hundredfoldSign = subHundredfoldOn(s);
-                      const honored = bookFinished || hundredfoldSign;
+                      const knockingSign = subStillKnockingOn(s);
+                      const honored = bookFinished || hundredfoldSign || knockingSign;
                       return (
                       <li
                         key={s.code}
@@ -2475,6 +2703,9 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                             )}
                             {hundredfoldSign && (
                               <span className="text-[#e4b95c]">· hundredfold</span>
+                            )}
+                            {knockingSign && (
+                              <span className="text-[#a855f7]">· still knocking</span>
                             )}
                           </span>
                         )}

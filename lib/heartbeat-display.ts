@@ -233,3 +233,59 @@ export function countryHundredfoldOn(
  *  read or heard here, and this ring is that light's crown,
  *  never a new color. (Red stays kindling's alone.) */
 export const HUNDREDFOLD_RING = "#e4b95c";
+
+/** STILL KNOCKING (Jason, Oct 30, 2026 — named for the friend
+ *  at midnight in Luke 11, who would not stop knocking until
+ *  the door opened): when a place's SHOWN day brings a
+ *  hundred or more VISITS (opens), that place's light wears
+ *  a soft purple glow. Visits are the seeking family, so
+ *  this sign lives in the glow, not in a ring — rings belong
+ *  to the Word's own feats (ivory for a book finished, gold
+ *  for a hundred chapters). ANY chapter state qualifies:
+ *  chapters, no chapters, it makes no difference — the count
+ *  is the row's `opens` and nothing else. So a kindled place
+ *  (75+ opens, no chapters) at a hundred opens wears the red
+ *  kindling AND the purple glow together, and a hundredfold
+ *  place at a hundred opens wears its gold ring inside the
+ *  purple glow — different truths, both shown. The trigger
+ *  reads the SHOWN day's own row (the row's `opens`, never
+ *  the all-time sum), so a past day browsed in the record
+ *  glows on its own count, exactly as it stood that day.
+ *  Pure function — the disc and the closer-look panel render
+ *  what this decides, so the two surfaces always agree. */
+export const STILL_KNOCKING_OPENS_THRESHOLD = 100;
+
+export function stillKnocking(row: { opens?: number }): boolean {
+  return (row.opens ?? 0) >= STILL_KNOCKING_OPENS_THRESHOLD;
+}
+
+/** A country's own glow steps back when one of its
+ *  subdivisions wears the glow that day — the finest
+ *  recorded geography carries the sign, exactly as it
+ *  carries the light and the rings (v3.1.1). This helper
+ *  walks the subdivision rows itself rather than through
+ *  subdivisionsOfCountry: that helper gathers a country's
+ *  CHAPTER-carrying divisions, and a knocking sign can
+ *  stand on a division with no chapters at all — indeed,
+ *  that is its likeliest wearer. A country whose hundred
+ *  visits stand in its own count, with no subdivision
+ *  wearing the glow, keeps its own glow. */
+export function countryStillKnockingOn(
+  row: { code: string; opens?: number },
+  subdivisions: readonly { country: string; opens?: number }[]
+): boolean {
+  if (!stillKnocking(row)) return false;
+  return !subdivisions.some(
+    (s) => s.country === row.code && stillKnocking(s)
+  );
+}
+
+/** The still-knocking glow's purple: a clear royal purple —
+ *  Lydia's trade in Acts 16, a royal priesthood's color
+ *  (1 Peter 2:9) — and a hue the map spends nowhere else:
+ *  gold belongs to the lights, ivory to the finished book,
+ *  pale blue (#8fd8ff) to the video trace, warm red to
+ *  kindling. The rim is its lighter companion, the pairing
+ *  kindling's fill and rim already keep. */
+export const STILL_KNOCKING_GLOW = "#a855f7";
+export const STILL_KNOCKING_RIM = "#c084fc";
