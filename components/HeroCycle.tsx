@@ -66,14 +66,15 @@ const SLIDES: { desktop: string; mobile: string; mobilePos?: string }[] = [
   // the tall frame — they replace the wide-frame phone crops on
   // the slides Jason crowned: the tomb, the ascension, Emmaus,
   // and the family around the Word (which takes the open-book
-  // slide's phone place). The angel, Rabboni, and shore phone
-  // crops stand until their remakes are crowned.
+  // slide's phone place); the Rabboni and shore remakes joined
+  // them on his crown later the same day. The angel's phone
+  // crop stands until its remake is decided and crowned.
   { desktop: "/images/hero-cycle/slide-01-desktop.jpg", mobile: "/images/hero-cycle/slide-01-mobile-native.jpg" },
   { desktop: "/images/hero-cycle/slide-03-desktop.jpg", mobile: "/images/hero-cycle/slide-03-mobile.jpg" },
-  { desktop: "/images/hero-cycle/slide-04-desktop.jpg", mobile: "/images/hero-cycle/slide-04-mobile.jpg" },
+  { desktop: "/images/hero-cycle/slide-04-desktop.jpg", mobile: "/images/hero-cycle/slide-04-mobile-native.jpg" },
   { desktop: "/images/hero-cycle/slide-05-desktop.jpg", mobile: "/images/hero-cycle/slide-05-mobile-native.jpg" },
   { desktop: "/images/hero-cycle/slide-06-desktop.jpg", mobile: "/images/hero-cycle/slide-06-mobile-native.jpg" },
-  { desktop: "/images/hero-cycle/slide-07-desktop.jpg", mobile: "/images/hero-cycle/slide-07-mobile.jpg" },
+  { desktop: "/images/hero-cycle/slide-07-desktop.jpg", mobile: "/images/hero-cycle/slide-07-mobile-native.jpg" },
   { desktop: "/images/hero-cycle/slide-08-desktop.jpg", mobile: "/images/hero-cycle/slide-08-mobile-native.jpg" },
   // The eighth picture is the vineyard-crosses hero itself,
   // served from its own long-standing files — no copy, no
