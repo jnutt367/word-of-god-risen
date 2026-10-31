@@ -279,6 +279,10 @@ interface LiveCountRow {
    *  in live payloads since the ivory ring shipped; older
    *  payloads and fixtures omit it, and no ring is worn. */
   bookFinishedOn?: string | null;
+  /** Whole books finished in this place in the shown day
+   *  (Oct 31, 2026) — the count the honor chip speaks; present
+   *  in live payloads since the books fix shipped. */
+  books?: number;
 }
 
 /** One live subdivision row from GET /api/heartbeat (v3.1) — `code`
@@ -1106,6 +1110,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
           total: s.total ?? (s.read ?? 0) + (s.heard ?? 0),
           opens: s.opens ?? 0,
           watches: s.watches ?? 0,
+          books: s.books ?? 0,
           bookFinishedOn: s.bookFinishedOn ?? null,
           country: (s.country || code.split("-")[0] || "").toUpperCase(),
           geo,
