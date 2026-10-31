@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { getAllBooks } from "@/lib/bible";
@@ -11,6 +10,7 @@ import LatestShorts from "@/components/LatestShorts";
 import BodyHeartbeat from "@/components/BodyHeartbeat";
 import WordIntegrityNote from "@/components/WordIntegrityNote";
 import WelcomeFilm from "@/components/WelcomeFilm";
+import HeroCycle from "@/components/HeroCycle";
 import OpenDoor from "@/components/OpenDoor";
 import CarvedDivider from "@/components/CarvedDivider";
 import TeddyNote from "@/components/TeddyNote";
@@ -31,22 +31,16 @@ export default function Home() {
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
-          <Image
-            src="/images/wogr-hero-banner.jpg"
-            alt="Three crosses on a hill at sunrise, above rows of grapevines"
-            fill
-            priority
-            sizes="100vw"
-            className="hidden object-cover object-top md:block"
-          />
-          <Image
-            src="/images/wogr-hero-mobile.jpg"
-            alt="Three crosses on a hill at sunrise, above rows of grapevines"
-            fill
-            priority
-            sizes="100vw"
-            className="block object-cover object-top md:hidden"
-          />
+          {/* The cycling hero (Jason, crowned Oct 31, 2026): the
+              three-crosses banner stood here from the beginning,
+              but this app is all about the risen Jesus — so the
+              hero now crossfades through eight crowned
+              resurrection-morning stills (the Hands still
+              excluded by Jason's ruling), each with its own
+              phone-shaped crop. The headline, the doors and
+              this scrim are untouched; only the picture walks.
+              See components/HeroCycle.tsx for the whole ruling. */}
+          <HeroCycle />
           <div className="absolute inset-0 bg-gradient-to-b from-vineyard-950/70 via-vineyard-950/55 to-vineyard-950" />
         </div>
         <div className="relative mx-auto max-w-4xl px-4 py-14 text-center sm:px-6 sm:py-20">
