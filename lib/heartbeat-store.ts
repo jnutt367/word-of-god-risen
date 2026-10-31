@@ -684,6 +684,18 @@ export function publicView(c: HbCounters) {
   };
   const countryFinish = lastFinishDates((d) => d.countries ?? {});
   const subdivisionFinish = lastFinishDates((d) => d.subdivisions ?? {});
+  /** Whole books finished on a day, summed over its COUNTRY rows
+   *  only (Oct 31, 2026): a beat increments its country and its
+   *  subdivision both, so the subdivisions are a breakdown of the
+   *  same finishes, never an addition to them. Surfaced on the
+   *  day objects because Jason finished two books in a day and
+   *  the app had nowhere that said so — the count was kept, the
+   *  telling was missing. */
+  const dayBooks = (d: HbDay) =>
+    Object.values(d.countries ?? {}).reduce(
+      (s, v) => s + (v.books ?? 0),
+      0
+    );
   const rows = (
     rec: Record<string, HbCountryCounts>,
     finish: Map<string, string>
@@ -695,6 +707,7 @@ export function publicView(c: HbCounters) {
         heard: v.heard,
         opens: v.opens ?? 0,
         watches: v.watches ?? 0,
+        books: v.books ?? 0,
         total: v.read + v.heard,
         bookFinishedOn: finish.get(code) ?? null,
       }))
@@ -732,6 +745,7 @@ export function publicView(c: HbCounters) {
       listensMarked: today.listensMarked ?? 0,
       opens: today.opens ?? 0,
       videosWatched: today.videosWatched ?? 0,
+      booksFinished: dayBooks(today),
     },
     countries: rows(today.countries, countryFinish),
     subdivisions: namedSubdivisions(today.subdivisions ?? {}),
@@ -749,6 +763,7 @@ export function publicView(c: HbCounters) {
       listensMarked: d.listensMarked ?? 0,
       opens: d.opens ?? 0,
       videosWatched: d.videosWatched ?? 0,
+      booksFinished: dayBooks(d),
       countries: rows(d.countries ?? {}, countryFinish),
       subdivisions: namedSubdivisions(d.subdivisions ?? {}),
     })),

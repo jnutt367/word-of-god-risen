@@ -1700,3 +1700,6 @@ governs the copy, as with every mark on this map.)
   the gold heart inside it, the rings outside the
   state untouched. (The ship record for this
   amendment follows in the commit itself.)
+
+## Amendment — the day learns to count its books (Oct 31, 2026)
+Jason finished a second book in a day (Acts, after one that morning) and found the app had nowhere that said "two books today": the store counted whole books per place per day all along, but the payload's day objects carried no book count and the honor chip only ever said "book finished." The telling was missing, not the counting. Now: each place row carries `books` (its finishes in the shown day), each day object (today + history) carries `booksFinished` (summed over country rows only — a beat increments country and subdivision both; subdivisions break the same finishes down, never add), and the honor chip counts: "· 2 books finished" when a place finishes more than one in a day. The ivory ring is unchanged.

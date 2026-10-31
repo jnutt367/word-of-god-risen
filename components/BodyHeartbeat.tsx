@@ -222,6 +222,10 @@ interface HbCountryRow {
    *  live rows carry it from the payload; the snapshot's rows
    *  predate it and leave it undefined. The ivory ring reads it. */
   bookFinishedOn?: string | null;
+  /** Whole books finished in this place in the shown day
+   *  (Oct 31, 2026) — the honor chip counts them ("· 2 books
+   *  finished") instead of only naming the honor. */
+  books?: number;
 }
 
 interface HbSnapshotCountry {
@@ -2971,7 +2975,12 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                   {honored && (
                     <span className="flex max-w-full flex-wrap items-center justify-center gap-x-2">
                       {bookFinished && (
-                        <span className="text-[#fffff0]">· book finished</span>
+                        <span className="text-[#fffff0]">
+                          ·{" "}
+                          {typeof c.books === "number" && c.books > 1
+                            ? `${c.books} books finished`
+                            : "book finished"}
+                        </span>
                       )}
                       {hundredfoldSign && (
                         <span className="text-[#e4b95c]">· hundredfold</span>
