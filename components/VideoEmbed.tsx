@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { VideoChoiceModal } from "./VideoChoice";
+import { beatWatch } from "@/lib/heartbeat";
 import WatchPlayer from "./WatchPlayer";
 
 /**
@@ -11,9 +11,10 @@ import WatchPlayer from "./WatchPlayer";
  * brand chip) and only loads the heavy YouTube iframe after the
  * user taps play — faster page loads and a much more professional look.
  *
- * The tap asks first (VideoChoice): "Watch here" plays in place, in
- * this frame, exactly as it always has; "Open in YouTube" is there
- * for readers who'd rather go — but nobody is carried off unasked.
+ * The tap plays HERE, in this frame, and the watch counts on the
+ * tap itself (Jason's ruling, Oct 31, 2026 — the click is the
+ * intent; nobody is carried off to YouTube, and no choice gate
+ * stands between the reader and the playing video).
  *
  * `brand` labels the video's source. Defaults to "TruVINE" for Jason's
  * own overviews; pass "BibleProject" only for the legacy placeholder
@@ -30,19 +31,17 @@ export default function VideoEmbed({
   brand?: string;
 }) {
   const [playing, setPlaying] = useState(false);
-  const [choiceOpen, setChoiceOpen] = useState(false);
   const [thumbSrc, setThumbSrc] = useState(
     `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`
   );
   const facadeRef = useRef<HTMLButtonElement>(null);
   const playerRef = useRef<HTMLDivElement>(null);
 
-  const closeChoice = useCallback((returnFocus = true) => {
-    setChoiceOpen(false);
-    if (returnFocus) {
-      requestAnimationFrame(() => facadeRef.current?.focus());
-    }
-  }, []);
+  const startPlaying = useCallback(() => {
+    // The watch counts from this tap (Jason, Oct 31, 2026).
+    beatWatch(videoId);
+    setPlaying(true);
+  }, [videoId]);
 
   // When playback starts in place, land focus on the player so a
   // keyboard reader arrives where the video now lives.
@@ -63,8 +62,7 @@ export default function VideoEmbed({
             <button
               type="button"
               ref={facadeRef}
-              onClick={() => setChoiceOpen(true)}
-              aria-haspopup="dialog"
+              onClick={startPlaying}
               aria-label={`Watch video: ${title}`}
               className="group absolute inset-0 h-full w-full cursor-pointer"
             >
@@ -103,15 +101,6 @@ export default function VideoEmbed({
           )}
         </div>
       </div>
-      {choiceOpen && (
-        <VideoChoiceModal
-          onClose={closeChoice}
-          videoId={videoId}
-          title={title}
-          youtubeUrl={`https://www.youtube.com/watch?v=${videoId}`}
-          onWatchHere={() => setPlaying(true)}
-        />
-      )}
     </div>
   );
 }
