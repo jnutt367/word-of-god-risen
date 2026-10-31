@@ -65,7 +65,7 @@ const SLIDES: { desktop: string; mobile: string; mobilePos?: string }[] = [
   // Oct 31, 2026): with the plain top crop, the doorway sat too
   // low to be seen clearly over the bottom of his screen, so
   // this slide's phone window centers lower (50% 45%).
-  { desktop: "/images/hero-cycle/slide-01-desktop.jpg", mobile: "/images/hero-cycle/slide-01-mobile.jpg", mobilePos: "50% 45%" },
+  { desktop: "/images/hero-cycle/slide-01-desktop.jpg", mobile: "/images/hero-cycle/slide-01-mobile.jpg", mobilePos: "50% 36%" },
   { desktop: "/images/hero-cycle/slide-03-desktop.jpg", mobile: "/images/hero-cycle/slide-03-mobile.jpg" },
   { desktop: "/images/hero-cycle/slide-04-desktop.jpg", mobile: "/images/hero-cycle/slide-04-mobile.jpg" },
   { desktop: "/images/hero-cycle/slide-05-desktop.jpg", mobile: "/images/hero-cycle/slide-05-mobile.jpg" },

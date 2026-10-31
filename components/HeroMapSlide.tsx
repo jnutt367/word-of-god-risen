@@ -574,7 +574,7 @@ export default function HeroMapSlide({ data }: { data: HeroMapPayload }) {
         aria-hidden="true"
         focusable="false"
         preserveAspectRatio="xMidYMid meet"
-        className="absolute inset-0 h-full w-full"
+        className="absolute inset-0 h-full w-full -translate-y-[4%]"
       >
         <defs>
           <filter id="hero-map-soft" x="-40%" y="-40%" width="180%" height="180%">

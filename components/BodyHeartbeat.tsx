@@ -1240,6 +1240,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
     date: string;
     chaptersRead: number;
     chaptersHeard: number;
+    booksFinished: number;
     countries: HbCountryRow[];
     subdivisions: LiveSubdivisionDisplay[];
   }
