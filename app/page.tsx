@@ -5,7 +5,6 @@ import { getAllBooks } from "@/lib/bible";
 import BookCard from "@/components/BookCard";
 import VerseOfDay from "@/components/VerseOfDay";
 import ContinueReading from "@/components/ContinueReading";
-import FirstDoors from "@/components/FirstDoors";
 import PlanContinue from "@/components/PlanContinue";
 import ListenDropdown from "@/components/ListenDropdown";
 import LatestShorts from "@/components/LatestShorts";
@@ -107,7 +106,24 @@ export default function Home() {
             >
               Start reading
             </Link>
-            <ListenDropdown />
+            {/* The first door, minimized (Jason, Oct 31, 2026): the
+                "Hear one chapter" door began the morning as a full
+                card under the hero; Jason shrank it to this speaker
+                bubble on Start listening's top-right corner. The
+                button keeps its own job; the bubble is the fast
+                lane — one tap and Teddy reads Mark chapter 1 (the
+                ?autoplay=1 start intent). */}
+            <span className="relative inline-block">
+              <ListenDropdown />
+              <Link
+                href="/book/mark/0?autoplay=1"
+                aria-label="Hear one chapter — Grandpa Teddy reads Mark chapter 1"
+                title="Hear one chapter — Mark 1"
+                className="absolute -top-2.5 -right-2.5 z-10 grid h-9 w-9 place-items-center rounded-full border border-gold-400/70 bg-vineyard-900 text-base shadow-lg transition-colors hover:border-gold-300 hover:bg-vineyard-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+              >
+                <span aria-hidden="true">🔊</span>
+              </Link>
+            </span>
             <Link
               href="/search"
               className="rounded-lg border border-cream-100/25 px-6 py-3.5 text-base font-semibold text-cream-100 transition-colors hover:border-gold-400 hover:text-gold-300"
@@ -128,15 +144,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* The first doors (Jason, Oct 31, 2026): a hear door and a
-          watch door side by side at the very top, for the visitor
-          who just arrived — one tap into Mark 1 with Teddy reading,
-          or one tap down to the welcome film resting below them. */}
-      <FirstDoors />
-
       {/* Meet Grandpa Teddy — moved up to rest directly under the
-          first doors (Jason, Oct 31, 2026), so a new visitor meets
-          him first; the Watch door above scrolls here. */}
+          hero (Jason, Oct 31, 2026), so a new visitor meets him
+          first. (The first door itself lives in the hero now, as
+          the speaker bubble on Start listening — Jason minimized
+          it there the same morning.) */}
       <section
         id="meet-teddy"
         className="mx-auto max-w-6xl scroll-mt-20 px-4 pt-8 sm:px-6"
@@ -173,9 +185,10 @@ export default function Home() {
           purpose (Jason, Oct 23, 2026): a visitor should meet the
           promise before the books and the map. Every Teddy reading is
           being checked word for word, and a chapter that doesn't match
-          comes down right away. (Oct 31, 2026: the first doors and
-          Grandpa Teddy's film moved in above it; the promise still
-          comes before the books and the map.) */}
+          comes down right away. (Oct 31, 2026: the first door — the
+          hero's speaker bubble — and Grandpa Teddy's film moved in
+          above it; the promise still comes before the books and
+          the map.) */}
       <div className="pt-6">
         <WordIntegrityNote />
       </div>
