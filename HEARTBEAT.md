@@ -1555,6 +1555,21 @@ governs the copy, as with every mark on this map.)
   compiled display logic pass unchanged (23 checks —
   the decisions were never the flaw, only the
   drawing), `tsc --noEmit` clean, ESLint clean on the
-  touched file, production build clean; production
-  confirmation and Florida's standing at ship time are
-  recorded with the commit.
+  touched file, production build clean. **Ship record:**
+  commit `4d1dc1b` is Vercel's live production
+  deployment (READY, superseding the halo build
+  `5b7dbfd`); the production build of that commit
+  carries the border treatment (`withinBorders`,
+  `knocking-border`) and no halo code. (The sandbox's
+  direct line to the site broke mid-verification —
+  TLS errors after the first fetches — so the served
+  chunk was confirmed by its deployment and its build
+  rather than by a byte-level grep of the served file;
+  the pixel proof is the parent's live-browser pass.)
+  Florida at ship time, from the live payload (Oct 30,
+  10:43 PM ET): 110 visits, 134 chapters (76 read, 58
+  heard), a book finished today, 2 watches — still
+  knocking TRUE and hundredfold TRUE on its own rows;
+  the United States' summed 176 visits earn it no glow
+  (state by state) and no deep tier; California stands
+  at 51 visits — still knocking, not yet through.
