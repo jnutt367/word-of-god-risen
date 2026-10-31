@@ -61,17 +61,20 @@ import HeroMapSlide, { type HeroMapPayload } from "@/components/HeroMapSlide";
  * map slide is never reached — the tomb stands, as always.
  */
 const SLIDES: { desktop: string; mobile: string; mobilePos?: string }[] = [
-  // The tomb rides raised on phones (Jason's phone verdict,
-  // Oct 31, 2026): with the plain top crop, the doorway sat too
-  // low to be seen clearly over the bottom of his screen, so
-  // this slide's phone window centers lower (50% 45%).
-  { desktop: "/images/hero-cycle/slide-01-desktop.jpg", mobile: "/images/hero-cycle/slide-01-mobile.jpg", mobilePos: "50% 36%" },
+  // Phone pictures crowned Oct 31, 2026 are PORTRAIT-NATIVE
+  // generations (hero-recreation/mobile-native/), composed for
+  // the tall frame — they replace the wide-frame phone crops on
+  // the slides Jason crowned: the tomb, the ascension, Emmaus,
+  // and the family around the Word (which takes the open-book
+  // slide's phone place). The angel, Rabboni, and shore phone
+  // crops stand until their remakes are crowned.
+  { desktop: "/images/hero-cycle/slide-01-desktop.jpg", mobile: "/images/hero-cycle/slide-01-mobile-native.jpg" },
   { desktop: "/images/hero-cycle/slide-03-desktop.jpg", mobile: "/images/hero-cycle/slide-03-mobile.jpg" },
   { desktop: "/images/hero-cycle/slide-04-desktop.jpg", mobile: "/images/hero-cycle/slide-04-mobile.jpg" },
-  { desktop: "/images/hero-cycle/slide-05-desktop.jpg", mobile: "/images/hero-cycle/slide-05-mobile.jpg" },
-  { desktop: "/images/hero-cycle/slide-06-desktop.jpg", mobile: "/images/hero-cycle/slide-06-mobile.jpg" },
+  { desktop: "/images/hero-cycle/slide-05-desktop.jpg", mobile: "/images/hero-cycle/slide-05-mobile-native.jpg" },
+  { desktop: "/images/hero-cycle/slide-06-desktop.jpg", mobile: "/images/hero-cycle/slide-06-mobile-native.jpg" },
   { desktop: "/images/hero-cycle/slide-07-desktop.jpg", mobile: "/images/hero-cycle/slide-07-mobile.jpg" },
-  { desktop: "/images/hero-cycle/slide-08-desktop.jpg", mobile: "/images/hero-cycle/slide-08-mobile.jpg" },
+  { desktop: "/images/hero-cycle/slide-08-desktop.jpg", mobile: "/images/hero-cycle/slide-08-mobile-native.jpg" },
   // The eighth picture is the vineyard-crosses hero itself,
   // served from its own long-standing files — no copy, no
   // re-encode.
