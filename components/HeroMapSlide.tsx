@@ -45,17 +45,29 @@ import {
  * GET /api/heartbeat once on mount — the same endpoint, the same
  * no-store fetch, the same validation BodyHeartbeat's loader uses
  * — and hands the payload here only when it is the LIVE record
- * (data.live === true). This component renders TODAY's rows
- * exactly as the API returned them: today's countries, today's
- * subdivisions, today's date for the ivory ring, and the history
- * sums for all-time ember brightness, each mirroring the real
- * map's own derivations line for line in spirit. If the fetch
- * failed or the payload was not the live record, HeroCycle never
- * renders this component at all — the cycle simply runs its nine
- * image slides. No invented lights, no snapshot dressed as today,
- * no cached yesterday. A live payload with no rows yet today is
- * still the truth, and renders as what it is: the Earth at rest,
- * unlit — the disc before dawn.
+ * (data.live === true). If the fetch failed or the payload was
+ * not the live record, HeroCycle never renders this component
+ * at all — the cycle simply runs its nine image slides. No
+ * invented lights, no cached yesterday dressed as anything.
+ *
+ * THE BEST DAY (Jason, Oct 31, 2026, 12:14 EDT — "we want the
+ * map to show its best day's colors"): this slide is the map's
+ * portrait, not its instrument, so it renders the fullest day
+ * on record — the day whose country rows carry the most
+ * chapters read or heard — chosen from the same live payload
+ * (today's rows are a candidate like any other; a day takes
+ * the portrait only by outshining every day before it, so the
+ * choice keeps itself as the record grows). The rows render
+ * exactly as the API returned them for that day, and every
+ * decision is the real map's own: a past day is graded exactly
+ * as the map section grades it while day browsing — its own
+ * lights, kindling, hundredfold rings and still-knocking
+ * glows on its own counts, and NO ivory book ring, because
+ * the ring is a one-day sign that belongs to today alone
+ * (BodyHeartbeat's haloDate law). The full honest map below,
+ * live for today with its legend and its sentence, is
+ * untouched — the record tells each day as it is; the
+ * portrait shows the Vine at its fullest.
  *
  * THE MARKS, in the real map's own layer order: the unsaid deep
  * purple tier first (rendered, never written — no title, no text,
@@ -458,11 +470,41 @@ function StillKnockingDeepGlowMark({
 export default function HeroMapSlide({ data }: { data: HeroMapPayload }) {
   const todayDate = data.today.date;
 
-  // Today's rows, normalized the way BodyHeartbeat normalizes
-  // them: a place stands on ANY activity — chapters, opens alone
-  // (an ember), or watches alone (its blue trace) — sorted with
-  // the fullest lights first.
-  const countries: CountryDisplay[] = (data.countries ?? [])
+  // THE BEST DAY (Jason, Oct 31, 2026): the portrait shows the
+  // fullest day on record — the most chapters across the country
+  // rows — chosen from today's rows and every history day in
+  // the same payload. A day takes the portrait only by strictly
+  // outshining the days before it, so the earliest day to set
+  // the mark keeps it until a fuller day comes. The ivory book
+  // ring belongs to today alone (BodyHeartbeat's haloDate law):
+  // on a past day's portrait it is not worn, exactly as the
+  // real map wears none while browsing that day.
+  const chaptersOf = (rows?: HeroMapCountRow[]): number =>
+    (rows ?? []).reduce(
+      (sum, c) => sum + (c.total ?? (c.read ?? 0) + (c.heard ?? 0)),
+      0
+    );
+  let shownDate = todayDate;
+  let shownCountries: HeroMapCountRow[] = data.countries ?? [];
+  let shownSubdivisions: HeroMapSubdivisionRow[] = data.subdivisions ?? [];
+  let bestTotal = chaptersOf(shownCountries);
+  for (const day of data.history ?? []) {
+    if (!day.date || day.date === todayDate) continue;
+    const t = chaptersOf(day.countries);
+    if (t > bestTotal) {
+      bestTotal = t;
+      shownDate = day.date;
+      shownCountries = day.countries ?? [];
+      shownSubdivisions = day.subdivisions ?? [];
+    }
+  }
+  const haloDate = shownDate === todayDate ? todayDate : null;
+
+  // The shown day's rows, normalized the way BodyHeartbeat
+  // normalizes them: a place stands on ANY activity — chapters,
+  // opens alone (an ember), or watches alone (its blue trace) —
+  // sorted with the fullest lights first.
+  const countries: CountryDisplay[] = shownCountries
     .map((c) => {
       const code = (c.code || "").toUpperCase();
       const geo = world.countries[code] ?? null;
@@ -486,7 +528,7 @@ export default function HeroMapSlide({ data }: { data: HeroMapPayload }) {
     )
     .sort((a, b) => b.total - a.total || b.opens - a.opens || b.watches - a.watches);
 
-  const subdivisions: SubdivisionDisplay[] = (data.subdivisions ?? [])
+  const subdivisions: SubdivisionDisplay[] = shownSubdivisions
     .map((s) => {
       const code = (s.code || "").toUpperCase();
       return {
@@ -540,9 +582,9 @@ export default function HeroMapSlide({ data }: { data: HeroMapPayload }) {
   const modeOf = (code: string) => lightModeForCountry(subdivisions, code);
   const tierOf = (c: PlaceRow): "full" | "ember" | "open" =>
     c.total === 0 ? "open" : modeOf(c.code);
-  const subHaloOn = (s: SubdivisionDisplay) => bookHaloOn(s, todayDate);
+  const subHaloOn = (s: SubdivisionDisplay) => bookHaloOn(s, haloDate);
   const countryHaloOn = (c: CountryDisplay) =>
-    countryBookHaloOn(c, subdivisions, todayDate);
+    countryBookHaloOn(c, subdivisions, haloDate);
   const subHundredfoldOn = (s: SubdivisionDisplay) => hundredfold(s);
   const countryHundredfoldSignOn = (c: CountryDisplay) =>
     countryHundredfoldOn(c, subdivisions);
