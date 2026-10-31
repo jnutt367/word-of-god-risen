@@ -664,7 +664,7 @@ function HundredfoldRingMark({
  *  .hb-glow, no breathing — a kept sign for the day.
  *
  *  WITHIN BORDERS — THE SUBDIVISION TREATMENT (Oct 30,
- *  2026, Jason's eye, corrected three times in one night).
+ *  2026, Jason's eye, corrected four times in one night).
  *  Florida, the first true wearer (102 visits), showed NO
  *  visible purple: a small state's blurred shape under the
  *  map's brightest gold light washed out entirely. The
@@ -683,9 +683,9 @@ function HundredfoldRingMark({
  *  under the lights as before — the body itself tints,
  *  strongest where a light or an ember is thin — and
  *  StillKnockingTraceMark (below) carries the readable
- *  sign: a crisp purple line just INSIDE the border,
- *  above the lights, in the watch trace's grammar, at
- *  the legend purple's full strength (the centered
+ *  sign: a purple FRAME just INSIDE the border, above
+ *  the lights, in the watch trace's grammar, at the
+ *  legend purple's full strength (the centered
  *  border line this mark first paired with hid under
  *  the rings, and the gold washed the fill pale beside
  *  the legend's swatch — Jason caught both). Nothing
@@ -802,11 +802,12 @@ function StillKnockingGlowMark({
  *  stroke's band around the border, so the trace's
  *  visible bands begin 3 units inside the line, clear
  *  of the watch trace's own ground (its core fills
- *  0→1.5 in, its skirt reaches 3). The knocking trace:
- *  a soft pass (stroke 13 at 0.40, visible 3→6.5 in)
- *  under a core pass (stroke 9 at 0.95, visible 3→4.5
- *  in — the watch core's own 1.5-unit width, at the
- *  legend purple's full strength). Drawn ABOVE the gold
+ *  0→1.5 in, its skirt reaches 3). The knocking trace
+ *  as first drawn: a soft pass (stroke 13 at 0.40,
+ *  visible 3→6.5 in) under a core pass (stroke 9 at
+ *  0.95, visible 3→4.5 in — the watch core's own
+ *  1.5-unit width, at the legend purple's strength).
+ *  Drawn ABOVE the gold
  *  light fills: nothing washes over it, so the purple
  *  on the map IS the legend's purple. The two inner
  *  traces share no ground — blue hugs the border,
@@ -814,7 +815,44 @@ function StillKnockingGlowMark({
  *  both, they read as two separate lines. STEADY — no
  *  .hb-glow, no breathing. It carries no <title>: the
  *  glow under the lights already voices the place; this
- *  is the same sign, drawn where eyes land. */
+ *  is the same sign, drawn where eyes land.
+ *
+ *  THE FRAME (Oct 30, 2026, the fourth drawing, later
+ *  the same night — Jason's PHONE ruled on the third).
+ *  The browser checks passed the thin trace too
+ *  easily: they render wider than his 390px-class
+ *  Android, and on his screen the purple inside
+ *  Florida still read "pretty pale" — a 1.5-unit core
+ *  of true color is ~3.5px in the panel there and next
+ *  to nothing on the disc, and the state's body is
+ *  dominated by the pale under-gold fill. PHONE FIRST,
+ *  then: the trace is now a FRAME inside the border.
+ *  Same mask (the visible band still begins 3 units
+ *  in; the seats are unchanged — blue keeps 0→1.5,
+ *  the rings keep the outside). A shoulder pass
+ *  (stroke 14 at 0.55, visible 3→7 in) under a core
+ *  pass (stroke 12 at 1.0 — full strength, no step
+ *  down — visible 3→6 in): THREE units of the legend's
+ *  own #a855f7, exactly double the third drawing's
+ *  core, then one unit of the shoulder's moderate
+ *  violet (6→7 in) grading into the gold body. The
+ *  whole visible band is 4 units: in the closer-look
+ *  panel (157 units across ~370px of phone screen,
+ *  ~2.36px a unit) that is ~9–10px, ~7px of it true
+ *  purple; on the disc (1000 units across the same
+ *  width) it is ~1.5px — a small mark there, as it
+ *  must be: the panel is where this honor lives. THE
+ *  PENINSULA, honestly: Florida's peninsula is only
+ *  ~8–10 units wide, so each coast's frame — 3 masked
+ *  units plus 4 of band — reaches past the middle and
+ *  the two frames MEET: the peninsula wears graded
+ *  purple across its whole width, the full-strength
+ *  cores joining at its center as a violet spine of
+ *  TRUE color, not the pale stripe of the third
+ *  drawing. The panhandle is wide enough to keep a
+ *  true frame with gold inside it. Accepted geometry,
+ *  named here so no one later mistakes the spine for
+ *  a flaw. */
 function StillKnockingTraceMark({
   idKey,
   d,
@@ -845,15 +883,15 @@ function StillKnockingTraceMark({
           d={d}
           fill="none"
           stroke={STILL_KNOCKING_GLOW}
-          strokeWidth="13"
-          strokeOpacity="0.40"
+          strokeWidth="14"
+          strokeOpacity="0.55"
         />
         <path
           d={d}
           fill="none"
           stroke={STILL_KNOCKING_GLOW}
-          strokeWidth="9"
-          strokeOpacity="0.95"
+          strokeWidth="12"
+          strokeOpacity="1"
         />
       </g>
     </g>
@@ -2041,18 +2079,20 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               ) : null
             )}
             {/* THE STILL-KNOCKING INNER TRACES (Oct 30,
-                2026, third drawing — see StillKnocking
+                2026, third drawing; widened to a FRAME in
+                the fourth, phone-first — see StillKnocking
                 TraceMark's note) — each knocking state's
-                purple line just INSIDE its border, drawn
+                purple frame just INSIDE its border, drawn
                 here: ABOVE the gold light fills just
                 rendered (nothing washes it, so the purple
                 is the legend's purple at full strength) and
                 in its own layer below the hearts, the blue
                 traces, and the rings. The blue watch trace
                 hugs the border (its core 0→1.5 in); this
-                trace stands deeper (core 3→4.5 in) — the
-                two share no ground and read as separate
-                lines where a place has earned both. The
+                frame stands deeper (full-strength core
+                3→6 in, graded band to 7 in) — the two
+                share no ground and read as separate marks
+                where a place has earned both. The
                 hundredfold gold and ivory rings rest
                 OUTSIDE the state's line, untouched. */}
             {shownSubdivisions.map((s) =>
@@ -2727,15 +2767,21 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                   ) : null
                 )}
                 {/* the still-knocking inner traces — the
-                    disc's purple line just inside the border,
-                    above the panel's lights and embers, below
-                    its traces and rings. The panel shares the
-                    disc's world units, so the trace keeps the
-                    watch trace's own measure there: a 1.5-unit
-                    core in a 157-unit viewBox reads ~3.7px on
-                    a phone, the blue core's own width beside
-                    it — blue at the border, purple deeper in,
-                    the two lines distinct where both are owed */}
+                    disc's purple frame just inside the
+                    border, above the panel's lights and
+                    embers, below its traces and rings. The
+                    panel shares the disc's world units, so
+                    the frame keeps the same unit measure
+                    there — and the panel is where it lives:
+                    in a 157-unit viewBox across a phone's
+                    width the band (visible 3→7 in: a
+                    3-unit core at full strength, 1 unit of
+                    graded shoulder) reads ~9–10px wide,
+                    ~7px of it true purple — widened in the
+                    fourth drawing (Oct 30) after the thin
+                    trace read pale on Jason's phone. Blue
+                    at the border, purple deeper in, the
+                    two marks distinct where both are owed */}
                 {usShownSubdivisions.map((s) =>
                   subStillKnockingOn(s) && s.geo ? (
                     <StillKnockingTraceMark
