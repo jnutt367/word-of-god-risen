@@ -3140,7 +3140,12 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                         {honored && (
                           <span className="flex max-w-full flex-wrap items-center justify-center gap-x-2">
                             {bookFinished && (
-                              <span className="text-[#fffff0]">· book finished</span>
+                              <span className="text-[#fffff0]">
+                                ·{" "}
+                                {typeof s.books === "number" && s.books > 1
+                                  ? `${s.books} books finished`
+                                  : "book finished"}
+                              </span>
                             )}
                             {hundredfoldSign && (
                               <span className="text-[#e4b95c]">· hundredfold</span>
