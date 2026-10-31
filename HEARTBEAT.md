@@ -1632,3 +1632,71 @@ governs the copy, as with every mark on this map.)
   tier; California stands at 53 visits — still
   knocking, not yet through. (The ship record for
   this amendment follows in the commit itself.)
+- **Amendment — the frame (Oct 30, 2026, the
+  fourth drawing of the mark in one night).** The
+  inner trace shipped; the parent's live-browser
+  pass found its color true — saturated violet, the
+  legend's own — its spill gone and the rings
+  untouched. Then Jason looked on his PHONE (a
+  390px-class Android) and ruled once more: "it's
+  pretty pale still." His eye is the final grade,
+  and the browser checks had passed too easily:
+  they render wider than his screen, and at his
+  width the third drawing's whole true-color core
+  was 1.5 units — ~3.5px in the panel, next to
+  nothing on the disc — while the state's body is
+  dominated by the pale fill lying under the gold.
+  **The correction is phone-first:**
+  `StillKnockingTraceMark` is now a FRAME inside
+  the border. The mask is unchanged — the visible
+  band still begins 3 units inside the line, and
+  the seats are unchanged: the blue watch trace
+  keeps 0→1.5 in, the ivory and gold rings keep
+  the outside, and the frame is drawn above the
+  gold fills, so nothing washes over it. A
+  shoulder pass (stroke 14 at 0.55, visible 3→7
+  in) under a core pass (stroke 12 at 1.0 — full
+  strength, no step down — visible 3→6 in): THREE
+  units of `#a855f7` at full strength, exactly
+  double the third drawing's core, then one unit
+  of the shoulder's moderate violet (6→7 in)
+  grading into the gold body. The whole visible
+  band is 4 units — on a phone in the closer-look
+  panel (157 units across ~370px, ~2.36px a unit)
+  ~9–10px, ~7px of it true purple; on the disc
+  (1000 units across the same width) ~1.5px,
+  where the mark stays small by design: the panel
+  is where this honor lives. THE PENINSULA,
+  honestly: at ~8–10 units wide, each coast's
+  frame — 3 masked units plus 4 of band — reaches
+  past the middle, so the two frames MEET: the
+  peninsula wears graded purple across its whole
+  width, the full-strength cores joining at its
+  center as a violet spine of TRUE color rather
+  than the pale stripe of the third drawing; the
+  panhandle is wide enough to keep a true frame
+  with gold inside it. The within-borders fill
+  stands as shipped (0.85, the body tint under the
+  gold); the frame carries the color. Countries
+  and the deep tier stand untouched. Verification:
+  fixture checks against the compiled display
+  logic pass unchanged (23 — the decisions were
+  never the flaw, only the drawing, a fourth
+  time), `tsc --noEmit` clean, ESLint clean on the
+  touched file, production build clean. Florida
+  at ship time, from the live payload (Oct 30,
+  11:22 PM ET): 122 visits, 143 chapters (81 read,
+  62 heard), a book finished today, 2 watches —
+  still knocking TRUE, hundredfold TRUE, the ivory
+  ring owed, and both inner traces owed; the
+  United States' summed 194 visits earn it no
+  light glow (state by state) and no deep tier;
+  California stands at 55 visits — still knocking,
+  not yet through. The phone verdict belongs to
+  Jason's screenshot, as every drawing of this
+  mark has ended: the geometry he should see is a
+  true-purple frame ~9–10px wide inside Florida's
+  border in the panel, the blue line outside it,
+  the gold heart inside it, the rings outside the
+  state untouched. (The ship record for this
+  amendment follows in the commit itself.)
