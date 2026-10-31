@@ -11,7 +11,11 @@ import Image from "next/image";
  * crowned stills, in this order: the empty tomb, the folded
  * cloths, the angel's "He is not here", Mary turning at her name,
  * the Ascension, Emmaus, breakfast on the shore, and the open
- * Word at first light. The Hands Shown still was built and loved
+ * Word at first light. The ninth slide is the hero this one
+ * replaced — the three crosses over the vineyard (Jason, later
+ * the same morning: "the image that we have now for the hero can
+ * be part of the cycle"); it closes the walk, so the loop turns
+ * from the cross back to the empty tomb. The Hands Shown still was built and loved
  * but is NOT in the cycle, by Jason's ruling ("all except for the
  * ones with his hands") — at phone width its nail mark fell at
  * the crop's edge, and the wound is that picture's whole point.
@@ -44,6 +48,9 @@ const SLIDES = [
   { desktop: "/images/hero-cycle/slide-06-desktop.jpg", mobile: "/images/hero-cycle/slide-06-mobile.jpg" },
   { desktop: "/images/hero-cycle/slide-07-desktop.jpg", mobile: "/images/hero-cycle/slide-07-mobile.jpg" },
   { desktop: "/images/hero-cycle/slide-08-desktop.jpg", mobile: "/images/hero-cycle/slide-08-mobile.jpg" },
+  // The ninth slide is the vineyard-crosses hero itself, served
+  // from its own long-standing files — no copy, no re-encode.
+  { desktop: "/images/wogr-hero-banner.jpg", mobile: "/images/wogr-hero-mobile.jpg" },
 ];
 
 const HOLD_MS = 8000;
