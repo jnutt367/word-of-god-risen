@@ -76,3 +76,15 @@ images is approved if it makes them better.
   retried (house rule + service decision). Michael stands on michael-fireeyes-v2.png.
   Doors offered to Jason: (1) hand-composited blue seam-glow on his current portrait
   (local work, no generation), (2) a genuinely different composition for Michael on his word.
+
+---
+
+## THE SETTLEMENT (Oct 31, 2026, evening — Jason's crowns)
+
+- **The first steel-and-flame Michael line was SCRAPPED at Jason's word** ("scrap that picture altogether — we're not going to try and fix it"). Its fire would not stay inside the eyes under pixel repair: strict-ember passes (v3, v5, v6) cleaned without wounding but never fully; broad desaturation blotched (v2, v4 — discarded); a full-zone cleanup melted the face (v7 — discarded); one generative clean drained the target eye's fire and plumed the other (banked, unused). Lesson kept: some defects are birth defects — rebuild from family, don't patch.
+- **The new Michael was built from Gabriel's crowned portrait** (Gate 9 seed = family by construction), same concept briefed with the default-killer first: fire INSIDE the irises only, no sparks outside the eyeballs. Landed first try with clean skin. Jason: "I like the Michael."
+- **Hair, Jason's direction across the evening:** Michael's slicked hair brought back out (fuller waves) → the blue charge shimmer added (Jason asked Judah's yes/no; Judah: yes as a shimmer, never as dyed hair) → mane past the shoulders → jaw-length trim → **final: the LONG MANE restored** as Michael's silhouette against Gabriel, when Jason saw the pair reading as almost the same fella.
+- **Gabriel revised for contrast, on Jason's crown:** leaner, less muscular — "lean and regal" — hair a little neater; the shimmer added to match. The revised plate REPLACED his morning plate in the package the same evening.
+- **ORDER MARKS (design law, final form):** steel blue-green eyes with golden fire inside the irises only · robes bright like lightning with the vivid blue along the thread seams · the faint electric-blue charge shimmering through the hair · no wings · faces registry-only; in scenes they stand faceless in their seats (Gabriel announcing, Michael guarding).
+- **CROWNED + LOCKED:** Gabriel (revised plate) `public/images/characters/gabriel.png` · Michael (mane) `public/images/characters/michael.png` — package = **50**. Sheets deepened the same night (Daniel in full for both; Michael #40 registered).
+- **THE TOMB (first scene depiction, crowned set):** `angels-at-the-tomb-CROWNED.png` — Gabriel seated at the head of the slab (John 20:12's seat), folded cloths, Michael guarding the entrance, stone rolled away, both from behind. **Jason's canon rule born here: a cross painted or carved into a scene where it does not belong is painted out of any canon picture we keep** — the generator's etched cross on the tomb wall was painted out before the picture was kept.

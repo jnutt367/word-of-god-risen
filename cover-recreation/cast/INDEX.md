@@ -23,7 +23,7 @@
 
 ---
 
-## GROUP A — LOCKED (49)
+## GROUP A — LOCKED (50)
 
 | Figure | File | On the road ahead |
 |---|---|---|
@@ -70,7 +70,8 @@
 | Paul, awakened | `paul-awakened.jpg` | The Damascus-road face, newly awakened — Acts 9 (book done) |
 | Paul, the aged apostle | `paul.jpg` | **The workhorse of the road ahead**: 1 Corinthians through Philemon, the prison letters, the Pastorals. Crowned and used on the Romans cover |
 | Tertius | `tertius.jpg` | **Retro-locked Oct 30, 2026** — cropped from the crowned Romans v3 raw, where Jason had already crowned his face as part of the cover (see "What this prevents") |
-| Gabriel | `gabriel.png` | **Locked Oct 31, 2026** — the announcer (Daniel 8–9; Luke 1). The steel-and-flame design is his crowned form: luminous blue-green eyes with golden fire in the irises (Heb 1:7 — servants who are flames of fire), white robe bright like lightning with that same blue running along its thread seams (Matt 28:3; Luke 24:4). No wings — Scripture never gives him any. Build copy + full grading trail: `cover-recreation/cast-angels/` |
+| Gabriel | `gabriel.png` | **Locked Oct 31, 2026; plate revised the same evening on Jason's crown** — the announcer (Daniel 8–9; Luke 1). The steel-and-flame design is his crowned form: luminous blue-green eyes with golden fire in the irises (Heb 1:7 — servants who are flames of fire), white robe bright like lightning with that same blue running along its thread seams (Matt 28:3; Luke 24:4), and the order's charge shimmering faintly through his hair. The evening plate makes him **lean and regal** — finer build, neater hair — told from Michael at a glance. No wings — Scripture never gives him any. Build copy + full grading trail: `cover-recreation/cast-angels/` |
+| Michael | `michael.png` | **Locked Oct 31, 2026 (the new family build, crowned after the first steel-and-flame line was scrapped at Jason's word)** — the guardian and archangel (Daniel 10–12; Jude 9; Revelation 12). The same steel-and-flame order marks as Gabriel — fire inside steel-blue-green eyes, lightning robe with the blue stitched seams, the charge shimmering in his hair — on the broader, heavier man, with the **long dark mane** as his silhouette. No wings. Build copy + full grading trail: `cover-recreation/cast-angels/` |
 | Grandpa Teddy | `teddy.webp` | Our narrator and host — not a Bible figure. Available if Jason ever wants a Teddy-framed cover (e.g. a wisdom book); his call, never assumed |
 
 ---
@@ -83,4 +84,3 @@
 | Apollos | `cover-recreation/cast-1cor/apollos.png` (graduation copy: `public/images/characters/apollos.png`) | LOCKED — crowned Oct 31, 2026 | books/1-corinthians.md |
 | Priscilla | `cover-recreation/cast-1cor/priscilla.png` (graduation copy: `public/images/characters/priscilla.png`) | LOCKED — crowned Oct 31, 2026 | books/1-corinthians.md |
 | Aquila | `cover-recreation/cast-1cor/aquila.png` (graduation copy: `public/images/characters/aquila.png`) | LOCKED — crowned Oct 31, 2026 | books/1-corinthians.md |
-| Michael | candidates: `cover-recreation/cast-angels/michael-door1-v1.png` (hand-lit) · `cover-recreation/cast-angels/michael-threshold.png` (new creation) | AWAITING CROWN — two ways shown to Jason Oct 31, 2026; the steel-and-flame treatment must match Gabriel's (same order of being). Build trail: `cover-recreation/cast-angels/GRADE.md` | — |
