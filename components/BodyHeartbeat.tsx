@@ -2298,11 +2298,33 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 : "Today on the vine"}
             </h3>
             <ul className="mt-4 flex flex-wrap justify-center gap-2">
-              {vineRows.map((c, i) => (
+              {vineRows.map((c, i) => {
+                // THE TWO-LINE CHIP (Oct 30, 2026, Jason's approved
+                // fix): a chip carrying honor badges — book
+                // finished, hundredfold, or both — sets its stats
+                // on the first line and its honors on a line of
+                // their own below, in their rings' own colors
+                // (ivory for the book finished, the hundredfold
+                // gold). One line holding all six segments
+                // overflowed the phone's width and clipped the
+                // place's own name — Florida, the first
+                // hundredfold, read "lorida". Badgeless chips keep
+                // the one-line form exactly; every line wraps
+                // inside the pill and the name never shrinks, so
+                // no chip can run off the edge again.
+                const bookFinished = countryHaloOn(c);
+                const hundredfoldSign = countryHundredfoldSignOn(c);
+                const honored = bookFinished || hundredfoldSign;
+                return (
                 <li
                   key={c.code}
-                  className="inline-flex items-center gap-2 rounded-full border border-gold-500/25 bg-vineyard-950/60 px-3.5 py-1.5 text-sm text-cream-100"
+                  className={
+                    honored
+                      ? "flex max-w-full flex-col items-center gap-y-0.5 rounded-full border border-gold-500/25 bg-vineyard-950/60 px-3.5 py-1.5 text-sm text-cream-100"
+                      : "inline-flex max-w-full items-center rounded-full border border-gold-500/25 bg-vineyard-950/60 px-3.5 py-1.5 text-sm text-cream-100"
+                  }
                 >
+                  <span className="flex max-w-full flex-wrap items-center justify-center gap-x-2 gap-y-0.5">
                   {/* the row's light — breathing in step with its
                       silhouette on the map (v3.1.3); aria-hidden,
                       the text beside it carries the meaning. An
@@ -2327,7 +2349,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                       style={{ animationDelay: `${(i % 5) * 0.9}s` }}
                     />
                   )}
-                  {c.name}{" "}
+                  <span className="shrink-0">{c.name}</span>
                   {c.total > 0 ? (
                     <span className="text-gold-300">
                       {fmt(c.total)} {c.total === 1 ? "chapter" : "chapters"} {shownWhen}
@@ -2348,20 +2370,20 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                       {c.opens === 1 ? "visit" : "visits"}
                     </span>
                   )}
-                  {countryHaloOn(c) && (
-                    <span className="text-sage-300">
-                      {" "}
-                      · book finished
-                    </span>
-                  )}
-                  {countryHundredfoldSignOn(c) && (
-                    <span className="text-sage-300">
-                      {" "}
-                      · hundredfold
+                  </span>
+                  {honored && (
+                    <span className="flex max-w-full flex-wrap items-center justify-center gap-x-2">
+                      {bookFinished && (
+                        <span className="text-[#fffff0]">· book finished</span>
+                      )}
+                      {hundredfoldSign && (
+                        <span className="text-[#e4b95c]">· hundredfold</span>
+                      )}
                     </span>
                   )}
                 </li>
-              ))}
+                );
+              })}
             </ul>
             {/* Subdivisions, grouped under their country — the text
                 mirror of the state silhouettes on the disc (v3.1).
@@ -2386,11 +2408,23 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                     {subdivisionGroupLabel(country)}
                   </h4>
                   <ul className="mt-3 flex flex-wrap justify-center gap-2">
-                    {rows.map((s, i) => (
+                    {rows.map((s, i) => {
+                      // The two-line chip, as on the country chips
+                      // above: honors on their own line below the
+                      // stats, in their rings' own colors.
+                      const bookFinished = subHaloOn(s);
+                      const hundredfoldSign = subHundredfoldOn(s);
+                      const honored = bookFinished || hundredfoldSign;
+                      return (
                       <li
                         key={s.code}
-                        className="inline-flex items-center gap-2 rounded-full border border-gold-500/25 bg-vineyard-950/60 px-3.5 py-1.5 text-sm text-cream-100"
+                        className={
+                          honored
+                            ? "flex max-w-full flex-col items-center gap-y-0.5 rounded-full border border-gold-500/25 bg-vineyard-950/60 px-3.5 py-1.5 text-sm text-cream-100"
+                            : "inline-flex max-w-full items-center rounded-full border border-gold-500/25 bg-vineyard-950/60 px-3.5 py-1.5 text-sm text-cream-100"
+                        }
                       >
+                        <span className="flex max-w-full flex-wrap items-center justify-center gap-x-2 gap-y-0.5">
                         {/* the row's light — breathing in step with
                             its silhouette on the map (v3.1.3);
                             aria-hidden, the text carries the meaning.
@@ -2412,7 +2446,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                             style={{ animationDelay: `${((i + 2) % 5) * 0.9}s` }}
                           />
                         )}
-                        {s.name}{" "}
+                        <span className="shrink-0">{s.name}</span>
                         {s.total > 0 ? (
                           <span className="text-gold-300">
                             {fmt(s.total)} {s.total === 1 ? "chapter" : "chapters"} {shownWhen}
@@ -2433,24 +2467,24 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                             {s.opens === 1 ? "visit" : "visits"}
                           </span>
                         )}
-                        {subHaloOn(s) && (
-                          <span className="text-sage-300">
-                            {" "}
-                            · book finished
-                          </span>
-                        )}
-                        {subHundredfoldOn(s) && (
-                          <span className="text-sage-300">
-                            {" "}
-                            · hundredfold
+                        </span>
+                        {honored && (
+                          <span className="flex max-w-full flex-wrap items-center justify-center gap-x-2">
+                            {bookFinished && (
+                              <span className="text-[#fffff0]">· book finished</span>
+                            )}
+                            {hundredfoldSign && (
+                              <span className="text-[#e4b95c]">· hundredfold</span>
+                            )}
                           </span>
                         )}
                       </li>
-                    ))}
+                      );
+                    })}
                     {countryRow && unrecorded > 0 && (
                       <li
                         key={`${country}-not-recorded`}
-                        className="rounded-full border border-cream-100/15 bg-vineyard-950/40 px-3.5 py-1.5 text-sm text-cream-100/75"
+                        className="max-w-full rounded-full border border-cream-100/15 bg-vineyard-950/40 px-3.5 py-1.5 text-sm text-cream-100/75"
                       >
                         {notRecordedLabel(country, countryRow.name)}{" "}
                         <span className="text-gold-300/80">
@@ -2482,7 +2516,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               {snapRows.map((c, i) => (
                 <li
                   key={c.code || c.name}
-                  className="inline-flex items-center gap-2 rounded-full border border-gold-500/25 bg-vineyard-950/60 px-3.5 py-1.5 text-sm text-cream-100"
+                  className="inline-flex max-w-full flex-wrap items-center justify-center gap-2 rounded-full border border-gold-500/25 bg-vineyard-950/60 px-3.5 py-1.5 text-sm text-cream-100"
                 >
                   {/* the row's light — breathing in step with its
                       silhouette on the map (v3.1.3); aria-hidden,
