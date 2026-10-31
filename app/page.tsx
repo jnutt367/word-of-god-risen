@@ -98,13 +98,48 @@ export default function Home() {
                 Oct 31, 2026): it used to scroll to the book grid,
                 which left the visitor still choosing. Now it
                 opens Genesis chapter 1 in the reader — the same
-                one-tap honesty as the speaker bubble beside it. */}
-            <Link
-              href="/book/genesis/0"
-              className="rounded-lg bg-gold-500 px-6 py-3.5 text-base font-semibold text-vineyard-950 transition-colors hover:bg-gold-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
-            >
-              Start reading
-            </Link>
+                one-tap honesty as the speaker bubble beside it.
+                The bubble on its corner is the speaker bubble's
+                twin (Jason, Oct 31, 2026): a little player in
+                channel colors — gold screen, vineyard play mark,
+                never YouTube red — one tap to the Mark chapter 1
+                film itself. The button reads; the bubble watches. */}
+            <span className="relative inline-block">
+              <Link
+                href="/book/genesis/0"
+                className="rounded-lg bg-gold-500 px-6 py-3.5 text-base font-semibold text-vineyard-950 transition-colors hover:bg-gold-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+              >
+                Start reading
+              </Link>
+              <Link
+                href="https://www.youtube.com/watch?v=z9pwCVw7Rf0"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Start watching — the Mark chapter 1 film"
+                title="Start watching — Mark 1, the film"
+                className="absolute -top-2.5 -right-2.5 z-10 grid h-9 w-9 place-items-center rounded-full border border-gold-400/70 bg-vineyard-900 shadow-lg transition-colors hover:border-gold-300 hover:bg-vineyard-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  className="h-5 w-5"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <rect
+                    x="2.5"
+                    y="6"
+                    width="19"
+                    height="12"
+                    rx="3"
+                    fill="var(--color-gold-400)"
+                  />
+                  <path
+                    d="M10.4 9.4 L10.4 14.6 L15.1 12 Z"
+                    fill="var(--color-vineyard-950)"
+                  />
+                </svg>
+              </Link>
+            </span>
             {/* The first door, minimized (Jason, Oct 31, 2026): the
                 "Hear one chapter" door began the morning as a full
                 card under the hero; Jason shrank it to this speaker
