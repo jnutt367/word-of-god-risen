@@ -10,10 +10,12 @@ import {
   KINDLING_FILL,
   KINDLING_FILL_OPACITY,
   KINDLING_RIM,
+  STILL_KNOCKING_DEEP_GLOW,
   STILL_KNOCKING_GLOW,
   bookHaloOn,
   countryBookHaloOn,
   countryHundredfoldOn,
+  countryStillKnockingDeepOn,
   countryStillKnockingOn,
   emberOpacityForOpens,
   emberStrokeForOpens,
@@ -178,7 +180,12 @@ import {
  * BY STATE (Jason's correction, the same night): a divided
  * country never wears it on summed visits — its states
  * wear their own, or none; only a country with no
- * subdivisions in the record glows as a country.
+ * subdivisions in the record glows as a country. One
+ * unsaid exception, ruled later that night: at a THOUSAND
+ * summed visits a divided country wears a DEEP purple
+ * glow (#7e22ce, countryStillKnockingDeepOn) — rendered,
+ * never written: no legend, title, aria, chip, or caption
+ * names it.
  */
 
 interface HbTotals {
@@ -715,6 +722,76 @@ function StillKnockingGlowMark({
   );
 }
 
+/** THE UNSAID DEEP TIER (Oct 30, 2026) — the same
+ *  construction as the still-knocking glow above, in the
+ *  deeper purple (STILL_KNOCKING_DEEP_GLOW, #7e22ce), for
+ *  a divided country whose shown day brought a thousand
+ *  or more visits in all (the decision is
+ *  countryStillKnockingDeepOn() in
+ *  lib/heartbeat-display.ts). Deliberately voiceless:
+ *  Jason ruled it "just unsaid" — no <title> here, and no
+ *  legend row, chip, aria, or caption anywhere names it.
+ *  It is drawn first among the disc's marks, under every
+ *  light, so the states' own glows bloom inside it while
+ *  the deep color keeps the whole country's outside.
+ *  STEADY — no .hb-glow, no breathing. Disc only: the
+ *  closer-look panel holds states, not the country. */
+function StillKnockingDeepGlowMark({
+  d,
+  cx,
+  cy,
+  r,
+  filterId,
+}: {
+  d?: string;
+  cx?: number;
+  cy?: number;
+  r?: number;
+  filterId: string;
+}) {
+  if (!d) {
+    if (cx === undefined || cy === undefined || r === undefined) return null;
+    return (
+      <g>
+        <circle
+          cx={cx}
+          cy={cy}
+          r={r}
+          fill={STILL_KNOCKING_DEEP_GLOW}
+          fillOpacity="0.18"
+        />
+        <circle
+          cx={cx}
+          cy={cy}
+          r={r}
+          fill={STILL_KNOCKING_DEEP_GLOW}
+          fillOpacity="0.55"
+          filter={`url(#${filterId})`}
+        />
+      </g>
+    );
+  }
+  return (
+    <g>
+      <path
+        d={d}
+        fill={STILL_KNOCKING_DEEP_GLOW}
+        fillRule="evenodd"
+        fillOpacity="0.55"
+        filter={`url(#${filterId})`}
+      />
+      <path
+        d={d}
+        fill="none"
+        stroke={STILL_KNOCKING_DEEP_GLOW}
+        strokeWidth="2.5"
+        strokeOpacity="0.3"
+        filter={`url(#${filterId})`}
+      />
+    </g>
+  );
+}
+
 function toMapCountry(row: HbCountryRow): MapCountry {
   const geo = world.countries[row.code] ?? null;
   const extra = geo ? null : world.extraCentroids?.[row.code] ?? null;
@@ -1167,6 +1244,16 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   const subStillKnockingOn = (s: LiveSubdivisionDisplay) => stillKnocking(s);
   const countryStillKnockingSignOn = (c: HbCountryRow) =>
     countryStillKnockingOn(c, shownSubdivisions);
+  // THE UNSAID DEEP TIER (Oct 30, 2026, later still): a
+  // divided country whose shown day brought a THOUSAND or
+  // more visits in all wears a deep purple glow on the
+  // disc — the one country-level form the correction left
+  // standing, at ten times the count. It feeds NO voice:
+  // anyStillKnocking below is untouched by it, and no
+  // title, clause, chip, legend row, or caption reads this
+  // decision. Rendered only, exactly as Jason ruled it.
+  const countryStillKnockingDeepSignOn = (c: HbCountryRow) =>
+    countryStillKnockingDeepOn(c, shownSubdivisions);
   const anyStillKnocking =
     mapRows.some((c) => countryStillKnockingSignOn(c)) ||
     shownSubdivisions.some((s) => subStillKnockingOn(s));
@@ -1601,6 +1688,32 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 visits (countryStillKnockingOn) — its states
                 wear their own below; only a country with no
                 subdivisions in the record glows as a country. */}
+            {/* THE UNSAID DEEP TIER (Oct 30, 2026) — drawn
+                before every other glow, under all the lights:
+                a divided country whose shown day brought a
+                thousand or more visits in all, in the deep
+                purple (StillKnockingDeepGlowMark). It has no
+                title and no text anywhere speaks it — the
+                color is the whole statement, as Jason ruled. */}
+            {mapRows.map((c) =>
+              countryStillKnockingDeepSignOn(c) ? (
+                c.geo ? (
+                  <StillKnockingDeepGlowMark
+                    key={`knocking-deep-${c.code}`}
+                    d={c.geo.path}
+                    filterId="hb-soft"
+                  />
+                ) : c.centroid ? (
+                  <StillKnockingDeepGlowMark
+                    key={`knocking-deep-${c.code}`}
+                    cx={c.centroid.cx}
+                    cy={c.centroid.cy}
+                    r={lightRadius(c.total) * 2.1 + 6}
+                    filterId="hb-soft"
+                  />
+                ) : null
+              ) : null
+            )}
             {mapRows.map((c) =>
               countryStillKnockingSignOn(c) ? (
                 c.geo ? (

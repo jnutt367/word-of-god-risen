@@ -289,6 +289,41 @@ export function countryStillKnockingOn(
   return !subdivisions.some((s) => s.country === row.code);
 }
 
+/** THE UNSAID DEEP TIER (Jason, Oct 30, 2026, later still —
+ *  the held idea of that night, lifted on his word: "We
+ *  can give the US a deep purple glow when it reaches a
+ *  thousand visits but it doesn't have to go on the legend
+ *  just unsaid"): when a country WITH recorded
+ *  subdivisions brings a THOUSAND or more visits in its
+ *  shown day — the whole country's summed knocks — its
+ *  light on the disc wears a DEEP purple glow. This is
+ *  the only country-level form of the mark a divided
+ *  country can ever wear: the correction above stands at
+ *  every lesser count (a divided country NEVER wears the
+ *  light glow on summed visits), and the deep tier asks
+ *  ten times the visits before it speaks at all. An
+ *  undivided country is a single place and keeps only its
+ *  own hundred-visit mark — a thousand visits there
+ *  deepens nothing. The two glows are independent: on a
+ *  thousand-visit day, a state at its own hundred wears
+ *  the light glow inside the country's deep one. And the
+ *  tier is DELIBERATELY UNSAID — no legend row carries
+ *  it, no chip names it, no title, aria, or caption
+ *  speaks of it; it is rendered, never written. (The
+ *  record of it lives in HEARTBEAT.md, the internal
+ *  book, not on any public surface.) Pure function, read
+ *  off the shown day's own rows like every other mark. */
+export const STILL_KNOCKING_COUNTRY_OPENS_THRESHOLD = 1000;
+
+export function countryStillKnockingDeepOn(
+  row: { code: string; opens?: number },
+  subdivisions: readonly { country: string; opens?: number }[]
+): boolean {
+  if ((row.opens ?? 0) < STILL_KNOCKING_COUNTRY_OPENS_THRESHOLD)
+    return false;
+  return subdivisions.some((s) => s.country === row.code);
+}
+
 /** The still-knocking glow's purple: a clear royal purple —
  *  Lydia's trade in Acts 16, a royal priesthood's color
  *  (1 Peter 2:9) — and a hue the map spends nowhere else:
@@ -298,3 +333,11 @@ export function countryStillKnockingOn(
  *  kindling's fill and rim already keep. */
 export const STILL_KNOCKING_GLOW = "#a855f7";
 export const STILL_KNOCKING_RIM = "#c084fc";
+
+/** The unsaid deep tier's purple: the same royal family
+ *  at a distinctly deeper register — a shade that reads
+ *  as a kept, weightier glow on the deep-sea ground,
+ *  never mistakable for the light glow's #a855f7 beside
+ *  it. It appears in no legend and no text; the color
+ *  itself is the whole statement. */
+export const STILL_KNOCKING_DEEP_GLOW = "#7e22ce";
