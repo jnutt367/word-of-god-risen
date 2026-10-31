@@ -1234,3 +1234,75 @@ kindling mark not yet built).
   by code, typecheck, lint, production build, and the
   deployed payload's shape — no test beats are fired into the
   live counters (a sandbox beat carries no geography anyway).
+
+## The hundredfold — a hundred chapters in a day (Oct 30, 2026)
+
+Jason, in the evening, with Florida's day still climbing:
+"I never thought I'd have to ask this but I'm so grateful
+that I do — we need another map marker that signifies 100
+chapters read, because that's about to happen." Florida
+stood at 97 chapters that day when he asked. The mark he
+crowned is named for the good soil of Matthew 13, which
+bore a hundredfold: the ring speaks of the soil receiving
+the Word deeply, and keeps no score (Philippians 2:3
+governs the copy, as with every mark on this map).
+
+- **The rule.** When a place's SHOWN day brings a hundred
+  or more chapters, the place wears a **steady gold ring**
+  for the day. The decisions are pure functions in
+  `lib/heartbeat-display.ts` (`hundredfold`,
+  `countryHundredfoldOn`, the threshold named as
+  `HUNDREDFOLD_TOTAL_THRESHOLD` = 100, beside `kindled`'s
+  75): the count is the row's `total` and nothing else —
+  chapters read or heard only. A watch never counts toward
+  it (a watch is its own count, never folded into read or
+  heard) and an open never counts; rows already keep both
+  out of `total`, so no new counting exists anywhere — the
+  mark reads what the record already holds. A kindled place
+  can never wear it: kindling needs a total of zero.
+- **Shown-day, not today-only.** The ivory ring belongs to
+  today alone (it reads a finish DATE); the gold ring reads
+  the shown rows themselves, and shown rows are always their
+  own day's — so day browsing and the `?day=` deep-link show
+  a past day's hundredfold exactly as it stood that day.
+- **The ring.** The ivory ring's own construction — a wide,
+  faint pass under a narrower, clearer one — in the lights'
+  own gold (`#e4b95c`, the country fill's gold; red stays
+  kindling's alone), nested OUTSIDE the ivory ring when a
+  place has earned both: around a silhouette it is clipped
+  to the shape's outside, the mirror of the watch trace's
+  inside clip, at doubled widths so the visible band stands
+  beyond the border the ivory ring rests on; around a
+  centroid light it is a circle beyond the ivory ring's own
+  radius. Drawn on the disc and in the closer-look panel,
+  just before the ivory rings so the two nest, and STEADY —
+  no breathing, no flare. The finest geography carries it,
+  as it carries the light and the ivory ring: a subdivision's
+  ring steps its country's own ring back. Every text surface
+  names it in the same voice: the legend's sixth row, placed
+  with the ivory row — a gold double-stroke swatch,
+  "Hundredfold — 100 chapters in a day" (one short row, the
+  kindled row's own weight — Jason's ask); the place chips
+  carry "· hundredfold"; the ring's `<title>`, the figure's
+  aria summary, and the closer-look label say it too.
+- **The first wearer is Florida, the night it was crowned.**
+  Florida crossed the hundred before the build shipped and
+  stood at 105 chapters (58 read, 47 heard) at the last live
+  check, with a book finished there the same day — so the
+  first gold ring stands nested outside an ivory one, and
+  the United States' own ring (115) steps back to Florida's,
+  as its light already does.
+- **Verification (Oct 30, 2026).** `tsc --noEmit` clean,
+  ESLint clean on the touched files, production build clean.
+  Fixture checks against the compiled display logic pass:
+  total 99 wears no ring, 100 and 101 wear it; a kindled row
+  (75 opens, no chapters) is not hundredfold; a row with a
+  book finished today at 101 chapters satisfies both ring
+  decisions at once; the country's ring steps back to its
+  subdivision's and stands when no subdivision wears one.
+  Production: the served homepage was polled until the new
+  build answered — the legend text "Hundredfold — 100
+  chapters in a day" is present in the served app (the ring
+  rendering ships in the same component, commit, and build;
+  the served JS chunk was not separately grepped — the
+  sandbox fetch does not surface the chunk references).
