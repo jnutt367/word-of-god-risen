@@ -8,23 +8,30 @@ import HeroMapSlide, { type HeroMapPayload } from "@/components/HeroMapSlide";
  * The cycling hero (Jason, crowned and ordered published
  * Oct 31, 2026). The old hero preached Friday — three crosses over
  * the vineyard. Jason's word: this app is all about the risen
- * Jesus, so the hero now walks resurrection morning in eight
- * crowned stills, in this order: the empty tomb, the folded
- * cloths, the angel's "He is not here", Mary turning at her name,
- * the Ascension, Emmaus, breakfast on the shore, and the open
- * Word at first light. The ninth slide is the hero this one
- * replaced — the three crosses over the vineyard (Jason, later
- * the same morning: "the image that we have now for the hero can
- * be part of the cycle"); it closes the walk, so the loop turns
- * from the cross back to the empty tomb. The Hands Shown still was built and loved
- * but is NOT in the cycle, by Jason's ruling ("all except for the
- * ones with his hands") — at phone width its nail mark fell at
- * the crop's edge, and the wound is that picture's whole point.
+ * Jesus, so the hero now walks resurrection morning in seven
+ * crowned stills, in this order: the empty tomb, the angel's
+ * "He is not here", Mary turning at her name, the Ascension,
+ * Emmaus, breakfast on the shore, and the open Word at first
+ * light. The eighth picture is the hero this one replaced — the
+ * three crosses over the vineyard (Jason, later the same
+ * morning: "the image that we have now for the hero can be part
+ * of the cycle"); it closes the walk, so the loop turns from
+ * the cross back to the empty tomb. The Hands Shown still was
+ * built and loved but is NOT in the cycle, by Jason's ruling
+ * ("all except for the ones with his hands") — at phone width
+ * its nail mark fell at the crop's edge, and the wound is that
+ * picture's whole point. The Folded Cloths still left the cycle
+ * the same morning on Jason's phone verdict ("the shot with the
+ * burial clothes doesn't work") — his eye is the final grade;
+ * the file stays banked in public/images/hero-cycle/ (slide-02),
+ * out of the rotation only.
  *
- * The rhythm is Jason's settled design: a new picture every 8
- * seconds, a slow 1.5-second crossfade, no hard cuts, and the
- * headline never moves — the words live outside this component,
- * exactly as before; only the picture breathes behind them.
+ * The rhythm: Jason first settled 8 seconds, then ruled from
+ * his phone the same morning — "the cycle needs to go faster" —
+ * so a new picture every 5 seconds, a slow 1.5-second
+ * crossfade, no hard cuts, and the headline never moves — the
+ * words live outside this component, exactly as before; only
+ * the picture breathes behind them.
  *
  * Calm is law here (accessibility is personal in this house):
  * a visitor who prefers reduced motion gets the empty tomb,
@@ -40,7 +47,7 @@ import HeroMapSlide, { type HeroMapPayload } from "@/components/HeroMapSlide";
  * phone variants of a slide share one fading wrapper, so the two
  * never drift out of step.
  *
- * The TENTH slide is not a file at all (Jason, later the same
+ * The LAST turn of the cycle is not a file at all (Jason, later the same
  * morning, Oct 31, 2026: "a polished version of the map that
  * actually shows updates… but looks a different kind of style"):
  * the live Earth map, drawn painterly by components/
@@ -53,21 +60,25 @@ import HeroMapSlide, { type HeroMapPayload } from "@/components/HeroMapSlide";
  * Under reduced motion the cycle never advances at all, so the
  * map slide is never reached — the tomb stands, as always.
  */
-const SLIDES = [
-  { desktop: "/images/hero-cycle/slide-01-desktop.jpg", mobile: "/images/hero-cycle/slide-01-mobile.jpg" },
-  { desktop: "/images/hero-cycle/slide-02-desktop.jpg", mobile: "/images/hero-cycle/slide-02-mobile.jpg" },
+const SLIDES: { desktop: string; mobile: string; mobilePos?: string }[] = [
+  // The tomb rides raised on phones (Jason's phone verdict,
+  // Oct 31, 2026): with the plain top crop, the doorway sat too
+  // low to be seen clearly over the bottom of his screen, so
+  // this slide's phone window centers lower (50% 45%).
+  { desktop: "/images/hero-cycle/slide-01-desktop.jpg", mobile: "/images/hero-cycle/slide-01-mobile.jpg", mobilePos: "50% 45%" },
   { desktop: "/images/hero-cycle/slide-03-desktop.jpg", mobile: "/images/hero-cycle/slide-03-mobile.jpg" },
   { desktop: "/images/hero-cycle/slide-04-desktop.jpg", mobile: "/images/hero-cycle/slide-04-mobile.jpg" },
   { desktop: "/images/hero-cycle/slide-05-desktop.jpg", mobile: "/images/hero-cycle/slide-05-mobile.jpg" },
   { desktop: "/images/hero-cycle/slide-06-desktop.jpg", mobile: "/images/hero-cycle/slide-06-mobile.jpg" },
   { desktop: "/images/hero-cycle/slide-07-desktop.jpg", mobile: "/images/hero-cycle/slide-07-mobile.jpg" },
   { desktop: "/images/hero-cycle/slide-08-desktop.jpg", mobile: "/images/hero-cycle/slide-08-mobile.jpg" },
-  // The ninth slide is the vineyard-crosses hero itself, served
-  // from its own long-standing files — no copy, no re-encode.
+  // The eighth picture is the vineyard-crosses hero itself,
+  // served from its own long-standing files — no copy, no
+  // re-encode.
   { desktop: "/images/wogr-hero-banner.jpg", mobile: "/images/wogr-hero-mobile.jpg" },
 ];
 
-const HOLD_MS = 8000;
+const HOLD_MS = 5000;
 
 export default function HeroCycle() {
   const [active, setActive] = useState(0);
@@ -186,11 +197,16 @@ export default function HeroCycle() {
             preload={i === 0}
             loading={i === 0 ? undefined : "lazy"}
             sizes="100vw"
+            style={
+              slide.mobilePos
+                ? { objectPosition: slide.mobilePos }
+                : undefined
+            }
             className="block object-cover object-top md:hidden"
           />
         </div>
       ))}
-      {/* The tenth slide — the live Earth map (Jason, Oct 31,
+      {/* The last turn — the live Earth map (Jason, Oct 31,
           2026), present only when the live record answered the
           fetch above. It fades on the same wrapper rhythm as the
           pictures, rests under the same pause and stop rules,
