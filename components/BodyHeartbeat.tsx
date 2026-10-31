@@ -6,13 +6,16 @@ import worldMap from "@/lib/world-map.json";
 import {
   EMBER_FILL_OPACITY,
   EMBER_STROKE_MAX_OPACITY,
+  HUNDREDFOLD_RING,
   KINDLING_FILL,
   KINDLING_FILL_OPACITY,
   KINDLING_RIM,
   bookHaloOn,
   countryBookHaloOn,
+  countryHundredfoldOn,
   emberOpacityForOpens,
   emberStrokeForOpens,
+  hundredfold,
   kindled,
   lightModeForCountry,
   notRecordedLabel,
@@ -131,6 +134,26 @@ import {
  * morning; Jason ruled ivory-white the same day, because gold
  * already belongs to the visit lights — a finished book gets
  * its own color.)
+ *
+ * THE HUNDREDFOLD (Oct 30, 2026, Jason's crown — "I never
+ * thought I'd have to ask this": named for the good soil of
+ * Matthew 13, which bore a hundredfold): when a place's shown
+ * day brings a hundred or more chapters read or heard, that
+ * place wears a STEADY GOLD RING for the day — gold being the
+ * lights' own gold, the chapter light's crown, and red stays
+ * kindling's alone. The ring nests OUTSIDE the ivory ring when
+ * a place has earned both: ivory on the border for the book
+ * finished, gold beyond it for the hundred chapters. The
+ * decision is hundredfold() in lib/heartbeat-display.ts, read
+ * off the SHOWN day's own rows, so a past day browsed in the
+ * record (or opened by its ?day= link) wears the ring it
+ * earned that day — unlike the ivory ring, a today-only sign.
+ * The finest geography carries it, as with the light and the
+ * ivory ring: a subdivision's ring steps its country's back.
+ * Only chapters count toward it — never a watch, never an
+ * open. Florida is its first wearer: 101 chapters on the very
+ * night it was crowned, a book finished there the same day, so
+ * the first gold ring stands nested outside an ivory one.
  */
 
 interface HbTotals {
@@ -500,6 +523,93 @@ function WatchTraceMark({
         strokeOpacity="0.95"
         clipPath={`url(#${clipId})`}
       />
+    </g>
+  );
+}
+
+/** THE HUNDREDFOLD RING (Oct 30, 2026) — the ivory ring's
+ *  elder brother: a STEADY GOLD RING for a place whose shown
+ *  day brought a hundred or more chapters read or heard (the
+ *  decision is hundredfold() in lib/heartbeat-display.ts). It
+ *  follows the ivory ring's own construction — a wide, faint
+ *  pass under a narrower, clearer one — and it nests OUTSIDE
+ *  that ring: for a silhouette, the gold stroke is clipped to
+ *  the OUTSIDE of the place's shape (the mirror of the watch
+ *  trace's inside clip: a clip of everything-but-the-shape,
+ *  cut by even-odd), at doubled widths so the visible band
+ *  stands beyond the border the ivory ring rests on; for a
+ *  centroid light, a plain circle at the ivory ring's radius
+ *  plus its own margin. STEADY — no .hb-glow, no breathing —
+ *  a kept sign for the day. */
+function HundredfoldRingMark({
+  idKey,
+  d,
+  cx,
+  cy,
+  r,
+  label,
+}: {
+  idKey: string;
+  d?: string;
+  cx?: number;
+  cy?: number;
+  r?: number;
+  label: string;
+}) {
+  if (!d) {
+    if (cx === undefined || cy === undefined || r === undefined) return null;
+    return (
+      <g>
+        <title>{label}</title>
+        <circle
+          cx={cx}
+          cy={cy}
+          r={r}
+          fill="none"
+          stroke={HUNDREDFOLD_RING}
+          strokeWidth="3.4"
+          strokeOpacity="0.2"
+        />
+        <circle
+          cx={cx}
+          cy={cy}
+          r={r}
+          fill="none"
+          stroke={HUNDREDFOLD_RING}
+          strokeWidth="1.5"
+          strokeOpacity="0.9"
+        />
+      </g>
+    );
+  }
+  const clipId = `hundredfold-${idKey.replace(/[^A-Za-z0-9-]/g, "")}`;
+  return (
+    <g>
+      <title>{label}</title>
+      {/* the outside of the shape: a frame far larger than the
+          disc, minus the silhouette itself (even-odd) */}
+      <clipPath id={clipId}>
+        <path
+          d={`M-200 -200 H1200 V1200 H-200 Z ${d}`}
+          clipRule="evenodd"
+        />
+      </clipPath>
+      <g clipPath={`url(#${clipId})`}>
+        <path
+          d={d}
+          fill="none"
+          stroke={HUNDREDFOLD_RING}
+          strokeWidth="7.5"
+          strokeOpacity="0.2"
+        />
+        <path
+          d={d}
+          fill="none"
+          stroke={HUNDREDFOLD_RING}
+          strokeWidth="4.4"
+          strokeOpacity="0.88"
+        />
+      </g>
     </g>
   );
 }
@@ -924,6 +1034,22 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
     shownSubdivisions.some((s) => subHaloOn(s));
   const haloTitle = (name: string) =>
     `${name} — a white ring: book finished here today`;
+  // THE HUNDREDFOLD (Oct 30, 2026) — decided against the SHOWN
+  // set on the rows themselves: each shown row IS its day's
+  // row, so the gold ring is true at the live default and for
+  // a browsed day alike (the ?day= record shows a past day's
+  // ring too). No date gate — hundredfold() in
+  // lib/heartbeat-display.ts reads the row's own total, and a
+  // country's own ring steps back to a subdivision's, exactly
+  // as its light and its ivory ring do.
+  const subHundredfoldOn = (s: LiveSubdivisionDisplay) => hundredfold(s);
+  const countryHundredfoldSignOn = (c: HbCountryRow) =>
+    countryHundredfoldOn(c, shownSubdivisions);
+  const anyHundredfold =
+    mapRows.some((c) => countryHundredfoldSignOn(c)) ||
+    shownSubdivisions.some((s) => subHundredfoldOn(s));
+  const hundredfoldTitle = (name: string) =>
+    `${name} — a gold ring: the hundredfold — a hundred chapters read or heard here ${shownWhen}`;
   // The aria voice of the ivory ring: the places within this
   // country that wear it today, named plainly. (In the opens-only
   // branch of describeCountry it can never speak — a ring needs
@@ -936,6 +1062,20 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
     for (const s of subsOf(c.code)) if (subHaloOn(s)) names.push(s.name);
     return names.length
       ? `; a white ring marks ${names.join(" and ")} — book finished there today`
+      : "";
+  };
+  // The aria voice of the gold ring, in ringClause's own shape:
+  // the places within this country that wear it in the shown
+  // day, named plainly. (In the opens-only branch of
+  // describeCountry it can never speak — a hundred chapters is
+  // chapters, and an opens-only country has none.)
+  const hundredfoldClause = (c: HbCountryRow): string => {
+    const names: string[] = [];
+    if (countryHundredfoldSignOn(c)) names.push(c.name);
+    for (const s of subsOf(c.code))
+      if (subHundredfoldOn(s)) names.push(s.name);
+    return names.length
+      ? `; a gold ring marks ${names.join(" and ")} — the hundredfold: a hundred chapters read or heard there ${shownWhen}`
       : "";
   };
 
@@ -990,6 +1130,9 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               (subHaloOn(s)
                 ? "; a white ring marks it — book finished here today"
                 : "") +
+              (subHundredfoldOn(s)
+                ? `; a gold ring marks it — the hundredfold: a hundred chapters read or heard here ${shownWhen}`
+                : "") +
               watchClause(s)
           )
           .join("; ")}.`
@@ -1035,9 +1178,9 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
     }
     if (modeOf(c.code) === "ember") {
       const subs = subsOf(c.code);
-      return `reading recorded across ${c.name} — ${fmt(c.total)} ${c.total === 1 ? "chapter" : "chapters"} ${shownWhen}; ${c.name} itself rests as a faint ember, not lit, and its divisions are lit where recorded: ${subs.map((s) => subdivisionPhrase(s) + watchClause(s)).join("; ")}${ringClause(c)}${countryWatchHeartOn(c) ? watchClause(c) : ""}`;
+      return `reading recorded across ${c.name} — ${fmt(c.total)} ${c.total === 1 ? "chapter" : "chapters"} ${shownWhen}; ${c.name} itself rests as a faint ember, not lit, and its divisions are lit where recorded: ${subs.map((s) => subdivisionPhrase(s) + watchClause(s)).join("; ")}${ringClause(c)}${hundredfoldClause(c)}${countryWatchHeartOn(c) ? watchClause(c) : ""}`;
     }
-    return `${mapPhrase(c)}, lit in its own shape${ringClause(c)}${watchClause(c)}`;
+    return `${mapPhrase(c)}, lit in its own shape${ringClause(c)}${hundredfoldClause(c)}${watchClause(c)}`;
   };
 
   const figureLabel = gathering
@@ -1374,6 +1517,9 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                     {subHaloOn(s)
                       ? " — book finished here today; a white ring marks it"
                       : ""}
+                    {subHundredfoldOn(s)
+                      ? ` — the hundredfold: a hundred chapters read or heard here ${shownWhen}; a gold ring marks it`
+                      : ""}
                     {watchTitle(s)}
                   </title>
                   <path
@@ -1563,6 +1709,50 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 ) : null
               ) : null
             )}
+            {/* THE HUNDREDFOLD RING (Oct 30, 2026) — drawn just
+                before the ivory rings, so where a place has
+                earned both, the rings nest: ivory on the border
+                for the book finished, gold beyond it for the
+                hundred chapters. A steady gold ring around the
+                mark of a place whose shown day brought a hundred
+                or more chapters read or heard — around a
+                silhouette, clipped to the shape's outside (the
+                watch trace's mirror); around a centroid light,
+                a circle beyond the ivory ring's own. A country's
+                own ring steps back when one of its subdivisions
+                wears the ring (countryHundredfoldOn), as its
+                light does. */}
+            {mapRows.map((c) =>
+              countryHundredfoldSignOn(c) ? (
+                c.geo ? (
+                  <HundredfoldRingMark
+                    key={`hundredfold-${c.code}`}
+                    idKey={c.code}
+                    d={c.geo.path}
+                    label={hundredfoldTitle(c.name)}
+                  />
+                ) : c.centroid ? (
+                  <HundredfoldRingMark
+                    key={`hundredfold-${c.code}`}
+                    idKey={c.code}
+                    cx={c.centroid.cx}
+                    cy={c.centroid.cy}
+                    r={lightRadius(c.total) * 2.1 + 10}
+                    label={hundredfoldTitle(c.name)}
+                  />
+                ) : null
+              ) : null
+            )}
+            {shownSubdivisions.map((s) =>
+              subHundredfoldOn(s) && s.geo ? (
+                <HundredfoldRingMark
+                  key={`hundredfold-${s.code}`}
+                  idKey={s.code}
+                  d={s.geo.path}
+                  label={hundredfoldTitle(s.name)}
+                />
+              ) : null
+            )}
             {/* THE IVORY RING (Oct 28, 2026) — drawn last, over
                 the lights it honors: a soft ivory-white ring traced
                 around the mark of a place where a whole book of
@@ -1710,6 +1900,9 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
             {anyHalo
               ? " A white ring — book finished here today."
               : ""}
+            {anyHundredfold
+              ? ` A gold ring — the hundredfold: 100 chapters read or heard here ${shownWhen}.`
+              : ""}
           </p>
           {/* Day stepping (Oct 24, 2026) — one slim row under the
               caption, in the card's own language: step back a day,
@@ -1777,14 +1970,18 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
             standing in its own deep-sea panel directly beneath
             the disc (moved off the disc the same night it gained
             its fifth row; see the note inside the SVG above for
-            the proven geometry). The same five meanings, each on
-            its own line at full size, in a tidy grid that wraps
-            with the column — no squeezed lines, no overlap at
-            any width. The swatches are the marks themselves in
+            the proven geometry). The meanings — five from
+            Oct 29, 2026, and a sixth, the hundredfold's gold
+            ring, from Oct 30, 2026 — each on its own line at
+            full size, in a tidy grid that wraps with the
+            column — no squeezed lines, no overlap at any
+            width. The swatches are the marks themselves in
             miniature: the golden light with its bright heart,
-            the steady ember, the ivory ring's double stroke, a
-            small outline wearing its own blue inner trace, and
-            the ember turned warm red for kindling. */}
+            the steady ember, the ivory ring's double stroke,
+            the same double stroke in the lights' gold for the
+            hundredfold, a small outline wearing its own blue
+            inner trace, and the ember turned warm red for
+            kindling. */}
         <div
           className="mx-auto mt-6 max-w-2xl rounded-2xl border border-gold-500/25 px-5 py-5 sm:px-6"
           style={{ backgroundColor: "#0b2836" }}
@@ -1841,6 +2038,20 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 focusable="false"
                 className="h-[26px] w-[26px] shrink-0"
               >
+                <circle cx="13" cy="13" r="9.5" fill="none" stroke="#e4b95c" strokeWidth="3.4" strokeOpacity="0.2" />
+                <circle cx="13" cy="13" r="9.5" fill="none" stroke="#e4b95c" strokeWidth="1.7" strokeOpacity="0.9" />
+              </svg>
+              <span className="text-[15px] leading-snug text-[#f6efdb]">
+                Hundredfold — 100 chapters in a day
+              </span>
+            </li>
+            <li className="flex items-center gap-3">
+              <svg
+                viewBox="0 0 26 26"
+                aria-hidden="true"
+                focusable="false"
+                className="h-[26px] w-[26px] shrink-0"
+              >
                 <rect x="3" y="3" width="20" height="20" rx="4" fill="none" stroke="#e8d9ae" strokeWidth="1.4" strokeOpacity="0.8" />
                 <rect x="6" y="6" width="14" height="14" rx="3" fill="none" stroke="#8fd8ff" strokeWidth="1.8" />
               </svg>
@@ -1871,8 +2082,9 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
             the same rows, the same treatments, the same helpers
             as the disc (full golden light with its bright core,
             the opens-only ember with its graduated rim, the blue
-            inner trace, the ivory ring), so stepping the day
-            steps the panel too. The panel names data resolution
+            inner trace, the ivory ring, the hundredfold's gold
+            ring), so stepping the day steps the panel too. The
+            panel names data resolution
             as its only reason; it carries no flag and no
             patriotic dressing (Jason's hard rule). */}
         <div
@@ -1926,6 +2138,9 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                         {subdivisionPhrase(s)}
                         {subHaloOn(s)
                           ? " — book finished here today; a white ring marks it"
+                          : ""}
+                        {subHundredfoldOn(s)
+                          ? ` — the hundredfold: a hundred chapters read or heard here ${shownWhen}; a gold ring marks it`
                           : ""}
                         {watchTitle(s)}
                       </title>
@@ -1990,6 +2205,20 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                       idKey={`panel-${s.code}`}
                       d={s.geo.path}
                       label={`${s.name} — a blue inner trace: a video was watched here ${shownWhen}`}
+                    />
+                  ) : null
+                )}
+                {/* the hundredfold rings — the disc's gold ring,
+                    drawn just before the ivory rings so the two
+                    nest in the panel as they do on the disc:
+                    ivory inside, gold outside */}
+                {usShownSubdivisions.map((s) =>
+                  subHundredfoldOn(s) && s.geo ? (
+                    <HundredfoldRingMark
+                      key={`us-hundredfold-${s.code}`}
+                      idKey={`panel-${s.code}`}
+                      d={s.geo.path}
+                      label={hundredfoldTitle(s.name)}
                     />
                   ) : null
                 )}
@@ -2125,6 +2354,12 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                       · book finished
                     </span>
                   )}
+                  {countryHundredfoldSignOn(c) && (
+                    <span className="text-sage-300">
+                      {" "}
+                      · hundredfold
+                    </span>
+                  )}
                 </li>
               ))}
             </ul>
@@ -2202,6 +2437,12 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                           <span className="text-sage-300">
                             {" "}
                             · book finished
+                          </span>
+                        )}
+                        {subHundredfoldOn(s) && (
+                          <span className="text-sage-300">
+                            {" "}
+                            · hundredfold
                           </span>
                         )}
                       </li>

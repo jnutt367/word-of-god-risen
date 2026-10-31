@@ -188,3 +188,48 @@ export function countryBookHaloOn(
     bookHaloOn(s, todayDate)
   );
 }
+
+/** THE HUNDREDFOLD (Jason, Oct 30, 2026 — crowned the night
+ *  Florida first neared it, and named for the good soil of
+ *  Matthew 13, which bore a hundredfold): when a place's SHOWN
+ *  day brings a hundred or more chapters, that place wears a
+ *  steady gold ring for the day. The count is the row's `total`
+ *  and nothing else — chapters read or heard only: a watch is
+ *  never chapter activity (Oct 29, 2026) and an open is not the
+ *  Word opened, and rows already keep both out of `total`. The
+ *  trigger reads the SHOWN day's own row — the rows the
+ *  component renders are that day's, at the live default and
+ *  while day browsing alike — so a past day browsed in the
+ *  record wears the ring on its own count, exactly as it stood
+ *  that day (unlike the ivory ring above, which belongs to
+ *  today alone). A kindled place can never wear it: kindling
+ *  needs a total of zero. Pure function — the disc and the
+ *  closer-look panel render what this decides, so the two
+ *  surfaces always agree. */
+export const HUNDREDFOLD_TOTAL_THRESHOLD = 100;
+
+export function hundredfold(row: { total: number }): boolean {
+  return row.total >= HUNDREDFOLD_TOTAL_THRESHOLD;
+}
+
+/** A country's own gold ring steps back when one of its
+ *  subdivisions wears the ring that day — the finest recorded
+ *  geography carries the sign, exactly as it carries the light
+ *  and the ivory ring (v3.1.1). A country whose hundredfold
+ *  stands in its own count, with no subdivision wearing one,
+ *  keeps its own ring. */
+export function countryHundredfoldOn(
+  row: { code: string; total: number },
+  subdivisions: readonly SubdivisionCountLike[]
+): boolean {
+  if (!hundredfold(row)) return false;
+  return !subdivisionsOfCountry(subdivisions, row.code).some((s) =>
+    hundredfold(s)
+  );
+}
+
+/** The hundredfold ring's gold — the lights' own gold, the
+ *  country fill's #e4b95c: gold already belongs to the Word
+ *  read or heard here, and this ring is that light's crown,
+ *  never a new color. (Red stays kindling's alone.) */
+export const HUNDREDFOLD_RING = "#e4b95c";
