@@ -1510,3 +1510,51 @@ governs the copy, as with every mark on this map.)
   no place has come near; when it first stands, this
   book will record it, and nothing on the app will say
   a word.
+- **Amendment — within borders (Oct 30, 2026, later
+  still, the same night).** Florida became the mark's
+  first true wearer under the corrected rule, crossing
+  a hundred visits late in the evening (102 at the
+  first sighting, 104 an hour on, 134 chapters beside
+  them) — and the wearing exposed the rendering twice
+  over. First, the glow as built — the state's shape
+  filled and blurred under its light — showed NO
+  visible purple at all: a small state's soft fringe
+  under the map's brightest gold light, with the ivory
+  and gold rings resting on its border, washed out
+  entirely; Jason could read the honor in Florida's
+  chip and see nothing on the map. The first repair
+  gave a subdivision's glow a true halo — a soft purple
+  disc at the state's centroid, sized to bloom past
+  the outermost ring — and the purple stood at last,
+  but as a round BLOB: Jason's own phone screenshot
+  showed it spilling far past Florida's borders, over
+  the Gulf, over the Atlantic, up toward Georgia,
+  claiming ground Florida never earned. His ruling,
+  in his words: "don't we want the purple inside the
+  borders of Florida?" The map's honesty is geographic
+  — a mark colors only the place that earned it. So
+  the halo is REMOVED the same night, and a
+  subdivision's glow is now a WITHIN-BORDERS treatment
+  in two parts: the state's own shape filled with the
+  purple UNBLURRED at 0.85 in the under-lights layer
+  (the body tints, strongest where a light or an ember
+  above it is thin), and — the part the eye reads — the
+  state's exact border traced in the same purple,
+  crisp (no blur), at 0.95, in its own layer ABOVE the
+  gold light fills and BELOW the hundredfold and ivory
+  rings: 4 units on the disc (about 1.6px at phone
+  width), 1.2 units in the closer-look panel (about
+  2.7px at phone width, in the family of the ivory
+  ring's own clear pass there). Coastline, panhandle,
+  peninsula — Florida itself wearing purple, and
+  nothing purple outside its line. Countries keep the
+  soft bloom exactly as built (a country with no
+  subdivisions IS a single place, and the bloom is its
+  own shape's softening); the deep tier stands
+  untouched. Verification: fixture checks against the
+  compiled display logic pass unchanged (23 checks —
+  the decisions were never the flaw, only the
+  drawing), `tsc --noEmit` clean, ESLint clean on the
+  touched file, production build clean; production
+  confirmation and Florida's standing at ship time are
+  recorded with the commit.

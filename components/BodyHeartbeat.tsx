@@ -663,28 +663,36 @@ function HundredfoldRingMark({
  *  faint steady disc of the same purple. STEADY — no
  *  .hb-glow, no breathing — a kept sign for the day.
  *
- *  THE SUBDIVISION HALO (Oct 30, 2026, later still — Jason's
- *  eye ruled the shape alone did not read): Florida, the
- *  first true wearer (102 visits), showed NO visible purple
- *  on the disc — a small state's filled shape under the
- *  map's brightest gold light, with the ivory and gold rings
- *  resting on its border, washed the fringe out entirely.
- *  So a subdivision's glow now ALSO carries a true halo: a
- *  soft purple disc at the state's own centroid, sized to
- *  bloom clearly past the outermost ring, drawn first inside
- *  this mark (still under every light), built exactly as the
- *  centroid branch below — a faint steady disc under a
- *  stronger blurred one. The shape fill and rim stay as
- *  they were, and country callers pass no halo: their
- *  rendering is untouched. */
+ *  WITHIN BORDERS — THE SUBDIVISION TREATMENT (Oct 30,
+ *  2026, Jason's eye, corrected twice in one night).
+ *  Florida, the first true wearer (102 visits), showed NO
+ *  visible purple: a small state's blurred shape under the
+ *  map's brightest gold light washed out entirely. The
+ *  first fix gave the glow a true halo — a soft purple
+ *  disc at the state's centroid, blooming past its rings.
+ *  It read at last, but as a round BLOB: on Jason's own
+ *  phone screenshot the purple spilled far past Florida's
+ *  borders, over the Gulf, the Atlantic, and up toward
+ *  Georgia — claiming ground Florida never earned. His
+ *  ruling: "don't we want the purple inside the borders
+ *  of Florida?" The map's honesty is geographic: a mark
+ *  colors only the place that earned it. So the halo is
+ *  GONE, and a subdivision's glow (withinBorders) is two
+ *  within-borders parts: THIS mark lays the state's own
+ *  shape filled with the purple, UNBLURRED, at 0.85,
+ *  under the lights as before — the body itself tints,
+ *  strongest where a light or an ember is thin — and
+ *  StillKnockingBorderMark (below) traces the state's
+ *  exact border in crisp purple ABOVE the lights, where
+ *  no gold can cover it. Nothing purple stands outside
+ *  the border line. Country callers pass no withinBorders:
+ *  their soft bloom is untouched. */
 function StillKnockingGlowMark({
   d,
   cx,
   cy,
   r,
-  haloCx,
-  haloCy,
-  haloR,
+  withinBorders,
   label,
   filterId,
 }: {
@@ -692,9 +700,7 @@ function StillKnockingGlowMark({
   cx?: number;
   cy?: number;
   r?: number;
-  haloCx?: number;
-  haloCy?: number;
-  haloR?: number;
+  withinBorders?: boolean;
   label: string;
   filterId: string;
 }) {
@@ -721,28 +727,29 @@ function StillKnockingGlowMark({
       </g>
     );
   }
+  if (withinBorders) {
+    // A SUBDIVISION'S GLOW (within borders — see the note
+    // above): the state's own shape filled with the purple,
+    // UNBLURRED, so not a hair of color stands outside its
+    // border, and strong (0.85) so the body tints through
+    // where the gold above it is thin. No rim pass here —
+    // the crisp border is StillKnockingBorderMark's, drawn
+    // above the lights in its own layer.
+    return (
+      <g>
+        <title>{label}</title>
+        <path
+          d={d}
+          fill={STILL_KNOCKING_GLOW}
+          fillRule="evenodd"
+          fillOpacity="0.85"
+        />
+      </g>
+    );
+  }
   return (
     <g>
       <title>{label}</title>
-      {haloCx !== undefined && haloCy !== undefined && haloR !== undefined ? (
-        <>
-          <circle
-            cx={haloCx}
-            cy={haloCy}
-            r={haloR}
-            fill={STILL_KNOCKING_GLOW}
-            fillOpacity="0.18"
-          />
-          <circle
-            cx={haloCx}
-            cy={haloCy}
-            r={haloR}
-            fill={STILL_KNOCKING_GLOW}
-            fillOpacity="0.55"
-            filter={`url(#${filterId})`}
-          />
-        </>
-      ) : null}
       <path
         d={d}
         fill={STILL_KNOCKING_GLOW}
@@ -759,6 +766,43 @@ function StillKnockingGlowMark({
         filter={`url(#${filterId})`}
       />
     </g>
+  );
+}
+
+/** THE STILL-KNOCKING BORDER (Oct 30, 2026 — Jason's
+ *  ruling from his own phone screenshot, the same night
+ *  the halo shipped): "don't we want the purple inside
+ *  the borders of Florida?" The mark that carries a
+ *  subdivision's still-knocking on the map's face: the
+ *  state's own path stroked in the royal purple
+ *  (STILL_KNOCKING_GLOW), CRISP — no blur filter — at
+ *  0.95, centered on the border line itself, round-joined
+ *  so the coastline traces clean. It is drawn in its own
+ *  layer ABOVE the gold light fills (so no light can ever
+ *  cover it) and BELOW the hundredfold and ivory rings
+ *  (so the Word's rings still rest outside it, honored
+ *  last). Nothing stands outside the line but the stroke's
+ *  own outer half, which IS the border. It carries no
+ *  <title>: the glow under the lights already voices the
+ *  place; this is the same sign, drawn where eyes land. */
+function StillKnockingBorderMark({
+  d,
+  strokeWidth,
+}: {
+  d: string;
+  strokeWidth: number;
+}) {
+  return (
+    <path
+      d={d}
+      fill="none"
+      stroke={STILL_KNOCKING_GLOW}
+      strokeWidth={strokeWidth}
+      strokeOpacity="0.95"
+      strokeLinejoin="round"
+      strokeLinecap="round"
+      aria-hidden="true"
+    />
   );
 }
 
@@ -1775,22 +1819,20 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 ) : null
               ) : null
             )}
-            {/* A subdivision's glow carries its halo here
-                (Oct 30, 2026, Jason's eye): the disc's states
-                are small and their lights the map's brightest,
-                so the halo radius takes the country glow's
-                measure and a wider margin still —
-                lightRadius * 2.1 + 14 — enough bloom to stand
-                clear of the gold ring on every side at phone
-                size. */}
+            {/* A subdivision's glow, WITHIN BORDERS (Oct 30,
+                2026, Jason's ruling — see StillKnocking
+                GlowMark's note): the state's own shape filled
+                with the purple, unblurred, under the lights;
+                its crisp border is drawn in its own layer
+                above the lights, below the rings. No halo:
+                the purple claims only the ground the state
+                itself covers. */}
             {shownSubdivisions.map((s) =>
               subStillKnockingOn(s) && s.geo ? (
                 <StillKnockingGlowMark
                   key={`knocking-${s.code}`}
                   d={s.geo.path}
-                  haloCx={s.geo.cx}
-                  haloCy={s.geo.cy}
-                  haloR={lightRadius(s.total) * 2.1 + 14}
+                  withinBorders
                   label={stillKnockingTitle(s.name)}
                   filterId="hb-soft"
                 />
@@ -1942,6 +1984,28 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                     />
                   </g>
                 )
+              ) : null
+            )}
+            {/* THE STILL-KNOCKING BORDERS (Oct 30, 2026,
+                Jason's ruling) — each knocking state's own
+                outline traced in crisp purple, drawn here:
+                ABOVE the gold light fills just rendered (no
+                light can cover its own border) and BELOW the
+                traces and rings that follow (the hundredfold
+                gold and the ivory ring still rest outside
+                it). The disc's states are ~20 units wide in a
+                1000-unit viewBox, so the stroke takes 4 units
+                — about 1.6px on a phone — enough to trace a
+                coastline at a glance. The glow fill under the
+                lights tints the state's body; this line is
+                what the eye reads. */}
+            {shownSubdivisions.map((s) =>
+              subStillKnockingOn(s) && s.geo ? (
+                <StillKnockingBorderMark
+                  key={`knocking-border-${s.code}`}
+                  d={s.geo.path}
+                  strokeWidth={4}
+                />
               ) : null
             )}
             {/* country hearts — a small bright core at each lit
@@ -2515,19 +2579,18 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 {/* still knocking — the disc's purple glow,
                     under the panel's lights as on the disc:
                     a hundred or more visits in the shown day,
-                    steady, in any chapter state. The halo rides
-                    here too (Oct 30, 2026): the panel draws its
-                    states far larger, so the country glow's own
-                    measure — lightRadius * 2.1 + 6 — already
-                    blooms well past the gold ring. */}
+                    steady, in any chapter state. WITHIN
+                    BORDERS here too (Oct 30, 2026, Jason's
+                    ruling): the state's shape filled unblurred
+                    under its light, and its crisp border drawn
+                    above the lights in the layer below — no
+                    halo, no spill past the state line. */}
                 {usShownSubdivisions.map((s) =>
                   subStillKnockingOn(s) && s.geo ? (
                     <StillKnockingGlowMark
                       key={`us-knocking-${s.code}`}
                       d={s.geo.path}
-                      haloCx={s.geo.cx}
-                      haloCy={s.geo.cy}
-                      haloR={lightRadius(s.total) * 2.1 + 6}
+                      withinBorders
                       label={stillKnockingTitle(s.name)}
                       filterId="hb-soft-us"
                     />
@@ -2605,6 +2668,22 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                         }
                       />
                     </g>
+                  ) : null
+                )}
+                {/* the still-knocking borders — the disc's
+                    crisp purple outline, above the panel's
+                    lights and embers, below its rings: the
+                    panel's viewBox is 157 units across the
+                    full width, so 1.2 units already reads
+                    ~2.7px on a phone, in the family of the
+                    ivory ring's own 1.5-unit clear pass */}
+                {usShownSubdivisions.map((s) =>
+                  subStillKnockingOn(s) && s.geo ? (
+                    <StillKnockingBorderMark
+                      key={`us-knocking-border-${s.code}`}
+                      d={s.geo.path}
+                      strokeWidth={1.2}
+                    />
                   ) : null
                 )}
                 {/* the blue inner traces — the disc's own mark,
