@@ -1573,3 +1573,62 @@ governs the copy, as with every mark on this map.)
   the United States' summed 176 visits earn it no glow
   (state by state) and no deep tier; California stands
   at 51 visits — still knocking, not yet through.
+- **Amendment — the inner trace (Oct 30, 2026, the
+  third drawing of the mark in one night).** Jason
+  looked at the within-borders build on his phone and
+  caught it twice more. (1) COLOR: the purple inside
+  Florida read pale LAVENDER beside the legend's
+  still-knocking swatch. It is the same `#a855f7` in
+  the can — but the fill lies UNDER the gold light, and
+  the gold washes it; and the centered border line hid
+  under the ivory and gold rings resting on the border.
+  On screen, they were not the same purple. (2) THE
+  IVORY RING: asked whether a top-layer purple line
+  would REPLACE the ivory book-finished ring, the
+  answer settled with Jason is NO, never — ivory (a
+  book finished) and gold (the hundredfold) keep their
+  seats OUTSIDE a place's line, and this work does not
+  touch the rings' code, geometry, or draw order.
+  **The correction:** the centered border line is
+  REMOVED, and a subdivision's still-knocking takes
+  the INNER-TRACE treatment — the watch trace's own
+  grammar (Jason's design: a crisp line just inside
+  the place's border, the mark that reads perfectly in
+  his screenshot). `StillKnockingTraceMark` strokes
+  the state's path clipped to its silhouette, set
+  DEEPER by a mask — the mask keeps the shape and
+  erases a 6-wide band around the border, so the
+  trace's visible bands begin 3 units inside the line:
+  a soft pass (stroke 13 at 0.40, visible 3→6.5 in)
+  under a core pass (stroke 9 at 0.95, visible 3→4.5
+  in — the watch core's own 1.5-unit visible width).
+  It is drawn ABOVE the gold light fills, so nothing
+  washes over it: the purple on the map IS the legend's
+  purple at full strength. The within-borders fill
+  (0.85, under the lights) stands as shipped — now
+  only the body tint; the trace carries the true
+  color. **The two inner traces share no ground:** the
+  blue watch trace hugs the border (core 0→1.5 in,
+  skirt to 3); the purple stands deeper (core 3→4.5
+  in) — where a place has earned both, as Florida has
+  tonight, they read as two separate lines. On the
+  disc the core reads ~0.6px at phone width and in the
+  closer-look panel ~3.7px — the blue trace's own
+  measure on each surface, since the trace keeps the
+  watch family's unit widths on both. Countries and
+  the deep tier stand untouched. Verification: fixture
+  checks against the compiled display logic pass
+  unchanged (23 checks — the decisions were never the
+  flaw, only the drawing, a third time), `tsc
+  --noEmit` clean, ESLint clean on the touched file,
+  production build clean. Florida at verification,
+  from the live payload (Oct 30, 10:53 PM ET): 115
+  visits, 134 chapters (76 read, 58 heard), a book
+  finished today, 2 watches — still knocking TRUE,
+  hundredfold TRUE, the ivory ring owed, and BOTH
+  inner traces owed (blue for the watches, purple for
+  the knocking); the United States' summed 184 visits
+  earn it no light glow (state by state) and no deep
+  tier; California stands at 53 visits — still
+  knocking, not yet through. (The ship record for
+  this amendment follows in the commit itself.)

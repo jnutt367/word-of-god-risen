@@ -664,7 +664,7 @@ function HundredfoldRingMark({
  *  .hb-glow, no breathing — a kept sign for the day.
  *
  *  WITHIN BORDERS — THE SUBDIVISION TREATMENT (Oct 30,
- *  2026, Jason's eye, corrected twice in one night).
+ *  2026, Jason's eye, corrected three times in one night).
  *  Florida, the first true wearer (102 visits), showed NO
  *  visible purple: a small state's blurred shape under the
  *  map's brightest gold light washed out entirely. The
@@ -682,11 +682,16 @@ function HundredfoldRingMark({
  *  shape filled with the purple, UNBLURRED, at 0.85,
  *  under the lights as before — the body itself tints,
  *  strongest where a light or an ember is thin — and
- *  StillKnockingBorderMark (below) traces the state's
- *  exact border in crisp purple ABOVE the lights, where
- *  no gold can cover it. Nothing purple stands outside
- *  the border line. Country callers pass no withinBorders:
- *  their soft bloom is untouched. */
+ *  StillKnockingTraceMark (below) carries the readable
+ *  sign: a crisp purple line just INSIDE the border,
+ *  above the lights, in the watch trace's grammar, at
+ *  the legend purple's full strength (the centered
+ *  border line this mark first paired with hid under
+ *  the rings, and the gold washed the fill pale beside
+ *  the legend's swatch — Jason caught both). Nothing
+ *  purple stands outside the border line. Country
+ *  callers pass no withinBorders: their soft bloom is
+ *  untouched. */
 function StillKnockingGlowMark({
   d,
   cx,
@@ -733,8 +738,9 @@ function StillKnockingGlowMark({
     // UNBLURRED, so not a hair of color stands outside its
     // border, and strong (0.85) so the body tints through
     // where the gold above it is thin. No rim pass here —
-    // the crisp border is StillKnockingBorderMark's, drawn
-    // above the lights in its own layer.
+    // the readable sign is StillKnockingTraceMark's inner
+    // trace, drawn above the lights in its own layer; this
+    // fill is the body under it.
     return (
       <g>
         <title>{label}</title>
@@ -769,40 +775,88 @@ function StillKnockingGlowMark({
   );
 }
 
-/** THE STILL-KNOCKING BORDER (Oct 30, 2026 — Jason's
- *  ruling from his own phone screenshot, the same night
- *  the halo shipped): "don't we want the purple inside
- *  the borders of Florida?" The mark that carries a
- *  subdivision's still-knocking on the map's face: the
- *  state's own path stroked in the royal purple
- *  (STILL_KNOCKING_GLOW), CRISP — no blur filter — at
- *  0.95, centered on the border line itself, round-joined
- *  so the coastline traces clean. It is drawn in its own
- *  layer ABOVE the gold light fills (so no light can ever
- *  cover it) and BELOW the hundredfold and ivory rings
- *  (so the Word's rings still rest outside it, honored
- *  last). Nothing stands outside the line but the stroke's
- *  own outer half, which IS the border. It carries no
- *  <title>: the glow under the lights already voices the
- *  place; this is the same sign, drawn where eyes land. */
-function StillKnockingBorderMark({
+/** THE STILL-KNOCKING INNER TRACE (Oct 30, 2026 — the
+ *  third drawing of the mark in one night, each step
+ *  corrected by Jason's eye). The within-borders fix
+ *  first traced the state's own border in the purple,
+ *  centered on the border line, above the lights. Jason
+ *  looked at his phone and caught two things. (1) COLOR:
+ *  the purple on the map read pale LAVENDER beside the
+ *  legend's still-knocking swatch — the same #a855f7 in
+ *  the can, but the fill lies under the gold light and
+ *  the gold washes it, and the centered line hid under
+ *  the rings that rest on the border. On screen they
+ *  were not the same color. (2) THE IVORY RING: asked
+ *  whether a top-layer purple line would REPLACE the
+ *  ivory book-finished ring, Jason's answer settled the
+ *  geometry for good — never: ivory (a book finished)
+ *  and gold (the hundredfold) keep their seats OUTSIDE
+ *  a place's line, untouched. So the purple takes the
+ *  one seat that is wholly its own: INSIDE the border,
+ *  in the watch trace's own grammar (Jason's design —
+ *  the blue trace reads crisp in his screenshot for
+ *  exactly this reason). The construction mirrors
+ *  WatchTraceMark — strokes clipped to the silhouette,
+ *  so only their inner halves show — set DEEPER by a
+ *  mask: the mask keeps the shape and erases a 6-wide
+ *  stroke's band around the border, so the trace's
+ *  visible bands begin 3 units inside the line, clear
+ *  of the watch trace's own ground (its core fills
+ *  0→1.5 in, its skirt reaches 3). The knocking trace:
+ *  a soft pass (stroke 13 at 0.40, visible 3→6.5 in)
+ *  under a core pass (stroke 9 at 0.95, visible 3→4.5
+ *  in — the watch core's own 1.5-unit width, at the
+ *  legend purple's full strength). Drawn ABOVE the gold
+ *  light fills: nothing washes over it, so the purple
+ *  on the map IS the legend's purple. The two inner
+ *  traces share no ground — blue hugs the border,
+ *  purple stands deeper — and where a place has earned
+ *  both, they read as two separate lines. STEADY — no
+ *  .hb-glow, no breathing. It carries no <title>: the
+ *  glow under the lights already voices the place; this
+ *  is the same sign, drawn where eyes land. */
+function StillKnockingTraceMark({
+  idKey,
   d,
-  strokeWidth,
 }: {
+  idKey: string;
   d: string;
-  strokeWidth: number;
 }) {
+  const clipId = `knocking-${idKey.replace(/[^A-Za-z0-9-]/g, "")}`;
+  const maskId = `knockingmask-${idKey.replace(/[^A-Za-z0-9-]/g, "")}`;
   return (
-    <path
-      d={d}
-      fill="none"
-      stroke={STILL_KNOCKING_GLOW}
-      strokeWidth={strokeWidth}
-      strokeOpacity="0.95"
-      strokeLinejoin="round"
-      strokeLinecap="round"
-      aria-hidden="true"
-    />
+    <g aria-hidden="true">
+      <clipPath id={clipId}>
+        <path d={d} />
+      </clipPath>
+      <mask
+        id={maskId}
+        maskUnits="userSpaceOnUse"
+        x="-100"
+        y="-100"
+        width="1200"
+        height="1200"
+      >
+        <path d={d} fill="white" />
+        <path d={d} fill="none" stroke="black" strokeWidth="6" />
+      </mask>
+      <g clipPath={`url(#${clipId})`} mask={`url(#${maskId})`}>
+        <path
+          d={d}
+          fill="none"
+          stroke={STILL_KNOCKING_GLOW}
+          strokeWidth="13"
+          strokeOpacity="0.40"
+        />
+        <path
+          d={d}
+          fill="none"
+          stroke={STILL_KNOCKING_GLOW}
+          strokeWidth="9"
+          strokeOpacity="0.95"
+        />
+      </g>
+    </g>
   );
 }
 
@@ -1823,10 +1877,10 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 2026, Jason's ruling — see StillKnocking
                 GlowMark's note): the state's own shape filled
                 with the purple, unblurred, under the lights;
-                its crisp border is drawn in its own layer
-                above the lights, below the rings. No halo:
-                the purple claims only the ground the state
-                itself covers. */}
+                its readable sign — the purple inner trace —
+                is drawn in its own layer above the lights.
+                No halo: the purple claims only the ground the
+                state itself covers. */}
             {shownSubdivisions.map((s) =>
               subStillKnockingOn(s) && s.geo ? (
                 <StillKnockingGlowMark
@@ -1986,25 +2040,27 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 )
               ) : null
             )}
-            {/* THE STILL-KNOCKING BORDERS (Oct 30, 2026,
-                Jason's ruling) — each knocking state's own
-                outline traced in crisp purple, drawn here:
-                ABOVE the gold light fills just rendered (no
-                light can cover its own border) and BELOW the
-                traces and rings that follow (the hundredfold
-                gold and the ivory ring still rest outside
-                it). The disc's states are ~20 units wide in a
-                1000-unit viewBox, so the stroke takes 4 units
-                — about 1.6px on a phone — enough to trace a
-                coastline at a glance. The glow fill under the
-                lights tints the state's body; this line is
-                what the eye reads. */}
+            {/* THE STILL-KNOCKING INNER TRACES (Oct 30,
+                2026, third drawing — see StillKnocking
+                TraceMark's note) — each knocking state's
+                purple line just INSIDE its border, drawn
+                here: ABOVE the gold light fills just
+                rendered (nothing washes it, so the purple
+                is the legend's purple at full strength) and
+                in its own layer below the hearts, the blue
+                traces, and the rings. The blue watch trace
+                hugs the border (its core 0→1.5 in); this
+                trace stands deeper (core 3→4.5 in) — the
+                two share no ground and read as separate
+                lines where a place has earned both. The
+                hundredfold gold and ivory rings rest
+                OUTSIDE the state's line, untouched. */}
             {shownSubdivisions.map((s) =>
               subStillKnockingOn(s) && s.geo ? (
-                <StillKnockingBorderMark
-                  key={`knocking-border-${s.code}`}
+                <StillKnockingTraceMark
+                  key={`knocking-trace-${s.code}`}
+                  idKey={s.code}
                   d={s.geo.path}
-                  strokeWidth={4}
                 />
               ) : null
             )}
@@ -2582,9 +2638,9 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                     steady, in any chapter state. WITHIN
                     BORDERS here too (Oct 30, 2026, Jason's
                     ruling): the state's shape filled unblurred
-                    under its light, and its crisp border drawn
-                    above the lights in the layer below — no
-                    halo, no spill past the state line. */}
+                    under its light, and its purple inner trace
+                    drawn above the lights in the layer below —
+                    no halo, no spill past the state line. */}
                 {usShownSubdivisions.map((s) =>
                   subStillKnockingOn(s) && s.geo ? (
                     <StillKnockingGlowMark
@@ -2670,19 +2726,22 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                     </g>
                   ) : null
                 )}
-                {/* the still-knocking borders — the disc's
-                    crisp purple outline, above the panel's
-                    lights and embers, below its rings: the
-                    panel's viewBox is 157 units across the
-                    full width, so 1.2 units already reads
-                    ~2.7px on a phone, in the family of the
-                    ivory ring's own 1.5-unit clear pass */}
+                {/* the still-knocking inner traces — the
+                    disc's purple line just inside the border,
+                    above the panel's lights and embers, below
+                    its traces and rings. The panel shares the
+                    disc's world units, so the trace keeps the
+                    watch trace's own measure there: a 1.5-unit
+                    core in a 157-unit viewBox reads ~3.7px on
+                    a phone, the blue core's own width beside
+                    it — blue at the border, purple deeper in,
+                    the two lines distinct where both are owed */}
                 {usShownSubdivisions.map((s) =>
                   subStillKnockingOn(s) && s.geo ? (
-                    <StillKnockingBorderMark
-                      key={`us-knocking-border-${s.code}`}
+                    <StillKnockingTraceMark
+                      key={`us-knocking-trace-${s.code}`}
+                      idKey={`panel-${s.code}`}
                       d={s.geo.path}
-                      strokeWidth={1.2}
                     />
                   ) : null
                 )}
