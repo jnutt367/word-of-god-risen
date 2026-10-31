@@ -1360,14 +1360,21 @@ governs the copy, as with every mark on this map.)
   glow reads the shown rows themselves: day browsing and
   the `?day=` deep-link show a past day's glow exactly as
   it stood that day.
-- **The finest geography carries it.** A subdivision's
-  glow steps its country's own glow back, as with the
-  light and the rings. The country helper walks the
-  subdivision rows itself rather than through the shared
-  helper: that helper gathers a country's chapter-carrying
-  divisions, and a knocking sign can stand on a division
-  with no chapters at all — indeed, that is its likeliest
-  wearer.
+- **State by state (as corrected the same night — see
+  the amendment at this section's end).** As first
+  shipped, the mark followed the rings' pattern: a
+  subdivision's glow stepped its country's own glow back,
+  and the country's glow stood on its summed count when
+  no subdivision wore one. Jason's ruling replaced that
+  within the hour: a country WITH recorded subdivisions
+  never wears the glow at all — its states wear their
+  own, or none — and only a country with no subdivisions
+  in the record, a single place, wears it as a country.
+  The country helper reads the subdivision rows for mere
+  presence, not through the shared helper: that helper
+  gathers a country's chapter-carrying divisions, and a
+  knocking sign can stand on a division with no chapters
+  at all — indeed, that is its likeliest wearer.
 - **Every text surface names it in the same voice:** the
   legend's seventh row, standing beside the kindled row —
   the two visit marks together, the seeking family's two
@@ -1379,16 +1386,22 @@ governs the copy, as with every mark on this map.)
   like any honored chip; the glow's `<title>`, the figure's
   aria summary, the caption under the disc, and the
   closer-look label say it too.
-- **The first wearer is the United States itself.** At the
-  last live check before this build shipped (9:06 PM ET,
-  Oct 30), the United States' row stood at 102 visits for
-  the day — the first row ever to reach a hundred — with
-  no state's count near it (Florida, the nearest, at 57),
-  so the country's own glow stands: the nation glows
-  purple around Florida's gold hundredfold ring on the
-  night both signs were born. California, the first place
-  ever to kindle, peaked at 78 visits on its kindling
-  night (Oct 29) — still knocking, not yet through.
+- **The first wearer — under the as-shipped rule, and
+  the correction it caused.** At the last live check
+  before this build shipped (9:06 PM ET, Oct 30), the
+  United States' row stood at 102 visits for the day —
+  the first row ever to reach a hundred — with no state's
+  count near it (Florida, the nearest, at 57), so under
+  the step-back as first built, the country's own glow
+  stood: the nation glowed purple around Florida's gold
+  hundredfold ring on the night both signs were born.
+  Jason saw it and ruled state by state the same night
+  (the amendment below): under the corrected rule that
+  aggregate wearing never qualified, and the mark's true
+  first wearer is still to come. California, the first
+  place ever to kindle, peaked at 78 visits on its
+  kindling night (Oct 29) — still knocking, not yet
+  through.
 - **Verification (Oct 30, 2026).** `tsc --noEmit` clean,
   ESLint clean on the touched files, production build
   clean. Fixture checks against the compiled display logic
@@ -1406,3 +1419,48 @@ governs the copy, as with every mark on this map.)
   the same component, commit, and build; the served JS
   chunk was not separately grepped — the sandbox fetch
   does not surface the chunk references).
+- **Amendment — state by state (Oct 30, 2026, later the
+  same night).** Jason, seeing the shipped mark light on
+  the United States' own row: "Oh wait I thought we were
+  doing state by state" — and ruled it so. The
+  correction: `countryStillKnockingOn` no longer steps
+  back — a country with recorded subdivisions in the
+  shown set never wears the glow at all, on any count,
+  and a country with none wears it as the single place
+  it is. The chips and every voice surface follow the
+  corrected decisions: the United States' chip loses its
+  "· still knocking" honor, and the country's titles and
+  aria no longer speak the clause on summed visits;
+  states keep the possibility on their own counts. The
+  rings were NOT touched — kindling, the hundredfold,
+  and the ivory ring keep their country step-back
+  exactly as built; the stricter rule is the purple
+  glow's alone. Production: the served homepage was
+  polled until its asset set turned over to the
+  correction's build (the legend row stands unchanged,
+  as ruled), and the live heartbeat payload run through
+  the corrected decisions agrees — the United States'
+  row, past a hundred summed visits, earns no glow, and
+  no place wears the mark tonight. Under the corrected
+  rule the mark has had NO wearer yet: the closest
+  approaches on record
+  are California's 78 visits on its kindling night
+  (Oct 29), and tonight, at the ruling, Florida at 57
+  and California at 37 — the United States' summed 104
+  stands in the
+  record only as the aggregate that caused the ruling,
+  never as a wearing. Verification of the correction:
+  fixture checks against the compiled display logic
+  pass — the United States' aggregate row (104 visits,
+  no state at a hundred) earns no glow anywhere; a state
+  at a hundred glows; an undivided country at a hundred
+  glows; and the kindling, hundredfold, and book-halo
+  fixtures from the earlier suites pass unchanged.
+  `tsc --noEmit` clean, ESLint clean on the touched
+  files, production build clean.
+- **A held idea, recorded and NOT built (Oct 30, 2026).**
+  Jason floated a deep-purple country tier at a thousand
+  total United States visits, and ruled the same night:
+  "we'll hold off for the thousand visits that's a bit
+  much" — it is not built, and the legend does not carry
+  it.
