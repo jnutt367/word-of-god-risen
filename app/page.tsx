@@ -5,6 +5,7 @@ import { getAllBooks } from "@/lib/bible";
 import BookCard from "@/components/BookCard";
 import VerseOfDay from "@/components/VerseOfDay";
 import ContinueReading from "@/components/ContinueReading";
+import FirstDoors from "@/components/FirstDoors";
 import PlanContinue from "@/components/PlanContinue";
 import ListenDropdown from "@/components/ListenDropdown";
 import LatestShorts from "@/components/LatestShorts";
@@ -127,17 +128,19 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Word Integrity — first content after the hero, on purpose
-          (Jason, Oct 23, 2026): a visitor should meet the promise
-          before the books and the map. Every Teddy reading is being
-          checked word for word, and a chapter that doesn't match
-          comes down right away. */}
-      <div className="pt-6">
-        <WordIntegrityNote />
-      </div>
+      {/* The first doors (Jason, Oct 31, 2026): a hear door and a
+          watch door side by side at the very top, for the visitor
+          who just arrived — one tap into Mark 1 with Teddy reading,
+          or one tap down to the welcome film resting below them. */}
+      <FirstDoors />
 
-      {/* Meet Grandpa Teddy */}
-      <section className="mx-auto max-w-6xl px-4 pt-8 sm:px-6">
+      {/* Meet Grandpa Teddy — moved up to rest directly under the
+          first doors (Jason, Oct 31, 2026), so a new visitor meets
+          him first; the Watch door above scrolls here. */}
+      <section
+        id="meet-teddy"
+        className="mx-auto max-w-6xl scroll-mt-20 px-4 pt-8 sm:px-6"
+      >
         <div className="overflow-hidden rounded-2xl border border-gold-500/15 bg-vineyard-900">
           <div className="grid gap-0 md:grid-cols-2">
             <div className="flex flex-col justify-center bg-vineyard-950/40 p-4 sm:p-5">
@@ -165,6 +168,17 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Word Integrity — the promise near the top of the page, on
+          purpose (Jason, Oct 23, 2026): a visitor should meet the
+          promise before the books and the map. Every Teddy reading is
+          being checked word for word, and a chapter that doesn't match
+          comes down right away. (Oct 31, 2026: the first doors and
+          Grandpa Teddy's film moved in above it; the promise still
+          comes before the books and the map.) */}
+      <div className="pt-6">
+        <WordIntegrityNote />
+      </div>
 
       {/* Widgets */}
       <div className="mx-auto max-w-4xl space-y-5 px-4 py-10 sm:px-6">
