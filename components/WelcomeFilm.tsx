@@ -92,6 +92,10 @@ export default function WelcomeFilm() {
   const [ended, setEnded] = useState(false);
 
   const startPlaying = useCallback(() => {
+    // The tap itself counts the watch (Jason, Oct 31, 2026);
+    // the player's PLAYING fire is the backstop, and the beat
+    // dedupes the pair to one count per visit.
+    beatWatch(FILM_ID);
     setEnded(false);
     setPlaying(true);
   }, []);

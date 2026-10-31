@@ -155,6 +155,36 @@ body {
   }
 }
 
+/* The watch bubble's halo (Jason, Oct 31, 2026) — the lights'
+ * breathing translated into a gold ring of light around the
+ * little play door on Start reading, so the eye is guided to it
+ * the way it is guided to a light on the map. Gold only: red
+ * belongs to kindling alone. Rests as a still soft halo for
+ * readers who prefer reduced motion. */
+@keyframes watch-bubble-halo {
+  from {
+    box-shadow:
+      0 10px 15px -3px rgba(0, 0, 0, 0.35),
+      0 0 6px 1px rgba(228, 185, 92, 0.35);
+  }
+  to {
+    box-shadow:
+      0 10px 15px -3px rgba(0, 0, 0, 0.35),
+      0 0 18px 5px rgba(228, 185, 92, 0.65);
+  }
+}
+.watch-bubble-glow {
+  animation: watch-bubble-halo 4.5s ease-in-out infinite alternate;
+}
+@media (prefers-reduced-motion: reduce) {
+  .watch-bubble-glow {
+    animation: none;
+    box-shadow:
+      0 10px 15px -3px rgba(0, 0, 0, 0.35),
+      0 0 10px 2px rgba(228, 185, 92, 0.45);
+  }
+}
+
 /* Teddy helper — Grandpa Teddy's first-visit card settles in with one
  * soft fade; fully still for readers who prefer reduced motion. */
 @keyframes teddy-helper-in {

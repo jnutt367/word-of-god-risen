@@ -99,9 +99,17 @@ export function beatOpen(): void {
  * on the map it sets a gold heart on the watcher's place instead,
  * and the ocean legend's "Video watched" row is the only words it
  * carries (Jason's ruling: no count words on the page — no clutter).
- * Fired only from a player's PLAYING state — never on a page view,
- * never on a door tap alone. Same gentle dedupe as every beat:
- * once per browser session PER VIDEO.
+ * Fired from a player's PLAYING state — and, since Jason's ruling
+ * of Oct 31, 2026 ("make sure it's getting credit each time
+ * someone clicks on it at all, not having to watch any certain
+ * amount of time"), ALSO from the click that starts a video: the
+ * "Watch here" tap in the video choice, the watch bubble's tap,
+ * the welcome film's play tap. A click is the intent; no duration
+ * is ever owed. The PLAYING fire remains as the backstop for any
+ * player reached without one of those taps. Same gentle dedupe
+ * as every beat: once per browser session PER VIDEO — a click
+ * counts the watch once per visit, the way a chapter counts once
+ * per visit, so no one can paint the map by tapping.
  */
 export function beatWatch(videoId: string): void {
   const key = `watch:${videoId}`;

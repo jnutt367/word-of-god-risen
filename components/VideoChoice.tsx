@@ -9,6 +9,7 @@ import {
   type SyntheticEvent,
 } from "react";
 import { createPortal } from "react-dom";
+import { beatWatch } from "@/lib/heartbeat";
 import WatchPlayer from "./WatchPlayer";
 
 /**
@@ -122,6 +123,11 @@ export function VideoChoiceModal({
   }, [onClose]);
 
   const watchHere = () => {
+    // The watch counts from this tap (Jason, Oct 31, 2026): the
+    // click is the intent, no amount of watching is owed. The
+    // player's PLAYING fire stands behind it as a backstop; the
+    // beat's own dedupe keeps the pair to one count per visit.
+    beatWatch(videoId);
     if (onWatchHere) {
       onWatchHere();
       onClose(false);
