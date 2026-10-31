@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import HeroMapSlide, { type HeroMapPayload } from "@/components/HeroMapSlide";
 
 /**
  * The cycling hero (Jason, crowned and ordered published
@@ -38,6 +39,19 @@ import Image from "next/image";
  * so the phone frame keeps the subject whole. The desktop and
  * phone variants of a slide share one fading wrapper, so the two
  * never drift out of step.
+ *
+ * The TENTH slide is not a file at all (Jason, later the same
+ * morning, Oct 31, 2026: "a polished version of the map that
+ * actually shows updates… but looks a different kind of style"):
+ * the live Earth map, drawn painterly by components/
+ * HeroMapSlide.tsx from the same /api/heartbeat record and the
+ * same display decisions as the real map below — today's lights,
+ * never a frozen picture. It joins the rotation only when the
+ * live record actually answers (see the fetch below); if the
+ * fetch fails or the payload is not the live record, the slide
+ * simply never exists and the nine pictures walk on without it.
+ * Under reduced motion the cycle never advances at all, so the
+ * map slide is never reached — the tomb stands, as always.
  */
 const SLIDES = [
   { desktop: "/images/hero-cycle/slide-01-desktop.jpg", mobile: "/images/hero-cycle/slide-01-mobile.jpg" },
@@ -61,6 +75,43 @@ export default function HeroCycle() {
   // the cycle then rests on whatever picture is showing.
   const [stopped, setStopped] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
+  // The live Earth map slide's payload — null until (and unless)
+  // the live record answers. Fetched ONCE on mount, the same
+  // endpoint and no-store pattern BodyHeartbeat's loader uses,
+  // and held to a stricter gate than the section map's: the hero
+  // slide joins only on the LIVE record itself (data.live), never
+  // on any fallback — a frozen picture of the map is the one
+  // thing Jason ruled out. A failed or unusable fetch leaves
+  // this null forever and the cycle stays at nine slides.
+  const [mapData, setMapData] = useState<HeroMapPayload | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/heartbeat", { cache: "no-store" });
+        if (!res.ok) return;
+        const data = (await res.json()) as HeroMapPayload;
+        if (cancelled) return;
+        if (
+          data &&
+          data.live === true &&
+          typeof data.totals?.chaptersRead === "number" &&
+          typeof data.today?.date === "string" &&
+          Array.isArray(data.countries)
+        ) {
+          setMapData(data);
+        }
+      } catch {
+        /* the slide simply never joins — the pictures walk on */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // The nine pictures, plus the map slide when it has joined.
+  const totalSlides = SLIDES.length + (mapData ? 1 : 0);
 
   // The walking itself: advance every 8 seconds unless the
   // visitor prefers reduced motion (then the tomb simply stays),
@@ -73,7 +124,7 @@ export default function HeroCycle() {
     const start = () => {
       stopTimer();
       timer = window.setInterval(() => {
-        setActive((i) => (i + 1) % SLIDES.length);
+        setActive((i) => (i + 1) % totalSlides);
       }, HOLD_MS);
     };
     const stopTimer = () => {
@@ -90,7 +141,7 @@ export default function HeroCycle() {
       stopTimer();
       document.removeEventListener("visibilitychange", onVisibility);
     };
-  }, [stopped]);
+  }, [stopped, totalSlides]);
 
   // A hand on any of the hero's doors (the nav pills, Start
   // reading, Start listening, the speaker bubble, Search) rests
@@ -139,6 +190,22 @@ export default function HeroCycle() {
           />
         </div>
       ))}
+      {/* The tenth slide — the live Earth map (Jason, Oct 31,
+          2026), present only when the live record answered the
+          fetch above. It fades on the same wrapper rhythm as the
+          pictures, rests under the same pause and stop rules,
+          and is decorative here: the real map below carries the
+          marks' full names and meanings. */}
+      {mapData ? (
+        <div
+          aria-hidden="true"
+          className={`pointer-events-none absolute inset-0 transition-opacity duration-[1500ms] ease-in-out ${
+            active === SLIDES.length ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          <HeroMapSlide data={mapData} />
+        </div>
+      ) : null}
     </div>
   );
 }
