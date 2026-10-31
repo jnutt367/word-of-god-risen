@@ -174,9 +174,11 @@ import {
  * gold ring inside it too. The decision is stillKnocking()
  * in lib/heartbeat-display.ts, read off the SHOWN day's own
  * rows, so a past day browsed in the record (or opened by
- * its ?day= link) wears the glow it earned that day. The
- * finest geography carries it, as with every sign here: a
- * subdivision's glow steps its country's own glow back.
+ * its ?day= link) wears the glow it earned that day. STATE
+ * BY STATE (Jason's correction, the same night): a divided
+ * country never wears it on summed visits — its states
+ * wear their own, or none; only a country with no
+ * subdivisions in the record glows as a country.
  */
 
 interface HbTotals {
@@ -1154,9 +1156,14 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   // shown row IS its day's row, so the purple glow is true at
   // the live default and for a browsed day alike. No date
   // gate — stillKnocking() in lib/heartbeat-display.ts reads
-  // the row's own opens, visits only, in any chapter state,
-  // and a country's own glow steps back to a subdivision's,
-  // exactly as its light and its rings do.
+  // the row's own opens, visits only, in any chapter state.
+  // STATE BY STATE (Jason's correction, the mark's first
+  // night): the glow belongs to places — a state on its own
+  // hundred, or a country with no subdivisions in the record
+  // on its own — and a divided country's SUMMED visits never
+  // earn it: countryStillKnockingOn refuses any country the
+  // shown set divides. (The rings keep their step-back; the
+  // stricter rule is this glow's alone.)
   const subStillKnockingOn = (s: LiveSubdivisionDisplay) => stillKnocking(s);
   const countryStillKnockingSignOn = (c: HbCountryRow) =>
     countryStillKnockingOn(c, shownSubdivisions);
@@ -1171,6 +1178,15 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   // carries it too.
   const stillKnockingClause = (r: HbCountryRow): string =>
     stillKnocking(r)
+      ? ` — still knocking: a hundred or more visits ${shownWhen}`
+      : "";
+  // The country voice of the same clause follows the SIGN,
+  // not the raw row (state by state, Oct 30, 2026): a
+  // divided country never speaks it on its summed visits —
+  // its states speak for themselves, through the clause
+  // above on their own rows.
+  const countryStillKnockingClause = (c: HbCountryRow): string =>
+    countryStillKnockingSignOn(c)
       ? ` — still knocking: a hundred or more visits ${shownWhen}`
       : "";
   // The aria voice of the purple glow, in hundredfoldClause's
@@ -1303,7 +1319,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
       const subs = shownSubdivisions.filter(
         (s) => s.country === c.code && (s.opens > 0 || s.watches > 0)
       );
-      const base = `the app was opened in ${c.name} ${shownWhen} — ${fmt(allTimeOpensOf(c))} ${allTimeOpensOf(c) === 1 ? "visit" : "visits"} in all, and the Word has not been opened there yet; ${c.name} rests as a faint ember, glowing a little brighter with visits, not fully lit${kindledClause(c)}${stillKnockingClause(c)}${countryWatchHeartOn(c) ? watchClause(c) : ""}`;
+      const base = `the app was opened in ${c.name} ${shownWhen} — ${fmt(allTimeOpensOf(c))} ${allTimeOpensOf(c) === 1 ? "visit" : "visits"} in all, and the Word has not been opened there yet; ${c.name} rests as a faint ember, glowing a little brighter with visits, not fully lit${kindledClause(c)}${countryStillKnockingClause(c)}${countryWatchHeartOn(c) ? watchClause(c) : ""}`;
       return subs.length > 0
         ? `${base}; its divisions rest as embers where recorded: ${subs
             .map((s) =>
@@ -1579,10 +1595,12 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 wears it — a kindled ember's red inside the
                 purple, a hundredfold light's gold ring inside
                 it too — and it is STEADY: no .hb-glow, no
-                breathing, a kept sign for the day. A country's
-                own glow steps back when one of its subdivisions
-                wears the glow (countryStillKnockingOn), as its
-                light does. */}
+                breathing, a kept sign for the day. STATE BY
+                STATE (Jason's correction, Oct 30, 2026): a
+                divided country never wears it on its summed
+                visits (countryStillKnockingOn) — its states
+                wear their own below; only a country with no
+                subdivisions in the record glows as a country. */}
             {mapRows.map((c) =>
               countryStillKnockingSignOn(c) ? (
                 c.geo ? (
@@ -1621,7 +1639,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                     <title>
                       {tierOf(c) === "open" ? openPhrase(c) : emberPhrase(c)}
                       {kindledClause(c)}
-                      {stillKnockingClause(c)}
+                      {countryStillKnockingClause(c)}
                       {countryWatchHeartOn(c) ? watchTitle(c) : ""}
                     </title>
                     <path
@@ -1779,7 +1797,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                     <title>
                       {tierOf(c) === "open" ? openPhrase(c) : emberPhrase(c)}
                       {kindledClause(c)}
-                      {stillKnockingClause(c)}
+                      {countryStillKnockingClause(c)}
                       {countryWatchHeartOn(c) ? watchTitle(c) : ""}
                     </title>
                     <circle

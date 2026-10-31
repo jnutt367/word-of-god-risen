@@ -259,25 +259,34 @@ export function stillKnocking(row: { opens?: number }): boolean {
   return (row.opens ?? 0) >= STILL_KNOCKING_OPENS_THRESHOLD;
 }
 
-/** A country's own glow steps back when one of its
- *  subdivisions wears the glow that day — the finest
- *  recorded geography carries the sign, exactly as it
- *  carries the light and the rings (v3.1.1). This helper
- *  walks the subdivision rows itself rather than through
- *  subdivisionsOfCountry: that helper gathers a country's
- *  CHAPTER-carrying divisions, and a knocking sign can
- *  stand on a division with no chapters at all — indeed,
- *  that is its likeliest wearer. A country whose hundred
- *  visits stand in its own count, with no subdivision
- *  wearing the glow, keeps its own glow. */
+/** STATE BY STATE (Jason's correction, Oct 30, 2026, the
+ *  night the mark was born — "I thought we were doing
+ *  state by state"): still knocking belongs to PLACES —
+ *  a country's own subdivisions, or a country that has
+ *  no subdivisions in the record — and only on that
+ *  place's OWN hundred visits. As first shipped, this
+ *  helper let a country's own glow stand on its SUMMED
+ *  count whenever no subdivision wore one, and the
+ *  United States' aggregate (102 visits, no state past
+ *  57) wore the glow the mark's first night. Jason's
+ *  ruling ends that: a country WITH recorded
+ *  subdivisions in the shown set never wears the glow
+ *  at all — its states wear their own, or none — and a
+ *  country with NO recorded subdivisions is a single
+ *  place and wears it on its own count, exactly as such
+ *  a country carries its own light (v3.1.1). The rings
+ *  keep their step-back unchanged; this stricter rule
+ *  is the purple glow's alone. The helper reads the
+ *  subdivision rows for mere presence (any row of the
+ *  country in the shown set, chapters or none), so it
+ *  takes the rows themselves, not the chapter-carrying
+ *  subset subdivisionsOfCountry gathers. */
 export function countryStillKnockingOn(
   row: { code: string; opens?: number },
   subdivisions: readonly { country: string; opens?: number }[]
 ): boolean {
   if (!stillKnocking(row)) return false;
-  return !subdivisions.some(
-    (s) => s.country === row.code && stillKnocking(s)
-  );
+  return !subdivisions.some((s) => s.country === row.code);
 }
 
 /** The still-knocking glow's purple: a clear royal purple —
