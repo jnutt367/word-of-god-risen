@@ -1306,3 +1306,103 @@ governs the copy, as with every mark on this map).
   rendering ships in the same component, commit, and build;
   the served JS chunk was not separately grepped — the
   sandbox fetch does not surface the chunk references).
+
+## Still knocking — a hundred visits in a day (Oct 30, 2026)
+
+Jason, later that same night, watching the day's counts
+climb: "I think 100 visits should get you something too
+then maybe not red but what other color is there out there
+LOL purple." He asked for one or two words around knocking
+or seeking, weighed "Knocking" against "Still Knocking",
+and crowned STILL KNOCKING — the friend at midnight in
+Luke 11, who received the bread "because of his
+persistence": a hundred visits in a day is not one knock;
+it is a place that kept coming back. (Philippians 2:3
+governs the copy, as with every mark on this map.)
+
+- **The rule.** When a place's SHOWN day brings a hundred
+  or more VISITS (opens), the place wears a **soft purple
+  glow** for the day. The decisions are pure functions in
+  `lib/heartbeat-display.ts` (`stillKnocking`,
+  `countryStillKnockingOn`, the threshold named as
+  `STILL_KNOCKING_OPENS_THRESHOLD` = 100, beside kindling's
+  75 and the hundredfold's 100): the count is the row's
+  `opens` and nothing else — visits only, in ANY chapter
+  state. A chapter is never a visit and a visit is never a
+  chapter; rows already keep the two apart, so no new
+  counting exists anywhere — the mark reads what the
+  record already holds.
+- **Not a ring — a glow.** Rings belong to the Word's own
+  feats (ivory for a book finished, gold for a hundred
+  chapters); visits are the seeking family, so this sign
+  lives in the glow. It is drawn under the lights
+  themselves, on the disc and in the closer-look panel:
+  the place's shape filled with the purple and passed
+  through the map's own soft blur — gold keeps a place's
+  inside, purple blooms past its border as a halo — and
+  around a centroid light, a blurred purple circle wider
+  than the light's own halo. STEADY — no breathing, no
+  flare, a kept sign for the day.
+- **The purple.** `#a855f7` (rim `#c084fc`), a clear royal
+  purple — Lydia's trade in Acts 16, the chapter Jason
+  studied that very morning (the door that opened because
+  Asia's was shut), and a royal priesthood's color
+  (1 Peter 2:9) — and a hue the map spends nowhere else:
+  gold belongs to the lights, ivory to the finished book,
+  pale blue (#8fd8ff) to the video trace, warm red to
+  kindling.
+- **It may coexist.** A kindled place (75+ opens, no
+  chapters) at a hundred opens wears the red kindling AND
+  the purple glow; a hundredfold place at a hundred opens
+  wears its gold ring inside the purple glow. Different
+  truths, both shown.
+- **Shown-day, not today-only.** Like the gold ring, the
+  glow reads the shown rows themselves: day browsing and
+  the `?day=` deep-link show a past day's glow exactly as
+  it stood that day.
+- **The finest geography carries it.** A subdivision's
+  glow steps its country's own glow back, as with the
+  light and the rings. The country helper walks the
+  subdivision rows itself rather than through the shared
+  helper: that helper gathers a country's chapter-carrying
+  divisions, and a knocking sign can stand on a division
+  with no chapters at all — indeed, that is its likeliest
+  wearer.
+- **Every text surface names it in the same voice:** the
+  legend's seventh row, standing beside the kindled row —
+  the two visit marks together, the seeking family's two
+  thresholds (the "Video watched" row moves to the last
+  cell to make the pair) — a purple-glow swatch, "Still
+  Knocking — 100 visits in a day"; the place chips carry
+  "· still knocking" in the purple on the honors line, and
+  a chip whose only honor it is takes the two-line form
+  like any honored chip; the glow's `<title>`, the figure's
+  aria summary, the caption under the disc, and the
+  closer-look label say it too.
+- **The first wearer is the United States itself.** At the
+  last live check before this build shipped (9:06 PM ET,
+  Oct 30), the United States' row stood at 102 visits for
+  the day — the first row ever to reach a hundred — with
+  no state's count near it (Florida, the nearest, at 57),
+  so the country's own glow stands: the nation glows
+  purple around Florida's gold hundredfold ring on the
+  night both signs were born. California, the first place
+  ever to kindle, peaked at 78 visits on its kindling
+  night (Oct 29) — still knocking, not yet through.
+- **Verification (Oct 30, 2026).** `tsc --noEmit` clean,
+  ESLint clean on the touched files, production build
+  clean. Fixture checks against the compiled display logic
+  pass: opens 99 wears no glow, 100 wears it; a kindled
+  row (100 opens, no chapters) satisfies kindling and
+  still knocking at once; a hundredfold row (110 chapters,
+  100 opens) satisfies both decisions at once; the
+  country's glow steps back to a subdivision's — including
+  an opens-only subdivision carrying no chapters — and
+  stands when no subdivision wears one. Production: the
+  served homepage was polled until the new build answered
+  (third poll, inside the expected deploy lag) — the
+  legend text "Still Knocking — 100 visits in a day" is
+  present in the served app (the glow rendering ships in
+  the same component, commit, and build; the served JS
+  chunk was not separately grepped — the sandbox fetch
+  does not surface the chunk references).
