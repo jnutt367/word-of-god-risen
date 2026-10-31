@@ -6,9 +6,6 @@ import { join } from "path";
 import { CHARACTERS, getCharacter } from "@/data/characters";
 import InlineMd from "@/components/InlineMd";
 
-// Printify store URL — set when the Faces of Faith card products go live.
-const PRINTIFY_STORE_URL = "";
-
 function cardImages(slug: string): { front: string; back: string } | null {
   const front = `/images/cards/${slug}-front.jpg`;
   const back = `/images/cards/${slug}-back.jpg`;
@@ -188,22 +185,6 @@ export default async function CharacterPage({
                   Back
                 </figcaption>
               </figure>
-            </div>
-            <div className="mt-6">
-              {PRINTIFY_STORE_URL ? (
-                <a
-                  href={PRINTIFY_STORE_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm font-medium text-gold-300 underline decoration-gold-500/40 underline-offset-4 transition-colors hover:text-gold-400"
-                >
-                  Available in the TruVINE store
-                </a>
-              ) : (
-                <p className="text-sm italic text-sage-500">
-                  Faces of Faith cards coming soon to the TruVINE store.
-                </p>
-              )}
             </div>
           </section>
         );

@@ -152,12 +152,6 @@ const RESPONSES: Record<string, TeddyResponse> = {
     links: [
       { label: "TruVINE on YouTube", href: "https://www.youtube.com/@TruVINE365" },
     ],
-    chips: ["Last stop: the store →", "That's all I need, thanks"],
-  },
-  "farm-store": {
-    id: "farm-store",
-    text: "Last stop on our walk — the little store. It's got shirts and hoodies with the Word on 'em, for anybody who'd like one. No pressure at all, friend — we're just glad you came by the farm.",
-    links: [{ label: "Visit the store", href: "https://truvine.printify.me/" }],
     chips: ["Finish the walk →", "That's all I need, thanks"],
   },
   "farm-close": {
@@ -206,7 +200,6 @@ const CHIP_ROUTES: Record<string, string> = {
   "Next: the movies →": "farm-movies",
   "Next: the Family Wall →": "farm-wall",
   "Next: all the videos →": "farm-videos",
-  "Last stop: the store →": "farm-store",
   "Finish the walk →": "farm-close",
   "That's all I need, thanks": "thanks",
 };

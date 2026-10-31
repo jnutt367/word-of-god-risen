@@ -43,17 +43,6 @@ export default function SiteFooter() {
               jnutt367@gmail.com
             </a>
           </div>
-          <p className="mt-3 text-xs text-sage-500">
-            Wear your faith —{" "}
-            <a
-              href="https://truvine.printify.me"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:text-gold-300"
-            >
-              TruVINE merch store
-            </a>
-          </p>
           <p className="mt-4 text-xs text-sage-500">
             A not-for-profit passion project by Jason Nutt · Scripture text
             (WEB &amp; KJV, public domain) for reading &amp; study · Videos by

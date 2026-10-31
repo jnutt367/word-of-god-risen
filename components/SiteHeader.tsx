@@ -82,10 +82,6 @@ const FARM_SECTIONS = [
     heading: "More from the Farm",
     items: [
       {
-        href: "https://truvine.printify.me/",
-        label: "The Store",
-      },
-      {
         href: "https://cash.app/$TRUVINE365",
         label: "Give",
         hint: "only if you'd like to",
@@ -97,8 +93,12 @@ const FARM_SECTIONS = [
 type FarmItem = (typeof FARM_SECTIONS)[number]["items"][number];
 
 // Mobile farm order (Jason, Oct 21): "More from the Farm" rides
-// top-right, beside Watch, so the Store and Give doors never sit at
-// the bottom of the panel where the floating Listen bar lives.
+// top-right, beside Watch, so the Give door never sits at the
+// bottom of the panel where the floating Listen bar lives.
+// (The Store item left this menu Oct 30, 2026, on Jason's ruling —
+// John 2:16, in his words: "I don't want to make my Father's house
+// a marketplace." The store keeps its own door outside the app;
+// the Give door stays, untouched.)
 const MOBILE_FARM_SECTIONS = [
   FARM_SECTIONS[0],
   FARM_SECTIONS[2],
