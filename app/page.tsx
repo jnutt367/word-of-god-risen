@@ -100,9 +100,14 @@ export default function Home() {
             chapter, tap Listen.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            {/* Start reading opens an actual chapter (Jason,
+                Oct 31, 2026): it used to scroll to the book grid,
+                which left the visitor still choosing. Now it
+                opens Genesis chapter 1 in the reader — the same
+                one-tap honesty as the speaker bubble beside it. */}
             <Link
-              href="#books"
-              className="rounded-lg bg-gold-500 px-6 py-3.5 text-base font-semibold text-vineyard-950 transition-colors hover:bg-gold-400"
+              href="/book/genesis/0"
+              className="rounded-lg bg-gold-500 px-6 py-3.5 text-base font-semibold text-vineyard-950 transition-colors hover:bg-gold-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
             >
               Start reading
             </Link>
