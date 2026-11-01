@@ -111,16 +111,73 @@ export function beatOpen(): void {
  * counts the watch once per visit, the way a chapter counts once
  * per visit, so no one can paint the map by tapping.
  */
+/**
+ * Deliver the watch beat on the sturdiest transport and report
+ * whether the browser ACCEPTED it. sendBeacon is the first door:
+ * it answers synchronously whether the browser queued the beat,
+ * and it survives the page transitions that kill ordinary calls.
+ * Only where sendBeacon does not exist does the beat fall back to
+ * the fetch-with-keepalive door every other beat uses; there the
+ * initiation itself is the acceptance, the old fire-and-forget
+ * corner, kept for browsers that offer nothing better.
+ */
+function deliverWatchBeat(): boolean {
+  const body = JSON.stringify({ type: "watch" });
+  try {
+    if (
+      typeof navigator !== "undefined" &&
+      typeof navigator.sendBeacon === "function"
+    ) {
+      return navigator.sendBeacon(
+        "/api/heartbeat",
+        new Blob([body], { type: "application/json" })
+      );
+    }
+  } catch {
+    /* fall through to the fetch door */
+  }
+  try {
+    void fetch("/api/heartbeat", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body,
+      keepalive: true,
+    }).catch(() => {
+      /* acceptance was the initiation; nothing more can be known */
+    });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export function beatWatch(videoId: string): void {
   const key = `watch:${videoId}`;
   if (seen(key)) return;
+  /**
+   * The hardening (Jason approved, Nov 1, 2026): the seen-mark is
+   * earned by ACCEPTANCE, not by the attempt. The old order marked
+   * the video seen first and fired one forgetful fetch; when that
+   * single call was blocked or lost — an ad-blocker, a strict
+   * privacy setting, a page turning at the wrong moment — the
+   * credit died AND the mark forbade any retry, so the PLAYING
+   * backstop fired into the same mark and was swallowed. Real
+   * viewers vanished that way: in the record only Florida had ever
+   * worn the watch trace, though a named viewer in Louisiana had
+   * truly watched. Now a send the browser refuses leaves the video
+   * UNMARKED, so the PLAYING backstop — or a later tap — fires it
+   * again within the session. The invariant stands untouched:
+   * once per browser session per video COUNTS, because an accepted
+   * delivery marks seen at once, and a retry can only ever follow
+   * a send that was never accepted.
+   */
+  if (!deliverWatchBeat()) return;
   markSeen(key);
   try {
     track("video_watched", { video: videoId });
   } catch {
     /* ignore */
   }
-  beatLive("watch");
 }
 
 /** Playback of a chapter began (Teddy MP3 or device TTS), from idle. Once per session per chapter. */
