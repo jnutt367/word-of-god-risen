@@ -1941,15 +1941,48 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 gold light's base (silhouetteFill starts at 0.30),
                 and an ember's gold layers over this cream exactly
                 as before — rendering presence only; no mark is
-                added, moved, or changed. */}
+                added, moved, or changed.
+                DARK EARTH PASS (third pass, Nov 1, 2026 — Jason,
+                with the new ocean on his phone: "make the land
+                darker so that when our lights show up it really
+                pops"): the ground trades the pale parchment for
+                a deep olive-brown earth, #5f5430 — the parchment
+                family darkened, warm, never grey or black — at
+                fill 0.78, the pale parchment surviving only in
+                the border stroke (0.42) so countries still draw
+                their own outlines on the dark ground. Measured
+                before it shipped, the pass-2 way (every mark
+                composited at its real values over the old land
+                and the new): the land itself darkens ~15 L*
+                points (53 → 36 over mid-water) and separates
+                from the sea FAR better than the pale land did
+                (ΔE ~14 → ~30 at every stop — warm earth against
+                blue water), so unlit land reads as land more
+                surely than before. The lights' POP is luminance:
+                the faintest chapter light's contrast against
+                its ground rises 1.26 → 1.60, a full light's
+                1.63 → 2.53, a light's bright core 3.64 → 6.71,
+                and the gold now renders true gold instead of a
+                blue-washed tint. The faint marks were the risk
+                and were checked hardest: the ember's fill holds
+                its separation (ΔE 6.0 → 6.2, its rim 12.5 →
+                14.6 and up), kindling's fill actually gains
+                (13.6 → 18.3), the purples and the deep tier
+                gain wide, the watch trace nearly doubles
+                (23.6 → 47.9) — NO mark needed strengthening,
+                and no light, fill, or count changed: the data
+                encodings are untouched, only the ground under
+                them darkened. The hero slide and the closer
+                look wear the same earth, so the page is one
+                world. */}
             <path
               d={world.land}
-              fill="#e8d9ae"
+              fill="#5f5430"
               fillRule="evenodd"
-              opacity="0.28"
+              fillOpacity="0.78"
               stroke="#e8d9ae"
               strokeWidth="0.8"
-              strokeOpacity="0.40"
+              strokeOpacity="0.42"
             />
             {/* (No vine overlay — v3.1.3 removed it under Jason's
                 rule "if they stay they should look like what they
@@ -2797,7 +2830,19 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
             patriotic dressing (Jason's hard rule).
             (Nov 1, 2026: the panel's deep-sea ground follows
             the sea's rim, #0b2836 → #174a73, per the
-            lighter-sea pass — panel and rim stay one color.) */}
+            lighter-sea pass — panel and rim stay one color.
+            Third pass, later Nov 1, 2026 — Jason, loving the
+            new ocean: "maybe change the color of it on the
+            United States one down below": the panel's MAP now
+            carries its own sea — the disc's very gradient
+            (hb-sea-us, the same three stops in panel space)
+            laid behind the states, so the water inside the
+            map is the ocean itself, not the flat rim blue;
+            the panel's surrounding ground stays the rim blue
+            as crowned, and the gradient's own corners land on
+            that same rim color, so the seam is invisible. The
+            states wear the disc's new dark earth too — see
+            the ground layer's dark-earth note.) */}
         <div
           className="mx-auto mt-10 max-w-3xl rounded-2xl border border-gold-500/25 px-4 py-6 sm:px-6"
           style={{ backgroundColor: "#174a73" }}
@@ -2816,21 +2861,45 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 <filter id="hb-soft-us" x="-40%" y="-40%" width="180%" height="180%">
                   <feGaussianBlur stdDeviation="7" />
                 </filter>
+                {/* the panel's own sea (third pass, Nov 1,
+                    2026): the disc's ocean gradient — the same
+                    three stops, #2a7ab0 at the heart → #1f6395
+                    → #174a73 at the rim — expressed in the
+                    panel's own coordinates (userSpaceOnUse,
+                    centered on the viewBox, r=94 so the corners
+                    reach the rim stop and meet the panel's
+                    rim-blue ground without a seam) */}
+                <radialGradient id="hb-sea-us" gradientUnits="userSpaceOnUse" cx="345.5" cy="476" r="94">
+                  <stop offset="0%" stopColor="#2a7ab0" />
+                  <stop offset="55%" stopColor="#1f6395" />
+                  <stop offset="100%" stopColor="#174a73" />
+                </radialGradient>
               </defs>
+              {/* the ocean inside the panel's map — an
+                  unrotated rect in panel space behind the
+                  rotated states (third pass, Nov 1, 2026) */}
+              <rect x="267" y="426" width="157" height="100" fill="url(#hb-sea-us)" />
               <g transform={US_PANEL_TRANSFORM}>
                 {/* every mainland state + DC, quiet — the same
-                    parchment presence the disc's land wears */}
+                    dark earth the disc's land wears (third
+                    pass, Nov 1, 2026: #5f5430 at 0.62, a touch
+                    quieter than the disc's 0.78 as the panel's
+                    base always sat a step under the disc's;
+                    its state-vs-sea separation measured
+                    ~21 ΔE, up from ~12 on the old flat ground,
+                    and every panel mark re-proven over it —
+                    see the ground layer's dark-earth note) */}
                 {US_PANEL_STATES.map(({ code, geo }) => (
                   <g key={`us-base-${code}`}>
                     <title>{geo.name}</title>
                     <path
                       d={geo.path}
-                      fill="#e8d9ae"
+                      fill="#5f5430"
                       fillRule="evenodd"
-                      fillOpacity="0.22"
+                      fillOpacity="0.62"
                       stroke="#e8d9ae"
                       strokeWidth="0.6"
-                      strokeOpacity="0.20"
+                      strokeOpacity="0.34"
                     />
                   </g>
                 ))}

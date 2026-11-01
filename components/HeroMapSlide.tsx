@@ -677,24 +677,33 @@ export default function HeroMapSlide({ data }: { data: HeroMapPayload }) {
         <g
           transform={`translate(500 500) scale(${MAP_SCALE}) translate(-500 -500)`}
         >
-          {/* the land — warm parchment, its edges softened by a
-              wide blurred pass beneath the true one, so the world
-              reads painted rather than printed */}
+          {/* the land — its edges softened by a wide blurred
+              pass beneath the true one, so the world reads
+              painted rather than printed. (Third pass, Nov 1,
+              2026 — the dark earth, matching the section map:
+              the parchment deepens to #5f5430, the blurred
+              underlay 0.10 → 0.20 and the true pass 0.24 →
+              0.58 with its border strengthened to 0.34, a
+              step softer than the disc's own 0.78 as this
+              slide has always sat quieter — measured the
+              same way as the disc: the land darkens from
+              L* ~55 to ~36 and every light's contrast over
+              it rises; see BodyHeartbeat's ground note.) */}
           <path
             d={world.land}
-            fill="#e8d9ae"
+            fill="#5f5430"
             fillRule="evenodd"
-            opacity="0.10"
+            opacity="0.20"
             filter="url(#hero-map-soft-lg)"
           />
           <path
             d={world.land}
-            fill="#e8d9ae"
+            fill="#5f5430"
             fillRule="evenodd"
-            opacity="0.24"
+            fillOpacity="0.58"
             stroke="#e8d9ae"
             strokeWidth="0.6"
-            strokeOpacity="0.22"
+            strokeOpacity="0.34"
           />
           {/* the unsaid deep tier — first among the marks, under
               every light, voiceless as it is on the real map */}
