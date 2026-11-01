@@ -1433,11 +1433,13 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   // a browsed day alike (the ?day= record shows a past day's
   // ring too). No date gate — hundredfold() in
   // lib/heartbeat-display.ts reads the row's own total, and a
-  // country's own ring steps back to a subdivision's, exactly
-  // as its light and its ivory ring do.
+  // country's ring ENCOMPASSES it when one of its subdivisions
+  // bears the ring (Jason's re-ruling, late Oct 31, 2026 —
+  // the ring no longer steps back).
   const subHundredfoldOn = (s: LiveSubdivisionDisplay) => hundredfold(s);
   const countryHundredfoldSignOn = (c: HbCountryRow) =>
     countryHundredfoldOn(c, shownSubdivisions);
+  const usCountryRow = mapRows.find((c) => c.code === "US");
   const anyHundredfold =
     mapRows.some((c) => countryHundredfoldSignOn(c)) ||
     shownSubdivisions.some((s) => subHundredfoldOn(s));
@@ -2285,9 +2287,9 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 silhouette, clipped to the shape's outside (the
                 watch trace's mirror); around a centroid light,
                 a circle beyond the ivory ring's own. A country's
-                own ring steps back when one of its subdivisions
-                wears the ring (countryHundredfoldOn), as its
-                light does. */}
+                ring ENCOMPASSES it when one of its subdivisions
+                wears the ring (countryHundredfoldOn — Jason's
+                re-ruling, late Oct 31, 2026: both rings stand). */}
             {mapRows.map((c) =>
               countryHundredfoldSignOn(c) ? (
                 c.geo ? (
@@ -2897,6 +2899,22 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                     />
                   ) : null
                 )}
+                {/* THE HUNDREDFOLD ENCOMPASSES THE COUNTRY
+                    (Jason, late Oct 31, 2026): when one of its
+                    states bears the hundredfold, the gold ring
+                    also outlines the whole United States down
+                    here — the country's own border from the
+                    same map geometry, drawn before the states'
+                    own rings so each state keeps its crown
+                    inside the country's. */}
+                {usCountryRow?.geo && countryHundredfoldSignOn(usCountryRow) ? (
+                  <HundredfoldRingMark
+                    key="us-hundredfold-US"
+                    idKey="panel-US"
+                    d={usCountryRow.geo.path}
+                    label={hundredfoldTitle(usCountryRow.name)}
+                  />
+                ) : null}
                 {/* the hundredfold rings — the disc's gold ring,
                     drawn just before the ivory rings so the two
                     nest in the panel as they do on the disc:

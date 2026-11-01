@@ -212,18 +212,26 @@ export function hundredfold(row: { total: number }): boolean {
   return row.total >= HUNDREDFOLD_TOTAL_THRESHOLD;
 }
 
-/** A country's own gold ring steps back when one of its
- *  subdivisions wears the ring that day — the finest recorded
- *  geography carries the sign, exactly as it carries the light
- *  and the ivory ring (v3.1.1). A country whose hundredfold
- *  stands in its own count, with no subdivision wearing one,
- *  keeps its own ring. */
+/** A country's gold ring — RE-RULED by Jason late on
+ *  Oct 31, 2026: "the hundredfold should still encompass
+ *  the United States after Florida gets it." The ring no
+ *  longer steps back when a subdivision wears it. When one
+ *  of a country's own places bears a hundredfold, the ring
+ *  ALSO encompasses the whole country — both rings stand:
+ *  Florida's around Florida, the United States' around the
+ *  United States, on the disc, in the closer-look panel
+ *  (the panel draws the country's own outline), and in the
+ *  hero slide's portrait of the best day. A country standing
+ *  in its own count keeps its ring as before. (Still
+ *  Knocking still refuses this inheritance — state by
+ *  state, Jason's Oct 30 correction; the ivory ring is
+ *  untouched.) */
 export function countryHundredfoldOn(
   row: { code: string; total: number },
   subdivisions: readonly SubdivisionCountLike[]
 ): boolean {
-  if (!hundredfold(row)) return false;
-  return !subdivisionsOfCountry(subdivisions, row.code).some((s) =>
+  if (hundredfold(row)) return true;
+  return subdivisionsOfCountry(subdivisions, row.code).some((s) =>
     hundredfold(s)
   );
 }
