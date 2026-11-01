@@ -158,7 +158,16 @@ function subdivisionFill(total: number): number {
 function subdivisionGlow(total: number): number {
   return Math.min(0.26, 0.12 + 0.05 * Math.log10(1 + total));
 }
-const MAP_SCALE = 1.06;
+/* Nov 1, 2026 (the second size pass): the section map's
+ * scale stepped to 1.09 in its presence pass — the farthest
+ * land reach (r≈456) landing on the disc face itself (r=497),
+ * the most growth the disc's own frame holds. The slide's
+ * disc is the same frame, so it takes the same step here for
+ * parity: a light must read at the same size in the hero as
+ * on the real map below. Beyond this, the slide's cycle frame
+ * (a full-bleed slide, meet-fitted) gives no honest layout
+ * room, and none is forced. */
+const MAP_SCALE = 1.09;
 
 interface PlaceRow {
   code: string;
@@ -216,6 +225,18 @@ function WatchTraceMark({
       <clipPath id={clipId}>
         <path d={d} />
       </clipPath>
+      {/* the depth seam, as on the real map (Nov 1, 2026,
+          the lighter-sea pass — see BodyHeartbeat's
+          WatchTraceMark note): a soft deep-ocean seam
+          beneath the pale trace, the mark itself untouched */}
+      <path
+        d={d}
+        fill="none"
+        stroke="#12405f"
+        strokeWidth="8"
+        strokeOpacity="0.30"
+        clipPath={`url(#${clipId})`}
+      />
       <path
         d={d}
         fill="none"
@@ -601,14 +622,20 @@ export default function HeroMapSlide({ data }: { data: HeroMapPayload }) {
     <div
       className="absolute inset-0"
       style={{
-        // The dawn sea — the section map's own sea family
-        // (#175263 → #10394a → #0b2836), warmed and lifted a step
-        // toward the hero stills' first light, with a soft gold
-        // bloom behind the disc's heart. The hero's scrim still
-        // settles over it, as it settles over every slide.
+        // The dawn sea — the section map's own sea family,
+        // warmed and lifted a step toward the hero stills'
+        // first light, with a soft gold bloom behind the
+        // disc's heart. The hero's scrim still settles over
+        // it, as it settles over every slide.
+        // (Nov 1, 2026, the lighter-sea pass: the family is
+        // now the true ocean blue the section map wears —
+        // #2a7ab0 → #1f6395 → #174a73 on the disc's face —
+        // and this surround lifts in step with it, deepening
+        // to the same rim at its edge, so the slide and the
+        // real map below are the same world.)
         background:
           "radial-gradient(58% 46% at 50% 44%, rgba(228,185,92,0.20) 0%, rgba(228,185,92,0) 70%)," +
-          "radial-gradient(130% 105% at 50% 38%, #1d6076 0%, #14455a 46%, #0e3449 78%, #0b2836 100%)",
+          "radial-gradient(130% 105% at 50% 38%, #35799f 0%, #256a90 46%, #1b527a 78%, #174a73 100%)",
       }}
     >
       <svg
@@ -625,12 +652,15 @@ export default function HeroMapSlide({ data }: { data: HeroMapPayload }) {
           <filter id="hero-map-soft-lg" x="-60%" y="-60%" width="220%" height="220%">
             <feGaussianBlur stdDeviation="16" />
           </filter>
-          {/* the disc's face — the sea gradient of the real map,
-              warmed one step at its center, as above */}
+          {/* the disc's face — the sea gradient of the real map:
+              since Nov 1, 2026 (the lighter-sea pass) the very
+              same stops the section map wears, #2a7ab0 at the
+              heart → #1f6395 → #174a73 at the rim, so both
+              maps are the same world */}
           <radialGradient id="hero-map-sea" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#1c5f74" />
-            <stop offset="55%" stopColor="#123e52" />
-            <stop offset="100%" stopColor="#0b2836" />
+            <stop offset="0%" stopColor="#2a7ab0" />
+            <stop offset="55%" stopColor="#1f6395" />
+            <stop offset="100%" stopColor="#174a73" />
           </radialGradient>
         </defs>
         {/* the disc, held in a soft gold rim light */}

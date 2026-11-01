@@ -452,7 +452,20 @@ function subdivisionGlow(total: number): number {
  *  disc face itself, the most growth the sea can hold. The
  *  breathing margin is spent on purpose this time, and because
  *  the one scale still wraps every layer together, no light
- *  moves off its geography and the ratio never distorts. */
+ *  moves off its geography and the ratio never distorts.
+ *  SECOND SIZE PASS (later Nov 1, 2026 — Jason: "is there any
+ *  more room to make that a little bit bigger"): the scale
+ *  itself has no more honest room (the rim is spent), so this
+ *  growth comes from the LAYOUT around the disc instead: the
+ *  section's phone padding narrows (px-4 → px-2), the map
+ *  figure and the legend strip bleed 16px toward the card's
+ *  edges on phone widths (-mx-4, leaving an 8px frame of card
+ *  around the disc), and the column widens a step on larger
+ *  screens (max-w-2xl → max-w-3xl, joining the closer-look
+ *  panel's width). On a 390px phone the disc renders ~358px
+ *  across, up from ~310px — about 15% wider, a third more
+ *  area — and not one light moved: the bleed is the figure's
+ *  box, the projection and the single scale are untouched. */
 const MAP_SCALE = 1.09;
 
 /** A CLOSER LOOK (Oct 29, 2026, Jason's crown — built first as a
@@ -561,6 +574,27 @@ function WatchTraceMark({
       <clipPath id={clipId}>
         <path d={d} />
       </clipPath>
+      {/* A depth seam under the trace (Nov 1, 2026, the
+          lighter-sea pass): the pale screen blue lost the
+          most ground of any mark when the sea lifted to a
+          true ocean blue — measured over pale land at the
+          disc's bright heart, its separation fell from
+          ~40 to ~24 (still clear, but the thinnest margin
+          on the map). So the trace gains a soft seam of
+          deep ocean (#12405f, darker than the new rim) at
+          low opacity beneath its own two passes — the mark
+          itself is untouched (same pale blue, same widths,
+          same clip); the seam only shows where the line
+          crosses pale ground, and over gold it is nearly
+          invisible. Depth, not a redesign. */}
+      <path
+        d={d}
+        fill="none"
+        stroke="#12405f"
+        strokeWidth="8"
+        strokeOpacity="0.30"
+        clipPath={`url(#${clipId})`}
+      />
       <path
         d={d}
         fill="none"
@@ -1779,7 +1813,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   return (
     <section
       aria-labelledby="heartbeat-heading"
-      className="mx-auto max-w-6xl px-4 pb-4 pt-6 sm:px-6"
+      className="mx-auto max-w-6xl px-2 pb-4 pt-6 sm:px-6"
     >
       {/* The #earth-map anchor lands on the card itself (Oct 30,
           2026): on the section, the jump stopped at an 80px scroll
@@ -1813,7 +1847,11 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
             (and its subdivisions within it), named in the text
             below. The map's lights are geography only — today's
             chapter total is text, in the caption. */}
-        <figure role="img" aria-label={figureLabel} className="mx-auto mt-6 max-w-2xl">
+        {/* (Second size pass, Nov 1, 2026 — see MAP_SCALE's
+            note: on phone widths this figure bleeds 16px toward
+            the card's edges, -mx-4, and the column widens to
+            max-w-3xl from sm up.) */}
+        <figure role="img" aria-label={figureLabel} className="-mx-4 mt-6 sm:mx-auto sm:max-w-3xl">
           <svg
             viewBox={world.viewBox}
             aria-hidden="true"
@@ -1832,11 +1870,35 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                   night sea: unlit land composited over its
                   brightest point stays below the faintest ember,
                   so land still reads as land and every light
-                  still reads as light. */}
+                  still reads as light.
+                  SECOND WATER PASS (Nov 1, 2026, Jason again:
+                  "make the ocean like a sea a bit more realistic
+                  or at least lighter blue"): the night sea lifts
+                  to a true ocean blue — #2a7ab0 at the heart,
+                  #1f6395 mid-water, #174a73 at the rim — lighter
+                  toward the disc's heart, deeper at the rim, so
+                  it still reads as water with depth, never a
+                  flat fill. Every mark was re-proven against the
+                  brighter water before the change (composited
+                  separations measured, not eyeballed): the land
+                  reads BETTER on the new blue, the gold lights,
+                  embers and their rims, the ivory and
+                  hundredfold rings, both purples, kindling's
+                  red and the legend all hold their separations
+                  at or above the old sea's. One mark took a
+                  minimal depth adjustment — the blue watch
+                  trace, whose pale line lost the most ground
+                  over pale land; see WatchTraceMark's note. The
+                  hero slide's disc wears these same stops, so
+                  both maps are the same world, and the two
+                  deep-sea panels below (the legend strip, the
+                  closer look) follow the rim to #174a73 as they
+                  were always designed to — panel and rim are
+                  one color. */}
               <radialGradient id="hb-sea" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#175263" />
-                <stop offset="55%" stopColor="#10394a" />
-                <stop offset="100%" stopColor="#0b2836" />
+                <stop offset="0%" stopColor="#2a7ab0" />
+                <stop offset="55%" stopColor="#1f6395" />
+                <stop offset="100%" stopColor="#174a73" />
               </radialGradient>
             </defs>
             {/* the disc's rim — a soft ring holding the world
@@ -2429,7 +2491,9 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 with textLength, a horizontal crush), and Jason,
                 looking at his phone, saw the words crowd and
                 overlap. So the key now stands under the disc at
-                full map-column width — same #0b2836 panel, same
+                full map-column width — same deep-sea panel (its
+                ground follows the sea's rim; #174a73 since the
+                Nov 1, 2026 lighter-sea pass), same
                 gold border — where every meaning gets its own
                 line at full size and nothing is crushed. The
                 disc's prose and aria label carry these meanings
@@ -2604,10 +2668,16 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
             for kindling, and a small outline wearing its own
             blue inner trace. Still knocking stands beside
             kindled — the two visit marks together, the
-            seeking family's two thresholds (75 and 100). */}
+            seeking family's two thresholds (75 and 100).
+            (Nov 1, 2026, the lighter-sea pass: the panel
+            follows the sea's rim as it was designed to —
+            #0b2836 → #174a73 — and the strip takes the
+            figure's own size treatment, -mx-4 on phones and
+            max-w-3xl from sm up, so the key still stands at
+            the map column's full width under the disc.) */}
         <div
-          className="mx-auto mt-6 max-w-2xl rounded-2xl border border-gold-500/25 px-5 py-5 sm:px-6"
-          style={{ backgroundColor: "#0b2836" }}
+          className="-mx-4 mt-6 rounded-2xl border border-gold-500/25 px-5 py-5 sm:mx-auto sm:max-w-3xl sm:px-6"
+          style={{ backgroundColor: "#174a73" }}
         >
           <h3 className="text-base font-semibold text-[#e8d9ae]">
             How to read this map:
@@ -2724,10 +2794,13 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
             the day steps the panel too. The
             panel names data resolution
             as its only reason; it carries no flag and no
-            patriotic dressing (Jason's hard rule). */}
+            patriotic dressing (Jason's hard rule).
+            (Nov 1, 2026: the panel's deep-sea ground follows
+            the sea's rim, #0b2836 → #174a73, per the
+            lighter-sea pass — panel and rim stay one color.) */}
         <div
           className="mx-auto mt-10 max-w-3xl rounded-2xl border border-gold-500/25 px-4 py-6 sm:px-6"
-          style={{ backgroundColor: "#0b2836" }}
+          style={{ backgroundColor: "#174a73" }}
         >
           <h3 className="text-center font-display text-xl text-cream-50">
             A closer look: the United States
