@@ -89,7 +89,11 @@ export default function Home() {
               One Is Enough
             </Link>
           </nav>
-          <p className="mx-auto mt-5 max-w-xl text-sage-300">
+          {/* The opening line, brightened one sage step (Jason,
+              Nov 1, 2026): sage-300 read a little dim over the
+              hero's scrim on his phone. Same words, same place —
+              one step lighter, sage-200. */}
+          <p className="mx-auto mt-5 max-w-xl text-sage-200">
             The whole Bible, read out loud by Grandpa Teddy — every
             chapter free. No account, no password: tap a book, tap a
             chapter, tap Listen.

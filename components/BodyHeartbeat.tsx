@@ -445,8 +445,15 @@ function subdivisionGlow(total: number): number {
  *  land's farthest reach (r≈456 in viewBox units) at r≈484 —
  *  at Jason's word the same evening the rim itself grew a tad
  *  (hairline ring r=490, disc face r=497) so the ring once again
- *  holds the whole scaled world with a small breathing margin. */
-const MAP_SCALE = 1.06;
+ *  holds the whole scaled world with a small breathing margin.
+ *  Nov 1, 2026 (Jason again: the map still read a little small
+ *  on his phone, and the countries were hard to make out): the
+ *  scale steps to 1.09 — the farthest reach lands at r≈497, the
+ *  disc face itself, the most growth the sea can hold. The
+ *  breathing margin is spent on purpose this time, and because
+ *  the one scale still wraps every layer together, no light
+ *  moves off its geography and the ratio never distorts. */
+const MAP_SCALE = 1.09;
 
 /** A CLOSER LOOK (Oct 29, 2026, Jason's crown — built first as a
  *  picture, prototype v2, and crowned from it the same night): the
@@ -1832,7 +1839,10 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 <stop offset="100%" stopColor="#0b2836" />
               </radialGradient>
             </defs>
-            {/* the disc's rim — a soft ring holding the world */}
+            {/* the disc's rim — a soft ring holding the world
+                (lifted a touch, 0.18 → 0.25, in the Nov 1, 2026
+                presence pass below, so the disc reads as a disc
+                at phone width) */}
             <circle cx="500" cy="500" r="497" fill="url(#hb-sea)" />
             <circle
               cx="500"
@@ -1841,7 +1851,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               fill="none"
               stroke="#e8d9ae"
               strokeWidth="1"
-              opacity="0.18"
+              opacity="0.25"
             />
             {/* The map group — every layer of the world itself
                 (land, lights, embers, hearts) inside ONE wrapper,
@@ -1860,15 +1870,24 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 not a whisper — and held there on purpose: the
                 faintest ember silhouette layers its gold over
                 this land and stays clearly warmer and brighter,
-                so unlit land never competes with an ember. */}
+                so unlit land never competes with an ember.
+                Presence pass (Jason, Nov 1, 2026): fill 0.22 →
+                0.28, stroke 0.20 → 0.40 at width 0.6 → 0.8 — at
+                phone width a country is made out mostly by its
+                border, so the borders carry this pass. The guard
+                above still holds: 0.28 stays under the faintest
+                gold light's base (silhouetteFill starts at 0.30),
+                and an ember's gold layers over this cream exactly
+                as before — rendering presence only; no mark is
+                added, moved, or changed. */}
             <path
               d={world.land}
               fill="#e8d9ae"
               fillRule="evenodd"
-              opacity="0.22"
+              opacity="0.28"
               stroke="#e8d9ae"
-              strokeWidth="0.6"
-              strokeOpacity="0.20"
+              strokeWidth="0.8"
+              strokeOpacity="0.40"
             />
             {/* (No vine overlay — v3.1.3 removed it under Jason's
                 rule "if they stay they should look like what they
