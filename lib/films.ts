@@ -8,6 +8,12 @@ export interface ChapterFilm {
   id: string; // YouTube video id
   title: string;
   note: string;
+  /* The film's own thumbnail, shipped first-party (public/images) like the
+   * homepage film cards — never hot-linked from YouTube's CDN, which can
+   * fail or be blocked and leave a broken-image card. When absent, the
+   * card falls back to the YouTube thumbnail. */
+  image?: string;
+  imageAlt?: string;
 }
 
 type FilmsMap = Record<string, Record<string, ChapterFilm>>;

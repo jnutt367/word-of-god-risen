@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import YouTubeThumb from "./YouTubeThumb";
 import { useVideoChoice, VideoChoiceModal } from "./VideoChoice";
 import { filmUrl, type ChapterFilm } from "@/lib/films";
@@ -26,7 +27,17 @@ export default function FilmCard({ film }: { film: ChapterFilm | null }) {
         className="group flex w-full cursor-pointer items-center gap-4 overflow-hidden rounded-xl border border-[var(--reader-line)] bg-[var(--reader-card)] p-3 text-left transition-colors hover:border-[var(--reader-verse-num)]/50"
       >
         <div className="relative aspect-video w-32 shrink-0 overflow-hidden rounded-lg sm:w-44">
-          <YouTubeThumb id={film.id} />
+          {film.image ? (
+            <Image
+              src={film.image}
+              alt={film.imageAlt ?? ""}
+              fill
+              sizes="(max-width: 640px) 128px, 176px"
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          ) : (
+            <YouTubeThumb id={film.id} />
+          )}
           <span
             className="absolute inset-0 flex items-center justify-center text-2xl text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
             aria-hidden="true"
