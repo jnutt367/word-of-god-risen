@@ -2834,6 +2834,32 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                     </g>
                   ) : null
                 )}
+                {/* STILL KNOCKING — THE PURPLE FILLS THE
+                    STATE (Oct 31, 2026, Jason's ruling: "make
+                    the still knocking fill the rest of the
+                    state area with that purple"): above the
+                    lights and embers, the knocking state's
+                    whole area wears the purple as its body,
+                    so the state reads purple at a glance.
+                    Every honor keeps its seat ABOVE the fill:
+                    the purple frame inside the border, the
+                    blue watch trace, the gold hundredfold
+                    ring, the ivory book ring. The under-light
+                    glow fill still runs beneath as before;
+                    this cap is what the eye meets. */}
+                {usShownSubdivisions.map((s) =>
+                  subStillKnockingOn(s) && s.geo ? (
+                    <g key={`us-knocking-fill-${s.code}`}>
+                      <title>{stillKnockingTitle(s.name)}</title>
+                      <path
+                        d={s.geo.path}
+                        fill={STILL_KNOCKING_GLOW}
+                        fillRule="evenodd"
+                        fillOpacity="0.85"
+                      />
+                    </g>
+                  ) : null
+                )}
                 {/* the still-knocking inner traces — the
                     disc's purple frame just inside the
                     border, above the panel's lights and
