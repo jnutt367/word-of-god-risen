@@ -45,6 +45,41 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-b from-vineyard-950/70 via-vineyard-950/55 to-vineyard-950" />
         </div>
         <div className="relative mx-auto max-w-4xl px-4 py-14 text-center sm:px-6 sm:py-20">
+          {/* The hero's bubble trio (Jason, Nov 2, 2026): the three
+              actions also ride small at the hero's top corner, in
+              the app's bubble idiom — the gold-rimmed round chips
+              of the watch bubble and the speaker bubble. Subtle,
+              not distracting, but there from the first glance and
+              recognizable: read, listen, search, each going where
+              its big button under the film goes. The full doors
+              row remains the main road; these are the shortcut
+              bubbles tucked inside the hero itself. */}
+          <div className="absolute right-4 top-4 z-20 flex gap-2 sm:right-6 sm:top-6">
+            <Link
+              href="/book/genesis/0"
+              aria-label="Start reading — opens Genesis chapter 1"
+              title="Start reading — Genesis 1"
+              className="grid h-9 w-9 place-items-center rounded-full border border-gold-400/70 bg-vineyard-900 text-base shadow-lg transition-colors hover:border-gold-300 hover:bg-vineyard-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+            >
+              <span aria-hidden="true">📖</span>
+            </Link>
+            <Link
+              href="/book/mark/0?autoplay=1"
+              aria-label="Start listening — Grandpa Teddy reads Mark chapter 1"
+              title="Start listening — Mark 1"
+              className="grid h-9 w-9 place-items-center rounded-full border border-gold-400/70 bg-vineyard-900 text-base shadow-lg transition-colors hover:border-gold-300 hover:bg-vineyard-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+            >
+              <span aria-hidden="true">🔊</span>
+            </Link>
+            <Link
+              href="/search"
+              aria-label="Search the Word"
+              title="Search the Word"
+              className="grid h-9 w-9 place-items-center rounded-full border border-gold-400/70 bg-vineyard-900 text-base shadow-lg transition-colors hover:border-gold-300 hover:bg-vineyard-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+            >
+              <span aria-hidden="true">🔍</span>
+            </Link>
+          </div>
           <p className="text-sm font-semibold uppercase tracking-[0.22em] text-gold-300">
             Centered on the King, not the crowds
           </p>
