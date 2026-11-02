@@ -63,20 +63,29 @@ import {
  * THE BEST FIVE DAYS (Jason, Nov 2, 2026 — "make the map cycle
  * through its best five days on the hero"): while this slide
  * holds the hero's turn, the portrait no longer stands on the
- * single fullest day — it walks the five fullest days on
+ * single fullest day — it walks the five best days on
  * record, strongest first, each holding a few seconds with a
  * slow crossfade, and each NAMED as it stands: its real date
  * in long form and its real chapter count, small at the
- * slide's foot, in the hero's own type. The ranking is the
- * best day's own measure (the country rows' chapters), zero
- * days never stand, and fewer than five stand when fewer
- * qualify; with fewer than two qualifying days the slide is
- * exactly what it was — the single best day, unnamed and
- * still. The day-walk inherits the hero cycle's own laws: it
- * pauses while the page is hidden, rests for good when the
- * visitor takes one of the hero's doors, never runs for a
- * visitor who prefers reduced motion, and begins again from
- * the best day each time the map's turn comes round. The rows render
+ * slide's foot, in the hero's own type. "Best" was first the
+ * best day's own measure (the fullest chapter count); Jason
+ * re-ruled it the same evening (Nov 2, 2026, ~16:57 EST):
+ * the best days are THE ONES WITH THE MOST LEGEND MARKS LIT
+ * UP — a day is graded by how many of the map's seven marks
+ * (gold, ember, ivory, the hundredfold ring, still knocking,
+ * kindling, the blue watch trace) stood lit anywhere on its
+ * own map, each decided by the same predicates that light
+ * them, read off that day's own rows; ties settle by the
+ * day's chapters, then by the candidates' standing order.
+ * Days wearing no mark never stand, and fewer than five
+ * stand when fewer qualify; with fewer than two qualifying
+ * days the slide is exactly what it was — the single best
+ * day, unnamed and still. The day-walk inherits the hero
+ * cycle's own laws: it pauses while the page is hidden,
+ * rests for good when the visitor takes one of the hero's
+ * doors, never runs for a visitor who prefers reduced
+ * motion, and begins again from the best day each time the
+ * map's turn comes round. The rows render
  * exactly as the API returned them for that day, and every
  * decision is the real map's own: a past day is graded exactly
  * as the map section grades it while day browsing — its own
@@ -117,6 +126,11 @@ export interface HeroMapCountRow {
   total?: number;
   opens?: number;
   watches?: number;
+  /** Whole books finished in this place in the row's own day
+   *  — the count the real map's honor chips read (Oct 31,
+   *  2026). Distinct from `bookFinishedOn`, which is the
+   *  place's LAST finish in the whole record. */
+  books?: number;
   bookFinishedOn?: string | null;
 }
 
@@ -146,10 +160,12 @@ export interface HeroMapPayload {
 
 /** One day of the best-five pass (Nov 2, 2026): the day's own
  *  rows exactly as the payload carries them, with their chapter
- *  total by the best day's own measure. */
+ *  total and their legend-mark count — the measure Jason's
+ *  re-ruling grades the pass by. */
 export interface HeroMapRankedDay {
   date: string;
   total: number;
+  marks: number;
   countries: HeroMapCountRow[];
   subdivisions: HeroMapSubdivisionRow[];
 }
@@ -169,14 +185,72 @@ function chaptersOfRows(rows?: HeroMapCountRow[]): number {
   );
 }
 
-/** The five fullest days on record, strongest first (Nov 2,
- *  2026). Candidates stand in the best day's own order —
+/** How many of the map's seven legend marks stood lit
+ *  anywhere on one day's own map (Jason's measure, Nov 2,
+ *  2026) — each type counted once, lit by any place, and each
+ *  decided by the same predicates that light the marks on the
+ *  real map, read off the day's own rows normalized the way
+ *  the day layer normalizes them:
+ *  gold (the Word read or heard — a place's chapters), ember
+ *  (the app opened — a place's visits), ivory (a book
+ *  finished that day — the day's own `books` count the rows
+ *  carry, never `bookFinishedOn`, which is the place's last
+ *  finish in the whole record and cannot grade a single
+ *  day), the hundredfold ring (a hundred chapters in a
+ *  place, the country's ring encompassing its subdivisions'
+ *  as countryHundredfoldOn rules), still knocking (a
+ *  subdivision's own hundred visits), kindling (seventy-five
+ *  visits and no chapters), and the blue watch trace (a
+ *  video watched). */
+function legendMarksOf(
+  countries?: HeroMapCountRow[],
+  subdivisions?: HeroMapSubdivisionRow[]
+): number {
+  const cs = (countries ?? []).map((c) => ({
+    code: (c.code || "").toUpperCase(),
+    total: c.total ?? (c.read ?? 0) + (c.heard ?? 0),
+    opens: c.opens ?? 0,
+    watches: c.watches ?? 0,
+    books: c.books ?? 0,
+  }));
+  const ss = (subdivisions ?? []).map((s) => ({
+    code: (s.code || "").toUpperCase(),
+    country: (
+      s.country ||
+      (s.code || "").split("-")[0] ||
+      ""
+    ).toUpperCase(),
+    total: s.total ?? (s.read ?? 0) + (s.heard ?? 0),
+    opens: s.opens ?? 0,
+    watches: s.watches ?? 0,
+    books: s.books ?? 0,
+  }));
+  const rows = [...cs, ...ss];
+  let marks = 0;
+  if (rows.some((r) => r.total > 0)) marks += 1; // gold
+  if (rows.some((r) => r.opens > 0)) marks += 1; // ember
+  if (rows.some((r) => r.books > 0)) marks += 1; // ivory
+  if (
+    ss.some((s) => hundredfold(s)) ||
+    cs.some((c) => countryHundredfoldOn(c, ss))
+  )
+    marks += 1; // hundredfold
+  if (ss.some((s) => stillKnocking(s))) marks += 1; // still knocking
+  if (rows.some((r) => kindled(r))) marks += 1; // kindling
+  if (rows.some((r) => r.watches > 0)) marks += 1; // blue
+  return marks;
+}
+
+/** The five best days on record, strongest first (Nov 2,
+ *  2026; the measure re-ruled by Jason the same evening):
+ *  graded by their legend-mark count, ties settled by their
+ *  chapter totals, then by the candidates' standing order —
  *  today's rows first, then the history days as the payload
- *  carries them — and the sort is stable, so a tie keeps the
- *  earlier candidate ahead, exactly as the single best day
- *  was always chosen (a day took the portrait only by strictly
- *  outshining). Zero days never stand; fewer than five stand
- *  when fewer qualify. */
+ *  carries them — and the sort is stable, so a full tie keeps
+ *  the earlier candidate ahead, exactly as the single best
+ *  day was always chosen (a day took the portrait only by
+ *  strictly outshining). Days wearing no mark never stand;
+ *  fewer than five stand when fewer qualify. */
 export function rankedHeroMapDays(
   data: HeroMapPayload
 ): HeroMapRankedDay[] {
@@ -184,6 +258,7 @@ export function rankedHeroMapDays(
     {
       date: data.today.date,
       total: chaptersOfRows(data.countries),
+      marks: legendMarksOf(data.countries, data.subdivisions),
       countries: data.countries ?? [],
       subdivisions: data.subdivisions ?? [],
     },
@@ -193,13 +268,14 @@ export function rankedHeroMapDays(
     candidates.push({
       date: day.date,
       total: chaptersOfRows(day.countries),
+      marks: legendMarksOf(day.countries, day.subdivisions),
       countries: day.countries ?? [],
       subdivisions: day.subdivisions ?? [],
     });
   }
   return candidates
-    .filter((d) => d.total > 0)
-    .sort((a, b) => b.total - a.total)
+    .filter((d) => d.marks > 0)
+    .sort((a, b) => b.marks - a.marks || b.total - a.total)
     .slice(0, 5);
 }
 
@@ -624,11 +700,12 @@ export default function HeroMapSlide({
   }
 
   // THE BEST FIVE DAYS (Jason, Nov 2, 2026): the days this slide
-  // walks, strongest first. When no day on record carries a
-  // chapter yet, the portrait falls back to today's rows exactly
+  // walks, strongest first — most legend marks lit, the measure
+  // of Jason's re-ruling. When no day on record wears a single
+  // mark yet, the portrait falls back to today's rows exactly
   // as the single-best-day slide always showed them; when fewer
   // than two days qualify there is no walk and no caption — the
-  // single fullest day stands, as before.
+  // single best day stands, as before.
   const ranked = rankedHeroMapDays(data);
   const days: HeroMapRankedDay[] =
     ranked.length > 0
@@ -637,6 +714,7 @@ export default function HeroMapSlide({
           {
             date: todayDate,
             total: chaptersOfRows(data.countries),
+            marks: legendMarksOf(data.countries, data.subdivisions),
             countries: data.countries ?? [],
             subdivisions: data.subdivisions ?? [],
           },
