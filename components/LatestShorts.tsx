@@ -28,11 +28,24 @@ function ShortShelfItem({ v }: { v: ShortItem }) {
         <div className="relative aspect-[9/16] overflow-hidden rounded-xl border border-gold-500/15 bg-vineyard-900">
           <YouTubeThumb id={v.id} />
           <div className="absolute inset-0 bg-gradient-to-t from-vineyard-950/80 via-transparent to-transparent" />
+          {/* The house gold play mark (Jason, Nov 2, 2026): every
+              video surface on the page wears the same unmistakable
+              gold — the gold circle with the vineyard triangle that
+              the film cards carry — never a plain white glyph a
+              visitor might read as decoration. */}
           <span
-            className="absolute inset-0 flex items-center justify-center text-3xl text-white opacity-80 drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)] transition-opacity group-hover:opacity-100"
+            className="absolute inset-0 flex items-center justify-center"
             aria-hidden="true"
           >
-            ▶
+            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-gold-400 text-vineyard-950 shadow-[0_6px_20px_rgba(0,0,0,0.5)] ring-2 ring-gold-200/40 transition-transform duration-300 group-hover:scale-110">
+              <svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="ml-0.5 h-5 w-5"
+              >
+                <path d="M8 5.5v13l11-6.5-11-6.5z" />
+              </svg>
+            </span>
           </span>
         </div>
         <p className="mt-2 line-clamp-2 text-xs leading-snug text-sage-300 group-hover:text-gold-300">

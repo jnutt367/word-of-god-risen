@@ -98,6 +98,20 @@ export default function Home() {
             chapter free. No account, no password: tap a book, tap a
             chapter, tap Listen.
           </p>
+          {/* The film leads (Jason, Nov 2, 2026): chapters read and
+              app opens were being counted all over the page while
+              watches lagged — the featured film rested below the
+              map where few ever reached it. Jason's ruling: the
+              video moves up to where the buttons are, and the
+              buttons rest underneath the video. So Teddy's note and
+              the "One Chapter Is Enough" film (id="film", its big
+              gold play mark unmistakable on the thumbnail) now sit
+              directly under the hero line, and the doors row below
+              follows it. The film's gold play treatment is the
+              house affordance — the welcome film and the Shorts
+              shelf wear the same gold mark, so every video surface
+              on the page reads as tappable at a glance. */}
+          <TeddyNote />
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             {/* Start reading opens an actual chapter (Jason,
                 Oct 31, 2026): it used to scroll to the book grid,
@@ -219,18 +233,11 @@ export default function Home() {
       {/* The Body, Reading — the Bible Heartbeat */}
       <BodyHeartbeat />
 
-      {/* One Chapter Is Enough — the full film, featured directly
-          under the heartbeat. Until Oct 27, 2026 this spot held the
-          Taiwan prayer Short; Jason's word that day: the Short's
-          card comes off the homepage and the full-length film is
-          the featured film presence here. So Grandpa Teddy's note
-          (Oct 26, 2026 — "hey, I have a little bit more to tell
-          you here"), which carries the film, moved down from under
-          "Meet Grandpa Teddy" to this spot: one clear presence for
-          the film, still through VideoChoice — "Watch here" plays
-          it in the app; nobody is carried to YouTube unasked. The
-          Short itself is untouched on the channel. */}
-      <TeddyNote />
+      {/* (The featured film — Grandpa Teddy's note carrying "One
+          Chapter Is Enough" — leads the page now: it rests in the
+          hero, directly under the hero line and above the doors
+          row, by Jason's Nov 2, 2026 ruling. It held this spot
+          under the heartbeat from Oct 27, 2026 until that day.) */}
 
       {/* The Open Door — a quiet link out to the TruVINE Family Wall,
           resting beside the heartbeat. A plain outbound link only:
