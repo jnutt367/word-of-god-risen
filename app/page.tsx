@@ -90,21 +90,17 @@ export default function Home() {
           <p className="mx-auto mt-5 max-w-xl font-scripture text-lg italic text-cream-100/90 sm:text-xl">
             &ldquo;I am the way, the truth, and the life.&rdquo;
           </p>
-          {/* The doors row (Jason, Oct 27, 2026): four named doors
-              directly under the hero title — Read to the books, the
-              Light Map to the heartbeat, Parables to their page, and
-              One Is Enough to the featured film below the map. One
-              calm row, nothing else. */}
+          {/* The doors row: two named doors directly under the hero
+              title — the Light Map to the heartbeat and Parables to
+              their page (Jason, Oct 27, 2026). The Read and One Is
+              Enough pills were removed (Jason, Nov 2, 2026): the
+              hero bubbles and the big Start reading button already
+              carry Read, and the featured film now sits immediately
+              below the hero. One calm row, nothing else. */}
           <nav
             aria-label="Explore"
             className="mt-7 flex flex-wrap items-center justify-center gap-2.5"
           >
-            <Link
-              href="#books"
-              className="rounded-full border border-cream-100/25 px-4 py-2.5 text-sm font-semibold text-cream-100 transition-colors hover:border-gold-400 hover:text-gold-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
-            >
-              Read
-            </Link>
             <Link
               href="#earth-map"
               className="rounded-full border border-cream-100/25 px-4 py-2.5 text-sm font-semibold text-cream-100 transition-colors hover:border-gold-400 hover:text-gold-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
@@ -116,12 +112,6 @@ export default function Home() {
               className="rounded-full border border-cream-100/25 px-4 py-2.5 text-sm font-semibold text-cream-100 transition-colors hover:border-gold-400 hover:text-gold-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
             >
               Parables
-            </Link>
-            <Link
-              href="#film"
-              className="rounded-full border border-cream-100/25 px-4 py-2.5 text-sm font-semibold text-cream-100 transition-colors hover:border-gold-400 hover:text-gold-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
-            >
-              One Is Enough
             </Link>
           </nav>
           {/* The opening line, brightened one sage step (Jason,
