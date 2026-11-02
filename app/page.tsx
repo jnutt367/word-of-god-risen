@@ -152,85 +152,13 @@ export default function Home() {
             chapter free. No account, no password: tap a book, tap a
             chapter, tap Listen.
           </p>
-          {/* The film leads (Jason, Nov 2, 2026): chapters read and
-              app opens were being counted all over the page while
-              watches lagged — the featured film rested below the
-              map where few ever reached it. Jason's ruling: the
-              video moves up to where the buttons are, and the
-              buttons rest underneath the video. His correction the
-              same morning: the film that leads must be the
-              INTRODUCTION — the welcome film ("Welcome to the
-              Farm," n-1KCs0r2Bw) that tells what this app is — not
-              the "One Chapter Is Enough" story film, which takes
-              the welcome film's former home under Meet Grandpa
-              Teddy below. The lead thumbnail wears the glowing
-              gold play circle at its top right (the WatchBubble
-              treatment), so the "this plays" signal sits exactly
-              where his eye expects it; the Shorts shelf wears the
-              same gold mark, so every video surface on the page
-              reads as tappable at a glance. */}
-          <div className="mt-6">
-            <WelcomeFilm />
-          </div>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            {/* Start reading opens an actual chapter (Jason,
-                Oct 31, 2026): it used to scroll to the book grid,
-                which left the visitor still choosing. Now it
-                opens Genesis chapter 1 in the reader — the same
-                one-tap honesty as the speaker bubble beside it.
-                The bubble on its corner wore the gold play mark
-                for one morning (Oct 31 – Nov 2, 2026), opening
-                the Mark 1 film — until Jason's icon-truth ruling
-                (Nov 2, 2026): the gold glowing play circle now
-                means VIDEO, strictly — it belongs on thumbnails
-                that play here in the app, and nowhere else. A
-                play mark on the reading button promised the
-                wrong thing, so the bubble is the BOOK now — the
-                same 📖 treatment as the hero trio's read bubble —
-                and it goes where the button goes: Genesis 1.
-                Icons tell the truth here: book = read,
-                speaker = listen, gold play = watch here. */}
-            <span className="relative inline-block">
-              <Link
-                href="/book/genesis/0"
-                className="rounded-lg bg-gold-500 px-6 py-3.5 text-base font-semibold text-vineyard-950 transition-colors hover:bg-gold-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
-              >
-                Start reading
-              </Link>
-              <Link
-                href="/book/genesis/0"
-                aria-label="Start reading — opens Genesis chapter 1"
-                title="Start reading — Genesis 1"
-                className="absolute -top-2.5 -right-2.5 z-10 grid h-9 w-9 place-items-center rounded-full border border-gold-400/70 bg-vineyard-900 text-base shadow-lg transition-colors hover:border-gold-300 hover:bg-vineyard-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
-              >
-                <span aria-hidden="true">📖</span>
-              </Link>
-            </span>
-            {/* The first door, minimized (Jason, Oct 31, 2026): the
-                "Hear one chapter" door began the morning as a full
-                card under the hero; Jason shrank it to this speaker
-                bubble on Start listening's top-right corner. The
-                button keeps its own job; the bubble is the fast
-                lane — one tap and Teddy reads Mark chapter 1 (the
-                ?autoplay=1 start intent). */}
-            <span className="relative inline-block">
-              <ListenDropdown />
-              <Link
-                href="/book/mark/0?autoplay=1"
-                aria-label="Hear one chapter — Grandpa Teddy reads Mark chapter 1"
-                title="Hear one chapter — Mark 1"
-                className="absolute -top-2.5 -right-2.5 z-10 grid h-9 w-9 place-items-center rounded-full border border-gold-400/70 bg-vineyard-900 text-base shadow-lg transition-colors hover:border-gold-300 hover:bg-vineyard-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
-              >
-                <span aria-hidden="true">🔊</span>
-              </Link>
-            </span>
-            <Link
-              href="/search"
-              className="rounded-lg border border-cream-100/25 px-6 py-3.5 text-base font-semibold text-cream-100 transition-colors hover:border-gold-400 hover:text-gold-300"
-            >
-              Search the Word
-            </Link>
-          </div>
+          {/* The welcome film and the doors row rested here for
+              one morning (Nov 2, 2026) — until Jason ruled the
+              film's frame covered the hero's cycling stills and
+              dulled the walk. The hero keeps its whole first
+              screen now; the film + doors unit leads the river
+              directly below (next section), and the film's poster
+              rides as a turn of the cycle itself (HeroCycle). */}
           <p className="mt-6 text-sm text-sage-300">
             <Link
               href="/#more"
@@ -244,58 +172,93 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Meet Grandpa Teddy — moved up to rest directly under the
-          hero (Jason, Oct 31, 2026), so a new visitor meets him
-          first. (The first door itself lives in the hero now, as
-          the speaker bubble on Start listening — Jason minimized
-          it there the same morning.) */}
+      {/* The introduction leads the river (Jason, Nov 2, 2026):
+          the welcome film spent one morning inside the hero,
+          where its frame covered the cycling stills and dulled
+          the walk. Jason's ruling: the hero keeps its whole
+          first screen — stills, headline, verse, line, bubbles
+          and pills — and the film steps out to lead everything
+          under it, the doors row resting directly beneath it,
+          the whole unit traveling together. The film's poster
+          also rides as a turn of the hero cycle above (see
+          components/HeroCycle.tsx); a tap on that turn opens
+          this very film, here in the app. */}
       <section
-        id="meet-teddy"
-        className="mx-auto max-w-6xl scroll-mt-20 px-4 pt-8 sm:px-6"
+        aria-label="Welcome to the Farm — the welcome film and the first doors"
+        className="mx-auto max-w-4xl px-4 pt-8 sm:px-6 sm:pt-10"
       >
-        <div className="overflow-hidden rounded-2xl border border-gold-500/15 bg-vineyard-900">
-          <div className="grid gap-0 md:grid-cols-2">
-            <div className="flex items-center justify-center bg-vineyard-950/40 p-6 md:min-h-[280px]">
-              {/* Canon-only law (Jason, Oct 28, 2026): the old welcome
-                  video showed a pre-package Teddy, so it came off the
-                  site and the locked canon portrait stood here. The
-                  new welcome film held this spot from Oct 29, 2026
-                  until Nov 2, 2026, when Jason moved it up to lead
-                  the page — the introduction goes first. So the
-                  canon portrait stands here again, beside the words
-                  that introduce him. */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/characters/teddy.webp"
-                alt="Grandpa Teddy — your guide through the Word"
-                className="aspect-square w-56 rounded-2xl border border-gold-500/20 object-cover sm:w-64"
-              />
-            </div>
-            <div className="flex flex-col justify-center p-6 sm:p-8">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold-400">
-                Meet Grandpa Teddy
-              </p>
-              <h2 className="mt-2 font-display text-2xl text-cream-50 sm:text-3xl">
-                Your guide through the Word
-              </h2>
-              <p className="mt-3 text-cream-100/85">
-                Grandpa Teddy reads every chapter aloud in his warm, unhurried voice —
-                the whole Bible, the lost books, and the parables. Pull up a chair,
-                friend — he&rsquo;ll read it to you.
-              </p>
-            </div>
-          </div>
+        <WelcomeFilm />
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          {/* Start reading opens an actual chapter (Jason,
+              Oct 31, 2026): it used to scroll to the book grid,
+              which left the visitor still choosing. Now it
+              opens Genesis chapter 1 in the reader — the same
+              one-tap honesty as the speaker bubble beside it.
+              The bubble on its corner wore the gold play mark
+              for one morning (Oct 31 – Nov 2, 2026), opening
+              the Mark 1 film — until Jason's icon-truth ruling
+              (Nov 2, 2026): the gold glowing play circle now
+              means VIDEO, strictly — it belongs on thumbnails
+              that play here in the app, and nowhere else. A
+              play mark on the reading button promised the
+              wrong thing, so the bubble is the BOOK now — the
+              same 📖 treatment as the hero trio's read bubble —
+              and it goes where the button goes: Genesis 1.
+              Icons tell the truth here: book = read,
+              speaker = listen, gold play = watch here. */}
+          <span className="relative inline-block">
+            <Link
+              href="/book/genesis/0"
+              className="rounded-lg bg-gold-500 px-6 py-3.5 text-base font-semibold text-vineyard-950 transition-colors hover:bg-gold-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+            >
+              Start reading
+            </Link>
+            <Link
+              href="/book/genesis/0"
+              aria-label="Start reading — opens Genesis chapter 1"
+              title="Start reading — Genesis 1"
+              className="absolute -top-2.5 -right-2.5 z-10 grid h-9 w-9 place-items-center rounded-full border border-gold-400/70 bg-vineyard-900 text-base shadow-lg transition-colors hover:border-gold-300 hover:bg-vineyard-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+            >
+              <span aria-hidden="true">📖</span>
+            </Link>
+          </span>
+          {/* The first door, minimized (Jason, Oct 31, 2026): the
+              "Hear one chapter" door began the morning as a full
+              card under the hero; Jason shrank it to this speaker
+              bubble on Start listening's top-right corner. The
+              button keeps its own job; the bubble is the fast
+              lane — one tap and Teddy reads Mark chapter 1 (the
+              ?autoplay=1 start intent). */}
+          <span className="relative inline-block">
+            <ListenDropdown />
+            <Link
+              href="/book/mark/0?autoplay=1"
+              aria-label="Hear one chapter — Grandpa Teddy reads Mark chapter 1"
+              title="Hear one chapter — Mark 1"
+              className="absolute -top-2.5 -right-2.5 z-10 grid h-9 w-9 place-items-center rounded-full border border-gold-400/70 bg-vineyard-900 text-base shadow-lg transition-colors hover:border-gold-300 hover:bg-vineyard-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+            >
+              <span aria-hidden="true">🔊</span>
+            </Link>
+          </span>
+          <Link
+            href="/search"
+            className="rounded-lg border border-cream-100/25 px-6 py-3.5 text-base font-semibold text-cream-100 transition-colors hover:border-gold-400 hover:text-gold-300"
+          >
+            Search the Word
+          </Link>
         </div>
       </section>
 
-      {/* A note from Grandpa Teddy — home again directly under
-          Meet Grandpa Teddy (Jason, Nov 2, 2026), the postscript
-          spot where it was born on Oct 26, 2026. It carries the
-          "One Chapter Is Enough" film (id="film" — the YouTube
-          door for that film lands on this anchor) and the
-          word-for-word promise, whole and intact. It led the page
-          for one morning until Jason ruled the introduction —
-          the welcome film — leads instead. */}
+      {/* A note from Grandpa Teddy — resting directly under the
+          welcome film and the doors row (Jason, Nov 2, 2026). It
+          was born as his postscript under "Meet Grandpa Teddy" on
+          Oct 26, 2026; that section came off the page today —
+          the welcome film IS the meeting now, Jason's word, and
+          a portrait card saying "meet him" after the film has
+          introduced him is redundant. The note carries the "One
+          Chapter Is Enough" film (id="film" — the YouTube door
+          for that film lands on this anchor) and the
+          word-for-word promise, whole and intact. */}
       <TeddyNote />
 
       {/* Word Integrity — the promise near the top of the page, on
@@ -324,9 +287,11 @@ export default function Home() {
           carrying "One Chapter Is Enough" held this spot under
           the heartbeat from Oct 27, 2026, then led the page for
           one morning on Nov 2, 2026 — until Jason ruled the same
-          day that the introduction leads: the welcome film rests
-          in the hero now, and the note film keeps house directly
-          under Meet Grandpa Teddy, above.) */}
+          day that the introduction leads: the welcome film leads
+          the river directly under the hero now, and the note
+          film rests under the doors row, above. The Meet Grandpa
+          Teddy section itself is gone (Jason, Nov 2, 2026) —
+          the film is the meeting.) */}
 
       {/* The Open Door — a quiet link out to the TruVINE Family Wall,
           resting beside the heartbeat. A plain outbound link only:

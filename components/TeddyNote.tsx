@@ -15,10 +15,12 @@ import { useVideoChoice, VideoChoiceModal } from "./VideoChoice";
  * under the Body Heartbeat, where the Taiwan prayer Short's card
  * rested until that day. On Nov 2, 2026 it led the page for one
  * morning, until Jason ruled the introduction (the welcome film)
- * leads instead — so this note, the film's one presence on the
- * page, rests directly under Meet Grandpa Teddy now, back in the
- * postscript home where it began. Its id="film" anchor travels
- * with it; the YouTube door for the film lands here.
+ * leads instead. The same day, the Meet Grandpa Teddy section
+ * came off the page entirely — the welcome film IS the meeting
+ * now — and this note, the film's one presence on the page,
+ * rests directly under the welcome film and the doors row. Its
+ * id="film" anchor travels with it; the YouTube door for the
+ * film lands here.
  *
  * Kept to the house pattern (TaiwanPrayer): a heading, a few lines
  * in Teddy's voice, and a plain way to watch. The card carries the

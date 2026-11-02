@@ -98,6 +98,7 @@ export default function WelcomeFilm() {
   const choice = useVideoChoice();
   const [playing, setPlaying] = useState(false);
   const [ended, setEnded] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
 
   const startPlaying = useCallback(() => {
     // The tap itself counts the watch (Jason, Oct 31, 2026);
@@ -108,8 +109,32 @@ export default function WelcomeFilm() {
     setPlaying(true);
   }, []);
 
+  // The hero cycle's film turn (Jason, Nov 2, 2026): the
+  // welcome film's poster rides the hero's walk as one of its
+  // turns, and a tap on that turn asks THIS film to open —
+  // the same behavior as pressing the thumbnail below. The ask
+  // arrives as a window event ("wogr:welcome-film:open",
+  // dispatched by components/HeroCycle.tsx) so this component
+  // stays the one owner of the player, the watch count and
+  // the end door: scroll the film into view and start it here.
+  useEffect(() => {
+    const onOpen = () => {
+      const reduce = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+      rootRef.current?.scrollIntoView({
+        behavior: reduce ? "auto" : "smooth",
+        block: "center",
+      });
+      startPlaying();
+    };
+    window.addEventListener("wogr:welcome-film:open", onOpen);
+    return () =>
+      window.removeEventListener("wogr:welcome-film:open", onOpen);
+  }, [startPlaying]);
+
   return (
-    <div>
+    <div ref={rootRef}>
       <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-gold-500/20 bg-vineyard-950">
         {ended ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-5 text-center">
