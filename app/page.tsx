@@ -109,9 +109,32 @@ export default function Home() {
           >
             <Link
               href="#earth-map"
-              className="rounded-full border border-cream-100/25 px-4 py-2.5 text-sm font-semibold text-cream-100 transition-colors hover:border-gold-400 hover:text-gold-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+              className="relative rounded-full border border-cream-100/25 px-4 py-2.5 text-sm font-semibold text-cream-100 transition-colors hover:border-gold-400 hover:text-gold-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
             >
-              Light Map
+              {/* The legend in miniature (Jason, Nov 2, 2026):
+                  six little dots ride the pill's top rim in the
+                  Earth map legend's own colors — gold for the
+                  Word read or heard, the same gold dimmed to an
+                  ember for the app opened, ivory for a book
+                  finished, purple for still knocking, warm red
+                  for kindled, and the watch trace's blue for a
+                  video watched (the hundredfold's gold ring is
+                  the first gold again, so six dots carry all
+                  seven marks). A wordless signal that the map
+                  has lights on it. Decorative only — the pill's
+                  name already says Earth Map. */}
+              <span
+                aria-hidden="true"
+                className="absolute left-1/2 top-0 flex -translate-x-1/2 -translate-y-1/2 gap-[5px]"
+              >
+                <span className="h-[5px] w-[5px] rounded-full shadow-[0_0_0_1px_rgba(9,12,19,0.45)]" style={{ backgroundColor: "#e4b95c" }} />
+                <span className="h-[5px] w-[5px] rounded-full shadow-[0_0_0_1px_rgba(9,12,19,0.45)]" style={{ backgroundColor: "#e4b95c", opacity: 0.45 }} />
+                <span className="h-[5px] w-[5px] rounded-full shadow-[0_0_0_1px_rgba(9,12,19,0.45)]" style={{ backgroundColor: "#fffff0" }} />
+                <span className="h-[5px] w-[5px] rounded-full shadow-[0_0_0_1px_rgba(9,12,19,0.45)]" style={{ backgroundColor: "#a855f7" }} />
+                <span className="h-[5px] w-[5px] rounded-full shadow-[0_0_0_1px_rgba(9,12,19,0.45)]" style={{ backgroundColor: "#d9482f" }} />
+                <span className="h-[5px] w-[5px] rounded-full shadow-[0_0_0_1px_rgba(9,12,19,0.45)]" style={{ backgroundColor: "#8fd8ff" }} />
+              </span>
+              Earth Map
             </Link>
             <Link
               href="/parables"
