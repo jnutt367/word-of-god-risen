@@ -51,21 +51,13 @@ export default function FilmCard({ film }: { film: ChapterFilm | null }) {
           >
             <svg
               viewBox="0 0 24 24"
-              className="h-4 w-4"
+              className="h-4 w-4 ml-[1px]"
               aria-hidden="true"
               focusable="false"
             >
-              <rect
-                x="2.5"
-                y="6"
-                width="19"
-                height="12"
-                rx="3"
-                fill="var(--color-gold-400)"
-              />
               <path
-                d="M10.4 9.4 L10.4 14.6 L15.1 12 Z"
-                fill="var(--color-vineyard-950)"
+                d="M8 5.5v13l11-6.5-11-6.5z"
+                fill="var(--color-gold-400)"
               />
             </svg>
           </span>

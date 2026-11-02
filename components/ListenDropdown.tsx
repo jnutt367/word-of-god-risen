@@ -43,10 +43,14 @@ export default function ListenDropdown() {
         aria-haspopup="menu"
         className="rounded-lg bg-cream-100 px-6 py-3.5 text-base font-semibold text-vineyard-950 transition-colors hover:bg-gold-300"
       >
-        {/* Icon truth (Jason, Nov 2, 2026): this door LISTENS, so
-            it wears the speaker — the play mark belongs to video
-            alone. This button used to lead with a ▶. */}
-        <span aria-hidden="true" className="mr-1.5">🔊</span> Start listening
+        {/* One clear door (Jason, Nov 2, 2026): this button used
+            to lead with a black ▶ — a video signal on an audio
+            door — beside its ▾ and the speaker bubble on its
+            corner: three signals for one door. The ▶ is gone
+            (the corner bubble carries the listening signal), and
+            the ▾ stays because it tells the truth: this button
+            opens the testament picker below. */}
+        Start listening
         <span aria-hidden="true" className="ml-1.5 text-xs">▾</span>
       </button>
       {open && (

@@ -42,21 +42,13 @@ function ShortGridItem({ v }: { v: ShortItem }) {
           >
             <svg
               viewBox="0 0 24 24"
-              className="h-[18px] w-[18px]"
+              className="h-[18px] w-[18px] ml-0.5"
               aria-hidden="true"
               focusable="false"
             >
-              <rect
-                x="2.5"
-                y="6"
-                width="19"
-                height="12"
-                rx="3"
-                fill="var(--color-gold-400)"
-              />
               <path
-                d="M10.4 9.4 L10.4 14.6 L15.1 12 Z"
-                fill="var(--color-vineyard-950)"
+                d="M8 5.5v13l11-6.5-11-6.5z"
+                fill="var(--color-gold-400)"
               />
             </svg>
           </span>

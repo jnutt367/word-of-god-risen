@@ -43,7 +43,14 @@ export default function Home() {
           <HeroCycle />
           <div className="absolute inset-0 bg-gradient-to-b from-vineyard-950/70 via-vineyard-950/55 to-vineyard-950" />
         </div>
-        <div className="relative mx-auto max-w-4xl px-4 py-14 text-center sm:px-6 sm:py-20">
+        {/* Extra bottom room on phones (Jason, Nov 2, 2026):
+            the floating Ask Teddy helper (avatar + his name pill)
+            rests at the screen's bottom right, and the hero's
+            last line — "✦ Featuring the lost books…" — was
+            passing underneath it, covered mid-word. pb-28 lifts
+            that line clear of the helper's band; the helper
+            himself is untouched and works exactly as before. */}
+        <div className="relative mx-auto max-w-4xl px-4 pt-14 pb-28 text-center sm:px-6 sm:py-20">
           {/* The hero's bubble trio (Jason, Nov 2, 2026): the three
               actions also ride small at the hero's top corner, in
               the app's bubble idiom — the gold-rimmed round chips

@@ -23,9 +23,15 @@ const FILM_ID = "z9pwCVw7Rf0";
  * visitor's eye finds the play door the way it finds a light on
  * the map. It rests still under prefers-reduced-motion.
  *
- * The face is a little player in channel colors — a gold screen
- * with a vineyard play mark, never YouTube red (the app's standing
- * law: red belongs to the kindling mark alone).
+ * The face is a plain gold play triangle inside the gold-rimmed
+ * circle. It began as a little gold "screen" with a triangle in
+ * it — until Jason ruled (Nov 2, 2026) that a rounded rectangle
+ * with a triangle in it is YouTube's brand shape, and this app's
+ * mark must say "play" without resembling it. So: triangle only,
+ * gold, never YouTube red (the app's standing law: red belongs to
+ * the kindling mark alone). Every video surface in the app wears
+ * this same face — see WelcomeFilm, TeddyNote, the Shorts shelf
+ * and grid, FilmCard, WatchCard, and VideoEmbed.
  */
 export default function WatchBubble() {
   const [open, setOpen] = useState(false);
@@ -54,21 +60,13 @@ export default function WatchBubble() {
       >
         <svg
           viewBox="0 0 24 24"
-          className="h-5 w-5"
+          className="h-5 w-5 ml-0.5"
           aria-hidden="true"
           focusable="false"
         >
-          <rect
-            x="2.5"
-            y="6"
-            width="19"
-            height="12"
-            rx="3"
-            fill="var(--color-gold-400)"
-          />
           <path
-            d="M10.4 9.4 L10.4 14.6 L15.1 12 Z"
-            fill="var(--color-vineyard-950)"
+            d="M8 5.5v13l11-6.5-11-6.5z"
+            fill="var(--color-gold-400)"
           />
         </svg>
       </button>

@@ -18,7 +18,8 @@ import { beatWatch } from "@/lib/heartbeat";
  * Its thumbnail carries the "this plays" signal exactly where
  * his eye expects it — the glowing gold circle at the top right,
  * the WatchBubble treatment (small gold-rimmed circle, breathing
- * gold halo, the little gold screen with the vineyard play mark).
+ * gold halo, a plain gold play triangle — never YouTube's
+ * rounded-rectangle brand shape; Jason, Nov 2, 2026).
  *
  * The tap asks first (VideoChoice, Jason's Oct 20 law): "Watch
  * here" plays it in place; "Open in YouTube" is there for readers
@@ -161,31 +162,22 @@ export default function WelcomeFilm() {
                 centered medallion — the WatchBubble treatment. A
                 small glowing gold circle at the thumbnail's top
                 right: gold-rimmed vineyard circle, breathing gold
-                halo (watch-bubble-glow, the same family as the
-                bubble on Start reading), wearing the little gold
-                screen with the vineyard play mark. It sits where
-                his eye expects "this plays" to live. */}
+                halo (watch-bubble-glow), and a plain gold play
+                triangle for its face. It sits where his eye
+                expects "this plays" to live. */}
             <span
               aria-hidden="true"
               className="watch-bubble-glow absolute top-3 right-3 grid h-10 w-10 place-items-center rounded-full border border-gold-400/70 bg-vineyard-900 shadow-lg transition-transform duration-300 group-hover:scale-110"
             >
               <svg
                 viewBox="0 0 24 24"
-                className="h-5 w-5"
+                className="h-5 w-5 ml-0.5"
                 aria-hidden="true"
                 focusable="false"
               >
-                <rect
-                  x="2.5"
-                  y="6"
-                  width="19"
-                  height="12"
-                  rx="3"
-                  fill="var(--color-gold-400)"
-                />
                 <path
-                  d="M10.4 9.4 L10.4 14.6 L15.1 12 Z"
-                  fill="var(--color-vineyard-950)"
+                  d="M8 5.5v13l11-6.5-11-6.5z"
+                  fill="var(--color-gold-400)"
                 />
               </svg>
             </span>
