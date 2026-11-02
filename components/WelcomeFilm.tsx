@@ -39,6 +39,14 @@ const FILM_URL = `https://www.youtube.com/watch?v=${FILM_ID}`;
 const FILM_TITLE = "Welcome to the Farm | Grandpa Teddy Reads the Bible Aloud";
 const MARK1_HREF = "/book/mark/0";
 
+// The film's anchor and its play line (Jason, Nov 2, 2026): the
+// hero's gold play bubble scrolls the visitor to this anchor and
+// fires this event, and the film below answers by playing in
+// place. The anchor rides the film's own root so the landing is
+// the film itself, scrolled clear of the sticky header.
+export const WELCOME_FILM_ANCHOR = "welcome-film";
+export const WELCOME_FILM_PLAY_EVENT = "wogr:play-welcome-film";
+
 // The YouTube IFrame API is the only way to hear the film end (a
 // plain iframe keeps that to itself). Its loader is shared now —
 // components/WatchPlayer.tsx owns it, so every player on the page
@@ -108,8 +116,20 @@ export default function WelcomeFilm() {
     setPlaying(true);
   }, []);
 
+  // The hero's gold play bubble calls down on this line (Jason,
+  // Nov 2, 2026): its tap scrolls the visitor here and fires the
+  // event, and the film answers with the very same start as its
+  // facade's "Watch here" tap — the film plays here in the app,
+  // which is what the gold mark promises wherever it appears.
+  useEffect(() => {
+    const onPlayRequest = () => startPlaying();
+    window.addEventListener(WELCOME_FILM_PLAY_EVENT, onPlayRequest);
+    return () =>
+      window.removeEventListener(WELCOME_FILM_PLAY_EVENT, onPlayRequest);
+  }, [startPlaying]);
+
   return (
-    <div>
+    <div id={WELCOME_FILM_ANCHOR} className="scroll-mt-24">
       <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-gold-500/20 bg-vineyard-950">
         {ended ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-5 text-center">

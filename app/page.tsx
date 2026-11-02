@@ -10,6 +10,7 @@ import LatestShorts from "@/components/LatestShorts";
 import BodyHeartbeat from "@/components/BodyHeartbeat";
 import WordIntegrityNote from "@/components/WordIntegrityNote";
 import WelcomeFilm from "@/components/WelcomeFilm";
+import HeroWatchBubble from "@/components/HeroWatchBubble";
 import HeroCycle from "@/components/HeroCycle";
 import OpenDoor from "@/components/OpenDoor";
 import CarvedDivider from "@/components/CarvedDivider";
@@ -66,8 +67,14 @@ export default function Home() {
             tucked inside the hero itself. They sit on the section
             itself (not the words block) so they keep the hero's
             true top corner now that the words center on the tall
-            desktop stage. */}
+            desktop stage. Later the same day Jason asked for a
+            fourth bubble beside them — the gold play bubble, the
+            one mark that means a film plays here in the app: it
+            leads the row, scrolls the visitor down to the welcome
+            film and starts it playing in place (see
+            components/HeroWatchBubble.tsx). */}
         <div className="absolute right-4 top-4 z-20 flex gap-2 sm:right-6 sm:top-6">
+          <HeroWatchBubble />
           <Link
             href="/book/genesis/0"
             aria-label="Start reading — opens Genesis chapter 1"
