@@ -13,8 +13,12 @@ import { useVideoChoice, VideoChoiceModal } from "./VideoChoice";
  * chapter can be flagged from its own page. On Oct 27, 2026 Jason
  * moved the full film into the homepage's featured spot — directly
  * under the Body Heartbeat, where the Taiwan prayer Short's card
- * rested until that day — so this note, the film's one presence on
- * the page, rests there now.
+ * rested until that day. On Nov 2, 2026 it led the page for one
+ * morning, until Jason ruled the introduction (the welcome film)
+ * leads instead — so this note, the film's one presence on the
+ * page, rests directly under Meet Grandpa Teddy now, back in the
+ * postscript home where it began. Its id="film" anchor travels
+ * with it; the YouTube door for the film lands here.
  *
  * Kept to the house pattern (TaiwanPrayer): a heading, a few lines
  * in Teddy's voice, and a plain way to watch. The card carries the

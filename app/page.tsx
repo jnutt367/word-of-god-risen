@@ -128,15 +128,21 @@ export default function Home() {
               watches lagged — the featured film rested below the
               map where few ever reached it. Jason's ruling: the
               video moves up to where the buttons are, and the
-              buttons rest underneath the video. So Teddy's note and
-              the "One Chapter Is Enough" film (id="film", its big
-              gold play mark unmistakable on the thumbnail) now sit
-              directly under the hero line, and the doors row below
-              follows it. The film's gold play treatment is the
-              house affordance — the welcome film and the Shorts
-              shelf wear the same gold mark, so every video surface
-              on the page reads as tappable at a glance. */}
-          <TeddyNote />
+              buttons rest underneath the video. His correction the
+              same morning: the film that leads must be the
+              INTRODUCTION — the welcome film ("Welcome to the
+              Farm," n-1KCs0r2Bw) that tells what this app is — not
+              the "One Chapter Is Enough" story film, which takes
+              the welcome film's former home under Meet Grandpa
+              Teddy below. The lead thumbnail wears the glowing
+              gold play circle at its top right (the WatchBubble
+              treatment), so the "this plays" signal sits exactly
+              where his eye expects it; the Shorts shelf wears the
+              same gold mark, so every video surface on the page
+              reads as tappable at a glance. */}
+          <div className="mt-6">
+            <WelcomeFilm />
+          </div>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             {/* Start reading opens an actual chapter (Jason,
                 Oct 31, 2026): it used to scroll to the book grid,
@@ -210,14 +216,21 @@ export default function Home() {
       >
         <div className="overflow-hidden rounded-2xl border border-gold-500/15 bg-vineyard-900">
           <div className="grid gap-0 md:grid-cols-2">
-            <div className="flex flex-col justify-center bg-vineyard-950/40 p-4 sm:p-5">
+            <div className="flex items-center justify-center bg-vineyard-950/40 p-6 md:min-h-[280px]">
               {/* Canon-only law (Jason, Oct 28, 2026): the old welcome
                   video showed a pre-package Teddy, so it came off the
-                  site and the canon portrait stood here one night.
-                  The new welcome film (canon throughout, blessed by
-                  Jason Oct 29, 2026) now holds this spot — and when
-                  it ends, the Mark 1 reader opens right here. */}
-              <WelcomeFilm />
+                  site and the locked canon portrait stood here. The
+                  new welcome film held this spot from Oct 29, 2026
+                  until Nov 2, 2026, when Jason moved it up to lead
+                  the page — the introduction goes first. So the
+                  canon portrait stands here again, beside the words
+                  that introduce him. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/characters/teddy.webp"
+                alt="Grandpa Teddy — your guide through the Word"
+                className="aspect-square w-56 rounded-2xl border border-gold-500/20 object-cover sm:w-64"
+              />
             </div>
             <div className="flex flex-col justify-center p-6 sm:p-8">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold-400">
@@ -235,6 +248,16 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* A note from Grandpa Teddy — home again directly under
+          Meet Grandpa Teddy (Jason, Nov 2, 2026), the postscript
+          spot where it was born on Oct 26, 2026. It carries the
+          "One Chapter Is Enough" film (id="film" — the YouTube
+          door for that film lands on this anchor) and the
+          word-for-word promise, whole and intact. It led the page
+          for one morning until Jason ruled the introduction —
+          the welcome film — leads instead. */}
+      <TeddyNote />
 
       {/* Word Integrity — the promise near the top of the page, on
           purpose (Jason, Oct 23, 2026): a visitor should meet the
@@ -258,11 +281,13 @@ export default function Home() {
       {/* The Body, Reading — the Bible Heartbeat */}
       <BodyHeartbeat />
 
-      {/* (The featured film — Grandpa Teddy's note carrying "One
-          Chapter Is Enough" — leads the page now: it rests in the
-          hero, directly under the hero line and above the doors
-          row, by Jason's Nov 2, 2026 ruling. It held this spot
-          under the heartbeat from Oct 27, 2026 until that day.) */}
+      {/* (No film rests here anymore. Grandpa Teddy's note
+          carrying "One Chapter Is Enough" held this spot under
+          the heartbeat from Oct 27, 2026, then led the page for
+          one morning on Nov 2, 2026 — until Jason ruled the same
+          day that the introduction leads: the welcome film rests
+          in the hero now, and the note film keeps house directly
+          under Meet Grandpa Teddy, above.) */}
 
       {/* The Open Door — a quiet link out to the TruVINE Family Wall,
           resting beside the heartbeat. A plain outbound link only:

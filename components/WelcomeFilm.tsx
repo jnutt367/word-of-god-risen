@@ -9,9 +9,16 @@ import { beatWatch } from "@/lib/heartbeat";
 
 /**
  * The welcome film, home at last (Jason blessed the release
- * Oct 29, 2026). "Welcome to the Farm" lives in the Meet Grandpa
- * Teddy spot the old pre-package welcome video vacated on Oct 28 —
- * this is the new film, canon through and through.
+ * Oct 29, 2026). "Welcome to the Farm" — the introduction that
+ * tells what this app is — first lived in the Meet Grandpa Teddy
+ * spot the old pre-package welcome video vacated on Oct 28.
+ * On Nov 2, 2026 Jason corrected the film-first reorder: the
+ * INTRODUCTION leads the page, directly under the hero, so a new
+ * visitor's first play is the film that tells what the app is.
+ * Its thumbnail carries the "this plays" signal exactly where
+ * his eye expects it — the glowing gold circle at the top right,
+ * the WatchBubble treatment (small gold-rimmed circle, breathing
+ * gold halo, the little gold screen with the vineyard play mark).
  *
  * The tap asks first (VideoChoice, Jason's Oct 20 law): "Watch
  * here" plays it in place; "Open in YouTube" is there for readers
@@ -147,20 +154,40 @@ export default function WelcomeFilm() {
               src="/images/welcome-film-thumb.webp"
               alt="The welcome film's thumbnail: Grandpa Teddy on the farmhouse porch at dusk beneath the title Welcome to the Farm"
               fill
-              sizes="(max-width: 768px) 100vw, 560px"
+              sizes="(max-width: 768px) 100vw, 896px"
               className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
             />
-            <span className="absolute inset-0 flex items-center justify-center">
-              <span className="flex h-16 w-16 items-center justify-center rounded-full bg-gold-400 text-vineyard-950 shadow-[0_8px_30px_rgba(0,0,0,0.5)] ring-4 ring-gold-200/30 transition-transform duration-300 group-hover:scale-110">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="ml-1 h-7 w-7"
-                  aria-hidden="true"
-                >
-                  <path d="M8 5.5v13l11-6.5-11-6.5z" />
-                </svg>
-              </span>
+            {/* The play mark (Jason, Nov 2, 2026): not the old
+                centered medallion — the WatchBubble treatment. A
+                small glowing gold circle at the thumbnail's top
+                right: gold-rimmed vineyard circle, breathing gold
+                halo (watch-bubble-glow, the same family as the
+                bubble on Start reading), wearing the little gold
+                screen with the vineyard play mark. It sits where
+                his eye expects "this plays" to live. */}
+            <span
+              aria-hidden="true"
+              className="watch-bubble-glow absolute top-3 right-3 grid h-10 w-10 place-items-center rounded-full border border-gold-400/70 bg-vineyard-900 shadow-lg transition-transform duration-300 group-hover:scale-110"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                className="h-5 w-5"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <rect
+                  x="2.5"
+                  y="6"
+                  width="19"
+                  height="12"
+                  rx="3"
+                  fill="var(--color-gold-400)"
+                />
+                <path
+                  d="M10.4 9.4 L10.4 14.6 L15.1 12 Z"
+                  fill="var(--color-vineyard-950)"
+                />
+              </svg>
             </span>
           </button>
         )}
