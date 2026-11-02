@@ -54,7 +54,7 @@ export default function TeddyNote() {
           type="button"
           onClick={choice.openChoice}
           aria-haspopup="dialog"
-          aria-label="Watch the story — One Chapter Is Enough, the film"
+          aria-label="Watch the story here in the app — One Chapter Is Enough, the film"
           className="group relative mx-auto block w-full max-w-xl cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold-300"
         >
           <Image
@@ -64,17 +64,36 @@ export default function TeddyNote() {
             height={540}
             className="w-full rounded-xl border border-gold-500/20 object-cover transition-colors group-hover:border-gold-400"
           />
-          <span className="absolute inset-0 flex items-center justify-center">
-            <span className="flex h-16 w-16 items-center justify-center rounded-full bg-gold-400 text-vineyard-950 shadow-[0_8px_30px_rgba(0,0,0,0.5)] ring-4 ring-gold-200/30 transition-transform duration-300 group-hover:scale-110">
-              <svg
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="ml-1 h-7 w-7"
-                aria-hidden="true"
-              >
-                <path d="M8 5.5v13l11-6.5-11-6.5z" />
-              </svg>
-            </span>
+          {/* The one play mark (Jason, Nov 2, 2026): the gold
+              glowing circle at the thumbnail's top right — the
+              WatchBubble treatment every video surface in the app
+              now wears. It replaced this card's centered gold
+              medallion the day Jason ruled the mark identical
+              everywhere: gold, never YouTube red, and it means
+              "you can play it HERE, inside the app." */}
+          <span
+            aria-hidden="true"
+            className="watch-bubble-glow absolute top-3 right-3 grid h-10 w-10 place-items-center rounded-full border border-gold-400/70 bg-vineyard-900 shadow-lg transition-transform duration-300 group-hover:scale-110"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              className="h-5 w-5"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <rect
+                x="2.5"
+                y="6"
+                width="19"
+                height="12"
+                rx="3"
+                fill="var(--color-gold-400)"
+              />
+              <path
+                d="M10.4 9.4 L10.4 14.6 L15.1 12 Z"
+                fill="var(--color-vineyard-950)"
+              />
+            </svg>
           </span>
         </button>
         <p className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-gold-400">
@@ -99,7 +118,7 @@ export default function TeddyNote() {
             type="button"
             onClick={choice.openChoice}
             aria-haspopup="dialog"
-            aria-label="Watch the story — One Chapter Is Enough, the film"
+            aria-label="Watch the story here in the app — One Chapter Is Enough, the film"
             className="inline-block cursor-pointer rounded-lg bg-gold-500 px-5 py-2.5 text-sm font-semibold text-vineyard-950 transition-colors hover:bg-gold-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
           >
             Watch the story

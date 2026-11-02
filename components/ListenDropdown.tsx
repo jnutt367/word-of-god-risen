@@ -43,7 +43,10 @@ export default function ListenDropdown() {
         aria-haspopup="menu"
         className="rounded-lg bg-cream-100 px-6 py-3.5 text-base font-semibold text-vineyard-950 transition-colors hover:bg-gold-300"
       >
-        <span aria-hidden="true" className="mr-1.5">▶</span> Start listening
+        {/* Icon truth (Jason, Nov 2, 2026): this door LISTENS, so
+            it wears the speaker — the play mark belongs to video
+            alone. This button used to lead with a ▶. */}
+        <span aria-hidden="true" className="mr-1.5">🔊</span> Start listening
         <span aria-hidden="true" className="ml-1.5 text-xs">▾</span>
       </button>
       {open && (

@@ -23,29 +23,42 @@ function ShortShelfItem({ v }: { v: ShortItem }) {
         type="button"
         onClick={choice.openChoice}
         aria-haspopup="dialog"
+        aria-label={`Watch here in the app — ${v.title}`}
         className="group block w-40 shrink-0 cursor-pointer text-left"
       >
         <div className="relative aspect-[9/16] overflow-hidden rounded-xl border border-gold-500/15 bg-vineyard-900">
           <YouTubeThumb id={v.id} />
           <div className="absolute inset-0 bg-gradient-to-t from-vineyard-950/80 via-transparent to-transparent" />
-          {/* The house gold play mark (Jason, Nov 2, 2026): every
-              video surface on the page wears the same unmistakable
-              gold — the gold circle with the vineyard triangle that
-              the film cards carry — never a plain white glyph a
-              visitor might read as decoration. */}
+          {/* The one play mark (Jason, Nov 2, 2026): the gold
+              glowing circle at the thumbnail's top right — the
+              WatchBubble treatment every video surface in the app
+              wears, identical everywhere, so one learned mark is
+              trusted everywhere. Gold, never YouTube red, and it
+              means "you can play it HERE, inside the app, without
+              going to YouTube." */}
           <span
-            className="absolute inset-0 flex items-center justify-center"
             aria-hidden="true"
+            className="watch-bubble-glow absolute top-2 right-2 grid h-9 w-9 place-items-center rounded-full border border-gold-400/70 bg-vineyard-900 shadow-lg transition-transform duration-300 group-hover:scale-110"
           >
-            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-gold-400 text-vineyard-950 shadow-[0_6px_20px_rgba(0,0,0,0.5)] ring-2 ring-gold-200/40 transition-transform duration-300 group-hover:scale-110">
-              <svg
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="ml-0.5 h-5 w-5"
-              >
-                <path d="M8 5.5v13l11-6.5-11-6.5z" />
-              </svg>
-            </span>
+            <svg
+              viewBox="0 0 24 24"
+              className="h-[18px] w-[18px]"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <rect
+                x="2.5"
+                y="6"
+                width="19"
+                height="12"
+                rx="3"
+                fill="var(--color-gold-400)"
+              />
+              <path
+                d="M10.4 9.4 L10.4 14.6 L15.1 12 Z"
+                fill="var(--color-vineyard-950)"
+              />
+            </svg>
           </span>
         </div>
         <p className="mt-2 line-clamp-2 text-xs leading-snug text-sage-300 group-hover:text-gold-300">

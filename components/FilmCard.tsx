@@ -24,6 +24,7 @@ export default function FilmCard({ film }: { film: ChapterFilm | null }) {
         type="button"
         onClick={choice.openChoice}
         aria-haspopup="dialog"
+        aria-label={`Watch the animated film here in the app — ${film.title}`}
         className="group flex w-full cursor-pointer items-center gap-4 overflow-hidden rounded-xl border border-[var(--reader-line)] bg-[var(--reader-card)] p-3 text-left transition-colors hover:border-[var(--reader-verse-num)]/50"
       >
         <div className="relative aspect-video w-32 shrink-0 overflow-hidden rounded-lg sm:w-44">
@@ -38,11 +39,35 @@ export default function FilmCard({ film }: { film: ChapterFilm | null }) {
           ) : (
             <YouTubeThumb id={film.id} />
           )}
+          {/* The one play mark (Jason, Nov 2, 2026): the gold
+              glowing circle at the thumbnail's top right — the
+              WatchBubble treatment every video surface in the app
+              wears. It replaced the plain white ▶ this card used
+              to carry: gold, never YouTube red, and it means "you
+              can play it HERE, inside the app." */}
           <span
-            className="absolute inset-0 flex items-center justify-center text-2xl text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
             aria-hidden="true"
+            className="watch-bubble-glow absolute top-1.5 right-1.5 grid h-8 w-8 place-items-center rounded-full border border-gold-400/70 bg-vineyard-900 shadow-lg transition-transform duration-300 group-hover:scale-110"
           >
-            ▶
+            <svg
+              viewBox="0 0 24 24"
+              className="h-4 w-4"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <rect
+                x="2.5"
+                y="6"
+                width="19"
+                height="12"
+                rx="3"
+                fill="var(--color-gold-400)"
+              />
+              <path
+                d="M10.4 9.4 L10.4 14.6 L15.1 12 Z"
+                fill="var(--color-vineyard-950)"
+              />
+            </svg>
           </span>
         </div>
         <div className="flex min-w-0 flex-col justify-center">

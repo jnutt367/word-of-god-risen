@@ -147,7 +147,7 @@ export default function WelcomeFilm() {
             type="button"
             onClick={choice.openChoice}
             aria-haspopup="dialog"
-            aria-label="Watch the welcome film — Welcome to the Farm"
+            aria-label="Watch the welcome film here in the app — Welcome to the Farm"
             className="group absolute inset-0 block h-full w-full cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold-300"
           >
             <Image

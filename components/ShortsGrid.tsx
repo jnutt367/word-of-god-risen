@@ -24,16 +24,41 @@ function ShortGridItem({ v }: { v: ShortItem }) {
         type="button"
         onClick={choice.openChoice}
         aria-haspopup="dialog"
+        aria-label={`Watch here in the app — ${v.title}`}
         className="group block w-full cursor-pointer text-left"
       >
         <div className="relative aspect-[9/16] overflow-hidden rounded-xl border border-gold-500/15 bg-vineyard-900">
           <YouTubeThumb id={v.id} />
           <div className="absolute inset-0 bg-gradient-to-t from-vineyard-950/80 via-transparent to-transparent" />
+          {/* The one play mark (Jason, Nov 2, 2026): the gold
+              glowing circle at the thumbnail's top right — the
+              WatchBubble treatment every video surface in the app
+              wears. It replaced the plain white ▶ this grid used
+              to carry: gold, never YouTube red, and it means "you
+              can play it HERE, inside the app." */}
           <span
-            className="absolute inset-0 flex items-center justify-center text-3xl text-white opacity-80 drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)] transition-opacity group-hover:opacity-100"
             aria-hidden="true"
+            className="watch-bubble-glow absolute top-2 right-2 grid h-9 w-9 place-items-center rounded-full border border-gold-400/70 bg-vineyard-900 shadow-lg transition-transform duration-300 group-hover:scale-110"
           >
-            ▶
+            <svg
+              viewBox="0 0 24 24"
+              className="h-[18px] w-[18px]"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <rect
+                x="2.5"
+                y="6"
+                width="19"
+                height="12"
+                rx="3"
+                fill="var(--color-gold-400)"
+              />
+              <path
+                d="M10.4 9.4 L10.4 14.6 L15.1 12 Z"
+                fill="var(--color-vineyard-950)"
+              />
+            </svg>
           </span>
         </div>
         <p className="mt-2 line-clamp-2 text-xs leading-snug text-sage-300 group-hover:text-gold-300">

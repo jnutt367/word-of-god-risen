@@ -7,9 +7,10 @@ import WatchPlayer from "./WatchPlayer";
 /**
  * Polished click-to-play YouTube embed.
  *
- * Shows a branded thumbnail facade (maxres artwork, gold play button,
- * brand chip) and only loads the heavy YouTube iframe after the
- * user taps play — faster page loads and a much more professional look.
+ * Shows a branded thumbnail facade (maxres artwork, the app's one
+ * gold play mark at the top right, brand chip) and only loads the
+ * heavy YouTube iframe after the user taps play — faster page
+ * loads and a much more professional look.
  *
  * The tap plays HERE, in this frame, and the watch counts on the
  * tap itself (Jason's ruling, Oct 31, 2026 — the click is the
@@ -63,7 +64,7 @@ export default function VideoEmbed({
               type="button"
               ref={facadeRef}
               onClick={startPlaying}
-              aria-label={`Watch video: ${title}`}
+              aria-label={`Watch here in the app: ${title}`}
               className="group absolute inset-0 h-full w-full cursor-pointer"
             >
               <img
@@ -80,17 +81,36 @@ export default function VideoEmbed({
               <span className="absolute left-4 top-4 rounded-full bg-vineyard-950/80 px-3 py-1 text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-gold-300 backdrop-blur">
                 {brand}
               </span>
-              <span className="absolute inset-0 flex items-center justify-center">
-                <span className="flex h-20 w-20 items-center justify-center rounded-full bg-gold-400 text-vineyard-950 shadow-[0_8px_30px_rgba(0,0,0,0.5)] ring-4 ring-gold-200/30 transition-transform duration-300 group-hover:scale-110">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    className="ml-1 h-8 w-8"
-                    aria-hidden="true"
-                  >
-                    <path d="M8 5.5v13l11-6.5-11-6.5z" />
-                  </svg>
-                </span>
+              {/* The one play mark (Jason, Nov 2, 2026): the gold
+                  glowing circle at the thumbnail's top right — the
+                  WatchBubble treatment every video surface in the
+                  app wears. It replaced this facade's centered gold
+                  medallion: one mark, one place, gold and never
+                  YouTube red, meaning "you can play it HERE,
+                  inside the app." */}
+              <span
+                aria-hidden="true"
+                className="watch-bubble-glow absolute top-3 right-3 grid h-11 w-11 place-items-center rounded-full border border-gold-400/70 bg-vineyard-900 shadow-lg transition-transform duration-300 group-hover:scale-110"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  className="h-[22px] w-[22px]"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <rect
+                    x="2.5"
+                    y="6"
+                    width="19"
+                    height="12"
+                    rx="3"
+                    fill="var(--color-gold-400)"
+                  />
+                  <path
+                    d="M10.4 9.4 L10.4 14.6 L15.1 12 Z"
+                    fill="var(--color-vineyard-950)"
+                  />
+                </svg>
               </span>
               <span className="absolute inset-x-0 bottom-0 p-5 text-left">
                 <span className="font-display text-lg text-cream-50 drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]">

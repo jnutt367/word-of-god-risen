@@ -11,7 +11,6 @@ import BodyHeartbeat from "@/components/BodyHeartbeat";
 import WordIntegrityNote from "@/components/WordIntegrityNote";
 import WelcomeFilm from "@/components/WelcomeFilm";
 import HeroCycle from "@/components/HeroCycle";
-import WatchBubble from "@/components/WatchBubble";
 import OpenDoor from "@/components/OpenDoor";
 import CarvedDivider from "@/components/CarvedDivider";
 import TeddyNote from "@/components/TeddyNote";
@@ -149,15 +148,18 @@ export default function Home() {
                 which left the visitor still choosing. Now it
                 opens Genesis chapter 1 in the reader — the same
                 one-tap honesty as the speaker bubble beside it.
-                The bubble on its corner is the speaker bubble's
-                twin (Jason, Oct 31, 2026): a little player in
-                channel colors — gold screen, vineyard play mark,
-                never YouTube red. It began as a link out to
-                YouTube; Jason corrected it the same morning —
-                "it should be able to play here" — so the bubble
-                (components/WatchBubble.tsx) opens the Mark
-                chapter 1 film in the app's own player, right on
-                this page. The button reads; the bubble watches. */}
+                The bubble on its corner wore the gold play mark
+                for one morning (Oct 31 – Nov 2, 2026), opening
+                the Mark 1 film — until Jason's icon-truth ruling
+                (Nov 2, 2026): the gold glowing play circle now
+                means VIDEO, strictly — it belongs on thumbnails
+                that play here in the app, and nowhere else. A
+                play mark on the reading button promised the
+                wrong thing, so the bubble is the BOOK now — the
+                same 📖 treatment as the hero trio's read bubble —
+                and it goes where the button goes: Genesis 1.
+                Icons tell the truth here: book = read,
+                speaker = listen, gold play = watch here. */}
             <span className="relative inline-block">
               <Link
                 href="/book/genesis/0"
@@ -165,7 +167,14 @@ export default function Home() {
               >
                 Start reading
               </Link>
-              <WatchBubble />
+              <Link
+                href="/book/genesis/0"
+                aria-label="Start reading — opens Genesis chapter 1"
+                title="Start reading — Genesis 1"
+                className="absolute -top-2.5 -right-2.5 z-10 grid h-9 w-9 place-items-center rounded-full border border-gold-400/70 bg-vineyard-900 text-base shadow-lg transition-colors hover:border-gold-300 hover:bg-vineyard-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+              >
+                <span aria-hidden="true">📖</span>
+              </Link>
             </span>
             {/* The first door, minimized (Jason, Oct 31, 2026): the
                 "Hear one chapter" door began the morning as a full
