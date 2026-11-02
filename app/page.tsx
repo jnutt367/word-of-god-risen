@@ -29,7 +29,19 @@ export default function Home() {
   return (
     <div>
       {/* Hero */}
-      <section className="relative overflow-hidden">
+      {/* The hero's full stage (Jason, Nov 2, 2026): on desktop
+          the section was only as tall as its words (~500px), so
+          the cycle's scenes were cropped into a shallow band and
+          the welcome film already shared the first screen — the
+          film "eating into the scenes" on his computer, while the
+          phone (where the words nearly fill the screen) read
+          fine. At md+ the section now stands a full viewport
+          tall — 100svh minus the sticky header's measured 65px —
+          as a flex column with the words centered (md:my-auto on
+          the content below), so the scenes own the whole first
+          screen and the film begins beneath it. Below md nothing
+          changes: the phone layout stands exactly as graded. */}
+      <section className="relative overflow-hidden md:flex md:min-h-[calc(100svh_-_65px)] md:flex-col">
         <div className="absolute inset-0">
           {/* The cycling hero (Jason, crowned Oct 31, 2026): the
               three-crosses banner stood here from the beginning,
@@ -43,6 +55,44 @@ export default function Home() {
           <HeroCycle />
           <div className="absolute inset-0 bg-gradient-to-b from-vineyard-950/70 via-vineyard-950/55 to-vineyard-950" />
         </div>
+        {/* The hero's bubble trio (Jason, Nov 2, 2026): the three
+            actions ride small at the hero's top corner, in the
+            app's bubble idiom — the gold-rimmed round chips of the
+            watch bubble and the speaker bubble. Subtle, not
+            distracting, but there from the first glance and
+            recognizable: read, listen, search, each going where
+            its big button under the film goes. The full doors row
+            remains the main road; these are the shortcut bubbles
+            tucked inside the hero itself. They sit on the section
+            itself (not the words block) so they keep the hero's
+            true top corner now that the words center on the tall
+            desktop stage. */}
+        <div className="absolute right-4 top-4 z-20 flex gap-2 sm:right-6 sm:top-6">
+          <Link
+            href="/book/genesis/0"
+            aria-label="Start reading — opens Genesis chapter 1"
+            title="Start reading — Genesis 1"
+            className="grid h-9 w-9 place-items-center rounded-full border border-gold-400/70 bg-vineyard-900 text-base shadow-lg transition-colors hover:border-gold-300 hover:bg-vineyard-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+          >
+            <span aria-hidden="true">📖</span>
+          </Link>
+          <Link
+            href="/book/mark/0?autoplay=1"
+            aria-label="Start listening — Grandpa Teddy reads Mark chapter 1"
+            title="Start listening — Mark 1"
+            className="grid h-9 w-9 place-items-center rounded-full border border-gold-400/70 bg-vineyard-900 text-base shadow-lg transition-colors hover:border-gold-300 hover:bg-vineyard-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+          >
+            <span aria-hidden="true">🔊</span>
+          </Link>
+          <Link
+            href="/search"
+            aria-label="Search the Word"
+            title="Search the Word"
+            className="grid h-9 w-9 place-items-center rounded-full border border-gold-400/70 bg-vineyard-900 text-base shadow-lg transition-colors hover:border-gold-300 hover:bg-vineyard-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+          >
+            <span aria-hidden="true">🔍</span>
+          </Link>
+        </div>
         {/* Extra bottom room on phones (Jason, Nov 2, 2026):
             the floating Ask Teddy helper (avatar + his name pill)
             rests at the screen's bottom right, and the hero's
@@ -50,42 +100,7 @@ export default function Home() {
             passing underneath it, covered mid-word. pb-28 lifts
             that line clear of the helper's band; the helper
             himself is untouched and works exactly as before. */}
-        <div className="relative mx-auto max-w-4xl px-4 pt-14 pb-28 text-center sm:px-6 sm:py-20">
-          {/* The hero's bubble trio (Jason, Nov 2, 2026): the three
-              actions also ride small at the hero's top corner, in
-              the app's bubble idiom — the gold-rimmed round chips
-              of the watch bubble and the speaker bubble. Subtle,
-              not distracting, but there from the first glance and
-              recognizable: read, listen, search, each going where
-              its big button under the film goes. The full doors
-              row remains the main road; these are the shortcut
-              bubbles tucked inside the hero itself. */}
-          <div className="absolute right-4 top-4 z-20 flex gap-2 sm:right-6 sm:top-6">
-            <Link
-              href="/book/genesis/0"
-              aria-label="Start reading — opens Genesis chapter 1"
-              title="Start reading — Genesis 1"
-              className="grid h-9 w-9 place-items-center rounded-full border border-gold-400/70 bg-vineyard-900 text-base shadow-lg transition-colors hover:border-gold-300 hover:bg-vineyard-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
-            >
-              <span aria-hidden="true">📖</span>
-            </Link>
-            <Link
-              href="/book/mark/0?autoplay=1"
-              aria-label="Start listening — Grandpa Teddy reads Mark chapter 1"
-              title="Start listening — Mark 1"
-              className="grid h-9 w-9 place-items-center rounded-full border border-gold-400/70 bg-vineyard-900 text-base shadow-lg transition-colors hover:border-gold-300 hover:bg-vineyard-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
-            >
-              <span aria-hidden="true">🔊</span>
-            </Link>
-            <Link
-              href="/search"
-              aria-label="Search the Word"
-              title="Search the Word"
-              className="grid h-9 w-9 place-items-center rounded-full border border-gold-400/70 bg-vineyard-900 text-base shadow-lg transition-colors hover:border-gold-300 hover:bg-vineyard-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
-            >
-              <span aria-hidden="true">🔍</span>
-            </Link>
-          </div>
+        <div className="relative mx-auto w-full max-w-4xl px-4 pt-14 pb-28 text-center sm:px-6 sm:py-20 md:my-auto">
           <p className="text-sm font-semibold uppercase tracking-[0.22em] text-gold-300">
             Centered on the King, not the crowds
           </p>
@@ -157,8 +172,10 @@ export default function Home() {
               film's frame covered the hero's cycling stills and
               dulled the walk. The hero keeps its whole first
               screen now; the film + doors unit leads the river
-              directly below (next section), and the film's poster
-              rides as a turn of the cycle itself (HeroCycle). */}
+              directly below (next section). The film's poster
+              rode as a turn of the cycle for one morning more —
+              out the same day on Jason's verdict: Teddy doesn't
+              belong in the hero carousel. */}
           <p className="mt-6 text-sm text-sage-300">
             <Link
               href="/#more"
@@ -179,10 +196,10 @@ export default function Home() {
           first screen — stills, headline, verse, line, bubbles
           and pills — and the film steps out to lead everything
           under it, the doors row resting directly beneath it,
-          the whole unit traveling together. The film's poster
-          also rides as a turn of the hero cycle above (see
-          components/HeroCycle.tsx); a tap on that turn opens
-          this very film, here in the app. */}
+          the whole unit traveling together. On desktop the hero
+          now stands a full screen tall (see the hero section
+          above), so this film begins only after the complete
+          hero — never sharing the scenes' screen. */}
       <section
         aria-label="Welcome to the Farm — the welcome film and the first doors"
         className="mx-auto max-w-4xl px-4 pt-8 sm:px-6 sm:pt-10"
