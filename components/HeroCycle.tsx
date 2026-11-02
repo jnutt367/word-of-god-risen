@@ -67,8 +67,13 @@ const SLIDES: { desktop: string; mobile: string; mobilePos?: string }[] = [
   // the slides Jason crowned: the tomb, the ascension, Emmaus,
   // and the family around the Word (which takes the open-book
   // slide's phone place); the Rabboni and shore remakes joined
-  // them on his crown later the same day. The angel's phone
-  // crop stands until its remake is decided and crowned.
+  // them on his crown later the same day. The angel's remake
+  // came on Jason's ruling Nov 2, 2026: seeded from the crowned
+  // tomb plate (cover-recreation/cast-angels/), the unnamed
+  // angel of Matthew 28 seated on the rolled-away stone at
+  // dawn, his face turned away. Scripture never names him, so
+  // no label here does either — the picture may put a viewer
+  // in mind of Gabriel, and nothing in it settles that.
   { desktop: "/images/hero-cycle/slide-01-desktop.jpg", mobile: "/images/hero-cycle/slide-01-mobile-native.jpg" },
   { desktop: "/images/hero-cycle/slide-03-desktop.jpg", mobile: "/images/hero-cycle/slide-03-mobile.jpg" },
   { desktop: "/images/hero-cycle/slide-04-desktop.jpg", mobile: "/images/hero-cycle/slide-04-mobile-native.jpg" },
@@ -186,7 +191,9 @@ export default function HeroCycle() {
             alt={
               i === 0
                 ? "The empty tomb at sunrise — the stone rolled away, warm light shining from the open doorway"
-                : ""
+                : i === 1
+                  ? "The angel at the tomb at dawn — seated on the stone rolled away from the empty tomb, his face turned away"
+                  : ""
             }
             fill
             preload={i === 0}
