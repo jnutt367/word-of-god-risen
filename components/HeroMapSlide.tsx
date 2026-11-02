@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import worldMap from "@/lib/world-map.json";
 import {
   EMBER_FILL_OPACITY,
@@ -57,7 +58,25 @@ import {
  * chapters read or heard — chosen from the same live payload
  * (today's rows are a candidate like any other; a day takes
  * the portrait only by outshining every day before it, so the
- * choice keeps itself as the record grows). The rows render
+ * choice keeps itself as the record grows).
+ *
+ * THE BEST FIVE DAYS (Jason, Nov 2, 2026 — "make the map cycle
+ * through its best five days on the hero"): while this slide
+ * holds the hero's turn, the portrait no longer stands on the
+ * single fullest day — it walks the five fullest days on
+ * record, strongest first, each holding a few seconds with a
+ * slow crossfade, and each NAMED as it stands: its real date
+ * in long form and its real chapter count, small at the
+ * slide's foot, in the hero's own type. The ranking is the
+ * best day's own measure (the country rows' chapters), zero
+ * days never stand, and fewer than five stand when fewer
+ * qualify; with fewer than two qualifying days the slide is
+ * exactly what it was — the single best day, unnamed and
+ * still. The day-walk inherits the hero cycle's own laws: it
+ * pauses while the page is hidden, rests for good when the
+ * visitor takes one of the hero's doors, never runs for a
+ * visitor who prefers reduced motion, and begins again from
+ * the best day each time the map's turn comes round. The rows render
  * exactly as the API returned them for that day, and every
  * decision is the real map's own: a past day is graded exactly
  * as the map section grades it while day browsing — its own
@@ -87,7 +106,8 @@ import {
  * The breathing is the map's own and nothing more: the hero cycle
  * never even reaches this slide for a visitor who prefers reduced
  * motion (the tomb stands still instead), and while the slide is
- * up it fades on the cycle's own 8-second / 1.5-second rhythm.
+ * up it fades on the cycle's own rhythm — and, since Nov 2, 2026,
+ * through its best five days on the day-walk's own slower one.
  */
 
 export interface HeroMapCountRow {
@@ -122,6 +142,78 @@ export interface HeroMapPayload {
   countries: HeroMapCountRow[];
   subdivisions?: HeroMapSubdivisionRow[];
   history?: HeroMapDay[];
+}
+
+/** One day of the best-five pass (Nov 2, 2026): the day's own
+ *  rows exactly as the payload carries them, with their chapter
+ *  total by the best day's own measure. */
+export interface HeroMapRankedDay {
+  date: string;
+  total: number;
+  countries: HeroMapCountRow[];
+  subdivisions: HeroMapSubdivisionRow[];
+}
+
+/** How long each day of the pass stands while the map holds
+ *  the hero's turn — the crossfade between days runs 1.2s of
+ *  it. HeroCycle holds the map turn for one full pass (this
+ *  times the number of ranked days) before walking on. */
+export const HERO_MAP_DAY_MS = 4500;
+
+/** The best day's own measure: a day's chapters read or heard,
+ *  summed across its country rows. */
+function chaptersOfRows(rows?: HeroMapCountRow[]): number {
+  return (rows ?? []).reduce(
+    (sum, c) => sum + (c.total ?? (c.read ?? 0) + (c.heard ?? 0)),
+    0
+  );
+}
+
+/** The five fullest days on record, strongest first (Nov 2,
+ *  2026). Candidates stand in the best day's own order —
+ *  today's rows first, then the history days as the payload
+ *  carries them — and the sort is stable, so a tie keeps the
+ *  earlier candidate ahead, exactly as the single best day
+ *  was always chosen (a day took the portrait only by strictly
+ *  outshining). Zero days never stand; fewer than five stand
+ *  when fewer qualify. */
+export function rankedHeroMapDays(
+  data: HeroMapPayload
+): HeroMapRankedDay[] {
+  const candidates: HeroMapRankedDay[] = [
+    {
+      date: data.today.date,
+      total: chaptersOfRows(data.countries),
+      countries: data.countries ?? [],
+      subdivisions: data.subdivisions ?? [],
+    },
+  ];
+  for (const day of data.history ?? []) {
+    if (!day.date || day.date === data.today.date) continue;
+    candidates.push({
+      date: day.date,
+      total: chaptersOfRows(day.countries),
+      countries: day.countries ?? [],
+      subdivisions: day.subdivisions ?? [],
+    });
+  }
+  return candidates
+    .filter((d) => d.total > 0)
+    .sort((a, b) => b.total - a.total)
+    .slice(0, 5);
+}
+
+/** A payload date ("2026-10-30") in long form ("October 30,
+ *  2026"), built from its own parts so no timezone can walk
+ *  it a day either way. An unparseable date stands as itself. */
+function longDateOf(iso: string): string {
+  const [y, m, d] = iso.split("-").map((n) => parseInt(n, 10));
+  if (!y || !m || !d) return iso;
+  return new Date(y, m - 1, d).toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
 }
 
 interface WorldCountry {
@@ -488,38 +580,153 @@ function StillKnockingDeepGlowMark({
   );
 }
 
-export default function HeroMapSlide({ data }: { data: HeroMapPayload }) {
+export default function HeroMapSlide({
+  data,
+  active = false,
+  resting = false,
+}: {
+  data: HeroMapPayload;
+  /** True while the map holds the hero's turn (HeroCycle). */
+  active?: boolean;
+  /** True once the hero cycle has rested for good on a
+   *  visitor's interaction — the day-walk rests with it. */
+  resting?: boolean;
+}) {
   const todayDate = data.today.date;
 
-  // THE BEST DAY (Jason, Oct 31, 2026): the portrait shows the
-  // fullest day on record — the most chapters across the country
-  // rows — chosen from today's rows and every history day in
-  // the same payload. A day takes the portrait only by strictly
-  // outshining the days before it, so the earliest day to set
-  // the mark keeps it until a fuller day comes. The ivory book
-  // ring belongs to today alone (BodyHeartbeat's haloDate law):
-  // on a past day's portrait it is not worn, exactly as the
-  // real map wears none while browsing that day.
-  const chaptersOf = (rows?: HeroMapCountRow[]): number =>
-    (rows ?? []).reduce(
-      (sum, c) => sum + (c.total ?? (c.read ?? 0) + (c.heard ?? 0)),
-      0
-    );
-  let shownDate = todayDate;
-  let shownCountries: HeroMapCountRow[] = data.countries ?? [];
-  let shownSubdivisions: HeroMapSubdivisionRow[] = data.subdivisions ?? [];
-  let bestTotal = chaptersOf(shownCountries);
-  for (const day of data.history ?? []) {
-    if (!day.date || day.date === todayDate) continue;
-    const t = chaptersOf(day.countries);
-    if (t > bestTotal) {
-      bestTotal = t;
-      shownDate = day.date;
-      shownCountries = day.countries ?? [];
-      shownSubdivisions = day.subdivisions ?? [];
+  // All-time opens per place — the sum of a place's opens across
+  // every day in the payload's history (today included), exactly
+  // the real map's derivation; it grades the ember treatment and
+  // nothing else. Without a history, a row's own opens stand.
+  // (Computed once here and handed to each day's layer: it is a
+  // property of the whole record, not of any one day.)
+  const lifetimeOpensByCountry = new Map<string, number>();
+  const lifetimeOpensBySubdivision = new Map<string, number>();
+  if (data.history) {
+    for (const d of data.history) {
+      for (const c of d.countries ?? []) {
+        const code = (c.code || "").toUpperCase();
+        if (code)
+          lifetimeOpensByCountry.set(
+            code,
+            (lifetimeOpensByCountry.get(code) ?? 0) + (c.opens ?? 0)
+          );
+      }
+      for (const s of d.subdivisions ?? []) {
+        const code = (s.code || "").toUpperCase();
+        if (code)
+          lifetimeOpensBySubdivision.set(
+            code,
+            (lifetimeOpensBySubdivision.get(code) ?? 0) + (s.opens ?? 0)
+          );
+      }
     }
   }
-  const haloDate = shownDate === todayDate ? todayDate : null;
+
+  // THE BEST FIVE DAYS (Jason, Nov 2, 2026): the days this slide
+  // walks, strongest first. When no day on record carries a
+  // chapter yet, the portrait falls back to today's rows exactly
+  // as the single-best-day slide always showed them; when fewer
+  // than two days qualify there is no walk and no caption — the
+  // single fullest day stands, as before.
+  const ranked = rankedHeroMapDays(data);
+  const days: HeroMapRankedDay[] =
+    ranked.length > 0
+      ? ranked
+      : [
+          {
+            date: todayDate,
+            total: chaptersOfRows(data.countries),
+            countries: data.countries ?? [],
+            subdivisions: data.subdivisions ?? [],
+          },
+        ];
+  const multiDay = days.length >= 2;
+
+  // The day-walk itself. It runs only while the map holds the
+  // hero's turn, the cycle has not rested, and the visitor has
+  // not asked for reduced motion; it pauses while the page is
+  // hidden, on the cycle's own law. Whenever it is not running
+  // the portrait stands on the best day — so each new turn of
+  // the map begins the pass again from the strongest day.
+  const [reducedMotion] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+  const [dayIndex, setDayIndex] = useState(0);
+  const dayCycleOn = multiDay && active && !resting && !reducedMotion;
+  useEffect(() => {
+    if (!dayCycleOn) {
+      setDayIndex(0);
+      return;
+    }
+    let timer: number | undefined;
+    const start = () => {
+      stopTimer();
+      timer = window.setInterval(() => {
+        setDayIndex((i) => (i + 1) % days.length);
+      }, HERO_MAP_DAY_MS);
+    };
+    const stopTimer = () => {
+      if (timer !== undefined) window.clearInterval(timer);
+      timer = undefined;
+    };
+    const onVisibility = () => {
+      if (document.hidden) stopTimer();
+      else start();
+    };
+    start();
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      stopTimer();
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, [dayCycleOn, days.length]);
+  const shownIndex = dayCycleOn ? dayIndex : 0;
+
+  return (
+    <div className="absolute inset-0">
+      {days.map((day, i) => (
+        <HeroMapDayLayer
+          key={day.date}
+          day={day}
+          haloDate={day.date === todayDate ? todayDate : null}
+          lifetimeOpensByCountry={lifetimeOpensByCountry}
+          lifetimeOpensBySubdivision={lifetimeOpensBySubdivision}
+          caption={multiDay}
+          shown={i === shownIndex}
+        />
+      ))}
+    </div>
+  );
+}
+
+/** One day's portrait — the slide as it always was, drawn for a
+ *  single day's rows: the same normalization, the same imported
+ *  decisions, the same marks in the same order. Layers stack and
+ *  crossfade on opacity; only the shown one stands at full
+ *  strength. The ivory book ring belongs to today alone
+ *  (BodyHeartbeat's haloDate law): on a past day's portrait it
+ *  is not worn, exactly as the real map wears none while
+ *  browsing that day — the caller passes haloDate accordingly. */
+function HeroMapDayLayer({
+  day,
+  haloDate,
+  lifetimeOpensByCountry,
+  lifetimeOpensBySubdivision,
+  caption,
+  shown,
+}: {
+  day: HeroMapRankedDay;
+  haloDate: string | null;
+  lifetimeOpensByCountry: Map<string, number>;
+  lifetimeOpensBySubdivision: Map<string, number>;
+  caption: boolean;
+  shown: boolean;
+}) {
+  const shownCountries = day.countries;
+  const shownSubdivisions = day.subdivisions;
 
   // The shown day's rows, normalized the way BodyHeartbeat
   // normalizes them: a place stands on ANY activity — chapters,
@@ -565,32 +772,9 @@ export default function HeroMapSlide({ data }: { data: HeroMapPayload }) {
     .filter((s) => s.code && (s.total > 0 || s.opens > 0 || s.watches > 0))
     .sort((a, b) => b.total - a.total || b.opens - a.opens || b.watches - a.watches);
 
-  // All-time opens per place — the sum of a place's opens across
-  // every day in the payload's history (today included), exactly
-  // the real map's derivation; it grades the ember treatment and
-  // nothing else. Without a history, a row's own opens stand.
-  const lifetimeOpensByCountry = new Map<string, number>();
-  const lifetimeOpensBySubdivision = new Map<string, number>();
-  if (data.history) {
-    for (const d of data.history) {
-      for (const c of d.countries ?? []) {
-        const code = (c.code || "").toUpperCase();
-        if (code)
-          lifetimeOpensByCountry.set(
-            code,
-            (lifetimeOpensByCountry.get(code) ?? 0) + (c.opens ?? 0)
-          );
-      }
-      for (const s of d.subdivisions ?? []) {
-        const code = (s.code || "").toUpperCase();
-        if (code)
-          lifetimeOpensBySubdivision.set(
-            code,
-            (lifetimeOpensBySubdivision.get(code) ?? 0) + (s.opens ?? 0)
-          );
-      }
-    }
-  }
+  // All-time opens per place — derived once by the caller from
+  // the whole record (see the parent component) and read here
+  // through these two, exactly as the single-day slide read them.
   const allTimeOpensOf = (c: PlaceRow): number =>
     Math.max(c.opens, lifetimeOpensByCountry.get(c.code) ?? 0);
   const allTimeOpensOfSubdivision = (s: PlaceRow): number =>
@@ -620,7 +804,9 @@ export default function HeroMapSlide({ data }: { data: HeroMapPayload }) {
 
   return (
     <div
-      className="absolute inset-0"
+      className={`absolute inset-0 transition-opacity duration-[1200ms] ease-in-out ${
+        shown ? "opacity-100" : "opacity-0"
+      }`}
       style={{
         // The dawn sea — the section map's own sea family,
         // warmed and lifted a step toward the hero stills'
@@ -1054,6 +1240,22 @@ export default function HeroMapSlide({ data }: { data: HeroMapPayload }) {
           )}
         </g>
       </svg>
+      {/* The day's name (Nov 2, 2026) — carried only on the
+          best-five pass: the day's real date in long form and
+          its real chapter count, small at the slide's foot in
+          the hero's own type, fading with its day. A single-day
+          portrait (fewer than two qualifying days) wears no
+          caption, exactly as the slide always stood. */}
+      {caption ? (
+        <p className="absolute inset-x-0 bottom-5 text-center text-[13px] font-medium tracking-wide text-cream-100/85 sm:bottom-7 sm:text-sm">
+          <span className="font-semibold text-gold-300">
+            {longDateOf(day.date)}
+          </span>
+          {" · "}
+          {day.total} {day.total === 1 ? "chapter" : "chapters"} read or
+          heard
+        </p>
+      ) : null}
     </div>
   );
 }

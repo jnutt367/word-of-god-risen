@@ -2,7 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import HeroMapSlide, { type HeroMapPayload } from "@/components/HeroMapSlide";
+import HeroMapSlide, {
+  HERO_MAP_DAY_MS,
+  rankedHeroMapDays,
+  type HeroMapPayload,
+} from "@/components/HeroMapSlide";
 
 /**
  * The cycling hero (Jason, crowned and ordered published
@@ -57,6 +61,11 @@ import HeroMapSlide, { type HeroMapPayload } from "@/components/HeroMapSlide";
  * live record actually answers (see the fetch below); if the
  * fetch fails or the payload is not the live record, the slide
  * simply never exists and the nine pictures walk on without it.
+ * Since Nov 2, 2026 the map's turn runs longer than the
+ * pictures': while it is up, the map walks its best five days
+ * (strongest first, each named with its real date and chapter
+ * count — see HeroMapSlide), and this cycle holds the turn for
+ * one full pass before walking on.
  * Under reduced motion the cycle never advances at all, so the
  * map slide is never reached — the tomb stands, as always.
  */
@@ -133,35 +142,46 @@ export default function HeroCycle() {
   // The nine pictures, plus the map slide when it has joined.
   const totalSlides = SLIDES.length + (mapData ? 1 : 0);
 
-  // The walking itself: advance every 8 seconds unless the
+  // The walking itself: each picture holds 5 seconds unless the
   // visitor prefers reduced motion (then the tomb simply stays),
   // pausing whenever the page is hidden so the morning never
-  // walks on without its witness.
+  // walks on without its witness. The map turn keeps a longer
+  // hold (Nov 2, 2026): while it is up, the map walks its best
+  // five days (see HeroMapSlide), so the turn lasts one full
+  // pass — HERO_MAP_DAY_MS for every ranked day — before the
+  // cycle walks on; when fewer than two days qualify, the map
+  // stands on its best day and keeps the ordinary hold.
   useEffect(() => {
     if (stopped) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const rankedCount =
+      mapData && active === SLIDES.length
+        ? rankedHeroMapDays(mapData).length
+        : 0;
+    const holdMs =
+      rankedCount >= 2 ? rankedCount * HERO_MAP_DAY_MS : HOLD_MS;
     let timer: number | undefined;
-    const start = () => {
-      stopTimer();
-      timer = window.setInterval(() => {
+    const arm = () => {
+      disarm();
+      timer = window.setTimeout(() => {
         setActive((i) => (i + 1) % totalSlides);
-      }, HOLD_MS);
+      }, holdMs);
     };
-    const stopTimer = () => {
-      if (timer !== undefined) window.clearInterval(timer);
+    const disarm = () => {
+      if (timer !== undefined) window.clearTimeout(timer);
       timer = undefined;
     };
     const onVisibility = () => {
-      if (document.hidden) stopTimer();
-      else start();
+      if (document.hidden) disarm();
+      else arm();
     };
-    start();
+    arm();
     document.addEventListener("visibilitychange", onVisibility);
     return () => {
-      stopTimer();
+      disarm();
       document.removeEventListener("visibilitychange", onVisibility);
     };
-  }, [stopped, totalSlides]);
+  }, [stopped, totalSlides, active, mapData]);
 
   // A hand on any of the hero's doors (the nav pills, Start
   // reading, Start listening, the speaker bubble, Search) rests
@@ -230,7 +250,11 @@ export default function HeroCycle() {
             active === SLIDES.length ? "opacity-100" : "opacity-0"
           }`}
         >
-          <HeroMapSlide data={mapData} />
+          <HeroMapSlide
+            data={mapData}
+            active={active === SLIDES.length}
+            resting={stopped}
+          />
         </div>
       ) : null}
     </div>
