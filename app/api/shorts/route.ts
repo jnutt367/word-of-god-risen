@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import snapshot from "@/data/shorts-snapshot.json";
-import { isCanonShort } from "@/lib/canon-shorts";
+import { canonShortRank, isCanonShort } from "@/lib/canon-shorts";
 
 export const revalidate = 3600; // refresh the feed hourly
 
@@ -55,11 +55,14 @@ export async function GET() {
   // Canon-only (Jason's law, Oct 28, 2026): whichever source answers,
   // only canon film Shorts (lib/canon-shorts.ts) may reach the site.
   try {
-    const items = (await fromRss()).filter((i) => isCanonShort(i.id));
+    const items = (await fromRss())
+      .filter((i) => isCanonShort(i.id))
+      .sort((a, b) => canonShortRank(a.id) - canonShortRank(b.id));
     return NextResponse.json({ items, live: true });
   } catch {
     const items = (snapshot as { items: { id: string; title: string }[] }).items
       .filter((s) => isCanonShort(s.id))
+      .sort((a, b) => canonShortRank(a.id) - canonShortRank(b.id))
       .slice(0, 15)
       .map((s) => ({ id: s.id, title: s.title, published: "" }));
     return NextResponse.json({ items, live: false });

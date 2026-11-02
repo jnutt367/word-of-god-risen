@@ -12,8 +12,17 @@
  * (canon Teddy and Jason throughout; the Taiwan story), and the
  * welcome film's funnel Short joins when it publishes. Open Door and
  * the app promo stay off (non-canon Teddy / unverified footage).
+ *
+ * Nov 1, 2026 (Jason's word — the double-barrel funnel): the Global
+ * Bible Month daily Shorts join the shelf as they publish, leading
+ * it — Day 1's Introduction (canon Teddy, seeded from his own film
+ * frame) and its Scripture Short (Mark 1:14–18, built Gate-9-true
+ * from the locked package) go first, in that order. The list order
+ * IS the shelf order.
  */
 export const CANON_SHORT_IDS: readonly string[] = [
+  "8HU2j8BNS-Q", // Global Bible Challenge Day 1 — Run Like That | 1 Corinthians 9:24 — the Day 1 Introduction (Nov 1, 2026)
+  "rBf6RS0zTkE", // Global Bible Challenge Day 1 — "Follow Me" | Mark 1:14–18 — the Day 1 Scripture Short (Nov 1, 2026)
   "-oRYl9jBWKg", // One Chapter Is Enough | Mark 1 — the welcome film's funnel (Oct 29, 2026)
   "MM4Re8olRzY", // One Chapter Is Enough — the Prayer Short (Taiwan) | from the film
   "Jo2qZIZoaxU", // The Whole City at the Door | Mark 1:33
@@ -27,4 +36,11 @@ const CANON_SET = new Set(CANON_SHORT_IDS);
 
 export function isCanonShort(id: string): boolean {
   return CANON_SET.has(id);
+}
+
+/** Shelf order is the list order above (the list leads with the
+ * newest series) — surfaces sort by this rank, not by upload date. */
+export function canonShortRank(id: string): number {
+  const i = CANON_SHORT_IDS.indexOf(id);
+  return i === -1 ? CANON_SHORT_IDS.length : i;
 }
