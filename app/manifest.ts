@@ -13,6 +13,10 @@ export default function manifest(): MetadataRoute.Manifest {
       "The whole Bible read aloud by Grandpa Teddy — pick a chapter, tap Listen, and read along. No sign-up, nothing to download.",
     start_url: "/",
     display: "standalone",
+    // "any" = the app follows the phone in every direction, including
+    // upside-down portrait (readers holding the phone with the cable
+    // at the top). No orientation is ever locked.
+    orientation: "any",
     background_color: "#0c1f16",
     theme_color: "#0c1f16",
     icons: [
