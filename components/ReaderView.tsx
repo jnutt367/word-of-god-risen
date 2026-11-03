@@ -12,6 +12,7 @@ import FilmCard from "@/components/FilmCard";
 import ListenButton from "@/components/ListenButton";
 import ListenedMarkButton from "@/components/ListenedMarkButton";
 import AudioReportButton from "@/components/AudioReportButton";
+import ShareChapterButton from "@/components/ShareChapterButton";
 import { useProgress } from "@/components/ProgressProvider";
 import { beatRead, beatBookComplete } from "@/lib/heartbeat";
 import { getBook } from "@/lib/bible-client";
@@ -282,6 +283,12 @@ export default function ReaderView({
                 A+
               </button>
             </div>
+            <ShareChapterButton
+              slug={slug}
+              bookTitle={bookTitle}
+              chapterNum={chapterNum}
+              chapterIdx={chapterIdx}
+            />
           </div>
         </div>
 
