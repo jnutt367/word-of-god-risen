@@ -1045,6 +1045,61 @@ function StillKnockingDeepGlowMark({
   );
 }
 
+/** PRAYING HANDS (Nov 3, 2026 — Jason saw the candle
+ *  live and ruled: same color and feel, but the center
+ *  should be "a little like prayer hands") — the glyph
+ *  at the prayer light's heart, drawn once and used by
+ *  both the map mark and its legend swatch. Two palms
+ *  pressed together, fingers pointing up: each hand is
+ *  its own shape, so the candle amber glows through the
+ *  seam where they meet; the left hand wears the plain
+ *  cream, the right the same cream deepened a step (the
+ *  soft amber shading), and the thumbs lie across the
+ *  front as two long amber ridges running down from the
+ *  seam. Bold and simple on purpose — at the map's size
+ *  the split form and the ridges are what read; no fine
+ *  detail is attempted. Glyph space: 14.8 tall, 8.1
+ *  wide, origin at its center; callers scale it to the
+ *  flame's old footprint. */
+function PrayingHandsGlyph({
+  x,
+  y,
+  scale,
+}: {
+  x: number;
+  y: number;
+  scale: number;
+}) {
+  return (
+    <g transform={`translate(${x} ${y}) scale(${scale})`}>
+      <path
+        d="M -0.35 -7.4 C -1.5 -7.3 -2.6 -6.2 -3 -4.8 C -3.5 -3.2 -3.9 -1.2 -4 0.8 C -4.05 2.6 -3.6 4.4 -2.9 5.7 L -3.6 7.4 L -1.15 7.4 L -0.6 5.9 C -0.4 3.6 -0.35 1 -0.35 -1.6 C -0.35 -4 -0.35 -5.8 -0.35 -7.4 Z"
+        fill="#fff6da"
+      />
+      <path
+        d="M 0.35 -7.4 C 1.5 -7.3 2.6 -6.2 3 -4.8 C 3.5 -3.2 3.9 -1.2 4 0.8 C 4.05 2.6 3.6 4.4 2.9 5.7 L 3.6 7.4 L 1.15 7.4 L 0.6 5.9 C 0.4 3.6 0.35 1 0.35 -1.6 C 0.35 -4 0.35 -5.8 0.35 -7.4 Z"
+        fill="#ffe9b0"
+      />
+      <path
+        d="M -0.52 -2.8 C -1.3 -1.2 -2 0.3 -2.6 1.7"
+        fill="none"
+        stroke="#f08a24"
+        strokeWidth="0.62"
+        strokeLinecap="round"
+        strokeOpacity="0.88"
+      />
+      <path
+        d="M 0.52 -2.8 C 1.3 -1.2 2 0.3 2.6 1.7"
+        fill="none"
+        stroke="#f08a24"
+        strokeWidth="0.62"
+        strokeLinecap="round"
+        strokeOpacity="0.88"
+      />
+    </g>
+  );
+}
+
 /** THE PRAYER LIGHT (Nov 2, 2026) — a warm, candle-like
  *  glow for the Philippines, a place being prayed for
  *  before the Word has been opened there (the decisions
@@ -1055,11 +1110,14 @@ function StillKnockingDeepGlowMark({
  *  own shape rests in the candle amber — a soft blurred
  *  pass under a steadier one, so the archipelago itself
  *  glows the way a candle lights a room — and at its
- *  center a small FLAME stands: a cream teardrop over an
- *  amber heart. No bright heart (hearts belong to chapter
- *  lights), no ring, no trace, and a breathing all its
- *  own — .hb-prayer, slower and shallower than the
- *  lights' .hb-glow, and still under reduced motion. */
+ *  center a small pair of PRAYING HANDS stands where a
+ *  flame first stood (Nov 3, 2026, Jason's ruling: same
+ *  color and feel, hands at the heart — see
+ *  PrayingHandsGlyph above). No bright heart (hearts
+ *  belong to chapter lights), no ring, no trace, and a
+ *  breathing all its own — .hb-prayer, slower and
+ *  shallower than the lights' .hb-glow, and still under
+ *  reduced motion. */
 function PrayerLightMark({
   d,
   cx,
@@ -1098,8 +1156,7 @@ function PrayerLightMark({
         opacity="0.4"
         filter="url(#hb-soft)"
       />
-      <ellipse cx={cx} cy={cy} rx="3.6" ry="5.6" fill="#fff6da" />
-      <ellipse cx={cx} cy={cy + 1.6} rx="1.7" ry="2.8" fill="#ff9d45" />
+      <PrayingHandsGlyph x={cx} y={cy} scale={0.77} />
     </g>
   );
 }
@@ -3098,8 +3155,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               >
                 <circle cx="13" cy="13" r="10.5" fill="#ffab4a" fillOpacity="0.3" />
                 <circle cx="13" cy="13" r="6.5" fill="#ffab4a" fillOpacity="0.5" />
-                <ellipse cx="13" cy="12" rx="2.4" ry="3.8" fill="#fff6da" />
-                <ellipse cx="13" cy="13.2" rx="1.1" ry="1.9" fill="#ff9d45" />
+                <PrayingHandsGlyph x={13} y={12.7} scale={0.51} />
               </svg>
               <span className="text-[15px] leading-snug text-[#f6efdb]">
                 Praying for you — a place we're praying will open the Word with us
