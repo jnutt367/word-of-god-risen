@@ -24,6 +24,7 @@ export const CANON_SHORT_IDS: readonly string[] = [
   "8HU2j8BNS-Q", // Global Bible Challenge Day 1 — Run Like That | 1 Corinthians 9:24 — the Day 1 Introduction (Nov 1, 2026)
   "rBf6RS0zTkE", // Global Bible Challenge Day 1 — "Follow Me" | Mark 1:14–18 — the Day 1 Scripture Short (Nov 1, 2026)
   "1u9emv-xPqI", // Day 2: Not the Righteous, but Sinners | Mark 2:15–17 · Global Bible Challenge — the Day 2 Scripture Short (Nov 2, 2026)
+  "fqsojvm1Axk", // Day 3: My Brother, My Sister, My Mother | Mark 3:33–35 · Global Bible Challenge — the Day 3 Scripture Short (Nov 3, 2026); first Short published with manual English + Filipino caption tracks
   "-oRYl9jBWKg", // One Chapter Is Enough | Mark 1 — the welcome film's funnel (Oct 29, 2026)
   "MM4Re8olRzY", // One Chapter Is Enough — the Prayer Short (Taiwan) | from the film
   "Jo2qZIZoaxU", // The Whole City at the Door | Mark 1:33
