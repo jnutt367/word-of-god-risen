@@ -349,3 +349,47 @@ export const STILL_KNOCKING_RIM = "#c084fc";
  *  it. It appears in no legend and no text; the color
  *  itself is the whole statement. */
 export const STILL_KNOCKING_DEEP_GLOW = "#7e22ce";
+
+/** THE PRAYER LIGHT (Jason, Nov 2, 2026 — crowned the night
+ *  the Word of God Risen link was carried by hand to Bacong
+ *  Believers Church in the Philippines, whose leader answered
+ *  that it would be a useful tool for his congregation): the
+ *  map's first mark that is NOT a count. A place being prayed
+ *  for — prayed that the Word will be opened there — wears a
+ *  warm, candle-like light before it has recorded a single
+ *  beat, and the legend names it for exactly what it is, so
+ *  the candle can never be mistaken for reading. Its color
+ *  is a warm candle amber spent nowhere else on the map: the
+ *  chapter lights are the family's paler gold (#e4b95c), and
+ *  this is deliberately a deeper, more orange flame — a
+ *  candle kept burning, not a light kindled by a chapter.
+ *  The give-way decision reads the helper below over the
+ *  same rows the map already consumes; the component holds
+ *  the rest of the law (see BodyHeartbeat.tsx). */
+export const PRAYER_CANDLE = "#ffab4a";
+
+/** Whether any row for a country carries CHAPTER activity —
+ *  chapters read or heard above zero. Opens never count (an
+ *  open is a knock, not the Word opened) and neither do
+ *  watches: this is the plain read/heard test the prayer
+ *  light's give-way law reads, taken over whatever row set
+ *  the caller hands it — today's rows, one history day's
+ *  rows, or the snapshot's. (A row's `total` stands in only
+ *  when its read/heard sum is zero; in every row shape the
+ *  app serves, total is read + heard by construction.)
+ *  Pure function — the component renders what this decides. */
+export function countryChaptersRecorded(
+  rows: readonly {
+    code: string;
+    read?: number;
+    heard?: number;
+    total?: number;
+  }[],
+  countryCode: string
+): boolean {
+  return rows.some((r) => {
+    if ((r.code || "").toUpperCase() !== countryCode) return false;
+    const chapters = (r.read ?? 0) + (r.heard ?? 0) || (r.total ?? 0);
+    return chapters > 0;
+  });
+}

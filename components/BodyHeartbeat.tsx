@@ -10,10 +10,12 @@ import {
   KINDLING_FILL,
   KINDLING_FILL_OPACITY,
   KINDLING_RIM,
+  PRAYER_CANDLE,
   STILL_KNOCKING_DEEP_GLOW,
   STILL_KNOCKING_GLOW,
   bookHaloOn,
   countryBookHaloOn,
+  countryChaptersRecorded,
   countryHundredfoldOn,
   countryStillKnockingDeepOn,
   countryStillKnockingOn,
@@ -186,6 +188,25 @@ import {
  * glow (#7e22ce, countryStillKnockingDeepOn) — rendered,
  * never written: no legend, title, aria, chip, or caption
  * names it.
+ *
+ * THE PRAYER LIGHT (Nov 2, 2026, Jason's crown — "wish we
+ * could put a praying for you light on the map to show
+ * Bacong Church in the Philippines that we're rooting for
+ * them to open the app and read the word with us"): the
+ * Philippines wears a warm, candle-like light though it
+ * has recorded no activity at all — the map's first mark
+ * that is NOT a count, and the legend says so in plain
+ * words. It is a standing sign, decided from the same
+ * record the map already consumes (no new data): the
+ * moment the Philippines records chapter activity anywhere
+ * in that record, the candle gives way for good; on the
+ * FIRST day of that activity it is replaced for that day
+ * by a wide, radiant answered mark ("that one would be
+ * big" — Jason), and from the next day the Philippines
+ * wears the ordinary marks like any neighbor. Both signs
+ * belong to the live default, never to day browsing. See
+ * the decision block below (prayerLightOn /
+ * prayerAnsweredToday).
  */
 
 interface HbTotals {
@@ -1024,6 +1045,148 @@ function StillKnockingDeepGlowMark({
   );
 }
 
+/** THE PRAYER LIGHT (Nov 2, 2026) — a warm, candle-like
+ *  glow for the Philippines, a place being prayed for
+ *  before the Word has been opened there (the decisions
+ *  are prayerLightOn / prayerAnsweredToday in the
+ *  component; the color is PRAYER_CANDLE in
+ *  lib/heartbeat-display.ts). The construction keeps it
+ *  unmistakably a candle and never a count: the country's
+ *  own shape rests in the candle amber — a soft blurred
+ *  pass under a steadier one, so the archipelago itself
+ *  glows the way a candle lights a room — and at its
+ *  center a small FLAME stands: a cream teardrop over an
+ *  amber heart. No bright heart (hearts belong to chapter
+ *  lights), no ring, no trace, and a breathing all its
+ *  own — .hb-prayer, slower and shallower than the
+ *  lights' .hb-glow, and still under reduced motion. */
+function PrayerLightMark({
+  d,
+  cx,
+  cy,
+  label,
+}: {
+  d: string;
+  cx: number;
+  cy: number;
+  label: string;
+}) {
+  return (
+    <g className="hb-prayer">
+      <title>{label}</title>
+      <path
+        d={d}
+        fill={PRAYER_CANDLE}
+        fillRule="evenodd"
+        fillOpacity="0.5"
+        filter="url(#hb-soft)"
+      />
+      <path
+        d={d}
+        fill={PRAYER_CANDLE}
+        fillRule="evenodd"
+        fillOpacity="0.34"
+        stroke="#ffd9a0"
+        strokeWidth="0.8"
+        strokeOpacity="0.5"
+      />
+      <circle
+        cx={cx}
+        cy={cy}
+        r="15"
+        fill={PRAYER_CANDLE}
+        opacity="0.4"
+        filter="url(#hb-soft)"
+      />
+      <ellipse cx={cx} cy={cy} rx="3.6" ry="5.6" fill="#fff6da" />
+      <ellipse cx={cx} cy={cy + 1.6} rx="1.7" ry="2.8" fill="#ff9d45" />
+    </g>
+  );
+}
+
+/** PRAYER ANSWERED (Nov 2, 2026 — Jason: "that one would
+ *  be big") — the candle's successor for ONE day: the
+ *  first day the Philippines records chapter activity,
+ *  the place wears this wide, radiant mark instead. It is
+ *  built to be impossible to mistake for an ordinary read:
+ *  where a chapter light's whole halo spans ~27 units and
+ *  the widest ring ~37, this burst runs to 60 — a broad
+ *  soft halo, TWELVE rays, a gold-white ring at r=36 in
+ *  the ivory ring's double-stroke grammar but far wider,
+ *  and a bright core over the country's own radiant fill.
+ *  It breathes on the lights' .hb-glow (steady under
+ *  reduced motion, like them). Drawn last in the disc's
+ *  group, over the ordinary light the day also earned —
+ *  the day after, only that ordinary light remains. */
+function PrayerAnsweredMark({
+  d,
+  cx,
+  cy,
+  label,
+}: {
+  d: string;
+  cx: number;
+  cy: number;
+  label: string;
+}) {
+  const rays = Array.from({ length: 12 }, (_, k) => {
+    const a = (Math.PI / 6) * k;
+    return {
+      x1: cx + 41 * Math.cos(a),
+      y1: cy + 41 * Math.sin(a),
+      x2: cx + 56 * Math.cos(a),
+      y2: cy + 56 * Math.sin(a),
+    };
+  });
+  return (
+    <g className="hb-glow">
+      <title>{label}</title>
+      <path d={d} fill="#ffdf8a" fillRule="evenodd" fillOpacity="0.45" />
+      <circle
+        cx={cx}
+        cy={cy}
+        r="60"
+        fill="#ffdf8a"
+        opacity="0.32"
+        filter="url(#hb-soft)"
+      />
+      {rays.map((r, k) => (
+        <line
+          key={k}
+          x1={r.x1}
+          y1={r.y1}
+          x2={r.x2}
+          y2={r.y2}
+          stroke="#ffe9a8"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeOpacity="0.9"
+        />
+      ))}
+      <circle
+        cx={cx}
+        cy={cy}
+        r="36"
+        fill="none"
+        stroke="#fff3c4"
+        strokeWidth="7.5"
+        strokeOpacity="0.22"
+      />
+      <circle
+        cx={cx}
+        cy={cy}
+        r="36"
+        fill="none"
+        stroke="#fff3c4"
+        strokeWidth="3"
+        strokeOpacity="0.95"
+      />
+      <circle cx={cx} cy={cy} r="11" fill="#fff8dc" opacity="0.9" />
+      <circle cx={cx} cy={cy} r="5.5" fill="#ffffff" opacity="0.95" />
+    </g>
+  );
+}
+
 function toMapCountry(row: HbCountryRow): MapCountry {
   const geo = world.countries[row.code] ?? null;
   const extra = geo ? null : world.extraCentroids?.[row.code] ?? null;
@@ -1453,6 +1616,62 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
     subdivisionsOfCountry(shownSubdivisions, code);
   const anyEmber = mapRows.some((c) => tierOf(c) !== "full");
 
+  // THE PRAYER LIGHT (Nov 2, 2026 — Jason's crown, the night
+  // the app's link was carried by hand to Bacong Believers
+  // Church in the Philippines): a standing candle for a
+  // place being prayed for BEFORE the Word has been opened
+  // there. It is NOT activity data — no row stands behind
+  // it, and it renders though the Philippines has never
+  // recorded a beat — so it is decided here, from the same
+  // record the map already consumes (today's rows, the live
+  // history, the checked-in snapshot; no new data), under
+  // two laws:
+  //   (1) THE GIVE-WAY: the moment the Philippines records
+  //       chapter activity ANYWHERE in that record, the
+  //       candle goes out for good (phEverActive) — the
+  //       real marks take over, exactly as they do for any
+  //       neighbor. Opens and watches never answer it:
+  //       countryChaptersRecorded reads read/heard only.
+  //   (2) THE ANSWERED DAY: on the FIRST day of that
+  //       activity — active in today's rows, never active
+  //       before today — the candle is replaced for that
+  //       day by PrayerAnsweredMark, the big radiant sign
+  //       (prayerAnsweredToday); from the next day the
+  //       Philippines wears the ordinary marks alone.
+  // Both signs belong to the live default: while day
+  // browsing neither renders (the answered mark reads
+  // today's rows; the candle is a present-tense sign), the
+  // same discipline the ivory ring keeps. The candle also
+  // waits for the first fetch to settle, so a resting first
+  // paint never shows it an instant before the live record
+  // corrects it — the truth gate's own caution.
+  const phGeo = world.countries["PH"] ?? null;
+  const phActiveToday =
+    !browsedDay && countryChaptersRecorded(liveRows, "PH");
+  const phActiveBeforeToday =
+    countryChaptersRecorded(snapRows, "PH") ||
+    (live
+      ? historyAsc.some(
+          (d) =>
+            d.date < live.today.date &&
+            countryChaptersRecorded(d.countries ?? [], "PH")
+        )
+      : false);
+  const phEverActive =
+    phActiveBeforeToday ||
+    phActiveToday ||
+    (live
+      ? historyAsc.some((d) =>
+          countryChaptersRecorded(d.countries ?? [], "PH")
+        )
+      : false);
+  const prayerLightOn = settled && !browsedDay && !phEverActive;
+  const prayerAnsweredToday = phActiveToday && !phActiveBeforeToday;
+  const prayerLightTitle =
+    "Philippines — a warm, candle-like light: praying for you — we are praying the Word will be opened here";
+  const prayerAnsweredTitle =
+    "Philippines — a wide, radiant light: prayer answered — the Word was opened here today, after prayer";
+
   // THE GOLD RING (Oct 28, 2026) — decided against the SHOWN
   // set, but the sign belongs to TODAY: haloDate is today's date
   // only at the live default, so while day browsing no ring is
@@ -1700,6 +1919,16 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
             ? `A soft world map drawn as a disc, with ${fmt(todayCount)} ${todayCount === 1 ? "chapter" : "chapters"} read or heard today, ${longDate(today.date)}. No country shapes are lit yet.`
             : "A soft world map drawn as a disc, at rest in the early morning — the counting of chapters has only just begun, and no country shapes are lit yet.";
 
+  // The prayer signs speak in the figure's own voice (they
+  // carry legend rows, so — unlike the unsaid deep tier —
+  // they are named): the candle as what it is, prayer and
+  // never a count, and the answered mark on its one day.
+  const prayerAria = prayerAnsweredToday
+    ? " The Philippines wears a wide, radiant light — a prayer answered: the Word was opened there today, after prayer."
+    : prayerLightOn
+      ? " A warm, candle-like light rests on the Philippines. It is not a count — it marks prayer: we are praying for the Philippines, that the Word will be opened there."
+      : "";
+
   // "The Vine Is Growing" (Oct 21, 2026) — the day-by-day record,
   // turned into a growth story on the map's own card: a continuous
   // calendar series (days with no counted beat stand honestly at
@@ -1851,7 +2080,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
             note: on phone widths this figure bleeds 16px toward
             the card's edges, -mx-4, and the column widens to
             max-w-3xl from sm up.) */}
-        <figure role="img" aria-label={figureLabel} className="-mx-4 mt-6 sm:mx-auto sm:max-w-3xl">
+        <figure role="img" aria-label={figureLabel + prayerAria} className="-mx-4 mt-6 sm:mx-auto sm:max-w-3xl">
           <svg
             viewBox={world.viewBox}
             aria-hidden="true"
@@ -2019,6 +2248,25 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 visits (countryStillKnockingOn) — its states
                 wear their own below; only a country with no
                 subdivisions in the record glows as a country. */}
+            {/* THE PRAYER LIGHT (Nov 2, 2026) — the candle for
+                the Philippines, drawn first among the marks,
+                under every light: it is not a light earned by
+                a count but a prayer kept for a place, so it
+                rests beneath the day's activity and never
+                competes with it. It stands only while the
+                Philippines has recorded no chapter activity
+                anywhere in the record (the decision block
+                above); on the first day the Word is opened
+                there, the answered mark at the end of this
+                group takes its place for that day. */}
+            {prayerLightOn && phGeo ? (
+              <PrayerLightMark
+                d={phGeo.path}
+                cx={phGeo.cx}
+                cy={phGeo.cy}
+                label={prayerLightTitle}
+              />
+            ) : null}
             {/* THE UNSAID DEEP TIER (Oct 30, 2026) — drawn
                 before every other glow, under all the lights:
                 a divided country whose shown day brought a
@@ -2505,6 +2753,23 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 </g>
               ) : null
             )}
+            {/* PRAYER ANSWERED (Nov 2, 2026) — drawn last,
+                over the lights it celebrates, as the ivory
+                rings are drawn over theirs: on the first day
+                the Philippines records chapter activity, the
+                candle gives way to this wide, radiant mark
+                for that day alone — far larger and brighter
+                than any ordinary light, so an answered prayer
+                can never be mistaken for one more read. From
+                the next day, only the ordinary marks remain. */}
+            {prayerAnsweredToday && phGeo ? (
+              <PrayerAnsweredMark
+                d={phGeo.path}
+                cx={phGeo.cx}
+                cy={phGeo.cy}
+                label={prayerAnsweredTitle}
+              />
+            ) : null}
             </g>
             {/* THE LEGEND (Oct 29, 2026, Jason's crown — built
                 first ON the disc, riding the Pacific water of the
@@ -2619,6 +2884,12 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
             {anyStillKnocking
               ? ` A purple glow — still knocking: 100 visits here ${shownWhen}.`
               : ""}
+            {prayerAnsweredToday
+              ? " A wide, radiant light marks the Philippines — a prayer answered: the Word was opened there today, after prayer."
+              : ""}
+            {prayerLightOn
+              ? " A warm, candle-like light rests on the Philippines — praying for you: it marks prayer, not a count."
+              : ""}
           </p>
           {/* Day stepping (Oct 24, 2026) — one slim row under the
               caption, in the card's own language: step back a day,
@@ -2702,6 +2973,12 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
             blue inner trace. Still knocking stands beside
             kindled — the two visit marks together, the
             seeking family's two thresholds (75 and 100).
+            (Nov 2, 2026: an eighth and ninth row — the
+            prayer light's candle and the answered prayer's
+            radiant burst — the map's first marks that are
+            not counts at all: a prayer kept, and a prayer
+            answered. They close the key, in the order the
+            story itself runs.)
             (Nov 1, 2026, the lighter-sea pass: the panel
             follows the sea's rim as it was designed to —
             #0b2836 → #174a73 — and the strip takes the
@@ -2810,6 +3087,47 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               </svg>
               <span className="text-[15px] leading-snug text-[#f6efdb]">
                 Video watched
+              </span>
+            </li>
+            <li className="flex items-center gap-3">
+              <svg
+                viewBox="0 0 26 26"
+                aria-hidden="true"
+                focusable="false"
+                className="h-[26px] w-[26px] shrink-0"
+              >
+                <circle cx="13" cy="13" r="10.5" fill="#ffab4a" fillOpacity="0.3" />
+                <circle cx="13" cy="13" r="6.5" fill="#ffab4a" fillOpacity="0.5" />
+                <ellipse cx="13" cy="12" rx="2.4" ry="3.8" fill="#fff6da" />
+                <ellipse cx="13" cy="13.2" rx="1.1" ry="1.9" fill="#ff9d45" />
+              </svg>
+              <span className="text-[15px] leading-snug text-[#f6efdb]">
+                Praying for you — a place we're praying will open the Word with us
+              </span>
+            </li>
+            <li className="flex items-center gap-3">
+              <svg
+                viewBox="0 0 26 26"
+                aria-hidden="true"
+                focusable="false"
+                className="h-[26px] w-[26px] shrink-0"
+              >
+                <g stroke="#ffe9a8" strokeWidth="1.6" strokeLinecap="round" strokeOpacity="0.9">
+                  <line x1="13" y1="3.5" x2="13" y2="0.7" />
+                  <line x1="13" y1="22.5" x2="13" y2="25.3" />
+                  <line x1="3.5" y1="13" x2="0.7" y2="13" />
+                  <line x1="22.5" y1="13" x2="25.3" y2="13" />
+                  <line x1="19.7" y1="6.3" x2="21.7" y2="4.3" />
+                  <line x1="19.7" y1="19.7" x2="21.7" y2="21.7" />
+                  <line x1="6.3" y1="19.7" x2="4.3" y2="21.7" />
+                  <line x1="6.3" y1="6.3" x2="4.3" y2="4.3" />
+                </g>
+                <circle cx="13" cy="13" r="8.5" fill="none" stroke="#fff3c4" strokeWidth="3" strokeOpacity="0.22" />
+                <circle cx="13" cy="13" r="8.5" fill="none" stroke="#fff3c4" strokeWidth="1.6" strokeOpacity="0.95" />
+                <circle cx="13" cy="13" r="3.6" fill="#fff8dc" />
+              </svg>
+              <span className="text-[15px] leading-snug text-[#f6efdb]">
+                Prayer answered — the Word opened here after prayer
               </span>
             </li>
           </ul>
