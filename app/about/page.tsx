@@ -86,7 +86,7 @@ export default function AboutPage() {
             className="aspect-[3/4] w-1/2 rounded-xl object-cover object-center"
           />
           <Image
-            src="/images/jason-pixar-crosstee.jpg"
+            src="/images/jason-pixar-waydown.jpg"
             alt="Jason Nutt, Pixar-style portrait in his cross tee"
             width={344}
             height={458}
