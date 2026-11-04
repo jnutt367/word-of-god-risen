@@ -21,6 +21,7 @@ import {
   countryStillKnockingOn,
   emberOpacityForOpens,
   emberStrokeForOpens,
+  goldenScrollPlaces,
   hundredfold,
   kindled,
   lightModeForCountry,
@@ -207,6 +208,27 @@ import {
  * belong to the live default, never to day browsing. See
  * the decision block below (prayerLightOn /
  * prayerAnsweredToday).
+ *
+ * THE GOLDEN SCROLL (Nov 3, 2026, Jason's crown — born of a
+ * dictation that heard "squirrel" for SCROLL, and kept
+ * because the scroll is the right picture: the Word itself,
+ * unrolled in celebration): when ONE place finishes TEN or
+ * more whole books in a single day, a golden scroll stands
+ * ABOVE the disc — outside the legend, at Jason's word, so
+ * the legend is never crowded — naming the feat and the
+ * place in one line, for that day only, then settling.
+ * Rare on purpose: at its crowning, the best single-place
+ * day in the record stood at eight books. The decision is
+ * goldenScrollPlaces() in lib/heartbeat-display.ts, read
+ * off the SHOWN day's own rows (the payload's per-place
+ * `books`, counted since Oct 28, 2026), so a past day
+ * browsed in the record wears the scroll it earned. The
+ * counting honesty is the honor chip's (Oct 31, 2026): a
+ * finish increments its country row AND its subdivision
+ * row — the scroll announces the most specific places and
+ * never announces one finish twice. It is rendered from
+ * the existing payload alone: no new counting, no new
+ * tracking, aggregate only, like every mark on this map.
  */
 
 interface HbTotals {
@@ -1244,6 +1266,48 @@ function PrayerAnsweredMark({
   );
 }
 
+/** THE GOLDEN SCROLL GLYPH (Nov 3, 2026) — a small unrolled
+ *  scroll in the family's own colors: gold rolls, cream
+ *  parchment, two quiet gold lines where the writing would
+ *  rest. Drawn once, inline, so the honor above the disc
+ *  needs no image file and no emblem — the emblem's rules
+ *  are not this element's, and none is used. Decorative:
+ *  the line of text beside it carries the whole meaning. */
+function GoldenScrollGlyph() {
+  return (
+    <svg
+      viewBox="0 0 40 28"
+      width="30"
+      height="21"
+      aria-hidden="true"
+      focusable="false"
+      className="shrink-0"
+    >
+      <rect x="6" y="5" width="28" height="18" rx="2" fill="#f7ead0" />
+      <line
+        x1="12.5"
+        y1="11.5"
+        x2="27.5"
+        y2="11.5"
+        stroke="#b98a2f"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
+      <line
+        x1="12.5"
+        y1="16.5"
+        x2="23"
+        y2="16.5"
+        stroke="#b98a2f"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
+      <rect x="3.5" y="2.5" width="5.5" height="23" rx="2.75" fill="#e4b95c" />
+      <rect x="31" y="2.5" width="5.5" height="23" rx="2.75" fill="#e4b95c" />
+    </svg>
+  );
+}
+
 function toMapCountry(row: HbCountryRow): MapCountry {
   const geo = world.countries[row.code] ?? null;
   const extra = geo ? null : world.extraCentroids?.[row.code] ?? null;
@@ -1330,6 +1394,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
         total: c.total ?? (c.read ?? 0) + (c.heard ?? 0),
         opens: c.opens ?? 0,
         watches: c.watches ?? 0,
+        books: c.books ?? 0,
         bookFinishedOn: c.bookFinishedOn ?? null,
       }))
       // A place stands in the rows on ANY activity: chapters,
@@ -1655,6 +1720,22 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
       if (s.total > 0 || (s.opens ?? 0) > 0) seen.add(s.code);
     return seen.size;
   })();
+  // THE GOLDEN SCROLL (Nov 3, 2026) — decided against the SHOWN
+  // set, from the same rows Telling 1 counts its places from:
+  // today's live rows at the default, the browsed day's while
+  // stepping back. (In the resting snapshot fallback the rows
+  // carry no per-place books, so the scroll simply never
+  // stands there.) The decision itself — threshold, the
+  // most-specific-place rule, most books first — is
+  // goldenScrollPlaces() in lib/heartbeat-display.ts.
+  const scrollPlaces = goldenScrollPlaces(
+    browsedDay
+      ? browsedDay.countries
+      : mapSource === "live"
+        ? liveRows
+        : snapRows,
+    shownSubdivisions
+  );
   const modeOf = (code: string) => lightModeForCountry(shownSubdivisions, code);
   // The light tiers (Oct 27, 2026): "full" and "ember" are the
   // chapter tiers exactly as v3.1.1 settled them. "open" wears the
@@ -2137,6 +2218,37 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
             note: on phone widths this figure bleeds 16px toward
             the card's edges, -mx-4, and the column widens to
             max-w-3xl from sm up.) */}
+        {/* THE GOLDEN SCROLL (Nov 3, 2026) — the honor stands
+            ABOVE the disc, outside the legend, exactly where
+            Jason placed it: the legend below the disc is not
+            crowded by so much as a row, and the feat gets a
+            place of its own at the map's head. One line per
+            place that earned it in the shown day, most books
+            first, in the map's own voice and the caption's own
+            number style (Telling 1 writes its counts as
+            numerals: "8 whole books finished"). For a past
+            shown day the line names that day the way the
+            caption does — "on {long date}". Most days this
+            renders nothing at all: the threshold is ten whole
+            books in one place in one day, and the scroll is
+            rare on purpose. */}
+        {scrollPlaces.length > 0 ? (
+          <div className="mx-auto mt-8 flex max-w-3xl flex-col items-center gap-2 px-2">
+            {scrollPlaces.map((p) => (
+              <p
+                key={`${p.name}-${p.books}`}
+                className="inline-flex items-center gap-2.5 rounded-full border border-gold-500/40 bg-gold-500/10 px-4 py-2 text-center text-sm font-semibold text-gold-300 sm:text-base"
+              >
+                <GoldenScrollGlyph />
+                {fmt(p.books)} books finished in {p.name}
+                {browsedDay
+                  ? ` on ${longDate(browsedDay.date)}`
+                  : " today"}
+                .
+              </p>
+            ))}
+          </div>
+        ) : null}
         <figure role="img" aria-label={figureLabel + prayerAria} className="-mx-4 mt-6 sm:mx-auto sm:max-w-3xl">
           <svg
             viewBox={world.viewBox}

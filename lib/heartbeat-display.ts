@@ -393,3 +393,65 @@ export function countryChaptersRecorded(
     return chapters > 0;
   });
 }
+
+/** THE GOLDEN SCROLL (Jason, Nov 3, 2026 — crowned the night
+ *  Florida finished eight books before the evening was out
+ *  and ten stood in reach): when ONE place finishes TEN or
+ *  more whole books in a single day, the map gives the feat
+ *  its due with a golden scroll above the disc — outside the
+ *  legend, at Jason's word ("don't crowd the legend, but
+ *  give that it's due") — naming the place and its count for
+ *  that day only, then settling, exactly as the ivory ring
+ *  settles. Rare on purpose: no place in the record has yet
+ *  come near it, and it is meant to be seen seldom.
+ *
+ *  The count is the row's own `books` — whole books finished
+ *  in that place in the SHOWN day — and nothing else: not
+ *  chapters, not opens, not watches. The trigger reads the
+ *  shown day's own rows, so a past day browsed in the record
+ *  (or opened by its ?day= link) wears the scroll it earned
+ *  that day, in the hundredfold's discipline.
+ *
+ *  COUNTING HONESTY: a book-finished beat increments BOTH
+ *  its country row and its subdivision row — the subdivision
+ *  rows break the same finishes down; they never add to the
+ *  country (the Oct 31 honor-chip law, commit 872b807). So
+ *  the two row sets are never summed here. Subdivisions are
+ *  checked first and every subdivision at the threshold is
+ *  announced in its own name; a country is announced only
+ *  when its own row reaches the threshold AND no subdivision
+ *  of it is being announced for the same day — the most
+ *  specific places carry the honor, and no finish is ever
+ *  announced twice. Places are returned most books first.
+ *  Pure function — the component renders what this decides. */
+export const GOLDEN_SCROLL_BOOKS_THRESHOLD = 10;
+
+export interface GoldenScrollPlace {
+  name: string;
+  books: number;
+}
+
+export function goldenScrollPlaces(
+  countries: readonly { code: string; name: string; books?: number }[],
+  subdivisions: readonly { country: string; name: string; books?: number }[]
+): GoldenScrollPlace[] {
+  const subs = subdivisions.filter(
+    (s) => (s.books ?? 0) >= GOLDEN_SCROLL_BOOKS_THRESHOLD
+  );
+  const announcedCountries = new Set(
+    subs.map((s) => (s.country || "").toUpperCase())
+  );
+  const places: GoldenScrollPlace[] = subs.map((s) => ({
+    name: s.name,
+    books: s.books ?? 0,
+  }));
+  for (const c of countries) {
+    const books = c.books ?? 0;
+    if (books < GOLDEN_SCROLL_BOOKS_THRESHOLD) continue;
+    if (announcedCountries.has((c.code || "").toUpperCase())) continue;
+    places.push({ name: c.name, books });
+  }
+  return places.sort(
+    (a, b) => b.books - a.books || a.name.localeCompare(b.name)
+  );
+}
