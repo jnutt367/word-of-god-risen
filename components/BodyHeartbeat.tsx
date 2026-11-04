@@ -1277,8 +1277,8 @@ function GoldenScrollGlyph() {
   return (
     <svg
       viewBox="0 0 40 28"
-      width="30"
-      height="21"
+      width="22"
+      height="16"
       aria-hidden="true"
       focusable="false"
       className="shrink-0"
@@ -2233,11 +2233,11 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
             books in one place in one day, and the scroll is
             rare on purpose. */}
         {scrollPlaces.length > 0 ? (
-          <div className="mx-auto mt-8 flex max-w-3xl flex-col items-center gap-2 px-2">
+          <div className="mx-auto mt-6 flex max-w-3xl flex-col items-center gap-1.5 px-2">
             {scrollPlaces.map((p) => (
               <p
                 key={`${p.name}-${p.books}`}
-                className="inline-flex items-center gap-2.5 rounded-full border border-gold-500/40 bg-gold-500/10 px-4 py-2 text-center text-sm font-semibold text-gold-300 sm:text-base"
+                className="inline-flex items-center gap-2 rounded-full border border-gold-500/40 bg-gold-500/10 px-3 py-1.5 text-center text-xs font-semibold text-gold-300 sm:text-sm"
               >
                 <GoldenScrollGlyph />
                 {fmt(p.books)} books finished in {p.name}
