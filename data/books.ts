@@ -76,7 +76,7 @@ export const BOOKS: BookMeta[] = [
   { slug: 'timothy-1', title: '1 Timothy', testament: 'new', description: 'Read 1 Timothy online — Paul’s charge to a young pastor', image: '/images/cover-timothy-1.jpg', mood: 'warm', chapters: 6 },
   { slug: 'timothy-2', title: '2 Timothy', testament: 'new', description: 'Read 2 Timothy online — passing the torch: preach the word', image: '/images/cover-timothy-2.jpg', mood: 'warm', chapters: 4 },
   { slug: 'titus', title: 'Titus', testament: 'new', description: 'Read Titus online — godly order for the church', image: '/images/cover-titus.jpg', mood: 'warm', chapters: 3 },
-  { slug: 'philemon', title: 'Philemon', testament: 'new', description: 'Read Philemon online — grace that restores a runaway', image: '/images/cover-philemon.jpg', mood: 'warm', chapters: 1 },
+  { slug: 'philemon', title: 'Philemon', testament: 'new', description: 'Read Philemon online — grace that restores a runaway', image: '/images/cover-philemon-threshold.jpg', mood: 'warm', chapters: 1 },
   { slug: 'hebrews', title: 'Hebrews', testament: 'new', description: 'Read Hebrews online — the great cloud of witnesses and heroes of faith', image: '/images/cover-hebrews.jpg', mood: 'warm', chapters: 13 },
   { slug: 'james', title: 'James', testament: 'new', description: 'Read James online — faith that works: pure religion in action', image: '/images/cover-james.jpg', mood: 'warm', chapters: 5 },
   { slug: 'peter-1', title: '1 Peter', testament: 'new', description: 'Read 1 Peter online — living hope for scattered exiles', image: '/images/cover-peter-1.jpg', mood: 'warm', chapters: 5 },
