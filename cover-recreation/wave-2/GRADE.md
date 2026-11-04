@@ -17,6 +17,24 @@ The single authorized Ephesians generation call (Paul dictating to Tertius in hi
 - **What remains:** Ephesians still needs its 1 cover generation, on the plan's concept (Paul the prisoner dictating, Acts 28; the armor as imagery on a stand, worn by no one; card crop on Paul). A fresh attempt needs Jason's word at a stated count (1).
 - Tertius note for the next attempt: his only package file is the profile crop `tertius.jpg`; if a future brief seats him at the table, grade any returned face against that crop and the crowned Romans v3 scene.
 
+## Ephesians — REGENERATION `cover-ephesians-v1.webp` — GRADE: PASS (crown candidate, two watches named)
+
+**Jason's word (Nov 3, 2026):** "those three books go ahead and regenerate" — exactly 1 generation authorized for Ephesians under this word; 1 call fired; an image was produced this time. Nothing composited, cropped for cards, swapped, or committed — RAW crown candidate awaiting Jason's crown. Evidence: `ephesians-v1-faces-zoom.png`, `ephesians-v1-armor-zoom.png`, `ephesians-v1-lamp-zoom.png`.
+
+Scene (the plan's concept): Paul the prisoner dictating in his rented house (Acts 28); Tertius at the table writing; beside them on a wooden stand the armor of God laid out piece by piece as **imagery, worn by no one** (Eph 6).
+
+- **Paul** (left, large): short curly hair graying at the temples, thick brows, deep forehead lines, warm brown eyes, full beard heavily gray at the chin, beige mantle — recognizably our aged Paul, mid-dictation with one hand raised. Face large, clear, and well lit; the plan's card crop on Paul is clean.
+- **Tertius** (right, three-quarter, eyes down on his work): dark wavy hair with the gray temple streak, heavy brow, full dark beard graying at the chin, plain gray tunic — the seed's marks hold (the seed is a profile crop; the cover's three-quarter angle carries the same identity).
+- **The armor (unworn, on its stand):** crested bronze helmet, metal muscle-cuirass breastplate with leather straps, large oval wooden shield with leather bracing and iron boss, short sword leaning beside the shield — laid out as imagery, exactly as the plan asks. No one wears any piece.
+- **Staging law:** dictation as a shared task across the table, respectful distance; Paul's eyes open, Tertius's eyes on the page he is writing. Clean.
+- **Scripture truth:** the prisoner dictating, the armor as the letter's own pictured imagery (Eph 6:10–18); no child, no glowing fantasy, no angels, no figure in the light. Clean.
+- **Ghost-writing sweep:** the parchment sheet and the rolled scroll are completely blank; the clay ink pot is plain; no seals, letters, or marks on any surface. Clean.
+- **Period truth, object by object:**
+  - Through the open window (wooden shutters, iron-free): stone houses with tile roofs, cypress trees, hills — a period landscape, no modern building or object in the sightline.
+  - Clay jars, wicker basket, rough wooden furniture, reed pen — period.
+  - **Watch 1 (the lamp):** the table lamp is all clay — a small round clay vessel, no glass, no metal font, not a modern lampie — but its wick and flame sit in the central top opening rather than at a pinched wick spout: the center-burner variant logged as a watch in Waves 4–6 (Titus, James). Named on that precedent (`ephesians-v1-lamp-zoom.png`).
+  - **Watch 2 (the sword):** at zoom (`ephesians-v1-armor-zoom.png`) the leaning sword's straight brass crossguard and round pommel read a touch later than a Roman gladius's small guard; the piece is small in frame beside the shield, but it is named for Jason's eye under the object-by-object law.
+
 ## Philippians — `cover-philippians-v1.webp` — GRADE: PASS (crown candidate)
 
 Scene: the prison letter as joy — aged Paul at a rough wooden desk in a stone cell, dictating with a broad joyful smile; Timothy beside him, reed pen over blank parchment, looking up with an answering smile; a plain iron chain lies loose on the desk (Phil 1:1, 1:13, 4:4). Epaphroditus is not in frame, per the plan's lean. Evidence: `philippians-v1-faces-zoom.png`.
@@ -62,7 +80,7 @@ Scene (reframe road): the risen Christ in glory over creation — Jesus large an
 
 ## What remains (Jason's calls)
 
-1. **Ephesians:** authorize a fresh single generation (count: 1) on the plan's concept, or hold the book. Nothing is banked. *(Still open after the batch install below.)*
+1. **Ephesians:** REGENERATED under Jason's word (see above) — PASS crown candidate banked as `cover-ephesians-v1.webp`; awaiting Jason's crown. Post-crown install pass not yet authorized.
 2. Philippians, Colossians: **CROWNED + INSTALLED** — see below.
 3. Post-crown pass: DONE for Philippians and Colossians — see below.
 
@@ -78,3 +96,19 @@ Scene (reframe road): the risen Christ in glory over creation — Jesus large an
 - **Served verification (byte-identical, Romans/Acts/Luke standard):**
   - Philippians cover MD5 `6776a736a5045c3e958d529031cbeb7a` == installed ✅ · card `85d9f93633bbaa5b246c80fbb0898034` ✅ · live `/book/philippians` references `cover-philippians-joy.jpg` ✅
   - Colossians cover MD5 `a06469ac50d9e15f871e845fbe5593ba` ✅ · card `98b89512005fb62dc7837862cabc888b` ✅ · live `/book/colossians` references `cover-colossians-christ.jpg` ✅
+
+---
+
+## CROWN + INSTALL — EPHESIANS (Nov 3, 2026)
+
+**Jason's word (Nov 3, 2026): "Go with Ephesians and 3 John"** — the regenerated candidate above is crowned and installed tonight. Install followed the Luke/batch shape exactly (ZERO generations — crop + composite + repoint only).
+
+- **Cover:** `public/images/cover-ephesians-armor.jpg` (1280×720) — 16:9 crop from the crowned raw at y 70–1150 of the 1920×1280 frame (both faces, the helmet crest, and the full armor stand unclipped). The REAL TruVINE emblem master (`truvine-emblem-cleaned-transparent.png`) composited whole at true proportions, 104×74 at (26, 22), clear of every face.
+- **Chapter card:** `public/images/ephesians-armor-card.png` (512×512) — crop from the same raw at (225, 175)–(865, 815): **Paul's face** (the plan's crop).
+- **Repoints:** `data/books.ts` Ephesians image → `/images/cover-ephesians-armor.jpg`; all 6 chapters in BOTH `data/chapters/ephesians_data.json` and `data/chapters/ephesians_kjv_data.json` → `images/ephesians-armor-card.png` (12 chapter entries). The old cover file (`public/images/cover-ephesians.jpg`) **stays on disk** — replaced as the live pointer, not deleted; a grep of `data/` confirms no live reference to it remains.
+- **Build:** `npm run build` — ✓ Compiled successfully, TypeScript finished clean (the sandbox-only dynamic-font download warning appeared; pre-existing, unrelated).
+- **Commit:** `7fe6e76` — "Ephesians + 3 John covers installed (Jason's word, Nov 3)" (9 files, explicit adds only, shared with 3 John), pushed to main.
+- **Served verification (Romans/Acts/Luke/batch standard — byte-identical):**
+  - Live cover MD5 `cb00d94f2f1aa911fcabd9e92e449305` == installed file ✅
+  - Live card MD5 `dd23910141ac8e125271aded956d32e8` == installed file ✅
+  - Live `/book/ephesians` page references `cover-ephesians-armor.jpg` and `ephesians-armor-card.png` ✅
