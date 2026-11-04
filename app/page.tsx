@@ -137,7 +137,7 @@ export default function Home() {
                   six little dots ride the pill's top rim in the
                   Earth map legend's own colors — gold for the
                   Word read or heard, the same gold dimmed to an
-                  ember for the app opened, ivory for a book
+                  ember for the app opened, green for a book
                   finished, purple for still knocking, warm red
                   for kindled, and the watch trace's blue for a
                   video watched (the hundredfold's gold ring is
@@ -151,7 +151,7 @@ export default function Home() {
               >
                 <span className="h-[5px] w-[5px] rounded-full shadow-[0_0_0_1px_rgba(9,12,19,0.45)]" style={{ backgroundColor: "#e4b95c" }} />
                 <span className="h-[5px] w-[5px] rounded-full shadow-[0_0_0_1px_rgba(9,12,19,0.45)]" style={{ backgroundColor: "#e4b95c", opacity: 0.45 }} />
-                <span className="h-[5px] w-[5px] rounded-full shadow-[0_0_0_1px_rgba(9,12,19,0.45)]" style={{ backgroundColor: "#fffff0" }} />
+                <span className="h-[5px] w-[5px] rounded-full shadow-[0_0_0_1px_rgba(9,12,19,0.45)]" style={{ backgroundColor: "#94c64a" }} />
                 <span className="h-[5px] w-[5px] rounded-full shadow-[0_0_0_1px_rgba(9,12,19,0.45)]" style={{ backgroundColor: "#a855f7" }} />
                 <span className="h-[5px] w-[5px] rounded-full shadow-[0_0_0_1px_rgba(9,12,19,0.45)]" style={{ backgroundColor: "#d9482f" }} />
                 <span className="h-[5px] w-[5px] rounded-full shadow-[0_0_0_1px_rgba(9,12,19,0.45)]" style={{ backgroundColor: "#8fd8ff" }} />

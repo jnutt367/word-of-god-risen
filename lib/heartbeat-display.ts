@@ -248,7 +248,7 @@ export const HUNDREDFOLD_RING = "#e4b95c";
  *  hundred or more VISITS (opens), that place's light wears
  *  a soft purple glow. Visits are the seeking family, so
  *  this sign lives in the glow, not in a ring — rings belong
- *  to the Word's own feats (ivory for a book finished, gold
+ *  to the Word's own feats (green for a book finished, gold
  *  for a hundred chapters). ANY chapter state qualifies:
  *  chapters, no chapters, it makes no difference — the count
  *  is the row's `opens` and nothing else. So a kindled place
@@ -335,7 +335,7 @@ export function countryStillKnockingDeepOn(
 /** The still-knocking glow's purple: a clear royal purple —
  *  Lydia's trade in Acts 16, a royal priesthood's color
  *  (1 Peter 2:9) — and a hue the map spends nowhere else:
- *  gold belongs to the lights, ivory to the finished book,
+ *  gold belongs to the lights, green to the finished book,
  *  pale blue (#8fd8ff) to the video trace, warm red to
  *  kindling. The rim is its lighter companion, the pairing
  *  kindling's fill and rim already keep. */

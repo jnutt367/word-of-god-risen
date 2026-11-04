@@ -123,9 +123,10 @@ import {
  * places with that day's counts; the lifetime tiles above it never
  * follow, and stepping home restores "Today on the vine" exactly.
  *
- * THE IVORY RING (Oct 28, 2026, Jason's ruling): when a whole book
+ * THE BOOK RING (Oct 28, 2026, Jason's ruling; color re-ruled
+ * Nov 4, 2026): when a whole book
  * of the Bible is finished in a place, that place wears a soft
- * ivory-white ring for the rest of that day — traced around its
+ * vine-green ring for the rest of that day — traced around its
  * silhouette, or around its centroid light — then settles back
  * to its ordinary light. No names, no counts, nothing permanent.
  * The finish has been counted in the day's geo record beside
@@ -141,7 +142,13 @@ import {
  * HEARTBEAT.md, "The ivory ring". (The ring shipped gold that
  * morning; Jason ruled ivory-white the same day, because gold
  * already belongs to the visit lights — a finished book gets
- * its own color.)
+ * its own color. On Nov 4, 2026, watching South Carolina
+ * finish a book, Jason re-ruled the color: white did not carry
+ * the significance of a finished book, and gold would blur
+ * into the hundredfold's gold on a double day — so the ring
+ * is now the vine's own green, #94c64a, the green of "VINE"
+ * in the TruVINE wordmark: a finished book is fruit on the
+ * vine. The mechanism is unchanged; only the color moved.)
  *
  * THE HUNDREDFOLD (Oct 30, 2026, Jason's crown — "I never
  * thought I'd have to ask this": named for the good soil of
@@ -1824,7 +1831,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
     mapRows.some((c) => countryHaloOn(c)) ||
     shownSubdivisions.some((s) => subHaloOn(s));
   const haloTitle = (name: string) =>
-    `${name} — a white ring: book finished here today`;
+    `${name} — a green ring: book finished here today`;
   // THE HUNDREDFOLD (Oct 30, 2026) — decided against the SHOWN
   // set on the rows themselves: each shown row IS its day's
   // row, so the gold ring is true at the live default and for
@@ -1914,7 +1921,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
     if (countryHaloOn(c)) names.push(c.name);
     for (const s of subsOf(c.code)) if (subHaloOn(s)) names.push(s.name);
     return names.length
-      ? `; a white ring marks ${names.join(" and ")} — book finished there today`
+      ? `; a green ring marks ${names.join(" and ")} — book finished there today`
       : "";
   };
   // The aria voice of the gold ring, in ringClause's own shape:
@@ -1981,7 +1988,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                   ? subdivisionOpenPhrase(s) + kindledClause(s) + stillKnockingClause(s)
                   : `${s.name} — a video was watched here ${shownWhen}; it rests as a faint ember, not fully lit${kindledClause(s)}${stillKnockingClause(s)}`) +
               (subHaloOn(s)
-                ? "; a white ring marks it — book finished here today"
+                ? "; a green ring marks it — book finished here today"
                 : "") +
               (subHundredfoldOn(s)
                 ? `; a gold ring marks it — the hundredfold: a hundred chapters read or heard here ${shownWhen}`
@@ -2586,7 +2593,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                   <title>
                     {subdivisionPhrase(s)}
                     {subHaloOn(s)
-                      ? " — book finished here today; a white ring marks it"
+                      ? " — book finished here today; a green ring marks it"
                       : ""}
                     {subHundredfoldOn(s)
                       ? ` — the hundredfold: a hundred chapters read or heard here ${shownWhen}; a gold ring marks it`
@@ -2852,8 +2859,8 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 />
               ) : null
             )}
-            {/* THE IVORY RING (Oct 28, 2026) — drawn last, over
-                the lights it honors: a soft ivory-white ring traced
+            {/* THE BOOK RING (Oct 28, 2026; vine green since Nov 4, 2026) — drawn last, over
+                the lights it honors: a soft vine-green ring traced
                 around the mark of a place where a whole book of
                 the Bible was finished TODAY — around a country's
                 silhouette, around a subdivision's silhouette, or
@@ -2873,14 +2880,14 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                     <path
                       d={c.geo.path}
                       fill="none"
-                      stroke="#fffff0"
+                      stroke="#94c64a"
                       strokeWidth="3.4"
                       strokeOpacity="0.22"
                     />
                     <path
                       d={c.geo.path}
                       fill="none"
-                      stroke="#fffff0"
+                      stroke="#94c64a"
                       strokeWidth="1.5"
                       strokeOpacity="0.9"
                     />
@@ -2893,7 +2900,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                       cy={c.centroid.cy}
                       r={lightRadius(c.total) * 2.1 + 5}
                       fill="none"
-                      stroke="#fffff0"
+                      stroke="#94c64a"
                       strokeWidth="1.5"
                       strokeOpacity="0.9"
                     />
@@ -2908,14 +2915,14 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                   <path
                     d={s.geo.path}
                     fill="none"
-                    stroke="#fffff0"
+                    stroke="#94c64a"
                     strokeWidth="3.4"
                     strokeOpacity="0.22"
                   />
                   <path
                     d={s.geo.path}
                     fill="none"
-                    stroke="#fffff0"
+                    stroke="#94c64a"
                     strokeWidth="1.5"
                     strokeOpacity="0.9"
                   />
@@ -3045,7 +3052,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 : "Each light is a country where the Word was opened."
               : "Country lights join as the count gathers them — each light will mark a country where the Word was opened."}
             {anyHalo
-              ? " A white ring — book finished here today."
+              ? " A green ring — book finished here today."
               : ""}
             {anyHundredfold
               ? ` A gold ring — the hundredfold: 100 chapters read or heard here ${shownWhen}.`
@@ -3196,8 +3203,8 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 focusable="false"
                 className="h-[26px] w-[26px] shrink-0"
               >
-                <circle cx="13" cy="13" r="9.5" fill="none" stroke="#fffff0" strokeWidth="3.4" strokeOpacity="0.22" />
-                <circle cx="13" cy="13" r="9.5" fill="none" stroke="#fffff0" strokeWidth="1.7" strokeOpacity="0.9" />
+                <circle cx="13" cy="13" r="9.5" fill="none" stroke="#94c64a" strokeWidth="3.4" strokeOpacity="0.22" />
+                <circle cx="13" cy="13" r="9.5" fill="none" stroke="#94c64a" strokeWidth="1.7" strokeOpacity="0.9" />
               </svg>
               <span className="text-[15px] leading-snug text-[#f6efdb]">
                 Book finished here today
@@ -3423,7 +3430,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                       <title>
                         {subdivisionPhrase(s)}
                         {subHaloOn(s)
-                          ? " — book finished here today; a white ring marks it"
+                          ? " — book finished here today; a green ring marks it"
                           : ""}
                         {subHundredfoldOn(s)
                           ? ` — the hundredfold: a hundred chapters read or heard here ${shownWhen}; a gold ring marks it`
@@ -3585,14 +3592,14 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                       <path
                         d={s.geo.path}
                         fill="none"
-                        stroke="#fffff0"
+                        stroke="#94c64a"
                         strokeWidth="3.4"
                         strokeOpacity="0.22"
                       />
                       <path
                         d={s.geo.path}
                         fill="none"
-                        stroke="#fffff0"
+                        stroke="#94c64a"
                         strokeWidth="1.5"
                         strokeOpacity="0.9"
                       />
@@ -3730,7 +3737,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                   {honored && (
                     <span className="flex max-w-full flex-wrap items-center justify-center gap-x-2">
                       {bookFinished && (
-                        <span className="text-[#fffff0]">
+                        <span className="text-[#94c64a]">
                           ·{" "}
                           {typeof c.books === "number" && c.books > 1
                             ? `${c.books} books finished`
@@ -3836,7 +3843,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                         {honored && (
                           <span className="flex max-w-full flex-wrap items-center justify-center gap-x-2">
                             {bookFinished && (
-                              <span className="text-[#fffff0]">
+                              <span className="text-[#94c64a]">
                                 ·{" "}
                                 {typeof s.books === "number" && s.books > 1
                                   ? `${s.books} books finished`

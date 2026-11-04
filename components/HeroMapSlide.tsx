@@ -106,7 +106,7 @@ import {
  * full golden lights breathing on the family's own .hb-glow (the
  * global class already rests under prefers-reduced-motion), the
  * hearts, the blue video-watch inner traces, the hundredfold gold
- * rings, and the ivory book-finished rings last, over all. The
+ * rings, and the vine-green book-finished rings last, over all. The
  * small opacity curves and radii below are copied verbatim from
  * BodyHeartbeat's render treatment so the two surfaces grade a
  * light the same way; every DECISION — which place wears what —
@@ -1262,7 +1262,7 @@ function HeroMapDayLayer({
               <HundredfoldRingMark key={`hundredfold-${s.code}`} idKey={s.code} d={s.geo.path} />
             ) : null
           )}
-          {/* the ivory book-finished rings — last, over all */}
+          {/* the vine-green book-finished rings — last, over all */}
           {countries.map((c) =>
             countryHaloOn(c) ? (
               c.geo ? (
@@ -1270,14 +1270,14 @@ function HeroMapDayLayer({
                   <path
                     d={c.geo.path}
                     fill="none"
-                    stroke="#fffff0"
+                    stroke="#94c64a"
                     strokeWidth="3.4"
                     strokeOpacity="0.22"
                   />
                   <path
                     d={c.geo.path}
                     fill="none"
-                    stroke="#fffff0"
+                    stroke="#94c64a"
                     strokeWidth="1.5"
                     strokeOpacity="0.9"
                   />
@@ -1289,7 +1289,7 @@ function HeroMapDayLayer({
                   cy={c.centroid.cy}
                   r={lightRadius(c.total) * 2.1 + 5}
                   fill="none"
-                  stroke="#fffff0"
+                  stroke="#94c64a"
                   strokeWidth="1.5"
                   strokeOpacity="0.9"
                 />
@@ -1302,14 +1302,14 @@ function HeroMapDayLayer({
                 <path
                   d={s.geo.path}
                   fill="none"
-                  stroke="#fffff0"
+                  stroke="#94c64a"
                   strokeWidth="3.4"
                   strokeOpacity="0.22"
                 />
                 <path
                   d={s.geo.path}
                   fill="none"
-                  stroke="#fffff0"
+                  stroke="#94c64a"
                   strokeWidth="1.5"
                   strokeOpacity="0.9"
                 />

@@ -1054,6 +1054,20 @@ language of light. (Philippians 2:3 governs the copy: the ring
 celebrates a neighbor's walk through a book, and keeps no
 score.)
 
+**Re-ruled Nov 4, 2026 — the ring is vine green now.** Watching
+South Carolina finish a book, Jason judged that white did not
+carry the significance of a finished book. Gold was weighed and
+set aside again (it would blur into the hundredfold's gold ring
+on a double day), and green was his answer — "or we could just
+do green": the ring now renders in **vine green, `#94c64a`**, the
+green of "VINE" in the TruVINE wordmark — a finished book is
+fruit on the vine. Same ring, same day-only rule, same nesting
+(the hundredfold's gold still stands outside it); only the
+color moved. Every surface that speaks the color followed in
+the same change: the map ring, the hero map slide, the legend
+swatch, the day-list "book finished" words, the Earth Map pill
+dot, and the ring's spoken (aria) name — "a green ring".
+
 - **The finish gains a place.** Until today the `book` beat
   carried no geography at all: it moved only the lifetime
   `booksFinished` total, so no record existed of WHERE a book
