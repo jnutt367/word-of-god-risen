@@ -79,15 +79,15 @@ export default function AboutPage() {
       <div className="rounded-2xl border border-gold-500/15 bg-vineyard-900 p-6">
         <div className="flex gap-4">
           <Image
-            src="/images/jason.jpg"
+            src="/images/jason-casual.jpg"
             alt="Jason Nutt"
             width={344}
             height={458}
             className="aspect-[3/4] w-1/2 rounded-xl object-cover object-center"
           />
           <Image
-            src="/images/jason-pixar.jpg"
-            alt="Jason Nutt, Pixar-style portrait"
+            src="/images/jason-pixar-crosstee.jpg"
+            alt="Jason Nutt, Pixar-style portrait in his cross tee"
             width={344}
             height={458}
             className="aspect-[3/4] w-1/2 rounded-xl object-cover object-center"
