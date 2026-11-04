@@ -79,7 +79,7 @@ export default function AboutPage() {
       <div className="rounded-2xl border border-gold-500/15 bg-vineyard-900 p-6">
         <div className="flex gap-4">
           <Image
-            src="/images/jason-real-couch-greenwall.jpg"
+            src="/images/jason-real-couch-scene.jpg"
             alt="Jason Nutt"
             width={344}
             height={458}
