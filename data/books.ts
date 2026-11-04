@@ -62,7 +62,7 @@ export const BOOKS: BookMeta[] = [
   { slug: 'baruch', title: 'Baruch', testament: 'extra', description: 'Read Baruch online — repentance and hope from the Babylonian exile', image: '/images/cover-baruch.jpg', videoId: undefined, mood: 'warm', chapters: 6 },
   { slug: 'maccabees-1', title: '1 Maccabees', testament: 'extra', description: 'Read 1 Maccabees online — the revolt and the rededication of the temple', image: '/images/cover-maccabees-1.jpg', videoId: undefined, mood: 'desert', chapters: 16 },
   { slug: 'maccabees-2', title: '2 Maccabees', testament: 'extra', description: 'Read 2 Maccabees online — faith under persecution: martyrs, miracles, and mercy', image: '/images/cover-maccabees-2.jpg', videoId: undefined, mood: 'desert', chapters: 15 },
-  { slug: 'developer', title: 'My Testimony', testament: 'extra', description: '', image: '/images/cover-developer.jpg', videoId: 'jhcmzjwbvyk', mood: 'desert', chapters: 4 },
+  { slug: 'developer', title: 'My Testimony', testament: 'extra', description: '', image: '/images/cover-developer.jpg', videoId: 'jhcmzjwbvyk', mood: 'desert', chapters: 5 },
   { slug: 'acts', title: 'Acts', testament: 'new', description: '', image: '/images/cover-acts-ascension.jpg', videoId: '8wQ72lt6so4', mood: 'warm', chapters: 28 },
   { slug: 'romans', title: 'Romans', testament: 'new', description: '', image: '/images/cover-romans-dictation.jpg', videoId: 'egkl73aftq4', mood: 'warm', chapters: 16 },
   { slug: 'corinthians-1', title: '1 Corinthians', testament: 'new', description: 'Read 1 Corinthians online — love, unity, and the resurrection', image: '/images/cover-corinthians-1-table.jpg', videoId: 'xIfwzTDCMZs', mood: 'warm', chapters: 16 },
