@@ -68,7 +68,7 @@ export const BOOKS: BookMeta[] = [
   { slug: 'corinthians-1', title: '1 Corinthians', testament: 'new', description: 'Read 1 Corinthians online — love, unity, and the resurrection', image: '/images/cover-corinthians-1-table.jpg', videoId: 'xIfwzTDCMZs', mood: 'warm', chapters: 16 },
   { slug: 'corinthians-2', title: '2 Corinthians', testament: 'new', description: 'Read 2 Corinthians online — comfort in affliction, strength in weakness', image: '/images/cover-corinthians-2-letter.jpg', videoId: '7HpSEJkWI7Q', mood: 'warm', chapters: 13 },
   { slug: 'galatians', title: 'Galatians', testament: 'new', description: 'Read Galatians online — freedom in Christ, not chains of the law', image: '/images/cover-galatians-table.jpg', videoId: '9_RMky-_Uzk', mood: 'warm', chapters: 6 },
-  { slug: 'ephesians', title: 'Ephesians', testament: 'new', description: 'Read Ephesians online — the armor of God and riches of grace', image: '/images/cover-ephesians.jpg', mood: 'warm', chapters: 6 },
+  { slug: 'ephesians', title: 'Ephesians', testament: 'new', description: 'Read Ephesians online — the armor of God and riches of grace', image: '/images/cover-ephesians-armor.jpg', mood: 'warm', chapters: 6 },
   { slug: 'philippians', title: 'Philippians', testament: 'new', description: 'Read Philippians online — joy in every circumstance', image: '/images/cover-philippians-joy.jpg', mood: 'warm', chapters: 4 },
   { slug: 'colossians', title: 'Colossians', testament: 'new', description: 'Read Colossians online — Christ supreme over all', image: '/images/cover-colossians-christ.jpg', mood: 'warm', chapters: 4 },
   { slug: 'thessalonians-1', title: '1 Thessalonians', testament: 'new', description: 'Read 1 Thessalonians online — the return of Christ and living hope', image: '/images/cover-thessalonians-1.jpg', mood: 'warm', chapters: 5 },
@@ -83,7 +83,7 @@ export const BOOKS: BookMeta[] = [
   { slug: 'peter-2', title: '2 Peter', testament: 'new', description: 'Read 2 Peter online — stand firm against false teaching', image: '/images/cover-peter-2.jpg', mood: 'warm', chapters: 3 },
   { slug: 'john-1', title: '1 John', testament: 'new', description: 'Read 1 John online — walking in the light of God’s love', image: '/images/cover-john-1.jpg', mood: 'warm', chapters: 5 },
   { slug: 'john-2', title: '2 John', testament: 'new', description: 'Read 2 John online — truth and love in a short letter', image: '/images/cover-john-2.jpg', mood: 'warm', chapters: 1 },
-  { slug: 'john-3', title: '3 John', testament: 'new', description: 'Read 3 John online — hospitality and faithfulness commended', image: '/images/cover-john-3.jpg', mood: 'warm', chapters: 1 },
+  { slug: 'john-3', title: '3 John', testament: 'new', description: 'Read 3 John online — hospitality and faithfulness commended', image: '/images/cover-john-3-door.jpg', mood: 'warm', chapters: 1 },
   { slug: 'jude', title: 'Jude', testament: 'new', description: 'Read Jude online — contend earnestly for the faith', image: '/images/cover-jude.jpg', mood: 'warm', chapters: 1 },
   { slug: 'revelation', title: 'Revelation', testament: 'new', description: 'Read Revelation online — the risen Christ and the New Jerusalem', image: '/images/cover-revelation.jpg', mood: 'warm', chapters: 22 },
 ];
