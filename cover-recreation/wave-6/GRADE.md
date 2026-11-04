@@ -95,3 +95,45 @@ Scene (the plan's concept): Patmos — the aged John kneeling before the risen C
   - Live cover MD5 `01c9f04a6e79fa7e168913df1b20d993` == installed file ✅
   - Live card MD5 `e28618ceaf6d19bf1f6af753e8e232de` == installed file ✅
   - Live `/book/john-3` page references `cover-john-3-door.jpg` and `john-3-door-card.png` ✅
+---
+
+## CROWN + INSTALL — 1 JOHN (Nov 3, 2026)
+
+**Jason's batch crown** (Nov 3, 2026, ~23:15 EST — "Crown all 13 — install them tonight") covered this book. The crown settles the book's named watches **as-is** — recorded in `cover-recreation/REVISIT-NOTES.md` (kept so any watch can be revisited and changed later; a crown means "installed with this known," never "forgotten"). Install followed the Luke/batch shape exactly (ZERO generations — crop + composite + repoint only), in the batch install commit `67c884d`, pushed.
+
+- **Cover:** `public/images/cover-john-1-light.jpg` (1280×720; 16:9 crop of the raw at y 30–1110). The REAL TruVINE emblem master (`truvine-emblem-cleaned-transparent.png`) composited whole at true proportions, 104×74 at (26, 22), clear of every face.
+- **Chapter card:** `public/images/john-1-light-card.png` (512×512) — crop from the same raw at (920, 0)–(1680, 760): **John's face**.
+- **Repoints:** `data/books.ts` → `/images/cover-john-1-light.jpg`; all 5 chapters in BOTH `data/chapters/john-1_data.json` and `data/chapters/john-1_kjv_data.json` → `images/john-1-light-card.png` (10 chapter entries). The old cover file (`public/images/cover-john-1.jpg`) **stays on disk** — replaced as the live pointer, not deleted; a grep of `data/` confirms no live reference to it remains.
+- **Build:** `npm run build` (one full build for the whole 13-book batch) — ✓ Compiled successfully, TypeScript finished clean, all 148 static pages generated (the sandbox-only dynamic-font download warning appeared; pre-existing, unrelated).
+- **Served verification (byte-identical, Romans/Acts/Luke standard):**
+  - Live cover MD5 `3512af8d35d242b8007696721f2957d3` == installed ✅
+  - Live card MD5 `6e1d8ec088b0175535bc7e27f79a22dc` == installed ✅
+  - Live `/book/john-1` page references `cover-john-1-light.jpg` ✅
+---
+
+## CROWN + INSTALL — 2 JOHN (Nov 3, 2026)
+
+**Jason's batch crown** (Nov 3, 2026, ~23:15 EST — "Crown all 13 — install them tonight") covered this book. The crown settles the book's named watches **as-is** — recorded in `cover-recreation/REVISIT-NOTES.md` (kept so any watch can be revisited and changed later; a crown means "installed with this known," never "forgotten"). Install followed the Luke/batch shape exactly (ZERO generations — crop + composite + repoint only), in the batch install commit `67c884d`, pushed.
+
+- **Cover:** `public/images/cover-john-2-seal.jpg` (1280×720; 16:9 crop of the raw at y 40–1120). The REAL TruVINE emblem master (`truvine-emblem-cleaned-transparent.png`) composited whole at true proportions, 104×74 at (26, 22), clear of every face.
+- **Chapter card:** `public/images/john-2-seal-card.png` (512×512) — crop from the same raw at (430, 40)–(1190, 800): **John's face**.
+- **Repoints:** `data/books.ts` → `/images/cover-john-2-seal.jpg`; all 1 chapters in BOTH `data/chapters/john-2_data.json` and `data/chapters/john-2_kjv_data.json` → `images/john-2-seal-card.png` (2 chapter entries). The old cover file (`public/images/cover-john-2.jpg`) **stays on disk** — replaced as the live pointer, not deleted; a grep of `data/` confirms no live reference to it remains.
+- **Build:** `npm run build` (one full build for the whole 13-book batch) — ✓ Compiled successfully, TypeScript finished clean, all 148 static pages generated (the sandbox-only dynamic-font download warning appeared; pre-existing, unrelated).
+- **Served verification (byte-identical, Romans/Acts/Luke standard):**
+  - Live cover MD5 `79afe06738168c42d3e0dd81fcd46c68` == installed ✅
+  - Live card MD5 `a0dafeb049d6e577cc54cab4fcb1c86a` == installed ✅
+  - Live `/book/john-2` page references `cover-john-2-seal.jpg` ✅
+---
+
+## CROWN + INSTALL — JUDE (Nov 3, 2026)
+
+**Jason's batch crown** (Nov 3, 2026, ~23:15 EST — "Crown all 13 — install them tonight") covered this book. The crown settles the book's named watches **as-is** — recorded in `cover-recreation/REVISIT-NOTES.md` (kept so any watch can be revisited and changed later; a crown means "installed with this known," never "forgotten"). Install followed the Luke/batch shape exactly (ZERO generations — crop + composite + repoint only), in the batch install commit `67c884d`, pushed.
+
+- **Cover:** `public/images/cover-jude-contend.jpg` (1280×720; 16:9 crop of the raw at y 60–1140). The REAL TruVINE emblem master (`truvine-emblem-cleaned-transparent.png`) composited whole at true proportions, 104×74 at (26, 22), clear of every face.
+- **Chapter card:** `public/images/jude-contend-card.png` (512×512) — crop from the same raw at (640, 80)–(1300, 740): **Jude's face**.
+- **Repoints:** `data/books.ts` → `/images/cover-jude-contend.jpg`; all 1 chapters in BOTH `data/chapters/jude_data.json` and `data/chapters/jude_kjv_data.json` → `images/jude-contend-card.png` (2 chapter entries). The old cover file (`public/images/cover-jude.jpg`) **stays on disk** — replaced as the live pointer, not deleted; a grep of `data/` confirms no live reference to it remains.
+- **Build:** `npm run build` (one full build for the whole 13-book batch) — ✓ Compiled successfully, TypeScript finished clean, all 148 static pages generated (the sandbox-only dynamic-font download warning appeared; pre-existing, unrelated).
+- **Served verification (byte-identical, Romans/Acts/Luke standard):**
+  - Live cover MD5 `4d434c431a4163bb64f95a420f899407` == installed ✅
+  - Live card MD5 `c3c25b55929ed763e89a782ea7152589` == installed ✅
+  - Live `/book/jude` page references `cover-jude-contend.jpg` ✅
