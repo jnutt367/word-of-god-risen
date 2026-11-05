@@ -208,6 +208,21 @@ body {
   }
 }
 
+/* While a video plays in the app, the page's ambient breathing
+ * rests (Nov 5, 2026): <html> carries data-video-open from the
+ * moment a player opens until it closes (lib/video-open.ts), and
+ * the map lights, the prayer candle and the play doors' halos
+ * hold still instead of repainting under the film. On a small
+ * phone that stillness is the difference between a film that
+ * plays and one that starves; on any screen it is calmer
+ * besides. The marks keep their lit look — only motion pauses,
+ * and it resumes the moment the film closes. */
+html[data-video-open] .hb-glow,
+html[data-video-open] .hb-prayer,
+html[data-video-open] .watch-bubble-glow {
+  animation-play-state: paused;
+}
+
 /* Teddy helper — Grandpa Teddy's first-visit card settles in with one
  * soft fade; fully still for readers who prefer reduced motion. */
 @keyframes teddy-helper-in {

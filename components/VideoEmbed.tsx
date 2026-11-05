@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { beatWatch } from "@/lib/heartbeat";
+import { setVideoOpen } from "@/lib/video-open";
 import WatchPlayer from "./WatchPlayer";
 
 /**
@@ -48,6 +49,15 @@ export default function VideoEmbed({
   // keyboard reader arrives where the video now lives.
   useEffect(() => {
     if (playing) playerRef.current?.focus();
+  }, [playing]);
+
+  // While the film plays here, the rest of the page rests — the
+  // video-open signal (lib/video-open.ts, Nov 5, 2026), held for
+  // exactly as long as the player stands in the facade's place.
+  useEffect(() => {
+    if (!playing) return;
+    setVideoOpen(true);
+    return () => setVideoOpen(false);
   }, [playing]);
 
   return (

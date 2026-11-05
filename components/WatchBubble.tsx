@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { beatWatch } from "@/lib/heartbeat";
+import { setVideoOpen } from "@/lib/video-open";
 import WatchPlayer from "./WatchPlayer";
 
 const FILM_ID = "z9pwCVw7Rf0";
@@ -46,6 +47,15 @@ export default function WatchBubble() {
     return () => document.removeEventListener("keydown", onKey);
   }, [open ]);
 
+  // While the film plays, the page behind it rests — the same
+  // video-open signal VideoChoice raises (lib/video-open.ts,
+  // Nov 5, 2026), lowered again on every close by this cleanup.
+  useEffect(() => {
+    if (!open) return;
+    setVideoOpen(true);
+    return () => setVideoOpen(false);
+  }, [open ]);
+
   return (
     <>
       <button
@@ -73,7 +83,10 @@ export default function WatchBubble() {
 
       {open && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-vineyard-950/80 p-4 backdrop-blur-sm"
+          // Plain dark veil, no backdrop blur — the same Nov 5,
+          // 2026 ruling as VideoChoice's dialog: blurring the live
+          // page under a playing film starved small phones.
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-vineyard-950/80 p-4"
           onClick={() => setOpen(false)}
         >
           <div

@@ -10,6 +10,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { beatWatch } from "@/lib/heartbeat";
+import { setVideoOpen } from "@/lib/video-open";
 import WatchPlayer from "./WatchPlayer";
 
 /**
@@ -97,12 +98,19 @@ export function VideoChoiceModal({
   }, [videoId]);
 
   // Hold the page still behind the dialog, land focus on it, keep
-  // Escape and Tab inside it.
+  // Escape and Tab inside it. Holding still now also means RAISING
+  // the video-open signal (lib/video-open.ts, Nov 5, 2026): while
+  // the film plays, the page behind it rests — the map's breathing
+  // pauses, the hero stops walking, the heartbeat poll skips — so
+  // a small phone spends itself on the film, not on the scenery.
+  // The cleanup lowers it again on EVERY way out (Close, Escape,
+  // backdrop tap, unmount), so the page always wakes.
   useEffect(() => {
     dialogRef.current?.focus();
     const root = document.documentElement;
     const prevOverflow = root.style.overflow;
     root.style.overflow = "hidden";
+    setVideoOpen(true);
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -137,6 +145,7 @@ export function VideoChoiceModal({
     document.addEventListener("keydown", onKey, true);
     return () => {
       document.removeEventListener("keydown", onKey, true);
+      setVideoOpen(false);
       root.style.overflow = prevOverflow;
     };
   }, [onClose]);
@@ -149,7 +158,11 @@ export function VideoChoiceModal({
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-vineyard-950/80 p-4 backdrop-blur-sm"
+      // The veil is plain dark, no backdrop blur (Nov 5, 2026):
+      // blurring the whole live page under a playing film cost a
+      // low-end phone a frame-tax it paid in pauses and freezes.
+      // Same vineyard-950/80 look family, none of the filter cost.
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-vineyard-950/80 p-4"
       onClick={() => onClose()}
     >
       <div

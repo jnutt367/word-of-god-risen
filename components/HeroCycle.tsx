@@ -7,6 +7,7 @@ import HeroMapSlide, {
   rankedHeroMapDays,
   type HeroMapPayload,
 } from "@/components/HeroMapSlide";
+import { useVideoOpen } from "@/lib/video-open";
 
 /**
  * The cycling hero (Jason, crowned and ordered published
@@ -100,6 +101,11 @@ const HOLD_MS = 5000;
 
 export default function HeroCycle() {
   const [active, setActive] = useState(0);
+  // While a video plays anywhere in the app, the cycle rests —
+  // the video-open signal (lib/video-open.ts, Nov 5, 2026): the
+  // walk stops advancing and the hero map's day-walk rests too,
+  // so a small phone spends itself on the film, not the pictures.
+  const videoOpen = useVideoOpen();
   // Set true once the visitor interacts with the hero's doors —
   // the cycle then rests on whatever picture is showing.
   const [stopped, setStopped] = useState(false);
@@ -153,6 +159,7 @@ export default function HeroCycle() {
   // stands on its best day and keeps the ordinary hold.
   useEffect(() => {
     if (stopped) return;
+    if (videoOpen) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const rankedCount =
       mapData && active === SLIDES.length
@@ -181,7 +188,7 @@ export default function HeroCycle() {
       disarm();
       document.removeEventListener("visibilitychange", onVisibility);
     };
-  }, [stopped, totalSlides, active, mapData]);
+  }, [stopped, videoOpen, totalSlides, active, mapData]);
 
   // A hand on any of the hero's doors (the nav pills, Start
   // reading, Start listening, the speaker bubble, Search) rests
@@ -253,7 +260,7 @@ export default function HeroCycle() {
           <HeroMapSlide
             data={mapData}
             active={active === SLIDES.length}
-            resting={stopped}
+            resting={stopped || videoOpen}
           />
         </div>
       ) : null}

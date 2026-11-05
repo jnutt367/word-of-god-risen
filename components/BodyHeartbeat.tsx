@@ -34,6 +34,7 @@ import {
   watchHonorPlaces,
   worldGlowOn,
 } from "@/lib/heartbeat-display";
+import { isVideoOpen } from "@/lib/video-open";
 
 /**
  * "The Body, Reading" — the Bible Heartbeat visualization (v3).
@@ -1572,9 +1573,17 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
     // external system (the live counter) and syncing its state in.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     void load();
-    const id = setInterval(() => void load(), 60_000);
+    // While a video is open in the app, the poll rests (the
+    // video-open signal, lib/video-open.ts, Nov 5, 2026): the
+    // numbers simply stand during the film, and the first tick
+    // after it closes refreshes them — a small phone's network
+    // and CPU belong to the film while it plays.
+    const id = setInterval(() => {
+      if (!isVideoOpen()) void load();
+    }, 60_000);
     const onVisible = () => {
-      if (document.visibilityState === "visible") void load();
+      if (document.visibilityState === "visible" && !isVideoOpen())
+        void load();
     };
     document.addEventListener("visibilitychange", onVisible);
     return () => {

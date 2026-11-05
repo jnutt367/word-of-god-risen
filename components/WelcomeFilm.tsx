@@ -6,6 +6,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useVideoChoice, VideoChoiceModal } from "./VideoChoice";
 import { loadYouTubeApi } from "./WatchPlayer";
 import { beatWatch } from "@/lib/heartbeat";
+import { setVideoOpen } from "@/lib/video-open";
 
 /**
  * The welcome film, home at last (Jason blessed the release
@@ -127,6 +128,15 @@ export default function WelcomeFilm() {
     return () =>
       window.removeEventListener(WELCOME_FILM_PLAY_EVENT, onPlayRequest);
   }, [startPlaying]);
+
+  // While the film plays here, the rest of the page rests — the
+  // video-open signal (lib/video-open.ts, Nov 5, 2026), held for
+  // exactly as long as the player stands in the facade's place.
+  useEffect(() => {
+    if (!playing) return;
+    setVideoOpen(true);
+    return () => setVideoOpen(false);
+  }, [playing]);
 
   return (
     <div id={WELCOME_FILM_ANCHOR} className="scroll-mt-24">
