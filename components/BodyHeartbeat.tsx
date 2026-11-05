@@ -1125,9 +1125,15 @@ function StillKnockingTraceMark({
  *  country's own shape (one path, clip-rule evenodd), so
  *  the blurred fill's bright heart hugs the border from
  *  outside and fades into the sea, the rim pass keeps
- *  only its outer half, and no purple stands within the
- *  line. The centroid form keeps the same seat: rings
- *  around the light's circle, never a filled disc. */
+ *  only its outer half. AND WITHIN (Jason's refinement,
+ *  later the same night — outside bright, inside lit
+ *  but dimmer): the country is lit from within as well,
+ *  the same blurred fill drawn first at a clearly lower
+ *  strength (0.22 against the halo's 0.55), so the whole
+ *  country reads kept in the purple while the rim
+ *  carries the main light. The centroid form keeps the
+ *  same grammar: a dim filled circle (0.2) within its
+ *  rings. */
 function StillKnockingDeepGlowMark({
   idKey,
   d,
@@ -1148,6 +1154,14 @@ function StillKnockingDeepGlowMark({
     const ring = Math.max(6, r * 0.6);
     return (
       <g>
+        <circle
+          cx={cx}
+          cy={cy}
+          r={r}
+          fill={STILL_KNOCKING_DEEP_GLOW}
+          fillOpacity="0.2"
+          filter={`url(#${filterId})`}
+        />
         <circle
           cx={cx}
           cy={cy}
@@ -1174,6 +1188,13 @@ function StillKnockingDeepGlowMark({
   const clipId = `deepoutside-${idKey.replace(/[^A-Za-z0-9-]/g, "")}`;
   return (
     <g>
+      <path
+        d={d}
+        fill={STILL_KNOCKING_DEEP_GLOW}
+        fillRule="evenodd"
+        fillOpacity="0.22"
+        filter={`url(#${filterId})`}
+      />
       <clipPath id={clipId}>
         <path d={`M-200 -200 H1200 V1200 H-200 Z ${d}`} clipRule="evenodd" />
       </clipPath>
@@ -2707,7 +2728,8 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 shown day brought two hundred or more visits
                 in all, in the deep purple
                 (StillKnockingDeepGlowMark), worn as an outer
-                halo on the country's outside. It has no title
+                halo on the country's outside with a dimmer
+                light within. It has no title
                 and no text anywhere speaks it — the color is
                 the whole statement, as Jason ruled. */}
             {mapRows.map((c) =>

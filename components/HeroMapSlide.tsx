@@ -646,9 +646,11 @@ function StillKnockingTraceMark({ idKey, d }: { idKey: string; d: string }) {
  *  there: rendered, never written. THE OUTSIDE SEAT (Nov 4,
  *  2026): the construction stands clipped to the country's
  *  outside, exactly as on the real map — an outer halo
- *  hugging the outline, nothing within the line; the
- *  centroid form rings the light's circle instead of
- *  filling it. */
+ *  hugging the outline at full strength, with a dimmer
+ *  fill lit within (0.22 against the halo's 0.55; Jason's
+ *  refinement, later the same night — outside bright,
+ *  inside lit but dimmer); the centroid form rings a dim
+ *  filled circle (0.2). */
 function StillKnockingDeepGlowMark({
   idKey,
   d,
@@ -669,6 +671,14 @@ function StillKnockingDeepGlowMark({
     const ring = Math.max(6, r * 0.6);
     return (
       <g>
+        <circle
+          cx={cx}
+          cy={cy}
+          r={r}
+          fill={STILL_KNOCKING_DEEP_GLOW}
+          fillOpacity="0.2"
+          filter={`url(#${filterId})`}
+        />
         <circle
           cx={cx}
           cy={cy}
@@ -695,6 +705,13 @@ function StillKnockingDeepGlowMark({
   const clipId = `deepoutside-${idKey.replace(/[^A-Za-z0-9-]/g, "")}`;
   return (
     <g>
+      <path
+        d={d}
+        fill={STILL_KNOCKING_DEEP_GLOW}
+        fillRule="evenodd"
+        fillOpacity="0.22"
+        filter={`url(#${filterId})`}
+      />
       <clipPath id={clipId}>
         <path d={`M-200 -200 H1200 V1200 H-200 Z ${d}`} clipRule="evenodd" />
       </clipPath>

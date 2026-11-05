@@ -1558,11 +1558,20 @@ governs the copy, as with every mark on this map.)
   mark's blurred construction is now clipped to the
   country's outside — an outer halo hugging the
   outline, its bright heart on the border's outer
-  side, fading into the sea — and no purple stands
-  inside the line. (As built Oct 30 it filled the
-  shape and bloomed both ways; the filled form above
-  is the historical record.) The centroid form rings
-  the light's circle instead of filling it. Tonight
+  side, fading into the sea. **And within, dimmer
+  (Jason's refinement, later the same night):** the
+  glow is BOTH — the country is also lit from inside
+  in the same deep purple at a clearly lower strength
+  (the blurred fill at 0.22 against the halo's 0.55),
+  drawn first, under the halo: **outside bright,
+  inside lit but dimmer — Jason, Nov 4, 2026** — so
+  the whole country reads kept in the purple while
+  the rim carries the main light. The centroid form
+  keeps the grammar: a dim filled circle (0.2)
+  within its rings. (As built Oct 30 the mark was
+  the filled shape alone at full strength, blooming
+  both ways; the filled form in the bullet above is
+  the historical record.) Tonight
   the United States stands at 92 visits at the
   night's final check: the tier still waits, but at
   a horizon a strong day can now honestly reach.

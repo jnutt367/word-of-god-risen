@@ -329,11 +329,16 @@ export function countryStillKnockingOn(
  *  is twice the best summed day on record (102, the
  *  count of Oct 30, 2026). The glow's seat moved the
  *  same night: Jason asked for the purple to glow on
- *  the OUTSIDE of the country, so the mark is now drawn
- *  as an outer halo hugging the country's outline,
- *  never a fill inside its light — the component clips
- *  the mark's blurred construction to the country's
- *  outside (StillKnockingDeepGlowMark in
+ *  the OUTSIDE of the country, so the mark is drawn as
+ *  an outer halo hugging the country's outline — the
+ *  component clips the mark's blurred construction to
+ *  the country's outside — AND, by his refinement later
+ *  the same night, a light within the country as well,
+ *  in the same deep purple at a clearly lower strength
+ *  (the blurred fill at 0.22 against the halo's 0.55):
+ *  outside bright, inside lit but dimmer — the country
+ *  reads lit-from-within softly while its rim carries
+ *  the main light (StillKnockingDeepGlowMark in
  *  components/BodyHeartbeat.tsx). The tier stays unsaid
  *  in full: "none of that gets mentioned it's just done
  *  behind the scenes as something cool — only we know." */
