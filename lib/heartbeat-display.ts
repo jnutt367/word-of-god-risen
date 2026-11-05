@@ -455,3 +455,102 @@ export function goldenScrollPlaces(
     (a, b) => b.books - a.books || a.name.localeCompare(b.name)
   );
 }
+
+/** THE WATCH HONOR (Jason, Nov 4, 2026 — crowned the night
+ *  West Virginia became the first place outside Florida to
+ *  watch a video in the app, and Florida stood at nine
+ *  watches for the day: "we should do something for 10
+ *  videos watched"; his crown: "10 videos in one day — a
+ *  day honor like the Scroll"): when a place watches TEN or
+ *  more videos in a single day, that place wears a gold
+ *  play-triangle badge for that day — the films' own honor,
+ *  the blue inner trace's crown. A day honor, in the
+ *  scroll's discipline: the trigger reads the SHOWN day's
+ *  own rows (the payload's per-place `watches`), so a past
+ *  day browsed in the record wears the badge it earned that
+ *  day. Watches never enter `total` — the honor changes no
+ *  light, finishes no book, and counts no chapter; it says
+ *  only that the films were watched here, ten times over,
+ *  in one day.
+ *
+ *  COUNTING HONESTY, the scroll's own: a watch beat
+ *  increments BOTH its country row and its subdivision row
+ *  (Florida's nine and West Virginia's three stood inside
+ *  the United States' twelve on the crowning night), so
+ *  the two row sets are never summed here. Subdivisions
+ *  are checked first and every subdivision at the
+ *  threshold is announced in its own name; a country is
+ *  announced only when no subdivision of it is being
+ *  announced for the same day AND the threshold stands on
+ *  the country's OWN watches — its row less the watches
+ *  its shown subdivisions already carry. A divided
+ *  country never wears the badge on summed watches (the
+ *  United States' twelve on the crowning night were
+ *  Florida's nine and West Virginia's three; neither
+ *  place had earned it, so the badge stood nowhere) —
+ *  Jason's state-by-state law, the still-knocking
+ *  correction of Oct 30, 2026, applied to the films'
+ *  honor: the most specific places carry it, and no
+ *  watch is ever announced twice. Places are returned
+ *  most watches first. Pure function — the component
+ *  renders what this decides. */
+export const WATCH_HONOR_WATCHES_THRESHOLD = 10;
+
+/** The watch honor's gold — the lights' own gold, #e4b95c:
+ *  the honor is the films', and the films play inside the
+ *  lights' family. It is told apart from every other gold
+ *  mark by its SHAPE — a play triangle in a small badge —
+ *  never by a new hue: gold belongs to the Word read or
+ *  heard, and this badge is that gold at rest, not a ring
+ *  (rings are the hundredfold's and the finished book's)
+ *  and not a glow (glows are the seeking family's). */
+export const WATCH_HONOR_GOLD = "#e4b95c";
+
+export interface WatchHonorPlace {
+  /** The row's own code — a country code ("US") or a full
+   *  ISO 3166-2 subdivision code ("US-FL"). */
+  code: string;
+  name: string;
+  watches: number;
+}
+
+export function watchHonorPlaces(
+  countries: readonly { code: string; name?: string; watches?: number }[],
+  subdivisions: readonly {
+    country: string;
+    code?: string;
+    name?: string;
+    watches?: number;
+  }[]
+): WatchHonorPlace[] {
+  const subs = subdivisions.filter(
+    (s) => (s.watches ?? 0) >= WATCH_HONOR_WATCHES_THRESHOLD
+  );
+  const announcedCountries = new Set(
+    subs.map((s) => (s.country || "").toUpperCase())
+  );
+  const places: WatchHonorPlace[] = subs.map((s) => ({
+    code: s.code ?? "",
+    name: s.name ?? s.code ?? "",
+    watches: s.watches ?? 0,
+  }));
+  for (const c of countries) {
+    const watches = c.watches ?? 0;
+    if (watches < WATCH_HONOR_WATCHES_THRESHOLD) continue;
+    const code = (c.code || "").toUpperCase();
+    if (announcedCountries.has(code)) continue;
+    // The country's own watches: its row less the watches
+    // its shown subdivisions already carry — a divided
+    // country earns the badge on its own watching (beats
+    // whose division was not recorded), never on the sum
+    // of its places' watching.
+    const carried = subdivisions
+      .filter((s) => (s.country || "").toUpperCase() === code)
+      .reduce((sum, s) => sum + (s.watches ?? 0), 0);
+    if (watches - carried < WATCH_HONOR_WATCHES_THRESHOLD) continue;
+    places.push({ code: c.code, name: c.name ?? c.code, watches });
+  }
+  return places.sort(
+    (a, b) => b.watches - a.watches || a.name.localeCompare(b.name)
+  );
+}

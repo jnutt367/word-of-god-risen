@@ -13,6 +13,7 @@ import {
   PRAYER_CANDLE,
   STILL_KNOCKING_DEEP_GLOW,
   STILL_KNOCKING_GLOW,
+  WATCH_HONOR_GOLD,
   bookHaloOn,
   countryBookHaloOn,
   countryChaptersRecorded,
@@ -29,6 +30,7 @@ import {
   stillKnocking,
   subdivisionsOfCountry,
   unrecordedChapters,
+  watchHonorPlaces,
 } from "@/lib/heartbeat-display";
 
 /**
@@ -236,6 +238,33 @@ import {
  * never announces one finish twice. It is rendered from
  * the existing payload alone: no new counting, no new
  * tracking, aggregate only, like every mark on this map.
+ *
+ * THE WATCH HONOR (Nov 4, 2026, Jason's crown — "10 videos
+ * in one day — a day honor like the Scroll"): when a place
+ * watches TEN or more videos in a single day, a small gold
+ * BADGE — a dark play triangle in a gold disc — stands
+ * against that place's light for that day: the films' own
+ * honor, and the blue inner trace's crown (one watch earns
+ * the trace; ten in a day earn the badge). Gold, because
+ * the films play inside the lights' family; told apart
+ * from every other gold mark by its shape alone — not a
+ * ring (rings are the hundredfold's and the finished
+ * book's), not a glow (glows are the seeking family's).
+ * It is decided by watchHonorPlaces() in
+ * lib/heartbeat-display.ts, read off the SHOWN day's own
+ * rows, so a past day browsed in the record wears the
+ * badge it earned. The counting honesty is the scroll's:
+ * a watch increments its country row AND its subdivision
+ * row, so the badge stands on the most specific places
+ * and never announces one watch twice. It is a steady
+ * mark — no breathing — and it changes no light: watches
+ * never enter a place's total, and a watches-only place
+ * at ten still rests as its ember, wearing the badge
+ * against it. Crowned the night West Virginia became the
+ * first place outside Florida to watch a video here, with
+ * Florida at nine watches for the day — so at its crowning
+ * the badge stands nowhere yet, waiting for its first
+ * wearer. See HEARTBEAT.md, "The watch honor".
  */
 
 interface HbTotals {
@@ -660,6 +689,52 @@ function WatchTraceMark({
         strokeWidth="3"
         strokeOpacity="0.95"
         clipPath={`url(#${clipId})`}
+      />
+    </g>
+  );
+}
+
+/** THE WATCH HONOR BADGE (Nov 4, 2026) — a small gold disc
+ *  bearing a dark play triangle, pinned against a place's
+ *  light at the shoulder of its heart (up and to the right
+ *  of the center, the way the old watch heart stood offset
+ *  from its centroid) for a place whose shown day brought
+ *  ten or more video watches (the decision is
+ *  watchHonorPlaces() in lib/heartbeat-display.ts). Gold —
+ *  WATCH_HONOR_GOLD, the lights' own #e4b95c — because the
+ *  films play inside the lights' family; a deep-vineyard
+ *  rim and the dark triangle keep it readable where it
+ *  stands on gold light itself, and its SHAPE tells it
+ *  apart from the rings and glows at a glance: a badge,
+ *  not a ring, not a halo. STEADY — no .hb-glow, no
+ *  breathing — a kept sign for the day. */
+function WatchHonorMark({
+  cx,
+  cy,
+  label,
+}: {
+  cx: number;
+  cy: number;
+  label?: string;
+}) {
+  const bx = cx + 8.5;
+  const by = cy - 8.5;
+  return (
+    <g>
+      {label ? <title>{label}</title> : null}
+      <circle cx={bx} cy={by} r="7.6" fill={WATCH_HONOR_GOLD} opacity="0.22" />
+      <circle
+        cx={bx}
+        cy={by}
+        r="5.4"
+        fill={WATCH_HONOR_GOLD}
+        stroke="#0c1f16"
+        strokeWidth="1.1"
+        strokeOpacity="0.85"
+      />
+      <path
+        d={`M ${bx - 1.7} ${by - 3} L ${bx + 3.1} ${by} L ${bx - 1.7} ${by + 3} Z`}
+        fill="#10281c"
       />
     </g>
   );
@@ -1743,6 +1818,28 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
         : snapRows,
     shownSubdivisions
   );
+  // THE WATCH HONOR (Nov 4, 2026) — decided against the SHOWN
+  // set from the very rows the scroll reads, so the two day
+  // honors always grade the same day: ten or more watches in
+  // the shown day earns the gold play badge. The decision
+  // itself — threshold, the most-specific-place rule, most
+  // watches first — is watchHonorPlaces() in
+  // lib/heartbeat-display.ts; here it settles to the set of
+  // row codes that wear the badge (subdivision codes carry
+  // their country inside them, so one set serves both row
+  // kinds and a code can never collide across them).
+  const watchHonorSet = new Set(
+    watchHonorPlaces(
+      browsedDay
+        ? browsedDay.countries
+        : mapSource === "live"
+          ? liveRows
+          : snapRows,
+      shownSubdivisions
+    ).map((p) => p.code)
+  );
+  const watchHonorOn = (code: string) => watchHonorSet.has(code);
+  const anyWatchHonor = watchHonorSet.size > 0;
   const modeOf = (code: string) => lightModeForCountry(shownSubdivisions, code);
   // The light tiers (Oct 27, 2026): "full" and "ember" are the
   // chapter tiers exactly as v3.1.1 settled them. "open" wears the
@@ -1953,6 +2050,29 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
     r.watches > 0
       ? ` — a blue inner trace: a video was watched here ${shownWhen}`
       : "";
+  // THE WATCH HONOR (Nov 4, 2026) — the voices of the gold
+  // play badge, in the rings' own shapes: a title for the
+  // badge itself (haloTitle's pattern), a fragment for a
+  // subdivision's own title (the ivory ring's fragment
+  // pattern), and a clause for the figure's aria voice
+  // (ringClause's pattern). Unlike the ring clauses this
+  // one CAN speak for an opens-only place — the honor is
+  // watches alone, and a place can earn it with no chapter
+  // opened at all.
+  const watchHonorTitle = (name: string) =>
+    `${name} — a gold play mark: ten or more videos watched here ${shownWhen}`;
+  const watchHonorFragment = (honored: boolean): string =>
+    honored
+      ? ` — ten or more videos watched here ${shownWhen}; a gold play mark marks it`
+      : "";
+  const watchHonorClause = (c: HbCountryRow): string => {
+    const names: string[] = [];
+    if (watchHonorOn(c.code)) names.push(c.name);
+    for (const s of subsOf(c.code)) if (watchHonorOn(s.code)) names.push(s.name);
+    return names.length
+      ? `; a gold play mark marks ${names.join(" and ")} — ten or more videos watched there ${shownWhen}`
+      : "";
+  };
   // KINDLING (Oct 29, 2026) — the voice of the warm-red ember:
   // 75 or more visits in the shown day, and no chapters yet. The
   // decision is kindled() in lib/heartbeat-display.ts, shared by
@@ -1996,6 +2116,9 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               (subStillKnockingOn(s)
                 ? `; a purple glow marks it — still knocking: a hundred visits here ${shownWhen}`
                 : "") +
+              (watchHonorOn(s.code)
+                ? `; a gold play mark marks it — ten or more videos watched here ${shownWhen}`
+                : "") +
               watchClause(s)
           )
           .join("; ")}.`
@@ -2028,7 +2151,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
       const subs = shownSubdivisions.filter(
         (s) => s.country === c.code && (s.opens > 0 || s.watches > 0)
       );
-      const base = `the app was opened in ${c.name} ${shownWhen} — ${fmt(allTimeOpensOf(c))} ${allTimeOpensOf(c) === 1 ? "visit" : "visits"} in all, and the Word has not been opened there yet; ${c.name} rests as a faint ember, glowing a little brighter with visits, not fully lit${kindledClause(c)}${countryStillKnockingClause(c)}${countryWatchHeartOn(c) ? watchClause(c) : ""}`;
+      const base = `the app was opened in ${c.name} ${shownWhen} — ${fmt(allTimeOpensOf(c))} ${allTimeOpensOf(c) === 1 ? "visit" : "visits"} in all, and the Word has not been opened there yet; ${c.name} rests as a faint ember, glowing a little brighter with visits, not fully lit${kindledClause(c)}${countryStillKnockingClause(c)}${watchHonorClause(c)}${countryWatchHeartOn(c) ? watchClause(c) : ""}`;
       return subs.length > 0
         ? `${base}; its divisions rest as embers where recorded: ${subs
             .map((s) =>
@@ -2041,9 +2164,9 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
     }
     if (modeOf(c.code) === "ember") {
       const subs = subsOf(c.code);
-      return `reading recorded across ${c.name} — ${fmt(c.total)} ${c.total === 1 ? "chapter" : "chapters"} ${shownWhen}; ${c.name} itself rests as a faint ember, not lit, and its divisions are lit where recorded: ${subs.map((s) => subdivisionPhrase(s) + watchClause(s)).join("; ")}${ringClause(c)}${hundredfoldClause(c)}${knockingClause(c)}${countryWatchHeartOn(c) ? watchClause(c) : ""}`;
+      return `reading recorded across ${c.name} — ${fmt(c.total)} ${c.total === 1 ? "chapter" : "chapters"} ${shownWhen}; ${c.name} itself rests as a faint ember, not lit, and its divisions are lit where recorded: ${subs.map((s) => subdivisionPhrase(s) + watchClause(s)).join("; ")}${ringClause(c)}${hundredfoldClause(c)}${knockingClause(c)}${watchHonorClause(c)}${countryWatchHeartOn(c) ? watchClause(c) : ""}`;
     }
-    return `${mapPhrase(c)}, lit in its own shape${ringClause(c)}${hundredfoldClause(c)}${knockingClause(c)}${watchClause(c)}`;
+    return `${mapPhrase(c)}, lit in its own shape${ringClause(c)}${hundredfoldClause(c)}${knockingClause(c)}${watchHonorClause(c)}${watchClause(c)}`;
   };
 
   const figureLabel = gathering
@@ -2599,6 +2722,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                       ? ` — the hundredfold: a hundred chapters read or heard here ${shownWhen}; a gold ring marks it`
                       : ""}
                     {stillKnockingClause(s)}
+                    {watchHonorFragment(watchHonorOn(s.code))}
                     {watchTitle(s)}
                   </title>
                   <path
@@ -2633,8 +2757,8 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                   <g key={`sub-${s.code}`}>
                     <title>
                       {s.opens > 0
-                        ? subdivisionOpenPhrase(s) + kindledClause(s) + stillKnockingClause(s) + watchTitle(s)
-                        : `${s.name} — a video was watched here ${shownWhen}; it rests as a faint ember, glowing a little brighter with visits, its rim brightening too${kindledClause(s)}${stillKnockingClause(s)}`}
+                        ? subdivisionOpenPhrase(s) + kindledClause(s) + stillKnockingClause(s) + watchHonorFragment(watchHonorOn(s.code)) + watchTitle(s)
+                        : `${s.name} — a video was watched here ${shownWhen}; it rests as a faint ember, glowing a little brighter with visits, its rim brightening too${kindledClause(s)}${stillKnockingClause(s)}${watchHonorFragment(watchHonorOn(s.code))}`}
                     </title>
                     <path
                       d={s.geo.path}
@@ -2929,6 +3053,37 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 </g>
               ) : null
             )}
+            {/* THE WATCH HONOR (Nov 4, 2026) — drawn after the
+                rings, against the lights it honors: a small
+                gold play badge at the shoulder of the heart
+                of every place whose shown day brought ten or
+                more video watches — a country at its centroid,
+                a subdivision at its own center. The set is
+                watchHonorPlaces' own (the most specific places
+                carry it), so a country and its subdivision
+                never wear it for the same watches. Steady, as
+                every honor is; it moves no light and claims
+                no ground — a badge pinned at the place. */}
+            {mapRows.map((c) =>
+              watchHonorOn(c.code) && c.centroid ? (
+                <WatchHonorMark
+                  key={`watch-honor-${c.code}`}
+                  cx={c.centroid.cx}
+                  cy={c.centroid.cy}
+                  label={watchHonorTitle(c.name)}
+                />
+              ) : null
+            )}
+            {shownSubdivisions.map((s) =>
+              watchHonorOn(s.code) && s.geo ? (
+                <WatchHonorMark
+                  key={`watch-honor-${s.code}`}
+                  cx={s.geo.cx}
+                  cy={s.geo.cy}
+                  label={watchHonorTitle(s.name)}
+                />
+              ) : null
+            )}
             {/* PRAYER ANSWERED (Nov 2, 2026) — drawn last,
                 over the lights it celebrates, as the ivory
                 rings are drawn over theirs: on the first day
@@ -3060,6 +3215,9 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
             {anyStillKnocking
               ? ` A purple glow — still knocking: 100 visits here ${shownWhen}.`
               : ""}
+            {anyWatchHonor
+              ? ` A gold play mark — ten or more videos watched here ${shownWhen}.`
+              : ""}
             {prayerAnsweredToday
               ? " A wide, radiant light marks the Philippines — a prayer answered: the Word was opened there today, after prayer."
               : ""}
@@ -3160,7 +3318,13 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
             #0b2836 → #174a73 — and the strip takes the
             figure's own size treatment, -mx-4 on phones and
             max-w-3xl from sm up, so the key still stands at
-            the map column's full width under the disc.) */}
+            the map column's full width under the disc.)
+            (Nov 4, 2026: a tenth row — the watch honor, the
+            video family's crown: a gold play badge for ten
+            videos watched in a place in a day, standing
+            directly after the plain "Video watched" row it
+            crowns, among the day-feats; the two prayer rows
+            still close the key, in the order the story runs.) */}
         <div
           className="-mx-4 mt-6 rounded-2xl border border-gold-500/25 px-5 py-5 sm:mx-auto sm:max-w-3xl sm:px-6"
           style={{ backgroundColor: "#174a73" }}
@@ -3263,6 +3427,20 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               </svg>
               <span className="text-[15px] leading-snug text-[#f6efdb]">
                 Video watched
+              </span>
+            </li>
+            <li className="flex items-center gap-3">
+              <svg
+                viewBox="0 0 26 26"
+                aria-hidden="true"
+                focusable="false"
+                className="h-[26px] w-[26px] shrink-0"
+              >
+                <circle cx="13" cy="13" r="10" fill="#e4b95c" stroke="#0c1f16" strokeWidth="1.1" strokeOpacity="0.85" />
+                <path d="M11 8.6 L18.6 13 L11 17.4 Z" fill="#10281c" />
+              </svg>
+              <span className="text-[15px] leading-snug text-[#f6efdb]">
+                Ten videos watched in a day
               </span>
             </li>
             <li className="flex items-center gap-3">
@@ -3436,6 +3614,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                           ? ` — the hundredfold: a hundred chapters read or heard here ${shownWhen}; a gold ring marks it`
                           : ""}
                         {stillKnockingClause(s)}
+                        {watchHonorFragment(watchHonorOn(s.code))}
                         {watchTitle(s)}
                       </title>
                       <path
@@ -3467,8 +3646,8 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                     <g key={`us-ember-${s.code}`}>
                       <title>
                         {s.opens > 0
-                          ? subdivisionOpenPhrase(s) + kindledClause(s) + stillKnockingClause(s) + watchTitle(s)
-                          : `${s.name} — a video was watched here ${shownWhen}; it rests as a faint ember, glowing a little brighter with visits, its rim brightening too${kindledClause(s)}${stillKnockingClause(s)}`}
+                          ? subdivisionOpenPhrase(s) + kindledClause(s) + stillKnockingClause(s) + watchHonorFragment(watchHonorOn(s.code)) + watchTitle(s)
+                          : `${s.name} — a video was watched here ${shownWhen}; it rests as a faint ember, glowing a little brighter with visits, its rim brightening too${kindledClause(s)}${stillKnockingClause(s)}${watchHonorFragment(watchHonorOn(s.code))}`}
                       </title>
                       <path
                         d={s.geo.path}
@@ -3606,6 +3785,21 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                     </g>
                   ) : null
                 )}
+                {/* the watch honor — the disc's gold play
+                    badge, at the shoulder of the state's own
+                    heart, for a state whose shown day brought
+                    ten or more video watches; drawn last among
+                    the panel's marks, as on the disc */}
+                {usShownSubdivisions.map((s) =>
+                  watchHonorOn(s.code) && s.geo ? (
+                    <WatchHonorMark
+                      key={`us-watch-honor-${s.code}`}
+                      cx={s.geo.cx}
+                      cy={s.geo.cy}
+                      label={watchHonorTitle(s.name)}
+                    />
+                  ) : null
+                )}
               </g>
             </svg>
             <figcaption className="mt-3 text-center text-sm text-sage-300">
@@ -3662,7 +3856,8 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               {vineRows.map((c, i) => {
                 // THE TWO-LINE CHIP (Oct 30, 2026, Jason's approved
                 // fix): a chip carrying honor badges — book
-                // finished, hundredfold, still knocking — sets its
+                // finished, hundredfold, still knocking, and (from
+                // Nov 4, 2026) the watch honor — sets its
                 // stats on the first line and its honors on a line
                 // of their own below, in their marks' own colors
                 // (ivory for the book finished, the hundredfold
@@ -3677,7 +3872,8 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 const bookFinished = countryHaloOn(c);
                 const hundredfoldSign = countryHundredfoldSignOn(c);
                 const knockingSign = countryStillKnockingSignOn(c);
-                const honored = bookFinished || hundredfoldSign || knockingSign;
+                const watchHonorSign = watchHonorOn(c.code);
+                const honored = bookFinished || hundredfoldSign || knockingSign || watchHonorSign;
                 return (
                 <li
                   key={c.code}
@@ -3747,6 +3943,9 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                       {hundredfoldSign && (
                         <span className="text-[#e4b95c]">· hundredfold</span>
                       )}
+                      {watchHonorSign && (
+                        <span className="text-[#e4b95c]">· ten videos watched</span>
+                      )}
                       {knockingSign && (
                         <span className="text-[#a855f7]">· still knocking</span>
                       )}
@@ -3786,7 +3985,8 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                       const bookFinished = subHaloOn(s);
                       const hundredfoldSign = subHundredfoldOn(s);
                       const knockingSign = subStillKnockingOn(s);
-                      const honored = bookFinished || hundredfoldSign || knockingSign;
+                      const watchHonorSign = watchHonorOn(s.code);
+                      const honored = bookFinished || hundredfoldSign || knockingSign || watchHonorSign;
                       return (
                       <li
                         key={s.code}
@@ -3852,6 +4052,9 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                             )}
                             {hundredfoldSign && (
                               <span className="text-[#e4b95c]">· hundredfold</span>
+                            )}
+                            {watchHonorSign && (
+                              <span className="text-[#e4b95c]">· ten videos watched</span>
                             )}
                             {knockingSign && (
                               <span className="text-[#a855f7]">· still knocking</span>

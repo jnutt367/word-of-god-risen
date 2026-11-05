@@ -11,6 +11,7 @@ import {
   KINDLING_RIM,
   STILL_KNOCKING_DEEP_GLOW,
   STILL_KNOCKING_GLOW,
+  WATCH_HONOR_GOLD,
   bookHaloOn,
   countryBookHaloOn,
   countryHundredfoldOn,
@@ -22,6 +23,7 @@ import {
   kindled,
   lightModeForCountry,
   stillKnocking,
+  watchHonorPlaces,
 } from "@/lib/heartbeat-display";
 
 /**
@@ -71,9 +73,11 @@ import {
  * best day's own measure (the fullest chapter count); Jason
  * re-ruled it the same evening (Nov 2, 2026, ~16:57 EST):
  * the best days are THE ONES WITH THE MOST LEGEND MARKS LIT
- * UP — a day is graded by how many of the map's seven marks
+ * UP — a day is graded by how many of the map's marks
  * (gold, ember, ivory, the hundredfold ring, still knocking,
- * kindling, the blue watch trace) stood lit anywhere on its
+ * kindling, the blue watch trace — seven when the measure was
+ * crowned; the watch honor's gold play mark made eight on
+ * Nov 4, 2026) stood lit anywhere on its
  * own map, each decided by the same predicates that light
  * them, read off that day's own rows; ties settle by the
  * day's chapters, then by the candidates' standing order.
@@ -106,7 +110,8 @@ import {
  * full golden lights breathing on the family's own .hb-glow (the
  * global class already rests under prefers-reduced-motion), the
  * hearts, the blue video-watch inner traces, the hundredfold gold
- * rings, and the vine-green book-finished rings last, over all. The
+ * rings, the vine-green book-finished rings, and (Nov 4, 2026)
+ * the watch honor's gold play badges last, over all. The
  * small opacity curves and radii below are copied verbatim from
  * BodyHeartbeat's render treatment so the two surfaces grade a
  * light the same way; every DECISION — which place wears what —
@@ -185,9 +190,10 @@ function chaptersOfRows(rows?: HeroMapCountRow[]): number {
   );
 }
 
-/** How many of the map's seven legend marks stood lit
+/** How many of the map's eight legend marks stood lit
  *  anywhere on one day's own map (Jason's measure, Nov 2,
- *  2026) — each type counted once, lit by any place, and each
+ *  2026; the eighth mark — the watch honor — joined
+ *  Nov 4, 2026) — each type counted once, lit by any place, and each
  *  decided by the same predicates that light the marks on the
  *  real map, read off the day's own rows normalized the way
  *  the day layer normalizes them:
@@ -200,8 +206,10 @@ function chaptersOfRows(rows?: HeroMapCountRow[]): number {
  *  place, the country's ring encompassing its subdivisions'
  *  as countryHundredfoldOn rules), still knocking (a
  *  subdivision's own hundred visits), kindling (seventy-five
- *  visits and no chapters), and the blue watch trace (a
- *  video watched). */
+ *  visits and no chapters), the blue watch trace (a
+ *  video watched), and the watch honor (ten or more videos
+ *  watched in one place in the day — watchHonorPlaces, the
+ *  scroll's most-specific-place discipline). */
 function legendMarksOf(
   countries?: HeroMapCountRow[],
   subdivisions?: HeroMapSubdivisionRow[]
@@ -238,6 +246,7 @@ function legendMarksOf(
   if (ss.some((s) => stillKnocking(s))) marks += 1; // still knocking
   if (rows.some((r) => kindled(r))) marks += 1; // kindling
   if (rows.some((r) => r.watches > 0)) marks += 1; // blue
+  if (watchHonorPlaces(cs, ss).length > 0) marks += 1; // watch honor
   return marks;
 }
 
@@ -420,6 +429,36 @@ function WatchTraceMark({
         strokeWidth="3"
         strokeOpacity="0.95"
         clipPath={`url(#${clipId})`}
+      />
+    </g>
+  );
+}
+
+/** The watch honor badge (Nov 4, 2026) — BodyHeartbeat's
+ *  WatchHonorMark, drawn the same way: a small gold disc
+ *  bearing a dark play triangle, pinned at the shoulder of
+ *  a place's heart, for a place whose day brought ten or
+ *  more video watches (the decision is watchHonorPlaces()
+ *  in lib/heartbeat-display.ts). Voiceless here, like every
+ *  hero mark — the real map below names it. */
+function WatchHonorMark({ cx, cy }: { cx: number; cy: number }) {
+  const bx = cx + 8.5;
+  const by = cy - 8.5;
+  return (
+    <g>
+      <circle cx={bx} cy={by} r="7.6" fill={WATCH_HONOR_GOLD} opacity="0.22" />
+      <circle
+        cx={bx}
+        cy={by}
+        r="5.4"
+        fill={WATCH_HONOR_GOLD}
+        stroke="#0c1f16"
+        strokeWidth="1.1"
+        strokeOpacity="0.85"
+      />
+      <path
+        d={`M ${bx - 1.7} ${by - 3} L ${bx + 3.1} ${by} L ${bx - 1.7} ${by + 3} Z`}
+        fill="#10281c"
       />
     </g>
   );
@@ -879,6 +918,13 @@ function HeroMapDayLayer({
   const countryWatchOn = (c: CountryDisplay): boolean =>
     c.watches > 0 &&
     !subdivisions.some((s) => s.country === c.code && s.watches > 0);
+  // THE WATCH HONOR (Nov 4, 2026) — the day's own badge set,
+  // decided by watchHonorPlaces() over the day's normalized
+  // rows, exactly as the real map decides it for the day it
+  // shows while browsing: the portrait can never disagree.
+  const watchHonorSet = new Set(
+    watchHonorPlaces(countries, subdivisions).map((p) => p.code)
+  );
 
   return (
     <div
@@ -1314,6 +1360,28 @@ function HeroMapDayLayer({
                   strokeOpacity="0.9"
                 />
               </g>
+            ) : null
+          )}
+          {/* the watch honor badges — last, over all, as on
+              the real map: a gold play badge at the shoulder
+              of the heart of every place whose day brought
+              ten or more video watches */}
+          {countries.map((c) =>
+            watchHonorSet.has(c.code) && c.centroid ? (
+              <WatchHonorMark
+                key={`watch-honor-${c.code}`}
+                cx={c.centroid.cx}
+                cy={c.centroid.cy}
+              />
+            ) : null
+          )}
+          {subdivisions.map((s) =>
+            watchHonorSet.has(s.code) && s.geo ? (
+              <WatchHonorMark
+                key={`watch-honor-${s.code}`}
+                cx={s.geo.cx}
+                cy={s.geo.cy}
+              />
             ) : null
           )}
         </g>
