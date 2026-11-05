@@ -13,6 +13,7 @@ import WelcomeFilm from "@/components/WelcomeFilm";
 import HeroWatchBubble from "@/components/HeroWatchBubble";
 import HeroCycle from "@/components/HeroCycle";
 import OpenDoor from "@/components/OpenDoor";
+import TestimonyBand from "@/components/TestimonyBand";
 import CarvedDivider from "@/components/CarvedDivider";
 import TeddyNote from "@/components/TeddyNote";
 import WalkTheFarm from "@/components/WalkTheFarm";
@@ -321,6 +322,19 @@ export default function Home() {
           resting beside the heartbeat. A plain outbound link only:
           no accounts, no tracking, no data gathered at the door. */}
       <OpenDoor />
+
+      {/* My Testimony — the front door (Jason, Nov 4, 2026): Jason
+          delegated the placement — "put the testimony where you
+          think it belongs," on Revelation 12:11 ("…and by the word
+          of their testimony"). The band rests here, after the map
+          and immediately before the books, so a visitor meets what
+          the Word did for one man right before the library itself:
+          Jesus → the Word going out → the testimony → the books.
+          Until tonight it was reachable only as an unexplained
+          card deep in the Lost Books grid; the card still rests
+          there, now carrying its description, and this band is
+          its door. */}
+      <TestimonyBand />
 
       {/* Book grid */}
       <section id="books" className="mx-auto max-w-6xl scroll-mt-20 px-4 pb-20 sm:px-6">
