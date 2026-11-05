@@ -323,18 +323,17 @@ export default function Home() {
           no accounts, no tracking, no data gathered at the door. */}
       <OpenDoor />
 
-      {/* My Testimony — the front door (Jason, Nov 4, 2026): Jason
-          delegated the placement — "put the testimony where you
-          think it belongs," on Revelation 12:11 ("…and by the word
-          of their testimony"). The band rests here, after the map
-          and immediately before the books, so a visitor meets what
-          the Word did for one man right before the library itself:
-          Jesus → the Word going out → the testimony → the books.
-          Until tonight it was reachable only as an unexplained
-          card deep in the Lost Books grid; the card still rests
-          there, now carrying its description, and this band is
-          its door. */}
-      <TestimonyBand />
+      {/* My Testimony — moved below the books (Jason, Nov 5, 2026):
+          Jason worried the band's old spot — between the map and
+          the book grids — put his own story where it could distract
+          from the Word itself, so it now rests after the books: the
+          Word leads, and the testimony follows as a door for anyone
+          who wants it. Its picture changed the same day, from the
+          painted vineyard cover to the film's "free indeed" frame —
+          the image that tells the story. (The band first stood here
+          on Nov 4, 2026, on Revelation 12:11 — "…and by the word of
+          their testimony" — and the developer book's own cover keeps
+          the vineyard painting.) */}
 
       {/* Book grid */}
       <section id="books" className="mx-auto max-w-6xl scroll-mt-20 px-4 pb-20 sm:px-6">
@@ -380,6 +379,10 @@ export default function Home() {
 
         <LatestShorts />
       </section>
+
+      {/* My Testimony — the door after the books (moved here
+          Nov 5, 2026; see the note above the book grid). */}
+      <TestimonyBand />
 
       {/* Walk the Farm — the quiet last door on the page, below the
           books and every other card (Jason, Oct 26, 2026): the

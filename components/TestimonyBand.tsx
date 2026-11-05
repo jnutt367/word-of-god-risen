@@ -31,11 +31,11 @@ export default function TestimonyBand() {
         <div className="sm:flex">
           <div className="relative aspect-[16/9] overflow-hidden sm:aspect-auto sm:min-h-[240px] sm:w-2/5">
             <Image
-              src="/images/cover-developer.jpg"
+              src="/images/testimony-freeindeed.jpg"
               alt=""
               fill
               sizes="(max-width: 640px) 100vw, 40vw"
-              className="object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+              className="object-cover object-[center_20%] transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-vineyard-950/60 via-transparent to-transparent sm:bg-gradient-to-r sm:from-transparent sm:via-transparent sm:to-vineyard-900/40" />
           </div>
