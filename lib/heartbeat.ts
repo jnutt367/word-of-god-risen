@@ -16,6 +16,8 @@
  * so the totals stay honest without tracking anyone.
  */
 import { track } from "@vercel/analytics";
+import { heartbeatToday } from "@/lib/heartbeat-date";
+import { bookCreditDecision } from "@/lib/book-credit";
 
 const SESSION_PREFIX = "hb:";
 const BOOK_DONE_KEY = "hb:bookdone:";
@@ -415,14 +417,43 @@ export function isListenedMarked(bookSlug: string, chapterIdx: number): boolean 
   return seen(`marked:${bookSlug}:${chapterIdx}`);
 }
 
-/** The reader's marked-read chapters now cover a whole book. Once per device per book. */
+/**
+ * The reader's marked-read chapters now cover a whole book.
+ *
+ * Credit rule (Jason, Nov 4, 2026 — "if you read through a book
+ * again you should probably get the credit"): the "book" beat fires
+ * ONCE PER DAY PER BOOK per device. Finishing a book again on a
+ * later day earns the credit again; finishing it twice in one day
+ * does not. The guard stores, under BOOK_DONE_KEY, the heartbeat
+ * day (YYYY-MM-DD in America/New_York — the same day the server
+ * credits the beat to) of the last paid completion.
+ *
+ * Migration: devices carrying the old once-ever flag (the literal
+ * "1") are treated as credited TODAY and converted to today's date
+ * WITHOUT firing — some of those completions are today's own (e.g.
+ * Revelation, finished the night this shipped) and must not be paid
+ * twice. A long-ago finisher loses at most one day of re-credit.
+ * The decision itself lives in lib/book-credit.ts, kept pure so it
+ * can be checked on its own.
+ */
 export function beatBookComplete(bookSlug: string): void {
+  let fire = true;
   try {
-    if (localStorage.getItem(BOOK_DONE_KEY + bookSlug) === "1") return;
-    localStorage.setItem(BOOK_DONE_KEY + bookSlug, "1");
+    const key = BOOK_DONE_KEY + bookSlug;
+    const decision = bookCreditDecision(
+      localStorage.getItem(key),
+      heartbeatToday()
+    );
+    fire = decision.fire;
+    try {
+      localStorage.setItem(key, decision.store);
+    } catch {
+      /* a failed write only means the guard may ask again later */
+    }
   } catch {
     /* if storage is unavailable, fall through and count it */
   }
+  if (!fire) return;
   try {
     track("book_complete", { book: bookSlug });
   } catch {
