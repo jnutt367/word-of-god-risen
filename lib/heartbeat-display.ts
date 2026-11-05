@@ -302,26 +302,42 @@ export function countryStillKnockingOn(
  *  can give the US a deep purple glow when it reaches a
  *  thousand visits but it doesn't have to go on the legend
  *  just unsaid"): when a country WITH recorded
- *  subdivisions brings a THOUSAND or more visits in its
+ *  subdivisions brings TWO HUNDRED or more visits in its
  *  shown day — the whole country's summed knocks — its
  *  light on the disc wears a DEEP purple glow. This is
  *  the only country-level form of the mark a divided
  *  country can ever wear: the correction above stands at
  *  every lesser count (a divided country NEVER wears the
  *  light glow on summed visits), and the deep tier asks
- *  ten times the visits before it speaks at all. An
+ *  twice the visits before it speaks at all. An
  *  undivided country is a single place and keeps only its
- *  own hundred-visit mark — a thousand visits there
- *  deepens nothing. The two glows are independent: on a
- *  thousand-visit day, a state at its own hundred wears
+ *  own hundred-visit mark — two hundred visits there
+ *  deepen nothing. The two glows are independent: on a
+ *  two-hundred-visit day, a state at its own hundred wears
  *  the light glow inside the country's deep one. And the
  *  tier is DELIBERATELY UNSAID — no legend row carries
  *  it, no chip names it, no title, aria, or caption
  *  speaks of it; it is rendered, never written. (The
  *  record of it lives in HEARTBEAT.md, the internal
  *  book, not on any public surface.) Pure function, read
- *  off the shown day's own rows like every other mark. */
-export const STILL_KNOCKING_COUNTRY_OPENS_THRESHOLD = 1000;
+ *  off the shown day's own rows like every other mark.
+ *
+ *  RE-RULED (Jason, Nov 4, 2026): "a thousand visits is
+ *  too much." The threshold fell from a thousand to TWO
+ *  HUNDRED the night the watch honor was crowned — 250
+ *  was weighed and set aside as "still a lot," and 200
+ *  is twice the best summed day on record (102, the
+ *  count of Oct 30, 2026). The glow's seat moved the
+ *  same night: Jason asked for the purple to glow on
+ *  the OUTSIDE of the country, so the mark is now drawn
+ *  as an outer halo hugging the country's outline,
+ *  never a fill inside its light — the component clips
+ *  the mark's blurred construction to the country's
+ *  outside (StillKnockingDeepGlowMark in
+ *  components/BodyHeartbeat.tsx). The tier stays unsaid
+ *  in full: "none of that gets mentioned it's just done
+ *  behind the scenes as something cool — only we know." */
+export const STILL_KNOCKING_COUNTRY_OPENS_THRESHOLD = 200;
 
 export function countryStillKnockingDeepOn(
   row: { code: string; opens?: number },
@@ -349,6 +365,77 @@ export const STILL_KNOCKING_RIM = "#c084fc";
  *  it. It appears in no legend and no text; the color
  *  itself is the whole statement. */
 export const STILL_KNOCKING_DEEP_GLOW = "#7e22ce";
+
+/** THE WHOLE-EARTH GLOW (Jason, Nov 4, 2026 — crowned
+ *  the night the deep tier was re-ruled: "how about we
+ *  do the world glows a different color if they reach a
+ *  thousand"; and of both tiers, "none of that gets
+ *  mentioned it's just done behind the scenes as
+ *  something cool — only we know"): when the SHOWN
+ *  day's visits across the WHOLE WORLD — every country
+ *  summed — reach a THOUSAND, the entire Earth map
+ *  wears a soft outer glow around the disc's edge for
+ *  that day. The deep family's summit: a hundred visits
+ *  knock at one place (the light purple), two hundred
+ *  glow around one divided country (the deep purple),
+ *  and a thousand across the whole world light the
+ *  disc's own rim. Its color is the COVENANT RAINBOW
+ *  (Jason's crown, later the same night): the bow God
+ *  set in the clouds over the whole earth (Genesis 9) —
+ *  a soft rim of the spectrum around the disc's edge,
+ *  its muted stops held in ONE named array
+ *  (WORLD_GLOW_STOPS, below), so the bow is defined in
+ *  exactly one place and no hex is scattered. (A plain
+ *  white halo stood as placeholder while Jason chose;
+ *  he set it aside for the bow.)
+ *
+ *  COUNTING HONESTY: the sum reads the COUNTRY rows'
+ *  `opens` only. A subdivision's visits roll up into
+ *  its country row (the Oct 31 honor-chip law), so the
+ *  subdivisions are never added — a country at six
+ *  hundred visits with four hundred of them in one of
+ *  its states gives the world six hundred plus the
+ *  other countries, never a thousand from that country
+ *  alone. The sum is the payload's own day total of
+ *  visits, counted once.
+ *
+ *  UNSAID, in the deep family's full discipline: no
+ *  legend row, no chip, no title, no aria, no caption —
+ *  rendered, never written. Even its working name (the
+ *  whole-earth glow) is this book's and HEARTBEAT.md's
+ *  keeping only: Jason has crowned no name, and none
+ *  stands on any public surface. Pure function, read
+ *  off the shown day's own rows like every other mark. */
+export const WORLD_GLOW_OPENS_THRESHOLD = 1000;
+
+/** The whole-earth glow's colors — the covenant bow's
+ *  stops, held in ONE named array by design: the
+ *  spectrum muted a full step toward the deep sea at
+ *  every band (a kept, reverent bow — never a bright
+ *  circus rainbow), ordered as the bow runs: red,
+ *  orange, yellow, green, blue, violet. The components
+ *  draw two blurred passes of these six bands around
+ *  the disc's rim (WorldGlowRimMark in the components),
+ *  the blur blending each band into its neighbors.
+ *  Nothing else in the code names these hexes; the
+ *  plain white that stood here as a placeholder while
+ *  Jason chose was set aside by him for the bow
+ *  (Nov 4, 2026). */
+export const WORLD_GLOW_STOPS: readonly string[] = [
+  "#c05a44",
+  "#cf8a4b",
+  "#d9bd6a",
+  "#7fae5c",
+  "#5b8fb9",
+  "#7a68a6",
+];
+
+export function worldGlowOn(
+  countries: readonly { opens?: number }[]
+): boolean {
+  const total = countries.reduce((sum, c) => sum + (c.opens ?? 0), 0);
+  return total >= WORLD_GLOW_OPENS_THRESHOLD;
+}
 
 /** THE PRAYER LIGHT (Jason, Nov 2, 2026 — crowned the night
  *  the Word of God Risen link was carried by hand to Bacong

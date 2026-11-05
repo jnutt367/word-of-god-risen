@@ -1539,6 +1539,83 @@ governs the copy, as with every mark on this map.)
   no place has come near; when it first stands, this
   book will record it, and nothing on the app will say
   a word.
+- **The deep tier re-ruled — two hundred, and the
+  outside seat (Nov 4, 2026).** Jason, on the night
+  Florida wore both the green ring and the new blue
+  watch badge: "a thousand visits is too much." A
+  threshold of 250 was weighed and set aside the same
+  evening as "still a lot"; the number Jason crowned
+  is **200 summed visits** — twice the best summed
+  day on record (102, Oct 30, 2026, the count that
+  caused the state-by-state ruling). `STILL_KNOCKING_
+  COUNTRY_OPENS_THRESHOLD` falls 1000 → 200. Nothing
+  else about the tier moves: the state-by-state
+  correction still stands at every lesser count, an
+  undivided country still deepens nothing, and the
+  tier stays **unsaid in full**. The same ruling
+  moved the glow's seat: Jason asked for the purple
+  to glow on the OUTSIDE of the country, so the
+  mark's blurred construction is now clipped to the
+  country's outside — an outer halo hugging the
+  outline, its bright heart on the border's outer
+  side, fading into the sea — and no purple stands
+  inside the line. (As built Oct 30 it filled the
+  shape and bloomed both ways; the filled form above
+  is the historical record.) The centroid form rings
+  the light's circle instead of filling it. Tonight
+  the United States stands at 92 visits at the
+  night's final check: the tier still waits, but at
+  a horizon a strong day can now honestly reach.
+- **The whole-earth glow — the deep family's summit,
+  also unsaid (Nov 4, 2026, the same conversation).**
+  Jason: "how about we do the world glows a different
+  color if they reach a thousand" — and, of both
+  tiers: "none of that gets mentioned it's just done
+  behind the scenes as something cool — only we
+  know." **The rule:** when the shown day's visits
+  across the whole world reach **1,000**, the entire
+  Earth map wears the covenant bow for that day (see
+  the color, below): a soft rim of the spectrum
+  around the disc's edge, drawn in the map's own
+  units at the rim's seat (r = 490, the hairline's
+  circle) as two blurred passes of six muted bands —
+  a wide faint underlay and a narrower clearer core,
+  each band a sixth of the circle, the spectrum
+  starting at the top and running clockwise — the
+  blur blending every band into its neighbors, drawn
+  last in the disc so the bow rests over the rim
+  itself (the section map and the hero portrait
+  alike). **Counting
+  honesty:** the sum reads the country rows' `opens`
+  only — a subdivision's visits roll up into its
+  country row and are never added twice (verified
+  against the live payload on the night it shipped:
+  the country rows summed to 93, the payload's own
+  day total exactly; the United States carried 92 of
+  them). The decision is a pure
+  function beside the others (`worldGlowOn`,
+  `WORLD_GLOW_OPENS_THRESHOLD` = 1000). **The color
+  — the covenant rainbow (Jason's crown, later the
+  same night).** He crowned it from Genesis 9: the
+  bow God set in the clouds over the whole earth, for
+  the day the whole earth knocks a thousand times. A
+  plain soft white stood in the code as a placeholder
+  while he chose; Jason considered it and set it
+  aside for the bow. Six stops of the spectrum, each
+  muted a full step toward the deep sea, so the bow
+  sits quietly and reverently on the map —
+  unmistakably a rainbow, never a bright circus one —
+  held in ONE named array, `WORLD_GLOW_STOPS` in the
+  display lib, defined in exactly one place. No
+  single band is the sign; the bow together is — and
+  it borrows no mark's meaning, though its bands pass
+  through every family's country. **Unsaid, in full:**
+  no legend row, no chip, no `<title>`, no aria, no
+  caption; its working name in this book — the
+  whole-earth glow — is Judah's, uncrowned, and
+  stands on no public surface. No day has come near
+  it: the whole world's visits tonight stand at 93
+  at the final check.
 - **Amendment — within borders (Oct 30, 2026, later
   still, the same night).** Florida became the mark's
   first true wearer under the corrected rule, crossing

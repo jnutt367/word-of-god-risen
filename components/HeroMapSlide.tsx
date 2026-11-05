@@ -12,6 +12,7 @@ import {
   STILL_KNOCKING_DEEP_GLOW,
   STILL_KNOCKING_GLOW,
   WATCH_HONOR_BLUE,
+  WORLD_GLOW_STOPS,
   bookHaloOn,
   countryBookHaloOn,
   countryHundredfoldOn,
@@ -24,6 +25,7 @@ import {
   lightModeForCountry,
   stillKnocking,
   watchHonorPlaces,
+  worldGlowOn,
 } from "@/lib/heartbeat-display";
 
 /**
@@ -638,16 +640,24 @@ function StillKnockingTraceMark({ idKey, d }: { idKey: string; d: string }) {
 }
 
 /** The unsaid deep tier (Oct 30, 2026) — the still-knocking
- *  construction in the deeper purple, for a divided country at a
- *  thousand summed visits. Deliberately voiceless, here as there:
- *  rendered, never written. */
+ *  construction in the deeper purple, for a divided country at
+ *  two hundred summed visits (a thousand when first ruled;
+ *  re-ruled Nov 4, 2026). Deliberately voiceless, here as
+ *  there: rendered, never written. THE OUTSIDE SEAT (Nov 4,
+ *  2026): the construction stands clipped to the country's
+ *  outside, exactly as on the real map — an outer halo
+ *  hugging the outline, nothing within the line; the
+ *  centroid form rings the light's circle instead of
+ *  filling it. */
 function StillKnockingDeepGlowMark({
+  idKey,
   d,
   cx,
   cy,
   r,
   filterId,
 }: {
+  idKey: string;
   d?: string;
   cx?: number;
   cy?: number;
@@ -656,43 +666,101 @@ function StillKnockingDeepGlowMark({
 }) {
   if (!d) {
     if (cx === undefined || cy === undefined || r === undefined) return null;
+    const ring = Math.max(6, r * 0.6);
     return (
       <g>
         <circle
           cx={cx}
           cy={cy}
-          r={r}
-          fill={STILL_KNOCKING_DEEP_GLOW}
-          fillOpacity="0.18"
+          r={r + ring / 2}
+          fill="none"
+          stroke={STILL_KNOCKING_DEEP_GLOW}
+          strokeWidth={ring}
+          strokeOpacity="0.5"
+          filter={`url(#${filterId})`}
         />
         <circle
           cx={cx}
           cy={cy}
-          r={r}
-          fill={STILL_KNOCKING_DEEP_GLOW}
-          fillOpacity="0.55"
+          r={r + ring + 1.25}
+          fill="none"
+          stroke={STILL_KNOCKING_DEEP_GLOW}
+          strokeWidth="2.5"
+          strokeOpacity="0.3"
           filter={`url(#${filterId})`}
         />
       </g>
     );
   }
+  const clipId = `deepoutside-${idKey.replace(/[^A-Za-z0-9-]/g, "")}`;
   return (
     <g>
-      <path
-        d={d}
-        fill={STILL_KNOCKING_DEEP_GLOW}
-        fillRule="evenodd"
-        fillOpacity="0.55"
-        filter={`url(#${filterId})`}
-      />
-      <path
-        d={d}
-        fill="none"
-        stroke={STILL_KNOCKING_DEEP_GLOW}
-        strokeWidth="2.5"
-        strokeOpacity="0.3"
-        filter={`url(#${filterId})`}
-      />
+      <clipPath id={clipId}>
+        <path d={`M-200 -200 H1200 V1200 H-200 Z ${d}`} clipRule="evenodd" />
+      </clipPath>
+      <g clipPath={`url(#${clipId})`}>
+        <path
+          d={d}
+          fill={STILL_KNOCKING_DEEP_GLOW}
+          fillRule="evenodd"
+          fillOpacity="0.55"
+          filter={`url(#${filterId})`}
+        />
+        <path
+          d={d}
+          fill="none"
+          stroke={STILL_KNOCKING_DEEP_GLOW}
+          strokeWidth="2.5"
+          strokeOpacity="0.3"
+          filter={`url(#${filterId})`}
+        />
+      </g>
+    </g>
+  );
+}
+
+/** The whole-earth glow's rim (Nov 4, 2026) — the covenant
+ *  bow on the portrait's rim, built exactly as the real
+ *  map's (see WorldGlowRimMark in BodyHeartbeat.tsx): the
+ *  six muted WORLD_GLOW_STOPS as two blurred passes around
+ *  r=490, each band a sixth of the circle, the spectrum
+ *  from the top running clockwise, the blur blending the
+ *  bands into one quiet bow. Voiceless, here as there. */
+function WorldGlowRimMark({ filterId }: { filterId: string }) {
+  return (
+    <g>
+      {WORLD_GLOW_STOPS.map((color, i) => (
+        <circle
+          key={`bow-wide-${i}`}
+          cx="500"
+          cy="500"
+          r="490"
+          pathLength={360}
+          fill="none"
+          stroke={color}
+          strokeWidth="30"
+          strokeOpacity="0.45"
+          strokeDasharray="60 300"
+          strokeDashoffset={90 - 60 * i}
+          filter={`url(#${filterId})`}
+        />
+      ))}
+      {WORLD_GLOW_STOPS.map((color, i) => (
+        <circle
+          key={`bow-core-${i}`}
+          cx="500"
+          cy="500"
+          r="490"
+          pathLength={360}
+          fill="none"
+          stroke={color}
+          strokeWidth="14"
+          strokeOpacity="0.6"
+          strokeDasharray="60 300"
+          strokeDashoffset={90 - 60 * i}
+          filter={`url(#${filterId})`}
+        />
+      ))}
     </g>
   );
 }
@@ -927,6 +995,14 @@ function HeroMapDayLayer({
   const watchHonorSet = new Set(
     watchHonorPlaces(countries, subdivisions).map((p) => p.code)
   );
+  // THE WHOLE-EARTH GLOW (Nov 4, 2026) — unsaid: at a
+  // thousand visits across the whole world, this portrait's
+  // disc wears the covenant bow on its rim, decided by
+  // worldGlowOn() over the portrait day's own country rows
+  // (country rows only — the sum is the day's own total),
+  // exactly as the real map decides it, so the portrait can
+  // never disagree.
+  const worldGlow = worldGlowOn(countries);
 
   return (
     <div
@@ -963,6 +1039,12 @@ function HeroMapDayLayer({
           </filter>
           <filter id="hero-map-soft-lg" x="-60%" y="-60%" width="220%" height="220%">
             <feGaussianBlur stdDeviation="16" />
+          </filter>
+          {/* the covenant bow's own softening (Nov 4, 2026) —
+              a wider blur than hero-map-soft, so the rim's
+              six bands melt into one another */}
+          <filter id="hero-map-bow" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="10" />
           </filter>
           {/* the disc's face — the sea gradient of the real map:
               since Nov 1, 2026 (the lighter-sea pass) the very
@@ -1024,12 +1106,14 @@ function HeroMapDayLayer({
               c.geo ? (
                 <StillKnockingDeepGlowMark
                   key={`knocking-deep-${c.code}`}
+                  idKey={`hero-${c.code}`}
                   d={c.geo.path}
                   filterId="hero-map-soft"
                 />
               ) : c.centroid ? (
                 <StillKnockingDeepGlowMark
                   key={`knocking-deep-${c.code}`}
+                  idKey={`hero-${c.code}`}
                   cx={c.centroid.cx}
                   cy={c.centroid.cy}
                   r={lightRadius(c.total) * 2.1 + 6}
@@ -1387,6 +1471,10 @@ function HeroMapDayLayer({
             ) : null
           )}
         </g>
+        {/* the whole-earth glow — unsaid: the covenant bow
+            on the portrait's rim, drawn last, when the
+            portrait day's world reached a thousand visits */}
+        {worldGlow ? <WorldGlowRimMark filterId="hero-map-bow" /> : null}
       </svg>
       {/* The day's name (Nov 2, 2026) — carried only on the
           best-five pass: the day's real date in long form and

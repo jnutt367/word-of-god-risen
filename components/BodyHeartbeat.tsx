@@ -14,6 +14,7 @@ import {
   STILL_KNOCKING_DEEP_GLOW,
   STILL_KNOCKING_GLOW,
   WATCH_HONOR_BLUE,
+  WORLD_GLOW_STOPS,
   bookHaloOn,
   countryBookHaloOn,
   countryChaptersRecorded,
@@ -31,6 +32,7 @@ import {
   subdivisionsOfCountry,
   unrecordedChapters,
   watchHonorPlaces,
+  worldGlowOn,
 } from "@/lib/heartbeat-display";
 
 /**
@@ -203,7 +205,14 @@ import {
  * summed visits a divided country wears a DEEP purple
  * glow (#7e22ce, countryStillKnockingDeepOn) — rendered,
  * never written: no legend, title, aria, chip, or caption
- * names it.
+ * names it. (Re-ruled Nov 4, 2026: the deep tier's
+ * threshold fell to TWO HUNDRED summed visits and its
+ * glow moved to the country's outside; and a second
+ * unsaid tier stands above it — at a thousand visits
+ * across the whole world, the disc itself wears a soft
+ * outer glow at its edge, worldGlowOn(). Both live in
+ * the lib's notes and HEARTBEAT.md; nothing public
+ * names either.)
  *
  * THE PRAYER LIGHT (Nov 2, 2026, Jason's crown — "wish we
  * could put a praying for you light on the map to show
@@ -1093,24 +1102,41 @@ function StillKnockingTraceMark({
 /** THE UNSAID DEEP TIER (Oct 30, 2026) — the same
  *  construction as the still-knocking glow above, in the
  *  deeper purple (STILL_KNOCKING_DEEP_GLOW, #7e22ce), for
- *  a divided country whose shown day brought a thousand
+ *  a divided country whose shown day brought two hundred
  *  or more visits in all (the decision is
  *  countryStillKnockingDeepOn() in
- *  lib/heartbeat-display.ts). Deliberately voiceless:
- *  Jason ruled it "just unsaid" — no <title> here, and no
- *  legend row, chip, aria, or caption anywhere names it.
- *  It is drawn first among the disc's marks, under every
- *  light, so the states' own glows bloom inside it while
- *  the deep color keeps the whole country's outside.
- *  STEADY — no .hb-glow, no breathing. Disc only: the
- *  closer-look panel holds states, not the country. */
+ *  lib/heartbeat-display.ts; a thousand when first ruled,
+ *  re-ruled to two hundred Nov 4, 2026). Deliberately
+ *  voiceless: Jason ruled it "just unsaid" — no <title>
+ *  here, and no legend row, chip, aria, or caption
+ *  anywhere names it. It is drawn first among the disc's
+ *  marks, under every light, so the states' own glows
+ *  bloom inside it. STEADY — no .hb-glow, no breathing.
+ *  Disc only: the closer-look panel holds states, not
+ *  the country.
+ *
+ *  THE OUTSIDE SEAT (Jason, Nov 4, 2026 — "it glows on
+ *  the outside of the country"): as first built, the
+ *  mark filled the country's shape and passed it through
+ *  the soft blur, so the purple's mass sat INSIDE the
+ *  light and only its fringe crossed the border. The
+ *  same construction now stands clipped to the country's
+ *  OUTSIDE: the clip path is the whole canvas less the
+ *  country's own shape (one path, clip-rule evenodd), so
+ *  the blurred fill's bright heart hugs the border from
+ *  outside and fades into the sea, the rim pass keeps
+ *  only its outer half, and no purple stands within the
+ *  line. The centroid form keeps the same seat: rings
+ *  around the light's circle, never a filled disc. */
 function StillKnockingDeepGlowMark({
+  idKey,
   d,
   cx,
   cy,
   r,
   filterId,
 }: {
+  idKey: string;
   d?: string;
   cx?: number;
   cy?: number;
@@ -1119,43 +1145,115 @@ function StillKnockingDeepGlowMark({
 }) {
   if (!d) {
     if (cx === undefined || cy === undefined || r === undefined) return null;
+    const ring = Math.max(6, r * 0.6);
     return (
       <g>
         <circle
           cx={cx}
           cy={cy}
-          r={r}
-          fill={STILL_KNOCKING_DEEP_GLOW}
-          fillOpacity="0.18"
+          r={r + ring / 2}
+          fill="none"
+          stroke={STILL_KNOCKING_DEEP_GLOW}
+          strokeWidth={ring}
+          strokeOpacity="0.5"
+          filter={`url(#${filterId})`}
         />
         <circle
           cx={cx}
           cy={cy}
-          r={r}
-          fill={STILL_KNOCKING_DEEP_GLOW}
-          fillOpacity="0.55"
+          r={r + ring + 1.25}
+          fill="none"
+          stroke={STILL_KNOCKING_DEEP_GLOW}
+          strokeWidth="2.5"
+          strokeOpacity="0.3"
           filter={`url(#${filterId})`}
         />
       </g>
     );
   }
+  const clipId = `deepoutside-${idKey.replace(/[^A-Za-z0-9-]/g, "")}`;
   return (
     <g>
-      <path
-        d={d}
-        fill={STILL_KNOCKING_DEEP_GLOW}
-        fillRule="evenodd"
-        fillOpacity="0.55"
-        filter={`url(#${filterId})`}
-      />
-      <path
-        d={d}
-        fill="none"
-        stroke={STILL_KNOCKING_DEEP_GLOW}
-        strokeWidth="2.5"
-        strokeOpacity="0.3"
-        filter={`url(#${filterId})`}
-      />
+      <clipPath id={clipId}>
+        <path d={`M-200 -200 H1200 V1200 H-200 Z ${d}`} clipRule="evenodd" />
+      </clipPath>
+      <g clipPath={`url(#${clipId})`}>
+        <path
+          d={d}
+          fill={STILL_KNOCKING_DEEP_GLOW}
+          fillRule="evenodd"
+          fillOpacity="0.55"
+          filter={`url(#${filterId})`}
+        />
+        <path
+          d={d}
+          fill="none"
+          stroke={STILL_KNOCKING_DEEP_GLOW}
+          strokeWidth="2.5"
+          strokeOpacity="0.3"
+          filter={`url(#${filterId})`}
+        />
+      </g>
+    </g>
+  );
+}
+
+/** THE WHOLE-EARTH GLOW'S RIM (Nov 4, 2026) — the
+ *  covenant bow (Genesis 9: the bow set in the clouds
+ *  over the whole earth) resting on the disc's rim, for
+ *  a day whose visits across the whole world reached a
+ *  thousand (the decision is worldGlowOn() in
+ *  lib/heartbeat-display.ts). The six muted stops of
+ *  WORLD_GLOW_STOPS drawn as two blurred passes around
+ *  the rim's own seat — r=490, the hairline's circle,
+ *  which does not scale with the map group: the bow is
+ *  the frame's, not the land's — a wide faint underlay
+ *  (30 units at 0.45) and a narrower clearer core (14
+ *  at 0.6). Each band is a sixth of the circle
+ *  (pathLength 360, one 60-unit dash per stop, the
+ *  spectrum starting at the top and running clockwise),
+ *  and the bow's own blur (stdDeviation 10) blends every
+ *  band into its neighbors, so it reads as one kept,
+ *  quiet light — unmistakably a bow, never a circus
+ *  rainbow. Drawn LAST in the disc, resting over the
+ *  rim and whatever stands at the edge alike. Voiceless
+ *  like its family: no <title>, and no legend, chip,
+ *  aria, or caption anywhere names it — "only we know." */
+function WorldGlowRimMark({ filterId }: { filterId: string }) {
+  return (
+    <g>
+      {WORLD_GLOW_STOPS.map((color, i) => (
+        <circle
+          key={`bow-wide-${i}`}
+          cx="500"
+          cy="500"
+          r="490"
+          pathLength={360}
+          fill="none"
+          stroke={color}
+          strokeWidth="30"
+          strokeOpacity="0.45"
+          strokeDasharray="60 300"
+          strokeDashoffset={90 - 60 * i}
+          filter={`url(#${filterId})`}
+        />
+      ))}
+      {WORLD_GLOW_STOPS.map((color, i) => (
+        <circle
+          key={`bow-core-${i}`}
+          cx="500"
+          cy="500"
+          r="490"
+          pathLength={360}
+          fill="none"
+          stroke={color}
+          strokeWidth="14"
+          strokeOpacity="0.6"
+          strokeDasharray="60 300"
+          strokeDashoffset={90 - 60 * i}
+          filter={`url(#${filterId})`}
+        />
+      ))}
     </g>
   );
 }
@@ -1851,6 +1949,24 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   );
   const watchHonorOn = (code: string) => watchHonorSet.has(code);
   const anyWatchHonor = watchHonorSet.size > 0;
+  // THE WHOLE-EARTH GLOW (Nov 4, 2026) — unsaid, the deep
+  // family's summit: when the SHOWN day's visits across
+  // the whole world reach a thousand, the disc wears a
+  // soft outer glow at its own edge. Decided by
+  // worldGlowOn() over the same shown country rows the
+  // scroll and the honor read — COUNTRY rows only, whose
+  // opens already carry their subdivisions' visits, so
+  // the sum is the day's own total and nothing counts
+  // twice. No text names it anywhere; the disc's svg
+  // below simply wears the covenant bow on its rim
+  // (WorldGlowRimMark, drawn last in the disc).
+  const worldGlow = worldGlowOn(
+    browsedDay
+      ? browsedDay.countries
+      : mapSource === "live"
+        ? liveRows
+        : snapRows
+  );
   const modeOf = (code: string) => lightModeForCountry(shownSubdivisions, code);
   // The light tiers (Oct 27, 2026): "full" and "ember" are the
   // chapter tiers exactly as v3.1.1 settled them. "open" wears the
@@ -1974,14 +2090,16 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   const subStillKnockingOn = (s: LiveSubdivisionDisplay) => stillKnocking(s);
   const countryStillKnockingSignOn = (c: HbCountryRow) =>
     countryStillKnockingOn(c, shownSubdivisions);
-  // THE UNSAID DEEP TIER (Oct 30, 2026, later still): a
-  // divided country whose shown day brought a THOUSAND or
-  // more visits in all wears a deep purple glow on the
-  // disc — the one country-level form the correction left
-  // standing, at ten times the count. It feeds NO voice:
-  // anyStillKnocking below is untouched by it, and no
-  // title, clause, chip, legend row, or caption reads this
-  // decision. Rendered only, exactly as Jason ruled it.
+  // THE UNSAID DEEP TIER (Oct 30, 2026, later still;
+  // re-ruled Nov 4, 2026): a divided country whose shown
+  // day brought TWO HUNDRED or more visits in all wears a
+  // deep purple glow on the disc — the one country-level
+  // form the correction left standing, at twice the count
+  // (a thousand, at ten times the count, when first
+  // ruled). It feeds NO voice: anyStillKnocking below is
+  // untouched by it, and no title, clause, chip, legend
+  // row, or caption reads this decision. Rendered only,
+  // exactly as Jason ruled it.
   const countryStillKnockingDeepSignOn = (c: HbCountryRow) =>
     countryStillKnockingDeepOn(c, shownSubdivisions);
   const anyStillKnocking =
@@ -2401,6 +2519,12 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               <filter id="hb-soft" x="-40%" y="-40%" width="180%" height="180%">
                 <feGaussianBlur stdDeviation="7" />
               </filter>
+              {/* the covenant bow's own softening (Nov 4,
+                  2026) — a wider blur than hb-soft, so the
+                  rim's six bands melt into one another */}
+              <filter id="hb-bow" x="-40%" y="-40%" width="180%" height="180%">
+                <feGaussianBlur stdDeviation="10" />
+              </filter>
               {/* the sea — a deep teal-blue radial depth (water
                   pass, Jason, Oct 27, 2026): the disc's ground is
                   deep water, #175263 lifted at the center and
@@ -2577,24 +2701,28 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 label={prayerLightTitle}
               />
             ) : null}
-            {/* THE UNSAID DEEP TIER (Oct 30, 2026) — drawn
-                before every other glow, under all the lights:
-                a divided country whose shown day brought a
-                thousand or more visits in all, in the deep
-                purple (StillKnockingDeepGlowMark). It has no
-                title and no text anywhere speaks it — the
-                color is the whole statement, as Jason ruled. */}
+            {/* THE UNSAID DEEP TIER (Oct 30, 2026; re-ruled
+                Nov 4, 2026) — drawn before every other glow,
+                under all the lights: a divided country whose
+                shown day brought two hundred or more visits
+                in all, in the deep purple
+                (StillKnockingDeepGlowMark), worn as an outer
+                halo on the country's outside. It has no title
+                and no text anywhere speaks it — the color is
+                the whole statement, as Jason ruled. */}
             {mapRows.map((c) =>
               countryStillKnockingDeepSignOn(c) ? (
                 c.geo ? (
                   <StillKnockingDeepGlowMark
                     key={`knocking-deep-${c.code}`}
+                    idKey={`disc-${c.code}`}
                     d={c.geo.path}
                     filterId="hb-soft"
                   />
                 ) : c.centroid ? (
                   <StillKnockingDeepGlowMark
                     key={`knocking-deep-${c.code}`}
+                    idKey={`disc-${c.code}`}
                     cx={c.centroid.cx}
                     cy={c.centroid.cy}
                     r={lightRadius(c.total) * 2.1 + 6}
@@ -3113,6 +3241,13 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               />
             ) : null}
             </g>
+            {/* THE WHOLE-EARTH GLOW (Nov 4, 2026) — unsaid:
+                at a thousand visits across the whole world,
+                the covenant bow rests on the disc's rim,
+                drawn last among the disc's own marks so it
+                settles over the rim itself. Nothing names
+                it; the color is the whole statement. */}
+            {worldGlow ? <WorldGlowRimMark filterId="hb-bow" /> : null}
             {/* THE LEGEND (Oct 29, 2026, Jason's crown — built
                 first ON the disc, riding the Pacific water of the
                 upper-left quadrant; MOVED the same night to a
