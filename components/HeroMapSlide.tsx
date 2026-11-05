@@ -11,7 +11,7 @@ import {
   KINDLING_RIM,
   STILL_KNOCKING_DEEP_GLOW,
   STILL_KNOCKING_GLOW,
-  WATCH_HONOR_GOLD,
+  WATCH_HONOR_BLUE,
   bookHaloOn,
   countryBookHaloOn,
   countryHundredfoldOn,
@@ -76,7 +76,7 @@ import {
  * UP — a day is graded by how many of the map's marks
  * (gold, ember, ivory, the hundredfold ring, still knocking,
  * kindling, the blue watch trace — seven when the measure was
- * crowned; the watch honor's gold play mark made eight on
+ * crowned; the watch honor's blue play mark made eight on
  * Nov 4, 2026) stood lit anywhere on its
  * own map, each decided by the same predicates that light
  * them, read off that day's own rows; ties settle by the
@@ -111,7 +111,7 @@ import {
  * global class already rests under prefers-reduced-motion), the
  * hearts, the blue video-watch inner traces, the hundredfold gold
  * rings, the vine-green book-finished rings, and (Nov 4, 2026)
- * the watch honor's gold play badges last, over all. The
+ * the watch honor's blue play badges last, over all. The
  * small opacity curves and radii below are copied verbatim from
  * BodyHeartbeat's render treatment so the two surfaces grade a
  * light the same way; every DECISION — which place wears what —
@@ -435,23 +435,25 @@ function WatchTraceMark({
 }
 
 /** The watch honor badge (Nov 4, 2026) — BodyHeartbeat's
- *  WatchHonorMark, drawn the same way: a small gold disc
- *  bearing a dark play triangle, pinned at the shoulder of
- *  a place's heart, for a place whose day brought ten or
- *  more video watches (the decision is watchHonorPlaces()
- *  in lib/heartbeat-display.ts). Voiceless here, like every
+ *  WatchHonorMark, drawn the same way: a small blue disc
+ *  (the video trace's #8fd8ff, Jason's same-night re-ruling
+ *  from the gold it shipped in) bearing a dark play
+ *  triangle, pinned at the shoulder of a place's heart,
+ *  for a place whose day brought ten or more video watches
+ *  (the decision is watchHonorPlaces() in
+ *  lib/heartbeat-display.ts). Voiceless here, like every
  *  hero mark — the real map below names it. */
 function WatchHonorMark({ cx, cy }: { cx: number; cy: number }) {
   const bx = cx + 8.5;
   const by = cy - 8.5;
   return (
     <g>
-      <circle cx={bx} cy={by} r="7.6" fill={WATCH_HONOR_GOLD} opacity="0.22" />
+      <circle cx={bx} cy={by} r="7.6" fill={WATCH_HONOR_BLUE} opacity="0.22" />
       <circle
         cx={bx}
         cy={by}
         r="5.4"
-        fill={WATCH_HONOR_GOLD}
+        fill={WATCH_HONOR_BLUE}
         stroke="#0c1f16"
         strokeWidth="1.1"
         strokeOpacity="0.85"
@@ -1316,15 +1318,15 @@ function HeroMapDayLayer({
                   <path
                     d={c.geo.path}
                     fill="none"
-                    stroke="#94c64a"
-                    strokeWidth="3.4"
-                    strokeOpacity="0.22"
+                    stroke="#aede59"
+                    strokeWidth="2.3"
+                    strokeOpacity="0.28"
                   />
                   <path
                     d={c.geo.path}
                     fill="none"
-                    stroke="#94c64a"
-                    strokeWidth="1.5"
+                    stroke="#aede59"
+                    strokeWidth="1.0"
                     strokeOpacity="0.9"
                   />
                 </g>
@@ -1335,8 +1337,8 @@ function HeroMapDayLayer({
                   cy={c.centroid.cy}
                   r={lightRadius(c.total) * 2.1 + 5}
                   fill="none"
-                  stroke="#94c64a"
-                  strokeWidth="1.5"
+                  stroke="#aede59"
+                  strokeWidth="1.0"
                   strokeOpacity="0.9"
                 />
               ) : null
@@ -1348,22 +1350,22 @@ function HeroMapDayLayer({
                 <path
                   d={s.geo.path}
                   fill="none"
-                  stroke="#94c64a"
-                  strokeWidth="3.4"
-                  strokeOpacity="0.22"
+                  stroke="#aede59"
+                  strokeWidth="2.3"
+                  strokeOpacity="0.28"
                 />
                 <path
                   d={s.geo.path}
                   fill="none"
-                  stroke="#94c64a"
-                  strokeWidth="1.5"
+                  stroke="#aede59"
+                  strokeWidth="1.0"
                   strokeOpacity="0.9"
                 />
               </g>
             ) : null
           )}
           {/* the watch honor badges — last, over all, as on
-              the real map: a gold play badge at the shoulder
+              the real map: a blue play badge at the shoulder
               of the heart of every place whose day brought
               ten or more video watches */}
           {countries.map((c) =>

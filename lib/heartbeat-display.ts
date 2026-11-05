@@ -462,9 +462,10 @@ export function goldenScrollPlaces(
  *  watches for the day: "we should do something for 10
  *  videos watched"; his crown: "10 videos in one day — a
  *  day honor like the Scroll"): when a place watches TEN or
- *  more videos in a single day, that place wears a gold
+ *  more videos in a single day, that place wears a blue
  *  play-triangle badge for that day — the films' own honor,
- *  the blue inner trace's crown. A day honor, in the
+ *  the blue inner trace's crown (the badge shipped gold and
+ *  was re-ruled blue the same night; see WATCH_HONOR_BLUE). A day honor, in the
  *  scroll's discipline: the trigger reads the SHOWN day's
  *  own rows (the payload's per-place `watches`), so a past
  *  day browsed in the record wears the badge it earned that
@@ -496,15 +497,21 @@ export function goldenScrollPlaces(
  *  renders what this decides. */
 export const WATCH_HONOR_WATCHES_THRESHOLD = 10;
 
-/** The watch honor's gold — the lights' own gold, #e4b95c:
- *  the honor is the films', and the films play inside the
- *  lights' family. It is told apart from every other gold
- *  mark by its SHAPE — a play triangle in a small badge —
- *  never by a new hue: gold belongs to the Word read or
- *  heard, and this badge is that gold at rest, not a ring
- *  (rings are the hundredfold's and the finished book's)
- *  and not a glow (glows are the seeking family's). */
-export const WATCH_HONOR_GOLD = "#e4b95c";
+/** The watch honor's blue — the video trace's own pale
+ *  blue, #8fd8ff, the exact stroke of the "Video watched"
+ *  border and trace. The badge shipped gold (#e4b95c) on
+ *  its first evening; Jason re-ruled it the same night
+ *  (Nov 4, 2026): the play circle should be blue, "just to
+ *  match the color of the video border for watching," so
+ *  the badge and the border read as the same thing — one
+ *  watch earns the blue trace, ten in a day earn the blue
+ *  badge. It is told apart from the trace itself by its
+ *  SHAPE — a play triangle in a small badge — never by a
+ *  new hue: blue belongs to the films watched here, and
+ *  this badge is that blue at rest, not a ring (rings are
+ *  the hundredfold's and the finished book's) and not a
+ *  glow (glows are the seeking family's). */
+export const WATCH_HONOR_BLUE = "#8fd8ff";
 
 export interface WatchHonorPlace {
   /** The row's own code — a country code ("US") or a full
