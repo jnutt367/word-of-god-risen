@@ -25,7 +25,7 @@ export interface Chapter {
 }
 
 export function getAllBooks(): BookMeta[] {
-  return BOOKS;
+  return BOOKS.filter((b) => !b.hidden);
 }
 
 export function getBook(slug: string): BookMeta | undefined {

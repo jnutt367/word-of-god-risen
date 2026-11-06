@@ -5,6 +5,11 @@ export interface BookMeta {
   description: string; image: string;
   videoId?: string; chapters: number;
   mood?: 'desert' | 'warm';
+  /** Hidden from every listing surface (grids, search, next-book) while
+      the book's data stays in place — set only by an explicit ruling.
+      (Nov 6, 2026: the legacy 'parables' book, hidden so the Parables
+      page stands as the app's one parables home.) */
+  hidden?: boolean;
 }
 
 export const BOOKS: BookMeta[] = [
@@ -51,7 +56,7 @@ export const BOOKS: BookMeta[] = [
   { slug: 'mark', title: 'Mark', testament: 'new', description: 'For even the Son of Man did not come to be served, but to serve, and to give his life as a ransom for many.', image: '/images/cover-mark-storm.jpg', videoId: 'QvfQA7chtJA', mood: 'warm', chapters: 16 },
   { slug: 'luke', title: 'Luke', testament: 'new', description: 'For the Son of Man came to seek and to save the lost ... Do to others as you would have them do to you.', image: '/images/cover-luke-field.jpg', videoId: '--URs_Ua24w', mood: 'warm', chapters: 24 },
   { slug: 'john', title: 'John', testament: 'new', description: 'I am the way and the truth and the life. No one comes to the Father except through me.', image: '/images/cover-john-vineyard.jpg', videoId: 'qdNbQKl_B8Q', mood: 'warm', chapters: 21 },
-  { slug: 'parables', title: 'Parables of Jesus', testament: 'extra', description: '', image: '/images/cover-parables.jpg', videoId: 'QCF-t91FnQE', mood: 'desert', chapters: 42 },
+  { slug: 'parables', title: 'Parables of Jesus', testament: 'extra', description: '', image: '/images/cover-parables.jpg', videoId: 'QCF-t91FnQE', mood: 'desert', chapters: 42, hidden: true },
   { slug: 'enoch-1', title: 'The Book of Enoch', testament: 'extra', description: 'Read the Book of Enoch online — the Watchers, the Son of Man, and the final judgment', image: '/images/cover-enoch-1.jpg', videoId: 'moyHe6xPBrY', mood: 'desert', chapters: 37 },
   { slug: 'jasher', title: 'The Book of Jasher', testament: 'extra', description: 'Read the Book of Jasher online free — the ancient record named in Joshua 10:13 and 2 Samuel 1:18', image: '/images/cover-jasher.jpg', videoId: undefined, mood: 'desert', chapters: 91 },
   { slug: 'jubilees', title: 'The Book of Jubilees', testament: 'extra', description: 'Read the Book of Jubilees online — the "Little Genesis," from creation to Moses', image: '/images/cover-jubilees.jpg', videoId: undefined, mood: 'desert', chapters: 50 },

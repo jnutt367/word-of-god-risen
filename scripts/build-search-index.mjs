@@ -9,13 +9,19 @@ const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const chaptersDir = path.join(root, "data", "chapters");
 const outFile = path.join(root, "public", "search-index.json");
 
+// Books hidden by ruling (data/books.ts `hidden: true`) stay out of the
+// index — their chapter files remain on disk but no search result may
+// lead into them. (Nov 6, 2026: the legacy 'parables' book.)
+const HIDDEN_SLUGS = new Set(["parables"]);
+
 const files = (await fs.readdir(chaptersDir)).filter(
   (f) =>
     f.endsWith("_data.json") &&
     // Version files (matthew_kjv_data.json) hold alternate translations of
     // the same chapters — index only the default text. Book slugs never
     // contain underscores, so any underscore means "version file".
-    !f.slice(0, -"_data.json".length).includes("_")
+    !f.slice(0, -"_data.json".length).includes("_") &&
+    !HIDDEN_SLUGS.has(f.slice(0, -"_data.json".length))
 );
 
 const index = [];

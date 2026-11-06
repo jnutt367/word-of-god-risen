@@ -70,14 +70,14 @@ function normalizedBookName(s: string): string {
 
 const BOOK_LOOKUP = (() => {
   const map = new Map<string, BookMeta>();
-  for (const b of BOOKS) {
+  for (const b of BOOKS.filter((x) => !x.hidden)) {
     map.set(normalizedBookName(b.title), b);
     map.set(normalizedBookName(b.title.replace(/^the book of /i, "")), b);
     map.set(normalizedBookName(b.title.replace(/^book of /i, "")), b);
     map.set(normalizedBookName(b.slug), b);
   }
   for (const [alias, slug] of Object.entries(BOOK_NAME_ALIASES)) {
-    const book = BOOKS.find((b) => b.slug === slug);
+    const book = BOOKS.filter((x) => !x.hidden).find((b) => b.slug === slug);
     if (book) map.set(alias, book);
   }
   return map;

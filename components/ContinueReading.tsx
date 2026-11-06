@@ -15,9 +15,10 @@ export default function ContinueReading() {
   // first chapter, instead of landing back in the finished chapter.
   // Revelation is the last entry in BOOKS, so it has no next book and
   // keeps the plain link to the chapter itself.
+  const visibleBooks = BOOKS.filter((b) => !b.hidden);
   const nextBook =
     book && last.idx >= book.chapters - 1
-      ? BOOKS[BOOKS.indexOf(book) + 1]
+      ? visibleBooks[visibleBooks.indexOf(book) + 1]
       : undefined;
 
   const label = nextBook ? nextBook.title : book ? book.title : last.slug;
