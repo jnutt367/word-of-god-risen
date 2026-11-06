@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { getAllSlugs, getBook, getChapters, getAvailableVersions } from "@/lib/bible";
 import ChapterGrid from "@/components/ChapterGrid";
+import BookResume from "@/components/BookResume";
 import VideoEmbed from "@/components/VideoEmbed";
 import BookProgress from "@/components/BookProgress";
 import MarkWatchedButton from "@/components/MarkWatchedButton";
@@ -61,6 +62,8 @@ export default async function BookPage({
       >
         ← All books
       </Link>
+
+      <BookResume slug={slug} bookTitle={book.title} total={chapters.length} />
 
       <div className="mt-6 overflow-hidden rounded-2xl border border-gold-500/15 bg-vineyard-900">
         {book.image && (
