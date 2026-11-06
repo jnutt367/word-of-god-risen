@@ -1463,6 +1463,44 @@ function PrayerHandsMark({
   );
 }
 
+/** THE PRAYER HANDS, IN THE CLOSER LOOK (Nov 5, 2026) —
+ *  the panel's own seat for the same sign: the panel is
+ *  drawn in its rotated frame, so the glyph rides the
+ *  panel's transform — a place's hands stand upright in
+ *  the panel's world, tilted exactly as its states are.
+ *  Same candle amber, same slow breathing, a step
+ *  larger, as every panel mark is a step larger than
+ *  the disc's. The soft blur is the panel's own filter
+ *  (hb-soft-us). */
+function PrayerHandsMarkPanel({
+  cx,
+  cy,
+  label,
+  transform,
+}: {
+  cx: number;
+  cy: number;
+  label: string;
+  transform: string;
+}) {
+  return (
+    <g transform={transform}>
+      <g className="hb-prayer">
+        <title>{label}</title>
+        <circle
+          cx={cx}
+          cy={cy}
+          r="11"
+          fill={PRAYER_CANDLE}
+          opacity="0.28"
+          filter="url(#hb-soft-us)"
+        />
+        <PrayingHandsGlyph x={cx} y={cy} scale={0.8} />
+      </g>
+    </g>
+  );
+}
+
 /** PRAYER ANSWERED (Nov 2, 2026 — Jason: "that one would
  *  be big") — the candle's successor for ONE day: the
  *  first day the Philippines records chapter activity,
@@ -4365,6 +4403,22 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                     />
                   ) : null
                 )}
+                {/* THE PRAYER HANDS, IN THE PANEL (Nov 5,
+                    2026) — the knocking states wear their
+                    hands here too, at the states' own
+                    hearts, under the same live-default
+                    discipline as the disc (the decisions
+                    are day-free: knockingSubs is empty
+                    while browsing). */}
+                {knockingSubs.map((p) => (
+                  <PrayerHandsMarkPanel
+                    key={`us-hands-${p.code}`}
+                    cx={p.cx}
+                    cy={p.cy}
+                    label={prayerHandsTitle(p.name)}
+                    transform={US_PANEL_TRANSFORM}
+                  />
+                ))}
               </g>
             </svg>
             <figcaption className="mt-3 text-center text-sm text-sage-300">
