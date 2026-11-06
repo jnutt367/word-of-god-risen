@@ -475,6 +475,49 @@ interface WorldCountry {
   cy: number;
 }
 
+/** A US STATE'S HEART, IN THE PANEL'S OWN SEAT (Nov 5, 2026,
+ *  late — Jason's ruling): the America closer-look panel is
+ *  the crowned truth for the states ("the top map is already
+ *  good — just make the bottom exactly like the top map
+ *  regarding America"). The panel seats every state heart by
+ *  riding the panel's rotation (US_PANEL_TRANSFORM: 263.24°
+ *  about the US centroid). The disc used to draw each state's
+ *  heart at the raw vendored cx/cy — and on Jason's phone the
+ *  disc's state marks sat in visibly different spots than the
+ *  panel's. So the disc now derives a state's heart FROM the
+ *  panel's seat: take the vendored center, ride it through
+ *  the panel rotation to the panel heart, then ride that
+ *  heart back through the inverse rotation — the disc heart
+ *  and the panel heart are the same heart by construction,
+ *  one source, never two placements to drift apart. */
+const US_PANEL_CX = 342.6;
+const US_PANEL_CY = 477.2;
+const US_PANEL_ROT_RAD = (263.24 * Math.PI) / 180;
+function rotateAboutPanel(
+  x: number,
+  y: number,
+  angle: number
+): { cx: number; cy: number } {
+  const dx = x - US_PANEL_CX;
+  const dy = y - US_PANEL_CY;
+  const c = Math.cos(angle);
+  const s = Math.sin(angle);
+  return {
+    cx: US_PANEL_CX + dx * c - dy * s,
+    cy: US_PANEL_CY + dx * s + dy * c,
+  };
+}
+/** The state heart the PANEL wears (its seat under the panel
+ *  rotation), expressed back in disc coordinates so the disc
+ *  can wear the very same heart. */
+function discHeartFromPanelSeat(geo: WorldCountry): {
+  cx: number;
+  cy: number;
+} {
+  const panelHeart = rotateAboutPanel(geo.cx, geo.cy, US_PANEL_ROT_RAD);
+  return rotateAboutPanel(panelHeart.cx, panelHeart.cy, -US_PANEL_ROT_RAD);
+}
+
 interface WorldCentroid {
   name: string;
   cx: number;
@@ -1787,6 +1830,12 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   interface LiveSubdivisionDisplay extends HbCountryRow {
     country: string;
     geo: WorldCountry | null;
+    /** The heart the DISC wears for this row: for a US state,
+     *  the panel-seated heart (Nov 5, 2026 — Jason: the bottom
+     *  map matches the top map regarding America); for any
+     *  other subdivision, the vendored heart itself. The panel
+     *  keeps reading s.geo directly — it is the source. */
+    heart: { cx: number; cy: number } | null;
   }
   const normalizeSubdivisionRows = (
     rows: LiveSubdivisionRow[]
@@ -1807,6 +1856,11 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
           bookFinishedOn: s.bookFinishedOn ?? null,
           country: (s.country || code.split("-")[0] || "").toUpperCase(),
           geo,
+          heart: geo
+            ? code.startsWith("US-")
+              ? discHeartFromPanelSeat(geo)
+              : { cx: geo.cx, cy: geo.cy }
+            : null,
         };
       })
       .filter((s) => s.code && (s.total > 0 || s.opens > 0 || s.watches > 0))
@@ -2396,8 +2450,12 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
           liveSubdivisionRows.find((r) => r.code === code)?.name ??
           geo.name,
         d: geo.path,
-        cx: geo.cx,
-        cy: geo.cy,
+        // the disc heart for a US state rides the row's own
+        // heart field — the panel's seat (Nov 5, 2026).
+        ...(liveSubdivisionRows.find((r) => r.code === code)?.heart ?? {
+          cx: geo.cx,
+          cy: geo.cy,
+        }),
       });
     }
     for (const r of liveRows) {
@@ -2428,8 +2486,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
         code: r.code,
         name: r.name,
         d: geo.path,
-        cx: geo.cx,
-        cy: geo.cy,
+        ...(r.heart ?? { cx: geo.cx, cy: geo.cy }),
       });
     }
   }
@@ -3344,9 +3401,11 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                     strokeOpacity="0.55"
                   />
                   {/* the subdivision's heart — the bright core of
-                      its light, at its own center */}
-                  <circle cx={s.geo.cx} cy={s.geo.cy} r="6.5" fill="#ffdf8a" opacity="0.3" />
-                  <circle cx={s.geo.cx} cy={s.geo.cy} r="2.6" fill="#fff3c4" />
+                      its light, at its own center: on the disc
+                      that center is the row's heart field — for a
+                      US state, the panel's seat (Nov 5, 2026) */}
+                  <circle cx={s.heart?.cx ?? s.geo.cx} cy={s.heart?.cy ?? s.geo.cy} r="6.5" fill="#ffdf8a" opacity="0.3" />
+                  <circle cx={s.heart?.cx ?? s.geo.cx} cy={s.heart?.cy ?? s.geo.cy} r="2.6" fill="#fff3c4" />
                 </g>
                 ) : (
                   // OPENS-ONLY subdivision (Oct 27, 2026): the
@@ -3680,8 +3739,8 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               watchHonorOn(s.code) && s.geo ? (
                 <WatchHonorMark
                   key={`watch-honor-${s.code}`}
-                  cx={s.geo.cx}
-                  cy={s.geo.cy}
+                  cx={s.heart?.cx ?? s.geo.cx}
+                  cy={s.heart?.cy ?? s.geo.cy}
                   label={watchHonorTitle(s.name)}
                 />
               ) : null
