@@ -475,55 +475,21 @@ interface WorldCountry {
   cy: number;
 }
 
-/** A US STATE'S HEART, IN THE PANEL'S OWN SEAT (Nov 5, 2026,
- *  late — Jason's ruling): the America closer-look panel is
- *  the crowned truth for the states ("the top map is already
- *  good — just make the bottom exactly like the top map
- *  regarding America"). The panel seats every state heart by
- *  riding the panel's rotation (US_PANEL_TRANSFORM: 263.24°
- *  about the US centroid). The disc used to draw each state's
- *  heart at the raw vendored cx/cy — and on Jason's phone the
- *  disc's state marks sat in visibly different spots than the
- *  panel's. So the disc now derives a state's heart FROM the
- *  panel's seat: take the vendored center, ride it through
- *  the panel rotation to the panel heart, then ride that
- *  heart back through the inverse rotation — the disc heart
- *  and the panel heart are the same heart by construction,
- *  one source, never two placements to drift apart. */
-const US_PANEL_CX = 342.6;
-const US_PANEL_CY = 477.2;
-const US_PANEL_ROT_RAD = (263.24 * Math.PI) / 180;
-function rotateAboutPanel(
-  x: number,
-  y: number,
-  angle: number
-): { cx: number; cy: number } {
-  const dx = x - US_PANEL_CX;
-  const dy = y - US_PANEL_CY;
-  const c = Math.cos(angle);
-  const s = Math.sin(angle);
-  return {
-    cx: US_PANEL_CX + dx * c - dy * s,
-    cy: US_PANEL_CY + dx * s + dy * c,
-  };
-}
-/** The seat the PANEL gives this state: the vendored center
- *  ridden through the panel rotation alone. The disc wears
- *  THIS seat for its US states (Nov 5, 2026, late — Jason,
- *  twice: "make the bottom exactly like the top"), so the
- *  bottom map's America matches the top map's America: same
- *  west-to-east arrangement, same relative order, same lean
- *  of the marks. Measured before shipping this time: the
- *  seats differ from the raw vendored centers by 14–99 units
- *  (Washington 99, North Dakota 50, Mississippi 48, New
- *  Jersey 64, Massachusetts 66) — a real move, verified in
- *  numbers, not a round trip. */
-function discHeartFromPanelSeat(geo: WorldCountry): {
-  cx: number;
-  cy: number;
-} {
-  return rotateAboutPanel(geo.cx, geo.cy, US_PANEL_ROT_RAD);
-}
+/** (RETIRED Nov 5, 2026, late — the panel-seat detour.) For
+ *  one evening the disc seated its US states from the
+ *  closer-look panel's rotated frame, at Jason's "make the
+ *  bottom exactly like the top" — first as a rotation
+ *  composed with its own inverse (an identity: nothing
+ *  moved), then as the panel rotation itself. The check
+ *  that followed found the panel's OWN prayer hands were
+ *  double-rotated (see PrayerHandsMarkPanel): the panel's
+ *  seats were never true to copy. With the panel fixed,
+ *  Jason ruled the honest end — TRUE STATES ON BOTH MAPS:
+ *  every state heart is the vendored geographic heart
+ *  again, and the panel seats its marks by its one
+ *  rotation, like every other mark it carries. The helper
+ *  that computed seats is gone; nothing computes a seat
+ *  anymore. */
 
 interface WorldCentroid {
   name: string;
@@ -1526,27 +1492,34 @@ function PrayerHandsMarkPanel({
   cx,
   cy,
   label,
-  transform,
 }: {
   cx: number;
   cy: number;
   label: string;
-  transform: string;
 }) {
+  /* NO transform of its own (Nov 5, 2026, late — the double
+   * rotation bug): this mark is rendered INSIDE the panel's
+   * rotated group, which already seats every mark once. An
+   * earlier version wrapped the glyph in the panel transform
+   * a second time, so the panel's hands were rotated twice
+   * and landed in the wrong states — two pairs rotated clean
+   * out of the panel's frame, one pair pushed below Texas.
+   * Jason saw it on his phone ("not in the correct spots")
+   * before any check did. The group outside does the seating;
+   * this mark only draws, at the state's own heart, exactly
+   * like its sibling marks in the same group. */
   return (
-    <g transform={transform}>
-      <g className="hb-prayer">
-        <title>{label}</title>
-        <circle
-          cx={cx}
-          cy={cy}
-          r="11"
-          fill={PRAYER_CANDLE}
-          opacity="0.28"
-          filter="url(#hb-soft-us)"
-        />
-        <PrayingHandsGlyph x={cx} y={cy} scale={0.8} />
-      </g>
+    <g className="hb-prayer">
+      <title>{label}</title>
+      <circle
+        cx={cx}
+        cy={cy}
+        r="11"
+        fill={PRAYER_CANDLE}
+        opacity="0.28"
+        filter="url(#hb-soft-us)"
+      />
+      <PrayingHandsGlyph x={cx} y={cy} scale={0.8} />
     </g>
   );
 }
@@ -1863,11 +1836,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
           bookFinishedOn: s.bookFinishedOn ?? null,
           country: (s.country || code.split("-")[0] || "").toUpperCase(),
           geo,
-          heart: geo
-            ? code.startsWith("US-")
-              ? discHeartFromPanelSeat(geo)
-              : { cx: geo.cx, cy: geo.cy }
-            : null,
+          heart: geo ? { cx: geo.cx, cy: geo.cy } : null,
         };
       })
       .filter((s) => s.code && (s.total > 0 || s.opens > 0 || s.watches > 0))
@@ -4512,7 +4481,6 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                     cx={p.cx}
                     cy={p.cy}
                     label={prayerHandsTitle(p.name)}
-                    transform={US_PANEL_TRANSFORM}
                   />
                 ))}
               </g>
