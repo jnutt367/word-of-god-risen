@@ -10,6 +10,7 @@ export interface BibleVersion {
 export const BIBLE_VERSIONS: BibleVersion[] = [
   { id: "web", label: "WEB", name: "World English Bible" },
   { id: "kjv", label: "KJV", name: "King James Version" },
+  { id: "ceb", label: "Cebuano", name: "Ang Biblia — Cebuano (Bugna, 1917)" },
 ];
 
 export const DEFAULT_VERSION = "web";
