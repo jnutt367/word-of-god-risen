@@ -3979,7 +3979,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 aria-label="Reset the map to the whole view"
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-cream-100/20 bg-vineyard-950/80 text-xs font-semibold text-sage-200 backdrop-blur-sm transition-colors hover:border-gold-400/60 hover:text-cream-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
               >
-                All
+                Full
               </button>
             )}
           </div>
