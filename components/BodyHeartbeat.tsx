@@ -234,6 +234,35 @@ import { isVideoOpen } from "@/lib/video-open";
  * the decision block below (prayerLightOn /
  * prayerAnsweredToday).
  *
+ * THE PRAYER HANDS, WIDENED (Nov 5, 2026, Jason's word —
+ * "see where are the places that most are in need of
+ * prayer and put some prayer hands for those places to
+ * open the app"): the candle's family grows to every
+ * place the record shows KNOCKING — the app opened
+ * there, never a chapter read or heard. Those places
+ * wear a small pair of praying hands at their heart
+ * (PrayerHandsMark): an invitation, never a ranking —
+ * no place is named neediest — and the hands ask the
+ * map's own visitors to pray, and to open the Word for
+ * their neighbors. Subdivisions wear their own hands; a
+ * divided country never sums its divisions into one.
+ * And the candle's grammar generalizes with them
+ * (Jason, the same night): on the FIRST day a prayed-
+ * for place records chapter activity it wears the
+ * RAISED answered sun for that day — raised, so the
+ * day's other lights stay visible beneath it — and
+ * from the next day, the ordinary marks alone.
+ *
+ * THE CHOSEN PLACE (Nov 5, 2026, Jason's word — "pick
+ * one place that's never been even clicked that's
+ * going through something in life on the planet to pray
+ * for just to see what happens"): Sudan wears the full
+ * candle, the Philippines pattern exactly — a place at
+ * war, in famine, that has never touched the app at
+ * all. It stands until the Word is first opened there;
+ * that day Sudan wears the raised sun, and the candle
+ * is done. (CHOSEN_PRAYER_CODE in the decision block.)
+ *
  * THE GOLDEN SCROLL (Nov 3, 2026, Jason's crown — born of a
  * dictation that heard "squirrel" for SCROLL, and kept
  * because the scroll is the right picture: the Word itself,
@@ -1396,6 +1425,44 @@ function PrayerLightMark({
   );
 }
 
+/** THE PRAYER HANDS (Nov 5, 2026 — Jason's word) — the
+ *  candle's glyph set free of the candle: a small pair of
+ *  praying hands at a place's heart, for a place that has
+ *  opened the app in the record but never read or heard a
+ *  chapter there. No fill, no ring, no count: the hands
+ *  themselves, breathing on the candle's own slow
+ *  .hb-prayer over a whisper of candle amber, are the
+ *  whole sign — we are praying for this place, and
+ *  whoever sees it is invited to pray and to open the
+ *  Word for their neighbors. The glyph is the candle's
+ *  own (PrayingHandsGlyph), a step smaller, so at a
+ *  country's heart it reads as a kept prayer and never
+ *  competes with the day's lights. */
+function PrayerHandsMark({
+  cx,
+  cy,
+  label,
+}: {
+  cx: number;
+  cy: number;
+  label: string;
+}) {
+  return (
+    <g className="hb-prayer">
+      <title>{label}</title>
+      <circle
+        cx={cx}
+        cy={cy}
+        r="11"
+        fill={PRAYER_CANDLE}
+        opacity="0.28"
+        filter="url(#hb-soft)"
+      />
+      <PrayingHandsGlyph x={cx} y={cy} scale={0.62} />
+    </g>
+  );
+}
+
 /** PRAYER ANSWERED (Nov 2, 2026 — Jason: "that one would
  *  be big") — the candle's successor for ONE day: the
  *  first day the Philippines records chapter activity,
@@ -2112,6 +2179,209 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   const prayerAnsweredTitle =
     "Philippines — a wide, radiant light: prayer answered — the Word was opened here today, after prayer";
 
+  // THE PRAYER FAMILY, GENERALIZED (Nov 5, 2026 — Jason's
+  // word; the design notes stand at the top of this file).
+  // Three rules, all read off the record the map already
+  // consumes — today's rows, the live history, the
+  // vendored geography; no new data:
+  //   (1) KNOCKING HANDS: a place — country or
+  //       subdivision — that has OPENED in the record but
+  //       never recorded a chapter wears the small
+  //       praying hands at its heart. Opens are summed
+  //       across the record exactly as the opens-only
+  //       ember sums them (allTimeOpensOf and its
+  //       subdivision twin); chapters are judged across
+  //       the whole record, so a place that read once,
+  //       on any day, never wears hands again.
+  //   (2) THE ANSWERED DAY, FOR EVERY PRAYED-FOR PLACE:
+  //       on the first day such a place records chapter
+  //       activity — active in today's rows, never
+  //       active on any earlier day of the record — it
+  //       wears the RAISED answered sun for that day
+  //       (Jason's rule: raised, so the day's other
+  //       lights stay visible beneath it).
+  //   (3) THE CHOSEN PLACE: Sudan (CHOSEN_PRAYER_CODE) —
+  //       never clicked, at war, in famine — wears the
+  //       full candle until the Word is first opened
+  //       there; that day it wears the raised sun.
+  // The Philippines keeps its own decision block above:
+  // its candle and its answered day are untouched, and
+  // it is excluded from every list below. All of these
+  // signs belong to the live default, like the candle —
+  // while day browsing, none of them render.
+  const CHOSEN_PRAYER_CODE = "SD";
+  interface PrayerPlace {
+    code: string;
+    name: string;
+    d: string;
+    cx: number;
+    cy: number;
+  }
+  const rowChapters = (r: {
+    read?: number;
+    heard?: number;
+    total?: number;
+  }): number => (r.read ?? 0) + (r.heard ?? 0) || (r.total ?? 0);
+  const anyChaptersIn = (
+    rows: readonly {
+      code: string;
+      read?: number;
+      heard?: number;
+      total?: number;
+    }[],
+    code: string
+  ): boolean =>
+    rows.some(
+      (r) => (r.code || "").toUpperCase() === code && rowChapters(r) > 0
+    );
+  const everChaptersCountry = (code: string): boolean =>
+    Boolean(live) &&
+    historyAsc.some((d) => anyChaptersIn(d.countries ?? [], code));
+  const everChaptersSub = (code: string): boolean =>
+    Boolean(live) &&
+    historyAsc.some((d) => anyChaptersIn(d.subdivisions ?? [], code));
+  const chaptersBeforeTodayCountry = (code: string): boolean =>
+    Boolean(live) &&
+    historyAsc.some(
+      (d) =>
+        live !== null &&
+        d.date < live.today.date &&
+        anyChaptersIn(d.countries ?? [], code)
+    );
+  const chaptersBeforeTodaySub = (code: string): boolean =>
+    Boolean(live) &&
+    historyAsc.some(
+      (d) =>
+        live !== null &&
+        d.date < live.today.date &&
+        anyChaptersIn(d.subdivisions ?? [], code)
+    );
+  const everOpenedCountry = (code: string): boolean => {
+    const row = liveRows.find((r) => r.code === code);
+    if (row && allTimeOpensOf(row) > 0) return true;
+    return (
+      Boolean(live) &&
+      historyAsc.some((d) =>
+        (d.countries ?? []).some(
+          (c) => (c.code || "").toUpperCase() === code && (c.opens ?? 0) > 0
+        )
+      )
+    );
+  };
+  const everOpenedSub = (code: string): boolean => {
+    const row = liveSubdivisionRows.find((r) => r.code === code);
+    if (row && allTimeOpensOfSubdivision(row) > 0) return true;
+    return (
+      Boolean(live) &&
+      historyAsc.some((d) =>
+        (d.subdivisions ?? []).some(
+          (c) => (c.code || "").toUpperCase() === code && (c.opens ?? 0) > 0
+        )
+      )
+    );
+  };
+  const prayerSignsLive = settled && !browsedDay && Boolean(live);
+  const knockingCountries: PrayerPlace[] = [];
+  const knockingSubs: PrayerPlace[] = [];
+  const answeredPlaces: PrayerPlace[] = [];
+  if (prayerSignsLive) {
+    const countryCodes = new Set<string>();
+    for (const r of liveRows) countryCodes.add(r.code);
+    for (const d of historyAsc)
+      for (const c of d.countries ?? []) {
+        const cd = (c.code || "").toUpperCase();
+        if (cd) countryCodes.add(cd);
+      }
+    for (const code of countryCodes) {
+      if (code === "PH" || code === CHOSEN_PRAYER_CODE) continue;
+      if (!everOpenedCountry(code)) continue;
+      if (everChaptersCountry(code)) continue;
+      const geo = world.countries[code] ?? null;
+      const extra = geo ? null : world.extraCentroids?.[code] ?? null;
+      const cx = geo?.cx ?? extra?.cx;
+      const cy = geo?.cy ?? extra?.cy;
+      if (cx === undefined || cy === undefined) continue;
+      knockingCountries.push({
+        code,
+        name:
+          liveRows.find((r) => r.code === code)?.name ?? geo?.name ?? code,
+        d: geo?.path ?? "",
+        cx,
+        cy,
+      });
+    }
+    const subCodes = new Set<string>();
+    for (const r of liveSubdivisionRows) subCodes.add(r.code);
+    for (const d of historyAsc)
+      for (const s of d.subdivisions ?? []) {
+        const cd = (s.code || "").toUpperCase();
+        if (cd) subCodes.add(cd);
+      }
+    for (const code of subCodes) {
+      if (!everOpenedSub(code)) continue;
+      if (everChaptersSub(code)) continue;
+      const geo = world.subdivisions?.[code] ?? null;
+      if (!geo) continue;
+      knockingSubs.push({
+        code,
+        name:
+          liveSubdivisionRows.find((r) => r.code === code)?.name ??
+          geo.name,
+        d: geo.path,
+        cx: geo.cx,
+        cy: geo.cy,
+      });
+    }
+    for (const r of liveRows) {
+      if (r.code === "PH" || r.code === CHOSEN_PRAYER_CODE) continue;
+      if (rowChapters(r) <= 0) continue;
+      if (chaptersBeforeTodayCountry(r.code)) continue;
+      if (!everOpenedCountry(r.code)) continue;
+      const geo = world.countries[r.code] ?? null;
+      const extra = geo ? null : world.extraCentroids?.[r.code] ?? null;
+      const cx = geo?.cx ?? extra?.cx;
+      const cy = geo?.cy ?? extra?.cy;
+      if (cx === undefined || cy === undefined) continue;
+      answeredPlaces.push({
+        code: r.code,
+        name: r.name,
+        d: geo?.path ?? "",
+        cx,
+        cy,
+      });
+    }
+    for (const r of liveSubdivisionRows) {
+      if (rowChapters(r) <= 0) continue;
+      if (chaptersBeforeTodaySub(r.code)) continue;
+      if (!everOpenedSub(r.code)) continue;
+      const geo = world.subdivisions?.[r.code] ?? null;
+      if (!geo) continue;
+      answeredPlaces.push({
+        code: r.code,
+        name: r.name,
+        d: geo.path,
+        cx: geo.cx,
+        cy: geo.cy,
+      });
+    }
+  }
+  const chosenGeo = world.countries[CHOSEN_PRAYER_CODE] ?? null;
+  const chosenEverActive = everChaptersCountry(CHOSEN_PRAYER_CODE);
+  const chosenAnsweredToday =
+    prayerSignsLive &&
+    anyChaptersIn(liveRows, CHOSEN_PRAYER_CODE) &&
+    !chaptersBeforeTodayCountry(CHOSEN_PRAYER_CODE);
+  const chosenCandleOn =
+    prayerSignsLive && Boolean(chosenGeo) && !chosenEverActive;
+  const prayerHandsTitle = (name: string) =>
+    `${name} — praying hands: the app has been opened here, and no chapter has been read or heard here yet — we are praying the Word will be opened here`;
+  const answeredPlaceTitle = (name: string) =>
+    `${name} — a wide, radiant light, raised so the day's other lights stay visible beneath it: prayer answered — the Word was opened here today, after prayer`;
+  const chosenPrayerTitle =
+    "Sudan — a warm, candle-like light: praying for you — a place at war, chosen for prayer before the Word has been opened here; we are praying it will be";
+  const chosenAnsweredTitle =
+    "Sudan — a wide, radiant light: prayer answered — the Word was opened here today, after prayer";
+
   // THE GOLD RING (Oct 28, 2026) — decided against the SHOWN
   // set, but the sign belongs to TODAY: haloDate is today's date
   // only at the live default, so while day browsing no ring is
@@ -2391,11 +2661,29 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   // carry legend rows, so — unlike the unsaid deep tier —
   // they are named): the candle as what it is, prayer and
   // never a count, and the answered mark on its one day.
-  const prayerAria = prayerAnsweredToday
-    ? " The Philippines wears a wide, radiant light — a prayer answered: the Word was opened there today, after prayer."
-    : prayerLightOn
-      ? " A warm, candle-like light rests on the Philippines. It is not a count — it marks prayer: we are praying for the Philippines, that the Word will be opened there."
-      : "";
+  const prayerAria =
+    (prayerAnsweredToday
+      ? " The Philippines wears a wide, radiant light — a prayer answered: the Word was opened there today, after prayer."
+      : prayerLightOn
+        ? " A warm, candle-like light rests on the Philippines. It is not a count — it marks prayer: we are praying for the Philippines, that the Word will be opened there."
+        : "") +
+    (chosenAnsweredToday
+      ? " Sudan wears a wide, radiant light — a prayer answered: the Word was opened there today, after prayer."
+      : chosenCandleOn
+        ? " A warm, candle-like light rests on Sudan — a place chosen for prayer before the Word has been opened there. It is not a count — it marks prayer: we are praying for Sudan, that the Word will be opened there."
+        : "") +
+    (answeredPlaces.length
+      ? ` ${answeredPlaces.map((p) => p.name).join(", ")} ${
+          answeredPlaces.length === 1 ? "wears" : "wear"
+        } a wide, radiant light, raised so the day's other lights stay visible beneath it — a prayer answered: the Word was opened there today, after prayer.`
+      : "") +
+    (knockingCountries.length || knockingSubs.length
+      ? ` Small praying hands rest on ${[...knockingCountries, ...knockingSubs]
+          .map((p) => p.name)
+          .join(
+            ", "
+          )} — places where the app has been opened, and no chapter has been read or heard yet. They are not counts — they mark prayer: we are praying the Word will be opened there.`
+      : "");
 
   // "The Vine Is Growing" (Oct 21, 2026) — the day-by-day record,
   // turned into a growth story on the map's own card: a continuous
@@ -2772,6 +3060,41 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 label={prayerLightTitle}
               />
             ) : null}
+            {/* THE CHOSEN PLACE'S CANDLE (Nov 5, 2026) —
+                Sudan, drawn with the Philippines candle and
+                under the same discipline: not a count, it
+                rests beneath the day's activity, and it
+                gives way for good the first day the Word
+                is opened there. */}
+            {chosenCandleOn && chosenGeo ? (
+              <PrayerLightMark
+                d={chosenGeo.path}
+                cx={chosenGeo.cx}
+                cy={chosenGeo.cy}
+                label={chosenPrayerTitle}
+              />
+            ) : null}
+            {/* THE PRAYER HANDS (Nov 5, 2026) — the small
+                hands at the heart of every place the
+                record shows knocking: opened, never yet a
+                chapter. Drawn with the candles, under the
+                lights — an invitation, never a ranking. */}
+            {knockingCountries.map((p) => (
+              <PrayerHandsMark
+                key={`hands-${p.code}`}
+                cx={p.cx}
+                cy={p.cy}
+                label={prayerHandsTitle(p.name)}
+              />
+            ))}
+            {knockingSubs.map((p) => (
+              <PrayerHandsMark
+                key={`hands-${p.code}`}
+                cx={p.cx}
+                cy={p.cy}
+                label={prayerHandsTitle(p.name)}
+              />
+            ))}
             {/* THE UNSAID DEEP TIER (Oct 30, 2026; re-ruled
                 Nov 4, 2026) — drawn before every other glow,
                 under all the lights: a divided country whose
@@ -3310,6 +3633,30 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 cx={phGeo.cx}
                 cy={phGeo.cy}
                 label={prayerAnsweredTitle}
+              />
+            ) : null}
+            {/* PRAYER ANSWERED, WIDENED (Nov 5, 2026) —
+                the raised sun for every other prayed-for
+                place on its first day of chapter activity:
+                the knocking places whose first chapter
+                landed today, and the chosen place if its
+                day has come. Raised, by Jason's rule, so
+                the day's other lights stay visible. */}
+            {answeredPlaces.map((p) => (
+              <PrayerAnsweredMark
+                key={`answered-${p.code}`}
+                d={p.d}
+                cx={p.cx}
+                cy={p.cy}
+                label={answeredPlaceTitle(p.name)}
+              />
+            ))}
+            {chosenAnsweredToday && chosenGeo ? (
+              <PrayerAnsweredMark
+                d={chosenGeo.path}
+                cx={chosenGeo.cx}
+                cy={chosenGeo.cy}
+                label={chosenAnsweredTitle}
               />
             ) : null}
             </g>
