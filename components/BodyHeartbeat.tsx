@@ -2318,6 +2318,36 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
       )
     );
   };
+  // OPENED BEFORE TODAY (Nov 5, 2026, late — Jason's ruling):
+  // the prayer must have STOOD before the answer came. A place
+  // counts as prayed-for only if it opened on an EARLIER day —
+  // the knocking hands stood there on a previous day — before
+  // its first chapter day. A place whose very first open and
+  // very first chapter land on the SAME day was never prayed
+  // for first, so the answered sun must not claim it (Arizona
+  // and Pennsylvania read their first chapters the day they
+  // first opened, and tonight's widened rule wrongly raised
+  // suns over both — Jason caught it: "it is misrepresenting").
+  const openedBeforeTodayCountry = (code: string): boolean =>
+    Boolean(live) &&
+    historyAsc.some(
+      (d) =>
+        live !== null &&
+        d.date < live.today.date &&
+        (d.countries ?? []).some(
+          (c) => (c.code || "").toUpperCase() === code && (c.opens ?? 0) > 0
+        )
+    );
+  const openedBeforeTodaySub = (code: string): boolean =>
+    Boolean(live) &&
+    historyAsc.some(
+      (d) =>
+        live !== null &&
+        d.date < live.today.date &&
+        (d.subdivisions ?? []).some(
+          (c) => (c.code || "").toUpperCase() === code && (c.opens ?? 0) > 0
+        )
+    );
   const prayerSignsLive = settled && !browsedDay && Boolean(live);
   const knockingCountries: PrayerPlace[] = [];
   const knockingSubs: PrayerPlace[] = [];
@@ -2374,7 +2404,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
       if (r.code === "PH" || r.code === CHOSEN_PRAYER_CODE) continue;
       if (rowChapters(r) <= 0) continue;
       if (chaptersBeforeTodayCountry(r.code)) continue;
-      if (!everOpenedCountry(r.code)) continue;
+      if (!openedBeforeTodayCountry(r.code)) continue;
       const geo = world.countries[r.code] ?? null;
       const extra = geo ? null : world.extraCentroids?.[r.code] ?? null;
       const cx = geo?.cx ?? extra?.cx;
@@ -2391,7 +2421,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
     for (const r of liveSubdivisionRows) {
       if (rowChapters(r) <= 0) continue;
       if (chaptersBeforeTodaySub(r.code)) continue;
-      if (!everOpenedSub(r.code)) continue;
+      if (!openedBeforeTodaySub(r.code)) continue;
       const geo = world.subdivisions?.[r.code] ?? null;
       if (!geo) continue;
       answeredPlaces.push({
