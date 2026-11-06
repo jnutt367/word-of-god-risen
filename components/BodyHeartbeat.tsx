@@ -1719,6 +1719,151 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   // the payload's history below.
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
+  // MAP ZOOM (Nov 6, 2026 — Jason's ruling: "buttons AND pinch
+  // together"). The disc zooms by narrowing its viewBox — the SVG
+  // is vector, so it stays sharp at every step — while the figure
+  // box itself never grows: page layout, the day-stepping row and
+  // the legend below never move. Buttons step ×1.6 around the disc
+  // center; a two-finger pinch zooms around the pinch midpoint;
+  // one-finger drag pans while zoomed; a double tap toggles
+  // between whole and close. Zoom is kept [1, 4] and the view is
+  // clamped to the disc, so no one can lose the map. The wrapper
+  // carries touch-action: none so the page never zooms instead.
+  const WORLD_VIEWBOX = world.viewBox;
+  const worldBoxParts = WORLD_VIEWBOX.split(/\s+/).map(Number);
+  const worldW = worldBoxParts[2];
+  const worldH = worldBoxParts[3];
+  const [zoom, setZoom] = useState(1);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const mapTouch = useRef<{
+    mode: "pinch" | "pan";
+    startDist: number;
+    startZoom: number;
+    anchorX: number;
+    anchorY: number;
+    startPanX: number;
+    startPanY: number;
+    lastX: number;
+    lastY: number;
+  } | null>(null);
+  const clampView = useCallback(
+    (z: number, px: number, py: number) => {
+      const zz = Math.min(4, Math.max(1, z));
+      const w = worldW / zz;
+      const h = worldH / zz;
+      const maxX = worldW - w;
+      const maxY = worldH - h;
+      return {
+        zoom: zz,
+        pan: {
+          x: Math.min(maxX, Math.max(0, px)),
+          y: Math.min(maxY, Math.max(0, py)),
+        },
+      };
+    },
+    [worldW, worldH],
+  );
+  const zoomStep = useCallback(
+    (factor: number) => {
+      const cx = pan.x + worldW / zoom / 2;
+      const cy = pan.y + worldH / zoom / 2;
+      const nz = Math.min(4, Math.max(1, zoom * factor));
+      const nw = worldW / nz;
+      const nh = worldH / nz;
+      const next = clampView(nz, cx - nw / 2, cy - nh / 2);
+      setZoom(next.zoom);
+      setPan(next.pan);
+    },
+    [pan, zoom, clampView, worldW, worldH],
+  );
+  const zoomReset = useCallback(() => {
+    setZoom(1);
+    setPan({ x: 0, y: 0 });
+  }, []);
+  const mapViewBox =
+    zoom === 1
+      ? WORLD_VIEWBOX
+      : `${pan.x} ${pan.y} ${worldW / zoom} ${worldH / zoom}`;
+  const mapPoint = useCallback(
+    (el: SVGSVGElement, clientX: number, clientY: number) => {
+      const rect = el.getBoundingClientRect();
+      return {
+        x: pan.x + ((clientX - rect.left) / rect.width) * (worldW / zoom),
+        y: pan.y + ((clientY - rect.top) / rect.height) * (worldH / zoom),
+      };
+    },
+    [pan, zoom, worldW, worldH],
+  );
+  const onMapTouchStart = (e: React.TouchEvent<SVGSVGElement>) => {
+    const el = e.currentTarget;
+    if (e.touches.length === 2) {
+      const [a, b] = [e.touches[0], e.touches[1]];
+      const dist = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+      const mid = mapPoint(el, (a.clientX + b.clientX) / 2, (a.clientY + b.clientY) / 2);
+      mapTouch.current = {
+        mode: "pinch",
+        startDist: dist,
+        startZoom: zoom,
+        anchorX: mid.x,
+        anchorY: mid.y,
+        startPanX: pan.x,
+        startPanY: pan.y,
+        lastX: (a.clientX + b.clientX) / 2,
+        lastY: (a.clientY + b.clientY) / 2,
+      };
+    } else if (e.touches.length === 1 && zoom > 1) {
+      mapTouch.current = {
+        mode: "pan",
+        startDist: 0,
+        startZoom: zoom,
+        anchorX: 0,
+        anchorY: 0,
+        startPanX: pan.x,
+        startPanY: pan.y,
+        lastX: e.touches[0].clientX,
+        lastY: e.touches[0].clientY,
+      };
+    }
+  };
+  const onMapTouchMove = (e: React.TouchEvent<SVGSVGElement>) => {
+    const t = mapTouch.current;
+    if (!t) return;
+    const el = e.currentTarget;
+    const rect = el.getBoundingClientRect();
+    if (t.mode === "pinch" && e.touches.length === 2) {
+      const [a, b] = [e.touches[0], e.touches[1]];
+      const dist = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+      if (t.startDist <= 0) return;
+      const nz = Math.min(4, Math.max(1, t.startZoom * (dist / t.startDist)));
+      const fracX = (t.anchorX - t.startPanX) / (worldW / t.startZoom);
+      const fracY = (t.anchorY - t.startPanY) / (worldH / t.startZoom);
+      const next = clampView(nz, t.anchorX - fracX * (worldW / nz), t.anchorY - fracY * (worldH / nz));
+      setZoom(next.zoom);
+      setPan(next.pan);
+    } else if (t.mode === "pan" && e.touches.length === 1) {
+      const dx = ((e.touches[0].clientX - t.lastX) / rect.width) * (worldW / zoom);
+      const dy = ((e.touches[0].clientY - t.lastY) / rect.height) * (worldH / zoom);
+      const next = clampView(zoom, pan.x - dx, pan.y - dy);
+      setPan(next.pan);
+      t.lastX = e.touches[0].clientX;
+      t.lastY = e.touches[0].clientY;
+    }
+  };
+  const onMapTouchEnd = () => {
+    mapTouch.current = null;
+  };
+  const onMapDoubleClick = (e: React.MouseEvent<SVGSVGElement>) => {
+    if (zoom > 1) {
+      zoomReset();
+      return;
+    }
+    const p = mapPoint(e.currentTarget, e.clientX, e.clientY);
+    const nz = 2.2;
+    const next = clampView(nz, p.x - worldW / nz / 2, p.y - worldH / nz / 2);
+    setZoom(next.zoom);
+    setPan(next.pan);
+  };
+
   const load = useCallback(async () => {
     try {
       const res = await fetch("/api/heartbeat", { cache: "no-store" });
@@ -2969,11 +3114,17 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
           </div>
         ) : null}
         <figure role="img" aria-label={figureLabel + prayerAria} className="-mx-4 mt-6 sm:mx-auto sm:max-w-3xl">
+          <div className="relative">
           <svg
-            viewBox={world.viewBox}
+            viewBox={mapViewBox}
             aria-hidden="true"
             focusable="false"
-            className="w-full"
+            className="w-full touch-none select-none"
+            onTouchStart={onMapTouchStart}
+            onTouchMove={onMapTouchMove}
+            onTouchEnd={onMapTouchEnd}
+            onTouchCancel={onMapTouchEnd}
+            onDoubleClick={onMapDoubleClick}
           >
             <defs>
               <filter id="hb-soft" x="-40%" y="-40%" width="180%" height="180%">
@@ -3797,6 +3948,45 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 too, so the legend is reinforcement, not the sole
                 carrier. */}
           </svg>
+          {/* Zoom controls (Nov 6, 2026) — a quiet stack at the
+              disc's lower right, in the day-stepping row's own
+              styling. The reset appears only while zoomed. The
+              buttons never cover the legend: they ride on the
+              disc itself, where the sea is empty. */}
+          <div className="absolute bottom-2 right-2 flex flex-col gap-1.5">
+            <button
+              type="button"
+              onClick={() => zoomStep(1.6)}
+              disabled={zoom >= 4}
+              aria-label="Zoom in on the map"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-gold-500/30 bg-vineyard-950/80 text-lg font-semibold text-cream-100 backdrop-blur-sm transition-colors hover:border-gold-400/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              +
+            </button>
+            <button
+              type="button"
+              onClick={() => zoomStep(1 / 1.6)}
+              disabled={zoom <= 1}
+              aria-label="Zoom out on the map"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-gold-500/30 bg-vineyard-950/80 text-lg font-semibold text-cream-100 backdrop-blur-sm transition-colors hover:border-gold-400/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              −
+            </button>
+            {zoom > 1 && (
+              <button
+                type="button"
+                onClick={zoomReset}
+                aria-label="Reset the map to the whole view"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-cream-100/20 bg-vineyard-950/80 text-xs font-semibold text-sage-200 backdrop-blur-sm transition-colors hover:border-gold-400/60 hover:text-cream-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+              >
+                All
+              </button>
+            )}
+          </div>
+          <p aria-hidden="true" className="pointer-events-none absolute bottom-2 left-2 text-[11px] text-sage-300/70">
+            Pinch or use + / − to look closer
+          </p>
+          </div>
           <figcaption className="mt-2 text-center text-sm text-sage-300">
             {gathering ? (
               "Gathering today's count — the lights kindle as the count comes in."
