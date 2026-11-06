@@ -1409,7 +1409,25 @@ function PrayerLightMark({
  *  It breathes on the lights' .hb-glow (steady under
  *  reduced motion, like them). Drawn last in the disc's
  *  group, over the ordinary light the day also earned —
- *  the day after, only that ordinary light remains. */
+ *  the day after, only that ordinary light remains.
+ *
+ *  THE RAISED SUN (Nov 5, 2026 — Jason's design, the
+ *  night the Philippines also earned its first BLUE
+ *  WATCH TRACE and the burst, centered on the country,
+ *  buried the blue completely: Jason could not see it,
+ *  and neither could the kids who love the mark): the
+ *  whole burst now rises straight up off the country by
+ *  SUN_LIFT units into the open sea above, and a thin
+ *  gold line — the pin — runs from the sun's underside
+ *  down INTO the country's own light, ending in a small
+ *  dot on the ground it celebrates. The country itself
+ *  keeps only its traced shape in low gold beneath, so
+ *  the blue trace inside its border reads clear: sun
+ *  above, line down, blue within — both honors visible
+ *  at once, and the line leaves no doubt which place
+ *  the sun belongs to. The pin is drawn FIRST, under
+ *  the burst, so the sun sits on its point like a
+ *  balloon on a string. */
 function PrayerAnsweredMark({
   d,
   cx,
@@ -1421,22 +1439,45 @@ function PrayerAnsweredMark({
   cy: number;
   label: string;
 }) {
+  // THE RAISED SUN (Nov 5, 2026): the burst's center
+  // rides SUN_LIFT units above the country's own center;
+  // the country's traced shape stays at home in low gold.
+  const SUN_LIFT = 88;
+  const sy = cy - SUN_LIFT;
   const rays = Array.from({ length: 12 }, (_, k) => {
     const a = (Math.PI / 6) * k;
     return {
       x1: cx + 41 * Math.cos(a),
-      y1: cy + 41 * Math.sin(a),
+      y1: sy + 41 * Math.sin(a),
       x2: cx + 56 * Math.cos(a),
-      y2: cy + 56 * Math.sin(a),
+      y2: sy + 56 * Math.sin(a),
     };
   });
   return (
     <g className="hb-glow">
       <title>{label}</title>
-      <path d={d} fill="#ffdf8a" fillRule="evenodd" fillOpacity="0.45" />
+      {/* The pin: a thin gold line from the sun's
+          underside down into the country's own light,
+          ending in a small dot on the ground it
+          celebrates — drawn first, under the burst. */}
+      <line
+        x1={cx}
+        y1={sy + 34}
+        x2={cx}
+        y2={cy}
+        stroke="#ffe9a8"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeOpacity="0.85"
+      />
+      <circle cx={cx} cy={cy} r="3.5" fill="#ffe9a8" opacity="0.95" />
+      {/* The country's own traced shape, in low gold at
+          home — the burst no longer fills it, so the
+          blue watch trace inside its border reads clear. */}
+      <path d={d} fill="#ffdf8a" fillRule="evenodd" fillOpacity="0.18" />
       <circle
         cx={cx}
-        cy={cy}
+        cy={sy}
         r="60"
         fill="#ffdf8a"
         opacity="0.32"
@@ -1457,7 +1498,7 @@ function PrayerAnsweredMark({
       ))}
       <circle
         cx={cx}
-        cy={cy}
+        cy={sy}
         r="36"
         fill="none"
         stroke="#fff3c4"
@@ -1466,15 +1507,15 @@ function PrayerAnsweredMark({
       />
       <circle
         cx={cx}
-        cy={cy}
+        cy={sy}
         r="36"
         fill="none"
         stroke="#fff3c4"
         strokeWidth="3"
         strokeOpacity="0.95"
       />
-      <circle cx={cx} cy={cy} r="11" fill="#fff8dc" opacity="0.9" />
-      <circle cx={cx} cy={cy} r="5.5" fill="#ffffff" opacity="0.95" />
+      <circle cx={cx} cy={sy} r="11" fill="#fff8dc" opacity="0.9" />
+      <circle cx={cx} cy={sy} r="5.5" fill="#ffffff" opacity="0.95" />
     </g>
   );
 }
