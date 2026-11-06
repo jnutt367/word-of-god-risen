@@ -507,15 +507,22 @@ function rotateAboutPanel(
     cy: US_PANEL_CY + dx * s + dy * c,
   };
 }
-/** The state heart the PANEL wears (its seat under the panel
- *  rotation), expressed back in disc coordinates so the disc
- *  can wear the very same heart. */
+/** The seat the PANEL gives this state: the vendored center
+ *  ridden through the panel rotation alone. The disc wears
+ *  THIS seat for its US states (Nov 5, 2026, late — Jason,
+ *  twice: "make the bottom exactly like the top"), so the
+ *  bottom map's America matches the top map's America: same
+ *  west-to-east arrangement, same relative order, same lean
+ *  of the marks. Measured before shipping this time: the
+ *  seats differ from the raw vendored centers by 14–99 units
+ *  (Washington 99, North Dakota 50, Mississippi 48, New
+ *  Jersey 64, Massachusetts 66) — a real move, verified in
+ *  numbers, not a round trip. */
 function discHeartFromPanelSeat(geo: WorldCountry): {
   cx: number;
   cy: number;
 } {
-  const panelHeart = rotateAboutPanel(geo.cx, geo.cy, US_PANEL_ROT_RAD);
-  return rotateAboutPanel(panelHeart.cx, panelHeart.cy, -US_PANEL_ROT_RAD);
+  return rotateAboutPanel(geo.cx, geo.cy, US_PANEL_ROT_RAD);
 }
 
 interface WorldCentroid {
