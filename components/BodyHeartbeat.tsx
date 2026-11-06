@@ -1736,7 +1736,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const mapTouch = useRef<{
-    mode: "pinch" | "pan";
+    mode: "pending" | "pinch" | "pan";
     startDist: number;
     startZoom: number;
     anchorX: number;
@@ -1745,7 +1745,12 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
     startPanY: number;
     lastX: number;
     lastY: number;
+    startX: number;
+    startY: number;
   } | null>(null);
+  // True while a one-finger touch drags the zoomed map; drives
+  // touch-action (Nov 6, 2026 scroll fix — see the svg below).
+  const [mapDragging, setMapDragging] = useState(false);
   const clampView = useCallback(
     (z: number, px: number, py: number) => {
       const zz = Math.min(4, Math.max(1, z));
@@ -1810,10 +1815,16 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
         startPanY: pan.y,
         lastX: (a.clientX + b.clientX) / 2,
         lastY: (a.clientY + b.clientY) / 2,
+        startX: (a.clientX + b.clientX) / 2,
+        startY: (a.clientY + b.clientY) / 2,
       };
+      setMapDragging(true);
     } else if (e.touches.length === 1 && zoom > 1) {
+      // One finger on a zoomed map starts as a CANDIDATE pan: which
+      // way the swipe runs decides whether it pans the map or
+      // scrolls the page (Nov 6, 2026 — see onMapTouchMove).
       mapTouch.current = {
-        mode: "pan",
+        mode: "pending",
         startDist: 0,
         startZoom: zoom,
         anchorX: 0,
@@ -1822,6 +1833,8 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
         startPanY: pan.y,
         lastX: e.touches[0].clientX,
         lastY: e.touches[0].clientY,
+        startX: e.touches[0].clientX,
+        startY: e.touches[0].clientY,
       };
     }
   };
@@ -1840,6 +1853,29 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
       const next = clampView(nz, t.anchorX - fracX * (worldW / nz), t.anchorY - fracY * (worldH / nz));
       setZoom(next.zoom);
       setPan(next.pan);
+    } else if (t.mode === "pending" && e.touches.length === 1) {
+      // A one-finger swipe on a zoomed map: mostly-HORIZONTAL
+      // movement pans the map; a mostly-VERTICAL swipe is the
+      // reader scrolling the page, so the gesture is released and
+      // the page scrolls (Nov 6, 2026 — Jason: scrolling "sticks
+      // right around the area that the zoom ins are at." The
+      // blanket touch-action: none from the first zoom build held
+      // every swipe over the map hostage; now the page keeps its
+      // scroll and only sideways drags move the map. The browser
+      // commits to one reading at touch-start, so a released
+      // vertical swipe scrolls from the NEXT touch — this read
+      // only ends the fight, which is what "clunky" felt like.)
+      const dx = e.touches[0].clientX - t.startX;
+      const dy = e.touches[0].clientY - t.startY;
+      if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
+      if (Math.abs(dx) > Math.abs(dy)) {
+        t.mode = "pan";
+        setMapDragging(true);
+        t.lastX = e.touches[0].clientX;
+        t.lastY = e.touches[0].clientY;
+      } else {
+        mapTouch.current = null;
+      }
     } else if (t.mode === "pan" && e.touches.length === 1) {
       const dx = ((e.touches[0].clientX - t.lastX) / rect.width) * (worldW / zoom);
       const dy = ((e.touches[0].clientY - t.lastY) / rect.height) * (worldH / zoom);
@@ -1851,6 +1887,7 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
   };
   const onMapTouchEnd = () => {
     mapTouch.current = null;
+    setMapDragging(false);
   };
   const onMapDoubleClick = (e: React.MouseEvent<SVGSVGElement>) => {
     if (zoom > 1) {
@@ -3119,7 +3156,17 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
             viewBox={mapViewBox}
             aria-hidden="true"
             focusable="false"
-            className="w-full touch-none select-none"
+            // Scroll fix (Nov 6, 2026): touch-action follows the
+            // gesture state — unzoomed or while a drag has
+            // committed, the map owns the touch (no page-zoom
+            // hijack); while zoomed and merely resting, only
+            // vertical panning is yielded so the page keeps its
+            // scroll over the map instead of sticking here.
+            className="w-full select-none"
+            style={{
+              touchAction:
+                zoom === 1 || mapDragging ? "none" : "pan-y",
+            }}
             onTouchStart={onMapTouchStart}
             onTouchMove={onMapTouchMove}
             onTouchEnd={onMapTouchEnd}
