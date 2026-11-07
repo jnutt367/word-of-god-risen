@@ -11,6 +11,11 @@ interface Props {
   bookTitle: string;
   chapterNum: number;
   verses: Verse[];
+  /** Reader's current Bible version id (ReaderView state). "ceb"
+   * selects the Cebuano audio manifest; anything else (including
+   * undefined) keeps the default English manifest exactly as before —
+   * KJV readers therefore keep English audio. */
+  version?: string;
   autoplay?: boolean;
   /** Reader pages: also show the floating Listen bar + Teddy helper. */
   floating?: boolean;
@@ -32,6 +37,13 @@ const VOICE_KEY = "wogr:tts-voice";
 const RATE_KEY = "wogr:tts-rate";
 const AMBIENT_KEY = "wogr:ambient";
 const MANIFEST_URL = "/audio-manifest.json";
+const CEB_MANIFEST_URL = "/audio-manifest-ceb.json";
+
+/** Which audio manifest serves a reader version: Cebuano readers get
+ * Cebuano Teddy recordings; every other version uses the default. */
+function manifestUrlFor(version?: string): string {
+  return version === "ceb" ? CEB_MANIFEST_URL : MANIFEST_URL;
+}
 /** Channel bed for all books (Jason 2026-10-18: the TruVINE video music bed, one bed across app + channel). */
 function ambientUrlFor(slug: string): string {
   return "/audio/ambient-channel.mp3";
@@ -39,15 +51,17 @@ function ambientUrlFor(slug: string): string {
 /** Channel bed sits well under narration without fighting it (house recipe). */
 const AMBIENT_VOL = 0.12;
 
-/** Fetched once, then reused for every chapter. */
-let manifestPromise: Promise<Record<string, string>> | null = null;
-function loadManifest(): Promise<Record<string, string>> {
-  if (!manifestPromise) {
-    manifestPromise = fetch(MANIFEST_URL, { cache: "no-store" })
+/** Fetched once per manifest file, then reused for every chapter. */
+const manifestPromises = new Map<string, Promise<Record<string, string>>>();
+function loadManifest(url: string = MANIFEST_URL): Promise<Record<string, string>> {
+  let p = manifestPromises.get(url);
+  if (!p) {
+    p = fetch(url, { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : {}))
       .catch(() => ({}));
+    manifestPromises.set(url, p);
   }
-  return manifestPromise;
+  return p;
 }
 
 const fmt = (s: number) => {
@@ -69,6 +83,7 @@ export default function ListenButton({
   bookTitle,
   chapterNum,
   verses,
+  version = "web",
   autoplay = false,
   floating = false,
   onEndedChange,
@@ -258,19 +273,21 @@ export default function ListenButton({
   }, [floating]);
 
   // Look up an MP3 for this chapter; reset playback when the chapter changes.
+  // Cebuano readers look in the Cebuano manifest; a missing key falls back
+  // to the device-TTS UI, which reads the (Cebuano) verses it was given.
   useEffect(() => {
     const key = `${bookSlug}:${chapterNum}`;
     let live = true;
     stopAll();
     setMp3Url(undefined);
-    loadManifest().then((m) => {
+    loadManifest(manifestUrlFor(version)).then((m) => {
       if (live) setMp3Url(m[key] ?? null);
     });
     return () => {
       live = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bookSlug, chapterNum, verses]);
+  }, [bookSlug, chapterNum, verses, version]);
 
   // Autoplay when ?autoplay=1 (e.g. from the homepage "Start listening" button).
   // Browsers may block this without prior interaction — if so, the button

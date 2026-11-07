@@ -245,6 +245,7 @@ export default function ReaderView({
               bookTitle={bookTitle}
               chapterNum={chapterNum}
               verses={verses}
+              version={version}
               autoplay={autoplay}
               floating
               onEndedChange={handleEndedChange}
