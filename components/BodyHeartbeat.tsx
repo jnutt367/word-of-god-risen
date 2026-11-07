@@ -1345,13 +1345,22 @@ function PrayingHandsGlyph({
   x,
   y,
   scale,
+  rotate,
 }: {
   x: number;
   y: number;
   scale: number;
+  /** Extra on-screen rotation in degrees (Nov 7, 2026 — the
+   *  closer-look panel seats its marks inside the panel's
+   *  rotated group, so a glyph there must counter-rotate to
+   *  stand right side up on the viewer's screen; see
+   *  PrayerHandsMarkPanel). */
+  rotate?: number;
 }) {
   return (
-    <g transform={`translate(${x} ${y}) scale(${scale})`}>
+    <g
+      transform={`translate(${x} ${y})${rotate ? ` rotate(${rotate})` : ""} scale(${scale})`}
+    >
       <path
         d="M -0.35 -7.4 C -1.5 -7.3 -2.6 -6.2 -3 -4.8 C -3.5 -3.2 -3.9 -1.2 -4 0.8 C -4.05 2.6 -3.6 4.4 -2.9 5.7 L -3.6 7.4 L -1.15 7.4 L -0.6 5.9 C -0.4 3.6 -0.35 1 -0.35 -1.6 C -0.35 -4 -0.35 -5.8 -0.35 -7.4 Z"
         fill="#fff6da"
@@ -1479,14 +1488,26 @@ function PrayerHandsMark({
   );
 }
 
-/** THE PRAYER HANDS, IN THE CLOSER LOOK (Nov 5, 2026) —
- *  the panel's own seat for the same sign: the panel is
- *  drawn in its rotated frame, so the glyph rides the
- *  panel's transform — a place's hands stand upright in
- *  the panel's world, tilted exactly as its states are.
- *  Same candle amber, same slow breathing, a step
- *  larger, as every panel mark is a step larger than
- *  the disc's. The soft blur is the panel's own filter
+/** THE PRAYER HANDS, IN THE CLOSER LOOK (Nov 5, 2026;
+ *  seat corrected Nov 7, 2026 at Jason's word — "change
+ *  the prayer hands on America to go right side up when
+ *  you look at them on the screen and make them a little
+ *  smaller so they kind of fit in the state"): the panel
+ *  is drawn in its rotated frame (US_PANEL_TRANSFORM,
+ *  rotate(263.24 342.6 477.2)), so a glyph seated raw
+ *  inside it stands SIDEWAYS on the viewer's screen.
+ *  The hands therefore counter-rotate by -263.24° about
+ *  their own heart — the position still comes from the
+ *  panel group, exactly once (see the double-rotation
+ *  note inside the mark); only the glyph's own direction
+ *  changes, so the hands stand right side up on screen,
+ *  fingertips pointing at the top of the panel like
+ *  every other pair of hands on the map. And smaller —
+ *  scale 0.8 → 0.6 — so a pair sits WITHIN its state
+ *  instead of spanning it. Before/after, computed: at
+ *  0.8 the glyph spans 6.5 × 11.8 map units; at 0.6 it
+ *  spans 4.9 × 8.9. Same candle amber, same slow
+ *  breathing. The soft blur is the panel's own filter
  *  (hb-soft-us). */
 function PrayerHandsMarkPanel({
   cx,
@@ -1497,17 +1518,22 @@ function PrayerHandsMarkPanel({
   cy: number;
   label: string;
 }) {
-  /* NO transform of its own (Nov 5, 2026, late — the double
-   * rotation bug): this mark is rendered INSIDE the panel's
-   * rotated group, which already seats every mark once. An
-   * earlier version wrapped the glyph in the panel transform
-   * a second time, so the panel's hands were rotated twice
-   * and landed in the wrong states — two pairs rotated clean
-   * out of the panel's frame, one pair pushed below Texas.
-   * Jason saw it on his phone ("not in the correct spots")
-   * before any check did. The group outside does the seating;
-   * this mark only draws, at the state's own heart, exactly
-   * like its sibling marks in the same group. */
+  /* NO positional transform of its own (Nov 5, 2026, late —
+   * the double rotation bug): this mark is rendered INSIDE
+   * the panel's rotated group, which already seats every
+   * mark once. An earlier version wrapped the glyph in the
+   * panel transform a second time, so the panel's hands were
+   * rotated twice and landed in the wrong states — two pairs
+   * rotated clean out of the panel's frame, one pair pushed
+   * below Texas. Jason saw it on his phone ("not in the
+   * correct spots") before any check did. The group outside
+   * does the seating; this mark only draws, at the state's
+   * own heart, exactly like its sibling marks in the same
+   * group. (Nov 7, 2026: the glyph DOES carry its own
+   * counter-rotation below — rotation about the glyph's own
+   * center moves nothing's seat; it only turns the hands
+   * upright on screen. Different thing from re-applying the
+   * panel transform, which moved the seat.) */
   return (
     <g className="hb-prayer">
       <title>{label}</title>
@@ -1519,7 +1545,7 @@ function PrayerHandsMarkPanel({
         opacity="0.28"
         filter="url(#hb-soft-us)"
       />
-      <PrayingHandsGlyph x={cx} y={cy} scale={0.8} />
+      <PrayingHandsGlyph x={cx} y={cy} scale={0.6} rotate={-263.24} />
     </g>
   );
 }
