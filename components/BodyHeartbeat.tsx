@@ -3156,16 +3156,21 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
             viewBox={mapViewBox}
             aria-hidden="true"
             focusable="false"
-            // Scroll fix (Nov 6, 2026): touch-action follows the
-            // gesture state — unzoomed or while a drag has
-            // committed, the map owns the touch (no page-zoom
-            // hijack); while zoomed and merely resting, only
-            // vertical panning is yielded so the page keeps its
-            // scroll over the map instead of sticking here.
+            // Scroll fix v2 (Nov 6, 2026, evening): the page ALWAYS
+            // keeps its vertical scroll over the map — pan-y in every
+            // state. v1 set touch-action: none at rest and while
+            // dragging; on Jason's phone a swipe starting on the map
+            // still stuck dead even unzoomed, because "none" tells
+            // the browser the map owns every touch from touch-start.
+            // What pan-y costs: a two-finger pinch that runs mostly
+            // vertical may scroll the page instead of zooming on
+            // some browsers — the + / - buttons and double-tap
+            // remain the sure zoom routes. A committed sideways pan
+            // still works: pan-y yields vertical scroll to the page
+            // and leaves horizontal drags to the page's own handlers.
             className="w-full select-none"
             style={{
-              touchAction:
-                zoom === 1 || mapDragging ? "none" : "pan-y",
+              touchAction: "pan-y",
             }}
             onTouchStart={onMapTouchStart}
             onTouchMove={onMapTouchMove}
