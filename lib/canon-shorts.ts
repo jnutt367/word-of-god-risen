@@ -27,6 +27,7 @@ export const CANON_SHORT_IDS: readonly string[] = [
   "fqsojvm1Axk", // Day 3: My Brother, My Sister, My Mother | Mark 3:33–35 · Global Bible Challenge — the Day 3 Scripture Short (Nov 3, 2026); first Short published with manual English + Filipino caption tracks
   "2v8VP221s8E", // Day 4: It Grows by Itself | Mark 4:26–29 · Global Bible Challenge — the Day 4 Scripture Short (Nov 4, 2026); English + Filipino caption tracks verified in Studio before public
   "sUAY9Z6fvOE", // Day 5: Tell Them What the Lord Has Done | Mark 5:19 · Global Bible Challenge — the Day 5 Scripture Short (Nov 5, 2026); English + Filipino caption tracks verified in Studio before public
+  "RqHiCNlbxeE", // Day 6: They All Ate and Were Filled | Mark 6:42 · Global Bible Challenge — the Day 6 Scripture Short (published Nov 8, 2026; made Nov 2 ahead of its Nov 6 day); English + Filipino caption tracks verified in Studio before public
   "-oRYl9jBWKg", // One Chapter Is Enough | Mark 1 — the welcome film's funnel (Oct 29, 2026)
   "MM4Re8olRzY", // One Chapter Is Enough — the Prayer Short (Taiwan) | from the film
   "Jo2qZIZoaxU", // The Whole City at the Door | Mark 1:33
