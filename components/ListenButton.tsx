@@ -35,6 +35,7 @@ type Status = "idle" | "playing" | "paused";
 
 const VOICE_KEY = "wogr:tts-voice";
 const RATE_KEY = "wogr:tts-rate";
+const VOLUME_KEY = "wogr:volume";
 const AMBIENT_KEY = "wogr:ambient";
 const MANIFEST_URL = "/audio-manifest.json";
 const CEB_MANIFEST_URL = "/audio-manifest-ceb.json";
@@ -93,6 +94,13 @@ export default function ListenButton({
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [voiceURI, setVoiceURI] = useState<string | null>(null);
   const [rate, setRate] = useState(1);
+  // Narration volume (0–1, Jason's ask Nov 9, 2026): one stored value
+  // drives the MP3 element, scales the ambient bed under it, and sets
+  // the device-voice utterance volume. The ref mirrors the state so
+  // the once-created audio elements and utterance builders always
+  // read the current value.
+  const [volume, setVolume] = useState(1);
+  const volumeRef = useRef(1);
   const [showSettings, setShowSettings] = useState(false);
   const [mp3Url, setMp3Url] = useState<string | null | undefined>(undefined);
   // Plain-words note when the sound can't start (Oct 19 kindness pass)
@@ -249,6 +257,11 @@ export default function ListenButton({
       setVoiceURI(localStorage.getItem(VOICE_KEY));
       const savedRate = parseFloat(localStorage.getItem(RATE_KEY) || "");
       if (savedRate >= 0.5 && savedRate <= 2) setRate(savedRate);
+      const savedVol = parseFloat(localStorage.getItem(VOLUME_KEY) || "");
+      if (savedVol >= 0 && savedVol <= 1) {
+        setVolume(savedVol);
+        volumeRef.current = savedVol;
+      }
       const amb = localStorage.getItem(AMBIENT_KEY);
       if (amb === "off") setAmbientOn(false);
     } catch {
@@ -326,6 +339,25 @@ export default function ListenButton({
     };
   }, [showSettings]);
 
+  // Volume changes land live: the narration element takes the new
+  // value mid-playback, and the ambient bed scales with it so the
+  // music never stays loud while Teddy drops.
+  useEffect(() => {
+    volumeRef.current = volume;
+    if (audioRef.current) audioRef.current.volume = volume;
+    if (ambientRef.current) ambientRef.current.volume = AMBIENT_VOL * volume;
+  }, [volume]);
+
+  const chooseVolume = (v: number) => {
+    const clamped = Math.min(1, Math.max(0, v));
+    setVolume(clamped);
+    try {
+      localStorage.setItem(VOLUME_KEY, String(clamped));
+    } catch {
+      /* ignore */
+    }
+  };
+
   /* ---------------- Teddy helper (floating mode) ----------------
    * The first time a reader opens a chapter, Grandpa Teddy himself
    * points out the Listen button (the mount effect below checks the
@@ -380,7 +412,7 @@ export default function ListenButton({
     if (!m) {
       m = new Audio(ambientUrlFor(bookSlug));
       m.loop = true;
-      m.volume = AMBIENT_VOL;
+      m.volume = AMBIENT_VOL * volumeRef.current;
       m.preload = "auto";
       ambientRef.current = m;
     }
@@ -436,6 +468,7 @@ export default function ListenButton({
     if (!a) {
       a = new Audio();
       a.preload = "metadata";
+      a.volume = volumeRef.current;
       a.onloadedmetadata = () => setDuration(a!.duration || 0);
       a.ontimeupdate = () => {
         setProgress(a!.currentTime || 0);
@@ -710,6 +743,7 @@ export default function ListenButton({
       // offer only unnamed voices the name-hints above can't sort, so
       // the narration is also deepened toward a man's register.
       u.pitch = 0.8;
+      u.volume = volumeRef.current;
       u.onstart = () => {
         const st = ttsStateRef.current;
         if (st && st.session === mySession) st.sawActivity = true;
@@ -773,7 +807,7 @@ export default function ListenButton({
 
   return (
     <>
-    <span ref={panelRef} className="relative inline-flex items-center gap-1.5">
+    <span ref={panelRef} className="relative inline-flex flex-wrap items-center gap-1.5">
       <button
         type="button"
         onClick={toggle}
@@ -823,6 +857,22 @@ export default function ListenButton({
             className="h-1 w-28 cursor-pointer appearance-none rounded-full bg-[var(--reader-line)] accent-[var(--reader-verse-num)] sm:w-40"
           />
           <span className="tabular-nums">{fmt(duration)}</span>
+        </span>
+      )}
+      {useMp3 && status !== "idle" && duration > 0 && (
+        <span className="flex basis-full items-center gap-2 text-xs text-[var(--reader-muted)]">
+          <span aria-hidden="true">🔈</span>
+          <input
+            type="range"
+            min={0}
+            max={1}
+            step={0.05}
+            value={volume}
+            onChange={(e) => chooseVolume(parseFloat(e.target.value))}
+            aria-label="Volume"
+            className="h-1 w-28 cursor-pointer appearance-none rounded-full bg-[var(--reader-line)] accent-[var(--reader-verse-num)] sm:w-40"
+          />
+          <span aria-hidden="true">🔊</span>
         </span>
       )}
       {!useMp3 && (
@@ -894,6 +944,23 @@ export default function ListenButton({
             >
               {notice}
             </p>
+          )}
+          {status !== "idle" && (
+            <div className="flex w-full items-center gap-2.5 rounded-full border border-[var(--reader-line)] bg-[var(--reader-card)] px-4 py-2.5 shadow-lg">
+              <span aria-hidden="true" className="text-base leading-none">🔈</span>
+              <span className="text-sm font-medium text-[var(--reader-muted)]">Volume</span>
+              <input
+                type="range"
+                min={0}
+                max={1}
+                step={0.05}
+                value={volume}
+                onChange={(e) => chooseVolume(parseFloat(e.target.value))}
+                aria-label="Volume"
+                className="h-1 min-w-0 flex-1 cursor-pointer appearance-none rounded-full bg-[var(--reader-line)] accent-[var(--reader-verse-num)]"
+              />
+              <span aria-hidden="true" className="text-base leading-none">🔊</span>
+            </div>
           )}
           <div className="flex w-full items-center gap-2">
             <button
