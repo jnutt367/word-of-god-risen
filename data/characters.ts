@@ -3038,6 +3038,148 @@ export const CHARACTERS: Character[] = [
     }
   },
   {
+    "slug": "leper",
+    "name": "The Leper",
+    "subtitle": "The Man Jesus Touched",
+    "image": "/images/characters/leper.jpg",
+    "caption": "The outcast no one would touch, restored by the touch no one else would give — his portrait crowned Nov 9, 2026.",
+    "group": "faces",
+    "unnamed": true,
+    "facts": [
+      {
+        "text": "**Matthew 8:1-4** — down from the mountain, in the press of the multitude, the leper comes worshiping: \"**Lord, if thou wilt, thou canst make me clean**.\" Jesus puts forth His hand and touches him — \"**I will; be thou clean**\" — \"and immediately his leprosy was cleansed.\" Then the charge: tell no man, but show himself to the priest and offer \"the gift that Moses commanded, for a testimony unto them.\"",
+        "ref": ""
+      },
+      {
+        "text": "**Mark 1:40-42** — the fullest telling: he comes \"beseeching him, and kneeling down to him,\" and Mark alone names what moved in Jesus before the miracle — \"**moved with compassion**, put forth his hand, and touched him.\" The cleansing is instant: \"as soon as he had spoken, immediately the leprosy departed from him, and he was cleansed.\"",
+        "ref": ""
+      },
+      {
+        "text": "**Luke 5:12-14** — \"a man **full of leprosy**: who seeing Jesus fell on his face, and besought him\" — the worst case Luke the physician can describe, answered the same way: the touch, \"I will: be thou clean,\" and the leprosy gone \"immediately.\"",
+        "ref": ""
+      },
+      {
+        "text": "**Mark 1:45** — the ending: sent out with a strict charge of silence, \"he went out, and began to **publish it much, and to blaze abroad the matter**,\" so that Jesus withdrew to desert places \"and they came to him from every quarter.\" The exchange of places, in one verse.",
+        "ref": ""
+      }
+    ],
+    "personality": [
+      "**Certain of the power, surrendered on the will** — there is no doubt anywhere in his sentence: \"thou **canst** make me clean.\" His only question is whether the Lord is willing — faith in the ability, submission on the outcome, in eight words",
+      "**A worshiper before he is a patient** — Matthew's order matters: the leper \"worshipped him, saying...\" (Matt 8:2); Luke has him flat on his face (Luke 5:12). He comes to Jesus as Lord first and as healer second, before he has received anything",
+      "**Bold past every barrier of his world** — reaching Jesus meant passing through a multitude that would have shrunk from him and entering space the Law fenced off from him. Luke says he was in \"a certain city\" (Luke 5:12) — a leper inside a city at all was already a man who had stopped waiting to be found"
+    ],
+    "dossier": [
+      {
+        "label": "Names",
+        "items": [
+          "Scripture **never names him** — he stands with the house's unnamed, known only by the disease that had taken his name, his home, and his place among men",
+          "\"**A leper**\" (Matt 8:2) — \"there came a leper and worshipped him\": the whole of his introduction in Matthew, a condition standing where a name should be",
+          "\"**A man full of leprosy**\" (Luke 5:12) — Luke the physician's fuller diagnosis: not a touch of the disease but a man filled with it, at its last stage",
+          "His own recorded words are his whole biography: \"**Lord, if thou wilt, thou canst make me clean**\" (Matt 8:2)"
+        ]
+      },
+      {
+        "label": "Where He Stands",
+        "items": [
+          "Outside the camp — the Law's sentence on the leper was separation itself: \"his clothes shall be rent, and his head bare, and he shall put a covering upon his upper lip, and shall cry, Unclean, unclean... he shall dwell alone; without the camp shall his habitation be\" (Lev 13:45-46). No family table, no synagogue, no touch — a living exile",
+          "At the foot of the mountain, in the middle of the multitude — Matthew places his coming immediately after the Sermon on the Mount, when \"great multitudes followed him\" (Matt 8:1): a man forbidden to be near anyone stands close enough to Jesus to speak, and worships",
+          "As the first individual healing Matthew records in his Gospel — before the centurion's servant, before Peter's household, the ministry of the hands begins with the man no hand had touched in years"
+        ]
+      }
+    ],
+    "chapters": [
+      1
+    ],
+    "readings": [],
+    "roles": [
+      "Witness / Friend"
+    ],
+    "era": "The Life of Jesus",
+    "books": [
+      "matthew",
+      "mark",
+      "luke"
+    ],
+    "firstBook": "matthew",
+    "firstAppearance": "Matthew 8",
+    "relationships": [],
+    "variants": [],
+    "status": {
+      "portrait": "crowned",
+      "sheet": "written",
+      "page": "live"
+    }
+  },
+  {
+    "slug": "magi",
+    "name": "The Magi",
+    "subtitle": "Wise Men from the East",
+    "image": "/images/characters/magi.jpg",
+    "caption": "The star-watchers from the east who crossed the world to worship a child — their portrait crowned Nov 9, 2026.",
+    "group": "faces",
+    "unnamed": false,
+    "facts": [
+      {
+        "text": "**Matthew 2:1-2** — the arrival and the question: \"there came wise men from the east to Jerusalem, Saying, **Where is he that is born King of the Jews? for we have seen his star in the east, and are come to worship him**.\" A star was enough to move them across the world; worship was the purpose of the journey from its first step.",
+        "ref": ""
+      },
+      {
+        "text": "**Matthew 2:3-8** — before Herod: the king who should have rejoiced is \"troubled, and all Jerusalem with him,\" and the answer to where the Christ is born comes from the scrolls — Bethlehem. Herod sends the seekers on with a false promise of worship of his own, and the men who read the stars walk out under orders from a liar.",
+        "ref": ""
+      },
+      {
+        "text": "**Matthew 2:9-10** — the star again: it \"went before them, till it came and stood over where the young child was\" — and the scholars' response is not analysis but joy: \"When they saw the star, **they rejoiced with exceeding great joy**.\"",
+        "ref": ""
+      },
+      {
+        "text": "**Matthew 2:11** — the worship and the gifts: \"when they were come into the house, they saw the young child with Mary his mother, and **fell down, and worshipped him**: and when they had opened their treasures, they presented unto him gifts; **gold, and frankincense, and myrrh**.\" The treasures of the east laid before a child in a village house.",
+        "ref": ""
+      }
+    ],
+    "personality": [
+      "**Seekers who acted on a sign** — they did not merely study the star; they rose, traveled, and asked. Whatever they had seen in the heavens, they treated it as worth a journey of months.",
+      "**Worshippers first** — before gifts, before words, their recorded act at the house is falling down. The learning of the east is shown on its face before the child.",
+      "**Obedient to God's warning over a king's command** — Herod had asked for a report; a dream countermanded it, and the wise men obeyed the dream. Their silence toward Herod is one of the quiet rescues of the chapter."
+    ],
+    "dossier": [
+      {
+        "label": "Names",
+        "items": [
+          "**Wise men** — \"behold, there came **wise men from the east** to Jerusalem\" (Matt 2:1). The Greek word is *magoi* — the scholar-priests and star-watchers of the eastern courts.",
+          "\"**From the east**\" — the east is the only homeland Scripture gives them. No country, no city, and no names are recorded.",
+          "Scripture **never numbers them and never names them**. (Tradition) Later tradition counted **three** — inferred from the three gifts — and named them **Melchior, Caspar, and Balthazar**; those names and that number belong to tradition, not to Matthew's account.",
+          "Scripture **never calls them kings**. They came seeking a King — \"Where is he that is born **King of the Jews**?\" (Matt 2:2) — but the crown in the story belongs to the child, not to them."
+        ]
+      },
+      {
+        "label": "Where They Stand",
+        "items": [
+          "At the very doorway of the Gospel — the first seekers from the nations to come looking for Jesus, arriving while He is still a young child in Bethlehem: Gentile star-watchers kneeling where Israel's king should have been welcomed.",
+          "As witnesses that the child was announced to heaven-watchers far outside Israel — a star was their Scripture, and they followed it further than the priests of Jerusalem followed their own scrolls.",
+          "Between two kings — questioned by Herod in Jerusalem, then sent to the true King in Bethlehem; they worship the one and, warned by God, quietly refuse the other: \"they departed into their own country another way\" (Matt 2:12)."
+        ]
+      }
+    ],
+    "chapters": [],
+    "readings": [],
+    "roles": [
+      "Witness / Friend"
+    ],
+    "era": "The Life of Jesus",
+    "books": [
+      "matthew"
+    ],
+    "firstBook": "matthew",
+    "firstAppearance": "Matthew 2",
+    "relationships": [],
+    "variants": [],
+    "status": {
+      "portrait": "crowned",
+      "sheet": "written",
+      "page": "live"
+    }
+  },
+  {
     "slug": "withered-hand",
     "name": "The Man with the Withered Hand",
     "subtitle": "Healed on the Sabbath",

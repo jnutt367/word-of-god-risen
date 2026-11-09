@@ -71,7 +71,7 @@ const READINGS = {
 const UNNAMED = new Set([
   "gerasene-demoniac", "woman-with-issue-of-blood", "rich-young-ruler", "poor-widow",
   "young-man-fled", "paralytic-roof", "boy-evil-spirit", "deaf-mute-decapolis",
-  "withered-hand", "scribe-greatest-commandment", "salome",
+  "withered-hand", "scribe-greatest-commandment", "salome", "leper",
 ]);
 
 const SUBTITLES = {
@@ -119,6 +119,8 @@ const SUBTITLES = {
   moses: "The Lawgiver \u00b7 Face to Face with God",
   elijah: "The Tishbite \u00b7 Prophet of Fire",
   joseph: "The Carpenter \u00b7 Husband of Mary",
+  magi: "Wise Men from the East",
+  leper: "The Man Jesus Touched",
   paul: "Saul of Tarsus \u00b7 Apostle to the Gentiles",
   tertius: "The Scribe of Romans \u00b7 He Held the Pen",
   timothy: "Paul\u2019s True Child in the Faith",
@@ -173,6 +175,16 @@ const BOOKS_BY_SLUG = {
   // nativity and in John (1:45; 6:42). Mark never names him, so he is
   // not filed under Mark.
   joseph: ["matthew", "luke", "john"],
+  // The Magi: filed under Matthew (crowned Nov 9, 2026) — the wise men
+  // appear in Matthew 2 and in no other Gospel; Scripture gives them
+  // no number, names, ages, or crowns (the three of the portrait are
+  // the classic traditional depiction, labeled as such in the sheet).
+  magi: ["matthew"],
+  // The Leper: filed under Matthew (crowned Nov 9, 2026) — one unnamed
+  // man carried in three parallel Synoptic accounts (Matt 8:1-4;
+  // Mark 1:40-45; Luke 5:12-16), so one record across all three, per
+  // the house pattern for parallel accounts.
+  leper: ["matthew", "mark", "luke"],
   "simon-of-cyrene": ["matthew", "mark", "luke"],
   // Rufus is named again in Romans 16:13; the crowned layout preview
   // (Nov 9, 2026) files him under Mark with a Romans cast of five, so
@@ -239,7 +251,7 @@ for (const s of [
   "syrophoenician-woman", "woman-with-issue-of-blood", "withered-hand",
   "rich-young-ruler", "poor-widow", "scribe-greatest-commandment",
   "young-man-fled", "centurion-at-cross", "timothy", "apollos",
-  "priscilla", "aquila",
+  "priscilla", "aquila", "magi", "leper",
 ]) ROLES[s] = WITNESS;
 
 const ERAS = {
@@ -264,6 +276,8 @@ const FIRST_APPEARANCE = {
   moses: "Exodus 2",
   elijah: "1 Kings 17",
   joseph: "Matthew 1",
+  magi: "Matthew 2",
+  leper: "Matthew 8",
 };
 
 const RELATIONSHIPS = {
@@ -332,7 +346,7 @@ const VARIANTS = {
 // Sheet sections rendered as dossier rows on the person page, in order.
 const DOSSIER_SECTIONS = [
   "Names", "Hometown", "Occupation", "Family", "His Turning",
-  "Where He Stands", "Tradition",
+  "Where He Stands", "Where They Stand", "Tradition",
 ];
 
 // Display overrides that must survive regeneration. The Daughter of Herodias
