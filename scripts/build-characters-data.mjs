@@ -368,7 +368,22 @@ function markChapters(facts) {
   return [...set].sort((a, b) => a - b);
 }
 
+// Versioned portrait addresses (Jason, Nov 9, 2026): when a crowned portrait
+// is REPLACED at its long-standing URL, phones that cached the old file keep
+// showing it (Gabriel healed on re-fetch; Michael did not). A versioned
+// filename is a fresh address no cache can confuse with the old one. The
+// un-versioned file stays in public/ untouched for any deep links.
+const IMAGE_OVERRIDES = {
+  michael: "michael-v2.jpg",
+  gabriel: "gabriel-v2.jpg",
+};
+
 function existingPublicImage(slug) {
+  // A versioned override wins when its file is present.
+  const overrideFile = IMAGE_OVERRIDES[slug];
+  if (overrideFile && fs.existsSync(path.join(IMG_OUT, overrideFile))) {
+    return `/images/characters/${overrideFile}`;
+  }
   // The crowned portrait already in public/ is canon — use it as-is.
   for (const ext of [".webp", ".jpg", ".png", ".jpeg"]) {
     if (fs.existsSync(path.join(IMG_OUT, `${slug}${ext}`))) {
