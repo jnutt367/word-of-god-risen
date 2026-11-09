@@ -118,6 +118,7 @@ const SUBTITLES = {
   michael: "The Archangel \u00b7 Prince and Guardian",
   moses: "The Lawgiver \u00b7 Face to Face with God",
   elijah: "The Tishbite \u00b7 Prophet of Fire",
+  joseph: "The Carpenter \u00b7 Husband of Mary",
   paul: "Saul of Tarsus \u00b7 Apostle to the Gentiles",
   tertius: "The Scribe of Romans \u00b7 He Held the Pen",
   timothy: "Paul\u2019s True Child in the Faith",
@@ -167,6 +168,11 @@ const BOOKS_BY_SLUG = {
   // in person at the Transfiguration in the three Synoptics and is
   // named as a person in John (1:21, by his Greek name Elias).
   elijah: [...GOSPELS],
+  // Joseph: filed under Matthew (crowned Nov 9, 2026) — he carries the
+  // nativity narrative there and is named as a person in Luke's
+  // nativity and in John (1:45; 6:42). Mark never names him, so he is
+  // not filed under Mark.
+  joseph: ["matthew", "luke", "john"],
   "simon-of-cyrene": ["matthew", "mark", "luke"],
   // Rufus is named again in Romans 16:13; the crowned layout preview
   // (Nov 9, 2026) files him under Mark with a Romans cast of five, so
@@ -213,6 +219,7 @@ const ROLES = {
   "john-the-baptist": ["Prophet"],
   moses: ["Prophet"],
   elijah: ["Prophet"],
+  joseph: ["Family of Jesus"],
   "mary-mother-of-jesus": ["Family of Jesus"],
   "pontius-pilate": ["King / Ruler", "Opponent"],
   "herod-antipas": ["King / Ruler", "Opponent"],
@@ -256,6 +263,7 @@ const FIRST_APPEARANCE = {
   michael: "Daniel 10",
   moses: "Exodus 2",
   elijah: "1 Kings 17",
+  joseph: "Matthew 1",
 };
 
 const RELATIONSHIPS = {

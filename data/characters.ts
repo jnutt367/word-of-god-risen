@@ -2205,6 +2205,77 @@ export const CHARACTERS: Character[] = [
     }
   },
   {
+    "slug": "joseph",
+    "name": "Joseph",
+    "subtitle": "The Carpenter · Husband of Mary",
+    "image": "/images/characters/joseph.jpg",
+    "caption": "The carpenter of Nazareth, whose obedience needed no words — his portrait crowned Nov 9, 2026.",
+    "group": "faces",
+    "unnamed": false,
+    "facts": [
+      {
+        "text": "**Matthew 1:18-25** — the crisis and the dream: Joseph, \"being a just man, and not willing to make her a publick example, was minded to put her away privily,\" until the angel speaks — \"**fear not to take unto thee Mary thy wife: for that which is conceived in her is of the Holy Ghost**.\" Joseph's whole answer is action: he \"did as the angel of the Lord had bidden him, and took unto him his wife.\"",
+        "ref": ""
+      },
+      {
+        "text": "**Matthew 2:13-15** — the flight to Egypt: the angel comes again in a dream — \"Arise, and take the young child and his mother, and flee into Egypt... for Herod will seek the young child to destroy him\" — and that same night Joseph rises and goes. The protector moves faster than the king.",
+        "ref": ""
+      },
+      {
+        "text": "**Matthew 2:19-23** — the return: Herod dead, a third dream sends the family home, and a fourth warning turns them aside to Galilee — \"he came and dwelt in a city called Nazareth: that it might be fulfilled which was spoken by the prophets, **He shall be called a Nazarene**.\"",
+        "ref": ""
+      },
+      {
+        "text": "**Luke 2:4-16** — the census journey: Joseph goes up to Bethlehem \"because he was of the house and lineage of David,\" and when the shepherds come with haste, \"they found Mary, and Joseph, and the babe lying in a manger.\" David's heir stands in a stable, exactly where prophecy needed him.",
+        "ref": ""
+      }
+    ],
+    "personality": [
+      "**Just, and merciful inside his justice** — his first recorded instinct, before any angel speaks, is to protect Mary's name at cost to his own plans: \"a just man, and not willing to make her a publick example\" (Matt 1:19).",
+      "**The man God guided by dreams** — four times in Matthew God's word comes to Joseph in sleep (Matt 1:20; 2:13; 2:19; 2:22), and four times the record is the same: Joseph rose and did it, once \"by night\" with a murderous king behind him. No argument, no delay, no questions recorded.",
+      "**Silent** — he is the only major figure of the nativity who never speaks a quoted word. Others in the story sing, prophesy, question, and announce; Joseph works, journeys, guards, and obeys. Scripture seems content to let his actions preach."
+    ],
+    "dossier": [
+      {
+        "label": "Names",
+        "items": [
+          "**Joseph** (Hebrew *Yosef*) — \"a man whose name was Joseph, of the house of David\" (Luke 1:27)",
+          "\"**Joseph the husband of Mary**, of whom was born Jesus, who is called Christ\" (Matt 1:16)",
+          "\"**Joseph, thou son of David**\" (Matt 1:20) — the angel's own address to him in the dream, tying the carpenter's house to the king's line",
+          "Scripture gives him **no recorded words** — not one sentence from his lips stands anywhere in the Bible. His obedience is recorded only in actions: \"Then Joseph being raised from sleep **did as the angel of the Lord had bidden him**\" (Matt 1:24)"
+        ]
+      },
+      {
+        "label": "Where He Stands",
+        "items": [
+          "At the hinge of the promise and its fulfillment — a son of David by lineage, a carpenter by trade, chosen to shelter the childhood of David's greater Son: \"thou shalt call his name JESUS: for he shall save his people from their sins\" (Matt 1:21)",
+          "As the legal father and protector of the child — he names Him (Matt 1:25), carries Him to Egypt ahead of Herod's sword, brings Him home, and settles Him in Nazareth (Matt 2)",
+          "Beside Mary in faithful, ordinary obedience — the census road to Bethlehem, the manger, the Temple presentation, the Passover journeys to Jerusalem (Luke 2) — a righteous man content to stand at the edge of the story he guards"
+        ]
+      }
+    ],
+    "chapters": [],
+    "readings": [],
+    "roles": [
+      "Family of Jesus"
+    ],
+    "era": "The Life of Jesus",
+    "books": [
+      "matthew",
+      "luke",
+      "john"
+    ],
+    "firstBook": "matthew",
+    "firstAppearance": "Matthew 1",
+    "relationships": [],
+    "variants": [],
+    "status": {
+      "portrait": "crowned",
+      "sheet": "written",
+      "page": "live"
+    }
+  },
+  {
     "slug": "joseph-of-arimathea",
     "name": "Joseph of Arimathea",
     "subtitle": "Council Member · The Bold Burial",
