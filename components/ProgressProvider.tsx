@@ -26,6 +26,15 @@ import {
   listenedOnPage,
   type MediaMap,
 } from "@/lib/media-progress";
+import {
+  highlightKey,
+  loadHighlights,
+  saveHighlights,
+  DEFAULT_HIGHLIGHT_COLOR,
+  type HighlightColorId,
+  type HighlightEntry,
+  type HighlightMap,
+} from "@/lib/highlights";
 
 interface ProgressCtx {
   map: ProgressMap;
@@ -45,6 +54,26 @@ interface ProgressCtx {
   isWatched: (videoId: string) => boolean;
   toggleWatched: (videoId: string, title: string) => boolean;
   totalWatched: number;
+  /** Verse highlights — the reader's own marks, this device only.
+   *  Keyed by book/chapter/verse, never by translation. */
+  highlights: HighlightMap;
+  getHighlight: (
+    slug: string,
+    idx: number,
+    verse: number
+  ) => HighlightEntry | undefined;
+  /** Tap behavior: off → on in the default gold; on → off. Returns
+   *  whether the verse is highlighted after the toggle. */
+  toggleHighlight: (slug: string, idx: number, verse: number) => boolean;
+  setHighlightColor: (
+    slug: string,
+    idx: number,
+    verse: number,
+    color: HighlightColorId
+  ) => void;
+  removeHighlight: (slug: string, idx: number, verse: number) => void;
+  clearHighlights: () => void;
+  totalHighlights: number;
 }
 
 const Ctx = createContext<ProgressCtx | null>(null);
@@ -53,11 +82,13 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
   const [map, setMap] = useState<ProgressMap>({});
   const [listened, setListened] = useState<MediaMap>({});
   const [watched, setWatched] = useState<MediaMap>({});
+  const [highlights, setHighlights] = useState<HighlightMap>({});
 
   useEffect(() => {
     setMap(loadProgress());
     setListened(loadListened());
     setWatched(loadWatched());
+    setHighlights(loadHighlights());
   }, []);
 
   const persist = useCallback((next: ProgressMap) => {
@@ -73,6 +104,11 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
   const persistWatched = useCallback((next: MediaMap) => {
     setWatched(next);
     saveWatched(next);
+  }, []);
+
+  const persistHighlights = useCallback((next: HighlightMap) => {
+    setHighlights(next);
+    saveHighlights(next);
   }, []);
 
   const isRead = useCallback(
@@ -122,6 +158,57 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     [listened, persistListened]
   );
 
+  const getHighlight = useCallback(
+    (slug: string, idx: number, verse: number) =>
+      highlights[highlightKey(slug, idx, verse)],
+    [highlights]
+  );
+
+  const toggleHighlight = useCallback(
+    (slug: string, idx: number, verse: number): boolean => {
+      const key = highlightKey(slug, idx, verse);
+      const next = { ...highlights };
+      let nowOn: boolean;
+      if (next[key]) {
+        delete next[key];
+        nowOn = false;
+      } else {
+        next[key] = { color: DEFAULT_HIGHLIGHT_COLOR, at: Date.now() };
+        nowOn = true;
+      }
+      persistHighlights(next);
+      return nowOn;
+    },
+    [highlights, persistHighlights]
+  );
+
+  const setHighlightColor = useCallback(
+    (slug: string, idx: number, verse: number, color: HighlightColorId) => {
+      const key = highlightKey(slug, idx, verse);
+      const existing = highlights[key];
+      persistHighlights({
+        ...highlights,
+        [key]: { color, at: existing?.at ?? Date.now() },
+      });
+    },
+    [highlights, persistHighlights]
+  );
+
+  const removeHighlight = useCallback(
+    (slug: string, idx: number, verse: number) => {
+      const key = highlightKey(slug, idx, verse);
+      if (!highlights[key]) return;
+      const next = { ...highlights };
+      delete next[key];
+      persistHighlights(next);
+    },
+    [highlights, persistHighlights]
+  );
+
+  const clearHighlights = useCallback(() => {
+    persistHighlights({});
+  }, [persistHighlights]);
+
   const isWatched = useCallback(
     (videoId: string) => Boolean(watched[videoId]),
     [watched]
@@ -164,6 +251,13 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
       isWatched,
       toggleWatched,
       totalWatched: Object.keys(watched).length,
+      highlights,
+      getHighlight,
+      toggleHighlight,
+      setHighlightColor,
+      removeHighlight,
+      clearHighlights,
+      totalHighlights: Object.keys(highlights).length,
     }),
     [
       map,
@@ -176,6 +270,12 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
       isWatched,
       toggleWatched,
       watched,
+      highlights,
+      getHighlight,
+      toggleHighlight,
+      setHighlightColor,
+      removeHighlight,
+      clearHighlights,
     ]
   );
 

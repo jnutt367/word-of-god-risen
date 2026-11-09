@@ -4,6 +4,7 @@ import { getAllBooks } from "@/lib/bible";
 import BookCard from "@/components/BookCard";
 import VerseOfDay from "@/components/VerseOfDay";
 import ContinueReading from "@/components/ContinueReading";
+import HighlightsCard from "@/components/HighlightsCard";
 import PlanContinue from "@/components/PlanContinue";
 import ListenDropdown from "@/components/ListenDropdown";
 import LatestShorts from "@/components/LatestShorts";
@@ -303,6 +304,7 @@ export default function Home() {
         <VerseOfDay />
         <PlanContinue />
         <ContinueReading />
+        <HighlightsCard />
       </div>
 
       {/* The Body, Reading — the Bible Heartbeat */}

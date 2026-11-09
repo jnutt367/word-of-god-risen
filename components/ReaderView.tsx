@@ -79,13 +79,24 @@ export default function ReaderView({
     setEndedKey(ended ? chapterKey : null);
   const searchParams = useSearchParams();
   const autoplay = searchParams.get("autoplay") === "1";
+  // Deep link from the My Highlights page: ?v=N brings that verse
+  // into view with a brief flash (handled inside VerseText).
+  const focusVerseRaw = parseInt(searchParams.get("v") || "", 10);
+  const focusVerse =
+    Number.isNaN(focusVerseRaw) || focusVerseRaw <= 0 ? null : focusVerseRaw;
   const [openRef, setOpenRef] = useState<{
     verseN: number;
     ref: string;
     targets: string[];
   } | null>(null);
-  const { isRead, toggle, isListened, toggleListened, readOnPage } =
-    useProgress();
+  const {
+    isRead,
+    toggle,
+    isListened,
+    toggleListened,
+    readOnPage,
+    totalHighlights,
+  } = useProgress();
   const read = isRead(slug, chapterIdx);
   const listened = isListened(slug, chapterIdx);
   const router = useRouter();
@@ -345,6 +356,21 @@ export default function ReaderView({
         {/* The chapter's animated film, beside the Listen controls */}
         <FilmCard film={film} />
 
+        {/* One quiet line teaching the highlight tap (Nov 8, 2026):
+            the feature a reader asked for is only kind if a reader
+            can find it without being told elsewhere. */}
+        <p className="mb-6 text-center text-sm text-[var(--reader-muted)]">
+          Tap a verse to highlight it — your marks are kept on this
+          phone, in{" "}
+          <Link
+            href="/highlights"
+            className="underline decoration-dotted underline-offset-2 transition-colors hover:text-[var(--reader-verse-num)]"
+          >
+            My Highlights
+          </Link>
+          .
+        </p>
+
         {/* Scripture */}
         <article>
           <VerseText
@@ -356,6 +382,9 @@ export default function ReaderView({
             onOpenRefs={(verseN, ref, targets) =>
               setOpenRef({ verseN, ref, targets })
             }
+            slug={slug}
+            chapterIdx={chapterIdx}
+            focusVerse={focusVerse}
           />
         </article>
 
@@ -413,6 +442,15 @@ export default function ReaderView({
           <p className="text-center text-sm text-[var(--reader-muted)]">
             Your place is kept on this phone.
           </p>
+          {totalHighlights > 0 && (
+            <Link
+              href="/highlights"
+              className="text-center text-sm font-medium text-[var(--reader-muted)] underline decoration-dotted underline-offset-2 transition-colors hover:text-[var(--reader-verse-num)]"
+            >
+              🖍 My Highlights — {totalHighlights} verse
+              {totalHighlights === 1 ? "" : "s"} you&rsquo;ve marked
+            </Link>
+          )}
           {narrationEnded && (
             <p
               role="status"

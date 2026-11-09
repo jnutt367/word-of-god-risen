@@ -121,6 +121,30 @@ body {
   --reader-card: var(--color-vineyard-900);
   --reader-line: rgba(217, 164, 65, 0.18);
 }
+/* The My Highlights jump-flash (Nov 8, 2026): arriving from the
+ * gathering page, the verse's wash pulses gently so the eye lands,
+ * then rests. VerseText marks it with .verse-flash only while the
+ * pulse should run; for readers who prefer reduced motion there is
+ * no pulse at all — the verse simply rests, in view, a little
+ * brighter, and VerseText's scroll is instant for them too. */
+@keyframes verse-flash-pulse {
+  0%,
+  100% {
+    background-color: rgba(217, 164, 65, 0.45);
+  }
+  50% {
+    background-color: rgba(217, 164, 65, 0.18);
+  }
+}
+.verse-flash {
+  animation: verse-flash-pulse 1.6s ease-in-out 2;
+}
+@media (prefers-reduced-motion: reduce) {
+  .verse-flash {
+    animation: none;
+  }
+}
+
 .reader-theme.lamp {
   --reader-bg: #f3ead3;
   --reader-ink: #2b2318;
