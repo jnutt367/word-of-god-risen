@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { getAllBooks, getChapters } from "@/lib/bible";
 import { getAllPlans } from "@/lib/plans";
 import { CHARACTERS } from "@/data/characters";
+import { BOOKS } from "@/data/books";
 
 const BASE = "https://word-of-god-risen.vercel.app";
 
@@ -47,10 +48,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     },
     ...CHARACTERS.map((c) => ({
-      url: `${BASE}/characters/mark/${c.slug}`,
+      url: `${BASE}/characters/${c.slug}`,
       lastModified: now,
       changeFrequency: "monthly" as const,
       priority: 0.6,
+    })),
+    ...BOOKS.filter((b) => !b.hidden).map((b) => ({
+      url: `${BASE}/characters/book/${b.slug}`,
+      lastModified: now,
+      changeFrequency: "monthly" as const,
+      priority: 0.5,
     })),
   ];
 
