@@ -18,6 +18,7 @@ import TestimonyBand from "@/components/TestimonyBand";
 import CarvedDivider from "@/components/CarvedDivider";
 import TeddyNote from "@/components/TeddyNote";
 import WalkTheFarm from "@/components/WalkTheFarm";
+import { BibleMonthBanner, BibleMonthSection } from "@/components/BibleMonth";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -31,6 +32,13 @@ export default function Home() {
 
   return (
     <div>
+      {/* Global Bible Month banner (Jason, Nov 9, 2026) — a slim
+          vine-and-gold strip above everything on the page, a door
+          to today's chapter. It lives only for November 2026 and
+          takes itself down on December 1; see
+          components/BibleMonth.tsx. */}
+      <BibleMonthBanner />
+
       {/* Hero */}
       {/* The hero's full stage (Jason, Nov 2, 2026): on desktop
           the section was only as tall as its words (~500px), so
@@ -197,6 +205,15 @@ export default function Home() {
           </p>
         </div>
       </section>
+
+      {/* Global Bible Month — the month's thirty day doors,
+          resting directly under the hero for November 2026 only
+          (Jason, Nov 9, 2026). Added, not rearranged: the hero
+          keeps its whole first screen, the welcome film still
+          leads the river below, and the Earth map and the books
+          stand exactly where they stood. The section takes
+          itself down on December 1; see components/BibleMonth.tsx. */}
+      <BibleMonthSection />
 
       {/* The introduction leads the river (Jason, Nov 2, 2026):
           the welcome film spent one morning inside the hero,
