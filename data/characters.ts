@@ -2195,6 +2195,80 @@ export const CHARACTERS: Character[] = [
     }
   },
   {
+    "slug": "moses",
+    "name": "Moses",
+    "subtitle": "The Lawgiver · Face to Face with God",
+    "image": "/images/characters/moses.jpg",
+    "caption": "The lawgiver, seen in glory on the mountain — his portrait crowned Nov 9, 2026.",
+    "group": "faces",
+    "unnamed": false,
+    "facts": [
+      {
+        "text": "**Mark 9:2-8** — on the high mountain, \"there appeared unto them Elias with Moses: and they were talking with Jesus\"; the cloud overshadows them, and the voice out of the cloud says, \"**This is my beloved Son: hear him**.\" The giver of the Law and the champion of the Prophets stand together in glory — and the Father directs all hearing to the Son.",
+        "ref": ""
+      },
+      {
+        "text": "**Luke 9:30-31** — Luke alone tells us what they talked about: Moses and Elijah \"appeared in glory, and spake of his decease which he should accomplish at Jerusalem.\" The word Luke uses is *exodos* — the lawgiver of the first exodus speaks with Jesus about the greater exodus He is about to lead.",
+        "ref": ""
+      },
+      {
+        "text": "**Matthew 17:1-8** — \"behold, there appeared unto them Moses and Elias talking with him,\" and the bright cloud's voice adds what Mark's shorter telling omits: \"in whom I am well pleased; **hear ye him**.\" And when the disciples lift up their eyes, \"they saw no man, save Jesus only.\"",
+        "ref": ""
+      },
+      {
+        "text": "**John 1:17** — the frame of the whole Gospel: \"**For the law was given by Moses, but grace and truth came by Jesus Christ**.\" Moses is named not as a rival cast aside, but as the measure of all that came before the fullness.",
+        "ref": ""
+      }
+    ],
+    "personality": [
+      "**Very meek** — \"Now the man Moses was very meek, above all the men which were upon the face of the earth\" (Num 12:3). The strongest leader in the Old Testament carries its softest description.",
+      "**Faithful in all God's house, as a servant** — \"Moses verily was faithful in all his house, as a servant, for a testimony of those things which were to be spoken after\" (Heb 3:5).",
+      "**The intercessor** — with Israel fresh from the golden calf, Moses pleaded, \"blot me, I pray thee, out of thy book which thou hast written\" (Ex 32:32); Psalm 106:23 says he \"stood before him in the breach.\" He offered himself for the people who had just betrayed his God."
+    ],
+    "dossier": [
+      {
+        "label": "Names",
+        "items": [
+          "**Moses** (Hebrew *Mosheh*) — Pharaoh's daughter named him \"because I drew him out of the water\" (Ex 2:10)",
+          "\"**The man of God**\" (Deut 33:1) — the title standing over the blessing he spoke before his death",
+          "\"**Moses the servant of the LORD**\" (Deut 34:5) — the words in which Scripture records that death",
+          "The prophet **like unto me**: \"The LORD thy God will raise up unto thee a Prophet from the midst of thee, of thy brethren, like unto me; unto him ye shall hearken\" (Deut 18:15) — Peter applies the promise to Jesus (Acts 3:22)"
+        ]
+      },
+      {
+        "label": "Where He Stands",
+        "items": [
+          "Between the LORD and Israel — the mediator of the first covenant: \"I stood between the LORD and you at that time, to shew you the word of the LORD\" (Deut 5:5)",
+          "On the mountain in glory beside Jesus, with Elijah, talking with Him about the exodus He would accomplish at Jerusalem (Luke 9:30-31) — the Law's own witness, standing by while the Father says, \"hear him\" (Mark 9:7)",
+          "As the witness whose writings testify of Christ — and accuse those who trust in Moses yet refuse the One he wrote of (John 5:45-47)"
+        ]
+      }
+    ],
+    "chapters": [
+      9
+    ],
+    "readings": [],
+    "roles": [
+      "Prophet"
+    ],
+    "era": "The Life of Jesus",
+    "books": [
+      "matthew",
+      "mark",
+      "luke",
+      "john"
+    ],
+    "firstBook": "matthew",
+    "firstAppearance": "Exodus 2",
+    "relationships": [],
+    "variants": [],
+    "status": {
+      "portrait": "crowned",
+      "sheet": "written",
+      "page": "live"
+    }
+  },
+  {
     "slug": "priscilla",
     "name": "Priscilla",
     "subtitle": "Fellow Worker · The Teacher of Apollos",

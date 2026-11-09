@@ -116,6 +116,7 @@ const SUBTITLES = {
   "scribe-greatest-commandment": "\u201cNot Far from the Kingdom\u201d",
   gabriel: "The Messenger \u00b7 Who Stands in God\u2019s Presence",
   michael: "The Archangel \u00b7 Prince and Guardian",
+  moses: "The Lawgiver \u00b7 Face to Face with God",
   paul: "Saul of Tarsus \u00b7 Apostle to the Gentiles",
   tertius: "The Scribe of Romans \u00b7 He Held the Pen",
   timothy: "Paul\u2019s True Child in the Faith",
@@ -157,6 +158,10 @@ const BOOKS_BY_SLUG = {
   salome: ["matthew", "mark"],
   "salome-wife-of-zebedee": ["matthew", "mark"],
   barabbas: [...GOSPELS],
+  // Moses: filed as a Gospel person (crowned Nov 9, 2026) — he appears
+  // in person at the Transfiguration in the three Synoptics and is
+  // named as a person in John (1:17; 5:45-47).
+  moses: [...GOSPELS],
   "simon-of-cyrene": ["matthew", "mark", "luke"],
   // Rufus is named again in Romans 16:13; the crowned layout preview
   // (Nov 9, 2026) files him under Mark with a Romans cast of five, so
@@ -201,6 +206,7 @@ const ROLES = {
   jesus: ["The Lord"],
   "judas-iscariot": ["Disciple / Apostle", "Opponent"],
   "john-the-baptist": ["Prophet"],
+  moses: ["Prophet"],
   "mary-mother-of-jesus": ["Family of Jesus"],
   "pontius-pilate": ["King / Ruler", "Opponent"],
   "herod-antipas": ["King / Ruler", "Opponent"],
@@ -242,6 +248,7 @@ const FIRST_APPEARANCE = {
   tertius: "Romans 16",
   gabriel: "Daniel 8",
   michael: "Daniel 10",
+  moses: "Exodus 2",
 };
 
 const RELATIONSHIPS = {
