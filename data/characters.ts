@@ -1911,6 +1911,79 @@ export const CHARACTERS: Character[] = [
     }
   },
   {
+    "slug": "elijah",
+    "name": "Elijah",
+    "subtitle": "The Tishbite · Prophet of Fire",
+    "image": "/images/characters/elijah.jpg",
+    "caption": "The Tishbite, seen in glory on the mountain — his portrait crowned Nov 9, 2026.",
+    "group": "faces",
+    "unnamed": false,
+    "facts": [
+      {
+        "text": "**Mark 9:2-8** — on the high mountain, \"there appeared unto them Elias with Moses: and they were talking with Jesus\"; the cloud overshadows them, and the voice out of the cloud says, \"**This is my beloved Son: hear him**.\" The champion of the Prophets and the giver of the Law stand together in glory — and the Father directs all hearing to the Son.",
+        "ref": ""
+      },
+      {
+        "text": "**Luke 9:30-31** — Luke alone tells us what they talked about: Elijah and Moses \"appeared in glory, and spake of his decease which he should accomplish at Jerusalem.\" The word Luke uses is *exodos* — the prophet of the whirlwind speaks with Jesus about the departure He is about to lead His people through.",
+        "ref": ""
+      },
+      {
+        "text": "**Matthew 17:1-13** — \"behold, there appeared unto them Moses and Elias talking with him\"; coming down, Jesus untangles the scribes' teaching for the disciples: \"**Elias truly shall first come, and restore all things**. But I say unto you, That Elias is come already, and they knew him not... Then the disciples understood that he spake unto them of John the Baptist.\"",
+        "ref": ""
+      },
+      {
+        "text": "**Luke 4:25-26** — Jesus Himself opens Elijah's story in the Nazareth synagogue: \"many widows were in Israel in the days of Elias, when the heaven was shut up three years and six months... But unto none of them was Elias sent, **save unto Sarepta, a city of Sidon, unto a woman that was a widow**.\" The hometown crowd hears the scandal of grace reaching an outsider — and moves to kill Him for it.",
+        "ref": ""
+      }
+    ],
+    "personality": [
+      "**Zealous for the LORD** — his own testimony twice over: \"I have been very jealous for the LORD God of hosts\" (1 Kings 19:10, 14). No prophet burns hotter against idolatry.",
+      "**A man of like passions, mighty in prayer** — \"Elias was a man subject to like passions as we are, and he prayed earnestly that it might not rain: and it rained not on the earth by the space of three years and six months. And he prayed again, and the heaven gave rain\" (James 5:17-18). Scripture insists the fire-brand prophet was a man like us.",
+      "**Spent and honest under the juniper tree** — after Carmel's victory he asks to die: \"It is enough; now, O LORD, take away my life\" (1 Kings 19:4). God answers not with rebuke but with bread, water, sleep — and then the still small voice (1 Kings 19:12)."
+    ],
+    "dossier": [
+      {
+        "label": "Names",
+        "items": [
+          "**Elijah** (Hebrew *Eliyahu*, \"My God is the LORD\") — named often in the Gospels by the Greek form of his name, **Elias**",
+          "\"**Elijah the Tishbite**, who was of the inhabitants of Gilead\" (1 Kings 17:1) — his first words in Scripture are spoken to Ahab: \"As the LORD God of Israel liveth, before whom I stand, there shall not be dew nor rain these years, but according to my word\"",
+          "\"**The prophet Elijah**\" — Malachi's promise stands over his Gospel presence: \"Behold, I will send you Elijah the prophet before the coming of the great and dreadful day of the LORD\" (Mal 4:5)"
+        ]
+      },
+      {
+        "label": "Where He Stands",
+        "items": [
+          "On Carmel against the prophets of Baal, alone for the LORD — \"I, even I only, remain a prophet of the LORD\" (1 Kings 18:22) — until the fire fell and Israel cried, \"The LORD, he is the God\" (1 Kings 18:39)",
+          "On the mountain in glory beside Jesus, with Moses, talking with Him about the exodus He would accomplish at Jerusalem (Luke 9:30-31) — the Prophets' own witness, standing by while the Father says, \"hear him\" (Mark 9:7)",
+          "As the promised forerunner's pattern: Jesus says of John the Baptist, \"this is Elias, which was for to come\" (Matt 11:14) — and of Elijah himself, \"Elias truly shall first come, and restore all things\" (Matt 17:11)"
+        ]
+      }
+    ],
+    "chapters": [
+      9
+    ],
+    "readings": [],
+    "roles": [
+      "Prophet"
+    ],
+    "era": "The Life of Jesus",
+    "books": [
+      "matthew",
+      "mark",
+      "luke",
+      "john"
+    ],
+    "firstBook": "matthew",
+    "firstAppearance": "1 Kings 17",
+    "relationships": [],
+    "variants": [],
+    "status": {
+      "portrait": "crowned",
+      "sheet": "written",
+      "page": "live"
+    }
+  },
+  {
     "slug": "herod-antipas",
     "name": "Herod Antipas",
     "subtitle": "Tetrarch of Galilee · The Divided King",
