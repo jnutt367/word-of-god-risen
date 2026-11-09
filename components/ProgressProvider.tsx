@@ -30,10 +30,14 @@ import {
   highlightKey,
   loadHighlights,
   saveHighlights,
+  upsertPhrase,
+  phraseMarkId,
   DEFAULT_HIGHLIGHT_COLOR,
   type HighlightColorId,
   type HighlightEntry,
   type HighlightMap,
+  type HighlightStore,
+  type PhraseHighlight,
 } from "@/lib/highlights";
 
 interface ProgressCtx {
@@ -72,7 +76,14 @@ interface ProgressCtx {
     color: HighlightColorId
   ) => void;
   removeHighlight: (slug: string, idx: number, verse: number) => void;
+  /** Word-exact marks — painted only in the translation they were
+   *  made in, over the exact words they were made on. */
+  phrases: PhraseHighlight[];
+  getPhrases: (slug: string, idx: number, verse: number) => PhraseHighlight[];
+  addPhrase: (mark: PhraseHighlight) => void;
+  removePhrase: (id: string) => void;
   clearHighlights: () => void;
+  /** Whole-verse marks + phrase marks — what the reader has kept. */
   totalHighlights: number;
 }
 
@@ -82,7 +93,10 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
   const [map, setMap] = useState<ProgressMap>({});
   const [listened, setListened] = useState<MediaMap>({});
   const [watched, setWatched] = useState<MediaMap>({});
-  const [highlights, setHighlights] = useState<HighlightMap>({});
+  const [highlights, setHighlights] = useState<HighlightStore>({
+    verses: {},
+    phrases: [],
+  });
 
   useEffect(() => {
     setMap(loadProgress());
@@ -106,7 +120,7 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     saveWatched(next);
   }, []);
 
-  const persistHighlights = useCallback((next: HighlightMap) => {
+  const persistHighlights = useCallback((next: HighlightStore) => {
     setHighlights(next);
     saveHighlights(next);
   }, []);
@@ -160,23 +174,23 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
 
   const getHighlight = useCallback(
     (slug: string, idx: number, verse: number) =>
-      highlights[highlightKey(slug, idx, verse)],
+      highlights.verses[highlightKey(slug, idx, verse)],
     [highlights]
   );
 
   const toggleHighlight = useCallback(
     (slug: string, idx: number, verse: number): boolean => {
       const key = highlightKey(slug, idx, verse);
-      const next = { ...highlights };
+      const nextVerses = { ...highlights.verses };
       let nowOn: boolean;
-      if (next[key]) {
-        delete next[key];
+      if (nextVerses[key]) {
+        delete nextVerses[key];
         nowOn = false;
       } else {
-        next[key] = { color: DEFAULT_HIGHLIGHT_COLOR, at: Date.now() };
+        nextVerses[key] = { color: DEFAULT_HIGHLIGHT_COLOR, at: Date.now() };
         nowOn = true;
       }
-      persistHighlights(next);
+      persistHighlights({ ...highlights, verses: nextVerses });
       return nowOn;
     },
     [highlights, persistHighlights]
@@ -185,10 +199,13 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
   const setHighlightColor = useCallback(
     (slug: string, idx: number, verse: number, color: HighlightColorId) => {
       const key = highlightKey(slug, idx, verse);
-      const existing = highlights[key];
+      const existing = highlights.verses[key];
       persistHighlights({
         ...highlights,
-        [key]: { color, at: existing?.at ?? Date.now() },
+        verses: {
+          ...highlights.verses,
+          [key]: { color, at: existing?.at ?? Date.now() },
+        },
       });
     },
     [highlights, persistHighlights]
@@ -197,16 +214,44 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
   const removeHighlight = useCallback(
     (slug: string, idx: number, verse: number) => {
       const key = highlightKey(slug, idx, verse);
-      if (!highlights[key]) return;
-      const next = { ...highlights };
-      delete next[key];
-      persistHighlights(next);
+      if (!highlights.verses[key]) return;
+      const nextVerses = { ...highlights.verses };
+      delete nextVerses[key];
+      persistHighlights({ ...highlights, verses: nextVerses });
+    },
+    [highlights, persistHighlights]
+  );
+
+  const getPhrases = useCallback(
+    (slug: string, idx: number, verse: number) => {
+      const key = highlightKey(slug, idx, verse);
+      return highlights.phrases.filter((p) => p.key === key);
+    },
+    [highlights]
+  );
+
+  const addPhrase = useCallback(
+    (mark: PhraseHighlight) => {
+      persistHighlights({
+        ...highlights,
+        phrases: upsertPhrase(highlights.phrases, mark),
+      });
+    },
+    [highlights, persistHighlights]
+  );
+
+  const removePhrase = useCallback(
+    (id: string) => {
+      persistHighlights({
+        ...highlights,
+        phrases: highlights.phrases.filter((p) => phraseMarkId(p) !== id),
+      });
     },
     [highlights, persistHighlights]
   );
 
   const clearHighlights = useCallback(() => {
-    persistHighlights({});
+    persistHighlights({ verses: {}, phrases: [] });
   }, [persistHighlights]);
 
   const isWatched = useCallback(
@@ -251,13 +296,18 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
       isWatched,
       toggleWatched,
       totalWatched: Object.keys(watched).length,
-      highlights,
+      highlights: highlights.verses,
       getHighlight,
       toggleHighlight,
       setHighlightColor,
       removeHighlight,
+      phrases: highlights.phrases,
+      getPhrases,
+      addPhrase,
+      removePhrase,
       clearHighlights,
-      totalHighlights: Object.keys(highlights).length,
+      totalHighlights:
+        Object.keys(highlights.verses).length + highlights.phrases.length,
     }),
     [
       map,
@@ -275,6 +325,9 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
       toggleHighlight,
       setHighlightColor,
       removeHighlight,
+      getPhrases,
+      addPhrase,
+      removePhrase,
       clearHighlights,
     ]
   );

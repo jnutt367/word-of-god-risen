@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   HIGHLIGHT_COLORS,
   type HighlightColorId,
@@ -39,7 +39,57 @@ export default function VerseActions({
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const rootRef = useRef<HTMLSpanElement>(null);
+  const popRef = useRef<HTMLSpanElement>(null);
   const timer = useRef<number | null>(null);
+
+  // Keep the popover on the phone. The card is centered over the
+  // marker chip (left-1/2 -translate-x-1/2), so a verse starting
+  // near the screen's left edge pushed its left half off-screen —
+  // Jason hit exactly that on his phone the first night. Before
+  // the opened card is painted, measure where it would land and
+  // fold any overflow past an 8px safe margin on either edge (and
+  // the top, by hanging it below the chip when above has no room)
+  // back into an inline transform layered over the centering
+  // class. The card itself never changes — same size, same
+  // contents. The shift lives in a data attribute + inline style
+  // set here without a re-render, so opening stays one gesture.
+  useLayoutEffect(() => {
+    if (!open) return;
+    const pop = popRef.current;
+    if (!pop) return;
+    const MARGIN = 8;
+    const rect = pop.getBoundingClientRect();
+    const vw = document.documentElement.clientWidth;
+    const vh = document.documentElement.clientHeight;
+    let dx = 0;
+    if (rect.left < MARGIN) dx = MARGIN - rect.left;
+    else if (rect.right > vw - MARGIN) dx = vw - MARGIN - rect.right;
+    let dy = 0;
+    let below = false;
+    if (rect.top < MARGIN) {
+      // Not enough room above the chip: hang the card below it
+      // instead (the chip's height plus the same 8px breathing
+      // room the mb-2 gap gives above). If even below would run
+      // off, stay above and take the smaller vertical nudge.
+      const host = rootRef.current;
+      const chipBottom = host
+        ? host.getBoundingClientRect().bottom
+        : rect.bottom;
+      if (chipBottom + 8 + rect.height <= vh - MARGIN) below = true;
+      else dy = MARGIN - rect.top;
+    } else if (rect.bottom > vh - MARGIN) {
+      dy = vh - MARGIN - rect.bottom;
+    }
+    if (below) {
+      pop.dataset.placement = "below";
+      pop.style.top = "100%";
+      pop.style.bottom = "auto";
+      pop.style.marginTop = "0.5rem";
+      pop.style.marginBottom = "0px";
+    }
+    if (dx !== 0 || dy !== 0)
+      pop.style.transform = `translate(calc(-50% + ${dx}px), ${dy}px)`;
+  }, [open ]);
 
   // Close on an outside tap or Escape — the popover is a guest in
   // the chapter, never a trap.
@@ -107,6 +157,7 @@ export default function VerseActions({
       </button>
       {open && (
         <span
+          ref={popRef}
           role="dialog"
           aria-label={`Options for ${reference}`}
           className="absolute bottom-full left-1/2 z-30 mb-2 block w-56 -translate-x-1/2 rounded-xl border border-[var(--reader-line)] bg-[var(--reader-card)] p-3 font-body shadow-xl"

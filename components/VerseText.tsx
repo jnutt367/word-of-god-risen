@@ -1,11 +1,55 @@
 "use client";
 
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { verseRef, type Verse } from "@/lib/verses";
-import { highlightWash } from "@/lib/highlights";
+import {
+  highlightKey,
+  highlightWash,
+  phraseMarksFor,
+  type PhraseHighlight,
+} from "@/lib/highlights";
 import { useProgress } from "@/components/ProgressProvider";
 import ShareVerseButton from "./ShareVerseButton";
 import VerseActions from "./VerseActions";
+
+/** Paints one verse's text with its marks: the whole-verse wash
+ *  underneath (the caller's backgroundColor on the outer span),
+ *  and any word-exact phrase washes over their exact words.
+ *  Phrase pieces render as their own spans so a phrase reads as
+ *  a deeper pool of the same color family over the verse wash —
+ *  nested translucent washes compose, they never fight. When a
+ *  verse carries no phrase marks this returns the plain string,
+ *  exactly as the reader has always rendered. */
+function paintVerseText(
+  text: string,
+  marks: PhraseHighlight[]
+): React.ReactNode {
+  if (marks.length === 0) return text;
+  const sorted = [...marks].sort((a, b) => a.start - b.start);
+  const parts: React.ReactNode[] = [];
+  let cursor = 0;
+  sorted.forEach((m, i) => {
+    if (m.start < cursor) return; // overlapping twin — first paint wins
+    if (m.start > cursor) parts.push(text.slice(cursor, m.start));
+    parts.push(
+      <span
+        key={`${m.start}-${m.end}-${i}`}
+        data-phrase-mark=""
+        className="rounded-[0.2em]"
+        style={{
+          backgroundColor: highlightWash(m.color),
+          boxDecorationBreak: "clone",
+          WebkitBoxDecorationBreak: "clone",
+        }}
+      >
+        {text.slice(m.start, m.end)}
+      </span>
+    );
+    cursor = m.end;
+  });
+  if (cursor < text.length) parts.push(text.slice(cursor));
+  return parts;
+}
 
 interface Props {
   verses: Verse[];
@@ -20,6 +64,10 @@ interface Props {
    *  Absent (any other surface), verses render plain, as before. */
   slug?: string;
   chapterIdx?: number;
+  /** The translation on screen — phrase marks paint only in the
+   *  version they were made in. Defaults to the house default so
+   *  older callers keep their behavior. */
+  version?: string;
   /** Verse to scroll to and briefly flash — set by a deep link from
    *  the My Highlights page (?v=N). */
   focusVerse?: number | null;
@@ -41,6 +89,11 @@ interface Props {
  * translation, so they follow the reader across WEB/KJV/Cebuano.
  * A wash is translucent background only: no padding, no layout
  * shift, the ink keeps its contrast in both reader themes.
+ *
+ * Word-exact marks (same night, Jason's second ruling): selecting
+ * words inside a verse paints just those words — handled by
+ * VerseTextWithSelection in the chapter reader; this component
+ * only paints what the store holds for the version on screen.
  */
 export default function VerseText({
   verses,
@@ -51,6 +104,7 @@ export default function VerseText({
   onOpenRefs,
   slug,
   chapterIdx,
+  version = "web",
   focusVerse,
 }: Props) {
   const {
@@ -58,6 +112,7 @@ export default function VerseText({
     toggleHighlight,
     setHighlightColor,
     removeHighlight,
+    getPhrases,
   } = useProgress();
   const canHighlight = slug !== undefined && chapterIdx !== undefined;
 
@@ -106,6 +161,17 @@ export default function VerseText({
           canHighlight && v.n > 0
             ? getHighlight(slug, chapterIdx, v.n)
             : undefined;
+        // Word-exact marks for this verse — only the ones made in
+        // the version on screen, over words that still match.
+        const phrases =
+          canHighlight && v.n > 0
+            ? phraseMarksFor(
+                getPhrases(slug, chapterIdx, v.n),
+                highlightKey(slug, chapterIdx, v.n),
+                version,
+                v.text
+              )
+            : [];
         return (
           <p key={v.n} id={v.n > 0 ? `verse-${v.n}` : undefined} className="mb-5 scroll-mt-24">
             {v.n > 0 && (
@@ -151,7 +217,7 @@ export default function VerseText({
                 WebkitBoxDecorationBreak: "clone",
               }}
             >
-              {v.text}
+              {paintVerseText(v.text, phrases)}
             </span>
             {ref && (
               <ShareVerseButton verseText={v.text} reference={ref} />

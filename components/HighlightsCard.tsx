@@ -26,8 +26,8 @@ export default function HighlightsCard() {
           My highlights
         </p>
         <p className="mt-2 font-display text-xl text-cream-100">
-          {totalHighlights} verse{totalHighlights === 1 ? "" : "s"} you&rsquo;ve
-          marked
+          {totalHighlights} mark{totalHighlights === 1 ? "" : "s"} you&rsquo;ve
+          made
         </p>
         <p className="mt-1 text-sm text-sage-400">
           Gathered in one place, kept on this phone.

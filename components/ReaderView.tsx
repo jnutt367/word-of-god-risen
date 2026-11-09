@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import VerseText from "@/components/VerseText";
+import VerseTextWithSelection from "@/components/VerseTextWithSelection";
 import CrossRefPanel from "@/components/CrossRefPanel";
 import CarvedDivider from "@/components/CarvedDivider";
 import WatchCard from "@/components/WatchCard";
@@ -360,8 +361,9 @@ export default function ReaderView({
             the feature a reader asked for is only kind if a reader
             can find it without being told elsewhere. */}
         <p className="mb-6 text-center text-sm text-[var(--reader-muted)]">
-          Tap a verse to highlight it — your marks are kept on this
-          phone, in{" "}
+          Tap a verse to highlight it — or press and hold to select
+          exact words and mark just those. Your marks are kept on
+          this phone, in{" "}
           <Link
             href="/highlights"
             className="underline decoration-dotted underline-offset-2 transition-colors hover:text-[var(--reader-verse-num)]"
@@ -371,21 +373,30 @@ export default function ReaderView({
           .
         </p>
 
-        {/* Scripture */}
+        {/* Scripture — wrapped so the chapter reader also carries
+            word-exact selection marking; VerseText alone (other
+            surfaces) renders whole-verse marks only. */}
         <article>
-          <VerseText
-            verses={verses}
-            bookTitle={bookTitle}
-            chapterNum={chapterNum}
-            fontSizeRem={TEXT_SIZES_REM[textSizeIdx]}
-            crossRefs={crossRefs}
-            onOpenRefs={(verseN, ref, targets) =>
-              setOpenRef({ verseN, ref, targets })
-            }
+          <VerseTextWithSelection
             slug={slug}
             chapterIdx={chapterIdx}
-            focusVerse={focusVerse}
-          />
+            version={version}
+          >
+            <VerseText
+              verses={verses}
+              bookTitle={bookTitle}
+              chapterNum={chapterNum}
+              fontSizeRem={TEXT_SIZES_REM[textSizeIdx]}
+              crossRefs={crossRefs}
+              onOpenRefs={(verseN, ref, targets) =>
+                setOpenRef({ verseN, ref, targets })
+              }
+              slug={slug}
+              chapterIdx={chapterIdx}
+              version={version}
+              focusVerse={focusVerse}
+            />
+          </VerseTextWithSelection>
         </article>
 
         {/* Actions */}
