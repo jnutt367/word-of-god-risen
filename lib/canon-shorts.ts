@@ -30,6 +30,7 @@ export const CANON_SHORT_IDS: readonly string[] = [
   "RqHiCNlbxeE", // Day 6: They All Ate and Were Filled | Mark 6:42 · Global Bible Challenge — the Day 6 Scripture Short (published Nov 8, 2026; made Nov 2 ahead of its Nov 6 day); English + Filipino caption tracks verified in Studio before public
   "98Uw2biCECE", // Day 7: He Has Done All Things Well | Mark 7:37 · Global Bible Challenge — the Day 7 Scripture Short (published Nov 8, 2026; made Nov 2 ahead of its Nov 7 day); English + Filipino caption tracks verified in Studio before public
   "lPpuObQFH1U", // Day 8: You Are the Christ | Mark 8:29 · Global Bible Challenge — the Day 8 Scripture Short (published Nov 8, 2026, on its own day; the v3 cut with all twelve disciples as their crowned selves); English + Filipino caption tracks verified in Studio before public
+  "okKk95jr2I8", // Day 9: Listen to Him | Mark 9:7 · Global Bible Challenge — the Day 9 Scripture Short (published Nov 9, 2026, on its own day; the Transfiguration, Mark 9:2–8, V4 cut crowned by Jason); English track published in Studio and the Cebuano track added via the YouTube API and verified serving before public — the first day with Cebuano captions
   "-oRYl9jBWKg", // One Chapter Is Enough | Mark 1 — the welcome film's funnel (Oct 29, 2026)
   "MM4Re8olRzY", // One Chapter Is Enough — the Prayer Short (Taiwan) | from the film
   "Jo2qZIZoaxU", // The Whole City at the Door | Mark 1:33
