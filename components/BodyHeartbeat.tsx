@@ -4092,34 +4092,52 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
               disc's lower right, in the day-stepping row's own
               styling. The reset appears only while zoomed. The
               buttons never cover the legend: they ride on the
-              disc itself, where the sea is empty. */}
-          <div className="absolute bottom-2 right-2 flex flex-col gap-1.5">
+              disc itself, where the sea is empty.
+              (Named Nov 11, 2026, the name-tag audit: the bare
+              + / − glyphs leaned on a naming sentence stranded
+              at the disc's opposite corner, and "Full" never said
+              what it restores. The words ride the buttons now —
+              "+ Closer", "− Farther", "Whole map" — whispered in
+              small sage type inside the same quiet pills, grown
+              to an honest 44px tall. The sentence at bottom-left
+              stays as it is, a second telling.) */}
+          <div className="absolute bottom-2 right-2 flex flex-col items-end gap-1.5">
             <button
               type="button"
               onClick={() => zoomStep(1.6)}
               disabled={zoom >= 4}
               aria-label="Zoom in on the map"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-gold-500/30 bg-vineyard-950/80 text-lg font-semibold text-cream-100 backdrop-blur-sm transition-colors hover:border-gold-400/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300 disabled:cursor-not-allowed disabled:opacity-40"
+              className="flex h-11 items-center justify-center gap-1.5 rounded-full border border-gold-500/30 bg-vineyard-950/80 px-3.5 text-cream-100 backdrop-blur-sm transition-colors hover:border-gold-400/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              +
+              <span aria-hidden="true" className="text-base font-semibold leading-none">
+                +
+              </span>
+              <span className="text-[11px] font-medium text-sage-200">
+                Closer
+              </span>
             </button>
             <button
               type="button"
               onClick={() => zoomStep(1 / 1.6)}
               disabled={zoom <= 1}
               aria-label="Zoom out on the map"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-gold-500/30 bg-vineyard-950/80 text-lg font-semibold text-cream-100 backdrop-blur-sm transition-colors hover:border-gold-400/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300 disabled:cursor-not-allowed disabled:opacity-40"
+              className="flex h-11 items-center justify-center gap-1.5 rounded-full border border-gold-500/30 bg-vineyard-950/80 px-3.5 text-cream-100 backdrop-blur-sm transition-colors hover:border-gold-400/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              −
+              <span aria-hidden="true" className="text-base font-semibold leading-none">
+                −
+              </span>
+              <span className="text-[11px] font-medium text-sage-200">
+                Farther
+              </span>
             </button>
             {zoom > 1 && (
               <button
                 type="button"
                 onClick={zoomReset}
                 aria-label="Reset the map to the whole view"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-cream-100/20 bg-vineyard-950/80 text-xs font-semibold text-sage-200 backdrop-blur-sm transition-colors hover:border-gold-400/60 hover:text-cream-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+                className="flex h-11 items-center justify-center rounded-full border border-cream-100/20 bg-vineyard-950/80 px-3.5 text-[11px] font-medium text-sage-200 backdrop-blur-sm transition-colors hover:border-gold-400/60 hover:text-cream-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
               >
-                Full
+                Whole map
               </button>
             )}
           </div>

@@ -89,6 +89,18 @@ export default function TeddyNote() {
               />
             </svg>
           </span>
+          {/* The picture's name tag (Jason, Nov 11, 2026, the
+              name-tag audit): the named "Watch the story" button
+              below always said it; now the picture itself says it
+              too — the same slim quiet ribbon the welcome film's
+              frame wears, along the thumbnail's dark lower edge. */}
+          <span
+            aria-hidden="true"
+            className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-1.5 rounded-b-xl bg-vineyard-950/70 px-3 py-1.5 text-xs font-medium text-cream-100/90"
+          >
+            <span className="text-[10px] text-gold-300">▶</span>
+            Watch the story
+          </span>
         </button>
         <p className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-gold-400">
           A note from Grandpa Teddy

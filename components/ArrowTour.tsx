@@ -729,19 +729,24 @@ export default function ArrowTour() {
         </span>
       )}
 
-      {/* The way out, always the visitor's: a small ✕ resting
+      {/* The way out, always the visitor's: a small door resting
           under the bubble row while the tour is up (it steps
           aside once the journey begins — by then the hero, and
-          this corner with it, has scrolled away). */}
+          this corner with it, has scrolled away). It wears its
+          name now (Jason, Nov 11, 2026, the name-tag audit):
+          the tour names every door it visits, so its own exit
+          reads "End tour" beside the ✕ — quiet, never louder
+          than the words it teaches. */}
       {(phase === "static" || (phase === "running" && stop <= 4)) && (
         <button
           type="button"
           data-arrow-tour-ui=""
           onClick={end}
           aria-label="End the tour"
-          className="absolute right-4 top-[52px] z-30 grid h-7 w-7 cursor-pointer place-items-center rounded-full border border-cream-100/30 text-sm text-cream-100/80 transition-colors hover:border-gold-400 hover:text-gold-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300 sm:right-6 sm:top-[64px]"
+          className="absolute right-4 top-[52px] z-30 flex h-10 cursor-pointer items-center gap-1.5 rounded-full border border-cream-100/30 px-3 text-cream-100/80 transition-colors hover:border-gold-400 hover:text-gold-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300 sm:right-6 sm:top-[64px]"
         >
-          <span aria-hidden="true">✕</span>
+          <span className="text-xs font-medium">End tour</span>
+          <span aria-hidden="true" className="text-sm">✕</span>
         </button>
       )}
 
@@ -770,13 +775,18 @@ export default function ArrowTour() {
             </span>
             New here? Quick tour →
           </button>
+          {/* The pill's own way out wears its name too (Jason,
+              Nov 11, 2026, the name-tag audit): "Hide" stands
+              quietly inside the dismiss control beside its ✕ —
+              part of the pill, in the pill's own register. */}
           <button
             type="button"
             onClick={dismissPill}
             aria-label="Hide the tour invitation"
-            className="grid h-10 w-10 shrink-0 cursor-pointer place-items-center rounded-full border border-gold-400/60 bg-vineyard-900/90 text-sm text-cream-100/80 shadow-lg transition-colors hover:border-gold-300 hover:text-gold-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+            className="flex h-10 shrink-0 cursor-pointer items-center gap-1 rounded-full border border-gold-400/60 bg-vineyard-900/90 px-3 text-cream-100/80 shadow-lg transition-colors hover:border-gold-300 hover:text-gold-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
           >
-            <span aria-hidden="true">✕</span>
+            <span className="text-xs font-medium">Hide</span>
+            <span aria-hidden="true" className="text-sm">✕</span>
           </button>
         </div>
       )}

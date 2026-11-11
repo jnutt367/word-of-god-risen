@@ -485,12 +485,18 @@ export default function AskTeddy() {
               Your farmhand for the Word
             </p>
           </div>
+          {/* The way out wears its name (Jason, Nov 11, 2026,
+              the name-tag audit): this panel opens on its own
+              for a first-timer, so its close is the first ✕ a
+              newcomer meets — "Close" stands beside it, quiet
+              in sage, inside the one control. */}
           <button
             type="button"
             onClick={() => setOpen(false)}
             aria-label="Close chat"
-            className="ml-auto rounded-lg p-1.5 text-cream-100 hover:bg-vineyard-800"
+            className="ml-auto flex min-h-[40px] items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-cream-100 hover:bg-vineyard-800"
           >
+            <span className="text-xs font-medium text-sage-300">Close</span>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
             </svg>
@@ -618,10 +624,13 @@ export default function AskTeddy() {
             aria-label="Message Teddy"
             className="min-w-0 flex-1 rounded-full border border-gold-500/40 bg-white px-4 py-2 text-sm text-vineyard-950 placeholder:text-vineyard-950/60 focus:border-gold-500 focus:outline-none"
           />
+          {/* The plane wears its name (Jason, Nov 11, 2026, the
+              name-tag audit): "Send" rides inside the same gold
+              pill — no louder than the circle was, just honest. */}
           <button
             type="submit"
             aria-label="Send message"
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-gold-500 text-vineyard-950 hover:bg-gold-400"
+            className="flex h-11 shrink-0 items-center gap-1.5 rounded-full bg-gold-500 px-4 text-sm font-semibold text-vineyard-950 transition-colors hover:bg-gold-400"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path
@@ -632,6 +641,7 @@ export default function AskTeddy() {
                 strokeLinejoin="round"
               />
             </svg>
+            Send
           </button>
         </form>
       </div>

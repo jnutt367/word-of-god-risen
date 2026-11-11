@@ -38,7 +38,9 @@ const NAV_SECTIONS = [
 // Flat list for desktop nav
 const NAV = NAV_SECTIONS.flatMap((s) => s.items);
 
-// "Visit the Farm" — the TruVINE doors beyond this app, grouped the way
+// "More from the farm" (born "Visit the Farm"; renamed Nov 11, 2026 in
+// the name-tag audit — a first-timer couldn't tell "Visit the Farm" was
+// a menu of doors) — the TruVINE doors beyond this app, grouped the way
 // Teddy walks the farm: watch a film, sit on the porch, then the rest.
 // They open in a new tab — except the Mark film, which asks first
 // (watch here, or YouTube) like every video door in the app.
@@ -273,7 +275,7 @@ export default function SiteHeader() {
               onClick={() => setFarmOpen((v) => !v)}
               className="flex min-h-[48px] items-center gap-1.5 rounded-lg px-3 py-3 text-sm font-semibold text-gold-300 transition-colors hover:bg-vineyard-800 hover:text-gold-400"
             >
-              Visit the Farm
+              More from the farm
               <span aria-hidden="true" className="text-xs">
                 {farmOpen ? "▴" : "▾"}
               </span>
@@ -281,7 +283,7 @@ export default function SiteHeader() {
             {farmOpen && (
               <div
                 id="farm-menu"
-                aria-label="Visit the farm"
+                aria-label="More from the farm"
                 className="absolute right-0 top-full z-50 mt-2 w-[44rem] max-w-[calc(100vw-2rem)] rounded-2xl border border-gold-500/25 bg-vineyard-950 p-6 shadow-[0_24px_60px_rgba(0,0,0,0.55)]"
               >
                 <div className="grid grid-cols-3 gap-6">
@@ -325,10 +327,15 @@ export default function SiteHeader() {
           <ShareAppButton compact />
         </div>
 
-        {/* Mobile hamburger */}
+        {/* Mobile hamburger — it wears its name now (Jason,
+            Nov 11, 2026, the name-tag audit): on a phone this is
+            the ONLY door to the full navigation, and three bare
+            lines said nothing to a first-timer's eyes. The word
+            "Menu" stands beside the lines, quiet in sage — the
+            title still leads this row; the tag only serves it. */}
         <button
           type="button"
-          className="rounded-lg p-3 text-cream-100 hover:bg-vineyard-800 lg:hidden"
+          className="flex min-h-[48px] items-center gap-1.5 rounded-lg px-3 py-3 text-cream-100 hover:bg-vineyard-800 lg:hidden"
           aria-expanded={open}
           aria-controls="mobile-nav"
           aria-label={open ? "Close menu" : "Open menu"}
@@ -343,6 +350,7 @@ export default function SiteHeader() {
               <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
             </svg>
           )}
+          <span className="text-sm font-medium text-sage-200">Menu</span>
         </button>
       </div>
 
@@ -389,11 +397,13 @@ export default function SiteHeader() {
             ))}
           </div>
 
-          {/* Visit the Farm — every other TruVINE door, below the
-              Bible's own pages so the app's nav stays primary. */}
+          {/* More from the farm — every other TruVINE door, below
+              the Bible's own pages so the app's nav stays primary.
+              (The heading wears the desktop door's new name too —
+              one family of doors, one name, Nov 11, 2026.) */}
           <div className="mt-5 border-t border-gold-500/15 pt-4">
             <p className="px-3 pb-1 font-display text-lg text-gold-300">
-              Visit the Farm
+              More from the farm
             </p>
             <div className="grid grid-cols-2 gap-x-8 md:grid-cols-3">
               {MOBILE_FARM_SECTIONS.map((section) => (

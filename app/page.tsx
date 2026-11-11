@@ -268,39 +268,49 @@ export default function Home() {
               same 📖 treatment as the hero trio's read bubble —
               and it goes where the button goes: Genesis 1.
               Icons tell the truth here: book = read,
-              speaker = listen, gold play = watch here. */}
-          <span className="relative inline-block">
-            <Link
-              href="/book/genesis/0"
-              className="rounded-lg bg-gold-500 px-6 py-3.5 text-base font-semibold text-vineyard-950 transition-colors hover:bg-gold-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
-            >
-              Start reading
-            </Link>
-            <Link
-              href="/book/genesis/0"
-              aria-label="Start reading — opens Genesis chapter 1"
-              title="Start reading — Genesis 1"
-              className="absolute -top-2.5 -right-2.5 z-10 grid h-9 w-9 place-items-center rounded-full border border-gold-400/70 bg-vineyard-900 text-base shadow-lg transition-colors hover:border-gold-300 hover:bg-vineyard-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
-            >
-              <span aria-hidden="true">📖</span>
-            </Link>
-          </span>
+              speaker = listen, gold play = watch here.
+              (Retired Nov 11, 2026, the name-tag audit: the 📖
+              bubble duplicated this button EXACTLY — same href,
+              same chapter, nothing of its own — an unnamed
+              second door to the place the named button already
+              goes. One door, said once: the button carries it
+              alone now. The hero trio's read bubble above is a
+              different thing — it IS its door, and the arrow
+              tour names it.) */}
+          <Link
+            href="/book/genesis/0"
+            className="rounded-lg bg-gold-500 px-6 py-3.5 text-base font-semibold text-vineyard-950 transition-colors hover:bg-gold-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+          >
+            Start reading
+          </Link>
           {/* The first door, minimized (Jason, Oct 31, 2026): the
               "Hear one chapter" door began the morning as a full
               card under the hero; Jason shrank it to this speaker
               bubble on Start listening's top-right corner. The
               button keeps its own job; the bubble is the fast
               lane — one tap and Teddy reads Mark chapter 1 (the
-              ?autoplay=1 start intent). */}
+              ?autoplay=1 start intent).
+              (Named Nov 11, 2026, the name-tag audit: unlike the
+              book bubble retired above, this one does something
+              DIFFERENT from its host — the button opens a picker,
+              the bubble plays Mark 1 at once — so a bare 🔊
+              borrowed the button's name while being another
+              door. It wears its own quiet name now, "Hear Mark 1
+              now", in small sage words inside the pill, riding
+              the button's shoulder the way the bubble always
+              did.) */}
           <span className="relative inline-block">
             <ListenDropdown />
             <Link
               href="/book/mark/0?autoplay=1"
               aria-label="Hear one chapter — Grandpa Teddy reads Mark chapter 1"
               title="Hear one chapter — Mark 1"
-              className="absolute -top-2.5 -right-2.5 z-10 grid h-9 w-9 place-items-center rounded-full border border-gold-400/70 bg-vineyard-900 text-base shadow-lg transition-colors hover:border-gold-300 hover:bg-vineyard-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+              className="absolute -top-[22px] -right-2.5 z-10 flex h-10 items-center gap-1.5 whitespace-nowrap rounded-full border border-gold-400/70 bg-vineyard-900 px-3 shadow-lg transition-colors hover:border-gold-300 hover:bg-vineyard-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
             >
-              <span aria-hidden="true">🔊</span>
+              <span aria-hidden="true" className="text-sm">🔊</span>
+              <span className="text-[11px] font-medium text-sage-200">
+                Hear Mark 1 now
+              </span>
             </Link>
           </span>
           <Link

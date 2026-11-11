@@ -211,6 +211,20 @@ export default function WelcomeFilm() {
                 />
               </svg>
             </span>
+            {/* The frame's name tag (Jason, Nov 11, 2026, the
+                name-tag audit): the picture IS the button, and a
+                first-timer shouldn't have to guess that. A slim
+                ribbon along the frame's dark lower edge says it
+                plays, in the legend's quiet register — low over
+                the porch boards, never across Teddy's face or
+                the title baked above. */}
+            <span
+              aria-hidden="true"
+              className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-1.5 bg-vineyard-950/70 px-3 py-1.5 text-xs font-medium text-cream-100/90"
+            >
+              <span className="text-[10px] text-gold-300">▶</span>
+              Watch — Welcome to the Farm
+            </span>
           </button>
         )}
       </div>
