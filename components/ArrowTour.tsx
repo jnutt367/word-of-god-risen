@@ -768,7 +768,7 @@ export default function ArrowTour() {
             <span aria-hidden="true" className="mr-1.5 text-gold-300">
               ➤
             </span>
-            New here? Watch · Read · Listen · Search
+            New here? Quick tour →
           </button>
           <button
             type="button"
