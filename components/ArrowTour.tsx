@@ -82,9 +82,9 @@ import { createPortal } from "react-dom";
  *   Nov 11). A run that COMPLETES its whole course ends on the
  *   Earth Map — that is where the journey was always going —
  *   but it does not strand the visitor at the bottom of a long
- *   page: a small quiet pill, "↑ Back to the books", waits at
+ *   page: a small quiet pill, "↓ To the books", waits at
  *   the map a few seconds (the "sendoff" below). Tapping it
- *   takes the glide back up to the books; untouched, it fades
+ *   takes the glide down to the books; untouched, it fades
  *   on its own; the visitor's own scroll or a tap elsewhere
  *   retires it. It appears ONLY on a completed run — a tour
  *   the visitor dismissed (even mid-glide) leaves nothing
@@ -145,7 +145,7 @@ const HANDOFF_MS = 500;
  * never fire (Teddy auto-opens only on scroll here) before it
  * introduces itself anyway. */
 const GRACE_MS = 12000;
-/** The sendoff's patience: how long the "↑ Back to the books"
+/** The sendoff's patience: how long the "↓ To the books"
  * door waits at the map before it quietly leaves on its own. */
 const SENDOFF_MS = 6000;
 /** The sendoff's fade — a breath, not a show. */
@@ -382,7 +382,7 @@ export default function ArrowTour() {
   /** The tour's goodbye — the sendoff (Jason's ruling, Nov 11,
    * 2026): a run that completes its whole course ends the way
    * end() ends — the seen-note written, the timers cleared —
-   * but leaves one small door behind at the map: "↑ Back to
+   * but leaves one small door behind at the map: "↓ To
    * the books" (the sendoff phase, rendered below). The visitor
    * was DELIVERED to the bottom of a long page; ending there
    * empty-handed would strand them. The hand-back is words and
@@ -678,7 +678,7 @@ export default function ArrowTour() {
     setPillOff(true);
   };
 
-  /* The sendoff door's one job: take the glide back up to the
+  /* The sendoff door's one job: take the glide down to the
    * books — no behavior of its own, so the page's own CSS glide
    * carries it (the same ride the Earth Map journey took on the
    * way down), landing on the section's own scroll margin. The
@@ -686,7 +686,7 @@ export default function ArrowTour() {
    * without it. The door is a door, not an animation: under
    * reduced motion it still appears, and its ride becomes an
    * instant jump instead. */
-  const backToBooks = () => {
+  const toTheBooks = () => {
     setSendoffFading(true);
     const el = document.getElementById("books");
     if (!el) return;
@@ -922,14 +922,14 @@ export default function ArrowTour() {
             type="button"
             data-arrow-tour-ui=""
             data-tour-sendoff=""
-            onClick={backToBooks}
+            onClick={toTheBooks}
             className={`fixed bottom-4 left-1/2 z-40 -translate-x-1/2 cursor-pointer rounded-full border border-gold-400/40 bg-vineyard-900/90 px-4 py-2 text-[13px] font-medium whitespace-nowrap text-cream-100/85 shadow-lg transition-opacity duration-300 hover:border-gold-300 hover:text-gold-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300 ${
               sendoffFading
                 ? "pointer-events-none opacity-0"
                 : "opacity-100"
             }`}
           >
-            ↑ Back to the books
+            ↓ To the books
           </button>,
           document.body
         )}
