@@ -1450,19 +1450,88 @@ function PrayerLightMark({
   );
 }
 
+/** HANDS IN THE ARCH (Nov 11, 2026 — Jason's crown,
+ *  option B of the prayer-mark options sheet,
+ *  map-design/prayer-mark-options-2026-11-11): the
+ *  construction every knocking-place prayer mark wears,
+ *  drawn ONCE here so the Earth map, the closer-look
+ *  panel, and the legend swatch can never drift apart
+ *  (the Nov 6 lesson). Geometry verbatim from the
+ *  crowned sheet (build_sheet.py mark_B), in mark-local
+ *  units about the mark's heart: the candle-amber hands
+ *  (PrayingHandsGlyph, unchanged) seated a breath below
+ *  center inside an open IVORY doorway — arch path and
+ *  sill at a constant 2.6 weight, ivory #f6efdb (the
+ *  legend's own text ivory). NO amber halo: the halo was
+ *  the confusion Jason caught (Nov 11) — at map size the
+ *  glyph inside it rendered ~3px wide, invisible, and
+ *  all the eye received was a warm amber glow, which is
+ *  exactly what a reading light is. No other mark on the
+ *  map wears a drawn container; lights are borderless
+ *  glows, so the doorway's silhouette separates the sign
+ *  in the first glance, and the shape quietly IS the
+ *  meaning — a door being knocked at. The breathing
+ *  stays the prayer's own (.hb-prayer on the callers'
+ *  group — an opacity breath, 0.7→1; it brightens no
+ *  glow, because there is no glow left to brighten).
+ *  `rotate` turns the WHOLE construction about the
+ *  mark's own heart (the panel's counter-rotation — a
+ *  circle never showed its turn, an arch does, so the
+ *  doorway counter-rotates with the hands as one rigid
+ *  shape; rotation about the heart moves nothing's
+ *  seat). */
+function PrayerArchHands({
+  cx,
+  cy,
+  glyphScale,
+  rotate,
+}: {
+  cx: number;
+  cy: number;
+  glyphScale: number;
+  rotate?: number;
+}) {
+  return (
+    <g transform={rotate ? `rotate(${rotate} ${cx} ${cy})` : undefined}>
+      <g transform={`translate(${cx} ${cy})`}>
+        <path
+          d="M -9 11 L -9 -3 C -9 -10.5 -5.2 -15 0 -15 C 5.2 -15 9 -10.5 9 -3 L 9 11"
+          fill="none"
+          stroke="#f6efdb"
+          strokeWidth="2.6"
+          strokeLinecap="round"
+        />
+        <line
+          x1="-11.5"
+          y1="11"
+          x2="11.5"
+          y2="11"
+          stroke="#f6efdb"
+          strokeWidth="2.6"
+          strokeLinecap="round"
+        />
+      </g>
+      <PrayingHandsGlyph x={cx} y={cy + 0.6} scale={glyphScale} />
+    </g>
+  );
+}
+
 /** THE PRAYER HANDS (Nov 5, 2026 — Jason's word) — the
  *  candle's glyph set free of the candle: a small pair of
  *  praying hands at a place's heart, for a place that has
  *  opened the app in the record but never read or heard a
  *  chapter there. No fill, no ring, no count: the hands
  *  themselves, breathing on the candle's own slow
- *  .hb-prayer over a whisper of candle amber, are the
- *  whole sign — we are praying for this place, and
- *  whoever sees it is invited to pray and to open the
- *  Word for their neighbors. The glyph is the candle's
- *  own (PrayingHandsGlyph), a step smaller, so at a
- *  country's heart it reads as a kept prayer and never
- *  competes with the day's lights. */
+ *  .hb-prayer, are the whole sign — we are praying for
+ *  this place, and whoever sees it is invited to pray and
+ *  to open the Word for their neighbors. The glyph is the
+ *  candle's own (PrayingHandsGlyph), a step smaller, so at
+ *  a country's heart it reads as a kept prayer and never
+ *  competes with the day's lights.
+ *  (Nov 11, 2026 — Jason's crown, "Hands in the Arch":
+ *  the whisper of candle amber this mark once breathed
+ *  over is GONE, and the hands now sit in the ivory
+ *  doorway — see PrayerArchHands above for why.) */
 function PrayerHandsMark({
   cx,
   cy,
@@ -1475,15 +1544,7 @@ function PrayerHandsMark({
   return (
     <g className="hb-prayer">
       <title>{label}</title>
-      <circle
-        cx={cx}
-        cy={cy}
-        r="11"
-        fill={PRAYER_CANDLE}
-        opacity="0.28"
-        filter="url(#hb-soft)"
-      />
-      <PrayingHandsGlyph x={cx} y={cy} scale={0.62} />
+      <PrayerArchHands cx={cx} cy={cy} glyphScale={0.55} />
     </g>
   );
 }
@@ -1508,7 +1569,16 @@ function PrayerHandsMark({
  *  0.8 the glyph spans 6.5 × 11.8 map units; at 0.6 it
  *  spans 4.9 × 8.9. Same candle amber, same slow
  *  breathing. The soft blur is the panel's own filter
- *  (hb-soft-us). */
+ *  (hb-soft-us).
+ *  (Nov 11, 2026 — Jason's crown, "Hands in the Arch":
+ *  the halo and its blur are gone here too, and the
+ *  panel wears the SAME PrayerArchHands construction
+ *  as the disc — same paths, glyph still 0.6 — with the
+ *  -263.24° counter-rotation now turning the whole
+ *  doorway about the mark's heart instead of the glyph
+ *  alone, so the arch stands upright on screen exactly
+ *  as the hands always did. One construction, both
+ *  surfaces: they cannot drift apart again.) */
 function PrayerHandsMarkPanel({
   cx,
   cy,
@@ -1537,15 +1607,7 @@ function PrayerHandsMarkPanel({
   return (
     <g className="hb-prayer">
       <title>{label}</title>
-      <circle
-        cx={cx}
-        cy={cy}
-        r="11"
-        fill={PRAYER_CANDLE}
-        opacity="0.28"
-        filter="url(#hb-soft-us)"
-      />
-      <PrayingHandsGlyph x={cx} y={cy} scale={0.6} rotate={-263.24} />
+      <PrayerArchHands cx={cx} cy={cy} glyphScale={0.6} rotate={-263.24} />
     </g>
   );
 }
@@ -4386,9 +4448,9 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 focusable="false"
                 className="h-[26px] w-[26px] shrink-0"
               >
-                <circle cx="13" cy="13" r="10.5" fill="#ffab4a" fillOpacity="0.3" />
-                <circle cx="13" cy="13" r="6.5" fill="#ffab4a" fillOpacity="0.5" />
-                <PrayingHandsGlyph x={13} y={12.7} scale={0.51} />
+                <g transform="translate(13 14.5) scale(0.9)">
+                  <PrayerArchHands cx={0} cy={0} glyphScale={0.55} />
+                </g>
               </svg>
               <span className="text-[15px] leading-snug text-[#f6efdb]">
                 Praying for you — a place we're praying will open the Word with us
