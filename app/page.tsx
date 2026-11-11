@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { getAllBooks } from "@/lib/bible";
 import BookCard from "@/components/BookCard";
 import VerseOfDay from "@/components/VerseOfDay";
-import ContinueReading from "@/components/ContinueReading";
+import PickupBand from "@/components/PickupBand";
 import HighlightsCard from "@/components/HighlightsCard";
 import PlanContinue from "@/components/PlanContinue";
 import ListenDropdown from "@/components/ListenDropdown";
@@ -217,6 +217,15 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Pick up where you left off (Jason, Nov 11, 2026): the
+          returning reader's place, carried to the very top — the
+          first thing under the hero, with Read and Listen doors.
+          It renders only for a reader with saved progress; a
+          first visit meets the hero alone. It replaces the old
+          ContinueReading card, which rested deep in the widgets
+          column below. See components/PickupBand.tsx. */}
+      <PickupBand />
+
       {/* Global Bible Month — the month's thirty day doors,
           resting directly under the hero for November 2026 only
           (Jason, Nov 9, 2026). Added, not rearranged: the hero
@@ -331,7 +340,6 @@ export default function Home() {
       <div className="mx-auto max-w-4xl space-y-5 px-4 py-10 sm:px-6">
         <VerseOfDay />
         <PlanContinue />
-        <ContinueReading />
         <HighlightsCard />
       </div>
 
