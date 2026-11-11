@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 /**
  * The first-visit arrow tour (Jason, Nov 11, 2026) — the dashboard
@@ -12,8 +13,13 @@ import { useCallback, useEffect, useRef, useState } from "react";
  *   Read → the hero's book bubble (Genesis 1)
  *   Listen → the hero's speaker bubble (Teddy reads Mark 1)
  *   Search → the hero's magnifying-glass bubble (/search)
- *   Earth Map → the map below (the tour first scrolls it into
- *   view, then the arrow points down at it)
+ *   Earth Map → the hero's own "Earth Map" pill, in TWO beats
+ *   (Jason's correction, later on Nov 11): first the arrow
+ *   touches the pill itself — the door — and the pill breathes
+ *   the ring; then the tour takes the very journey a tap on
+ *   that pill takes, gliding down to the map and naming it
+ *   once more where the eye lands. Cause, then effect — the
+ *   sequence a real tap makes.
  *
  * Jason's reason: visitors land and never learn what to tap —
  * California comes ~50 times a day and clicks nothing. The tour
@@ -51,7 +57,13 @@ import { useCallback, useEffect, useRef, useState } from "react";
  *   it, the small ✕ ends it, and a tap on a named bubble DOES
  *   that bubble's own job and ends it — the callouts are pure
  *   pointer-events-none decoration and no backdrop ever dims
- *   or blocks the page.
+ *   or blocks the page. "Anywhere" is a document listener, not
+ *   just the hero: during the Earth Map glide the hero has
+ *   scrolled away and the tap lands on the map itself, and
+ *   ending mid-glide stops the page where it is. A tap on the
+ *   Earth Map pill during its beat is likewise the tour ending
+ *   AND the pill's own anchor doing its job — one journey, the
+ *   real one, never two.
  * - THE INVITE PILL STANDS UNTIL IT IS TAPPED AWAY (Jason's
  *   ruling, later on Nov 11). The auto-play above is once per
  *   device, but the invite pill under the hero bubbles is a
@@ -87,8 +99,31 @@ const TEDDY_WELCOME_MAX_AUTO_OPENS = 2;
 
 type Phase = "idle" | "invite" | "running" | "static" | "rest";
 
+/** A measured rectangle in hero-section coordinates — the Earth
+ * Map pill's own footprint, so the tour can touch the pill
+ * itself (its ring) and rest a callout just above it. The pill
+ * rides a centered, wrapping nav, so no fixed numbers can know
+ * where it stands; it is measured, never guessed. */
+type PillBox = { top: number; left: number; width: number; height: number };
+
 const STOP_MS = 1900;
 const START_DELAY_MS = 900;
+/** The Earth Map's closing beat: the destination named where
+ * the eye lands, a breath shorter than a full stop. */
+const ARRIVAL_MS = 1600;
+/** The journey's patience: after asking for the glide, poll the
+ * scroll until it has been quiet for a breath (SETTLE), never
+ * before MIN has passed, and never wait past MAX — on a tall
+ * desktop the glide is long, and the closing beat's callout
+ * tracks the card even if it lands while the page still moves. */
+const JOURNEY_POLL_MS = 120;
+const JOURNEY_SETTLE_MS = 300;
+const JOURNEY_MIN_MS = 400;
+const JOURNEY_MAX_MS = 4500;
+/** The Earth Map callout's own height (the word's line + the
+ * down arrow + their gap), so it can rest its arrow tip just
+ * above the thing it names. */
+const MAP_CALLOUT_H = 46;
 /** The doorway between Teddy's welcome closing and the tour's
  * first arrow — long enough that the welcome reads as finished,
  * short enough that the tour still feels like one greeting. */
@@ -237,11 +272,30 @@ export default function ArrowTour() {
    * moment its ✕ is tapped. Nothing else reads it: the tour's
    * seen-note and the auto-play never consult the pill. */
   const [pillOff, setPillOff] = useState(false);
+  /** The Earth Map pill's measured footprint (hero-section
+   * coordinates), taken when its beat arrives — the door beat
+   * and the reduced-motion label both stand on it. */
+  const [pillBox, setPillBox] = useState<PillBox | null>(null);
+  /** The map card's corner in viewport coordinates, for the
+   * closing beat's callout (rendered through a portal: the hero
+   * section clips its own overflow, and the card lives far
+   * below it). Re-measured as the page moves, so the word stays
+   * on the card even if the glide is still settling. */
+  const [arrivalBox, setArrivalBox] = useState<{
+    top: number;
+    left: number;
+  } | null>(null);
   const timers = useRef<number[]>([]);
   const startedRef = useRef(false);
   /** Set the moment the tour is definitively over in this mount,
    * so a late handoff from Teddy's welcome can never revive it. */
   const doneRef = useRef(false);
+  /** The tour's root element — the way to its own hero section,
+   * inside which the Earth Map pill is found and measured. */
+  const rootRef = useRef<HTMLDivElement>(null);
+  /** True from the moment the Earth Map glide is asked for, so
+   * ending mid-glide can stop the page where it is. */
+  const journeyRef = useRef(false);
 
   const clearTimers = useCallback(() => {
     timers.current.forEach((t) => window.clearTimeout(t));
@@ -251,12 +305,105 @@ export default function ArrowTour() {
   const end = useCallback(() => {
     if (doneRef.current) return;
     doneRef.current = true;
+    if (journeyRef.current) {
+      // Ended mid-glide (a tap, Escape, the ✕): stop the page
+      // where it is rather than letting the tour's scroll run
+      // on without it. An instant jump to the very spot the
+      // page already shows cancels the in-flight glide.
+      try {
+        window.scrollTo({ top: window.scrollY, behavior: "instant" });
+      } catch {
+        /* an engine without "instant": the glide simply ends */
+      }
+    }
     clearTimers();
     // The tour rests into its standing invitation: the invite
     // pill takes the corner back (unless it was tapped away).
     setPhase(pillDismissed() ? "idle" : "rest");
     markTourSeen();
   }, [clearTimers]);
+
+  /** Measure the hero's Earth Map pill — found by what it IS
+   * (the anchor whose href is "#earth-map", inside this tour's
+   * own hero section), never by its text alone. Coordinates are
+   * taken relative to the section, the containing block of the
+   * tour's absolute callouts. */
+  const measurePill = useCallback(() => {
+    const section = rootRef.current?.closest("section");
+    const pill = section?.querySelector<HTMLElement>('a[href="#earth-map"]');
+    if (!section || !pill) return false;
+    const p = pill.getBoundingClientRect();
+    const s = section.getBoundingClientRect();
+    setPillBox({
+      top: p.top - s.top,
+      left: p.left - s.left,
+      width: p.width,
+      height: p.height,
+    });
+    return true;
+  }, []);
+
+  /** Where the closing beat's callout stands: just inside the
+   * map card's top edge, at its left corner — the card lands
+   * with its top a breath under the sticky header, so the word
+   * steps inside the card's own frame rather than fight the
+   * header for the strip above it. The heading is centered;
+   * the corner is the card's quiet ground. */
+  const trackArrival = useCallback(() => {
+    const el = document.getElementById("earth-map");
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    setArrivalBox({ top: r.top + 10, left: r.left + 18 });
+  }, []);
+
+  /** The closing beat: the glide has settled (or the journey's
+   * patience ran out) — name the destination where the eye
+   * lands, hold it a breath, and end. */
+  const arrive = useCallback(() => {
+    if (doneRef.current) return;
+    trackArrival();
+    setStop(6);
+    timers.current.push(window.setTimeout(end, ARRIVAL_MS));
+  }, [end, trackArrival]);
+
+  /** Beat two of the Earth Map stop: the journey a real tap on
+   * the pill takes. The pill is an anchor to #earth-map and
+   * this page glides by its own CSS (html scroll-behavior:
+   * smooth), so the tour asks for exactly that glide — no
+   * behavior of its own — and lands on the card's own scroll
+   * margin, the same landing the anchor gives. */
+  const journey = useCallback(() => {
+    if (doneRef.current) return;
+    const el = document.getElementById("earth-map");
+    if (!el) {
+      end();
+      return;
+    }
+    journeyRef.current = true;
+    setStop(5);
+    el.scrollIntoView({ block: "start" });
+    // Watch for the glide to settle, then name the destination.
+    let lastY = window.scrollY;
+    let quiet = 0;
+    let waited = 0;
+    const poll = () => {
+      if (doneRef.current) return;
+      waited += JOURNEY_POLL_MS;
+      const y = window.scrollY;
+      if (Math.abs(y - lastY) < 1) quiet += JOURNEY_POLL_MS;
+      else quiet = 0;
+      lastY = y;
+      if (
+        (waited >= JOURNEY_MIN_MS && quiet >= JOURNEY_SETTLE_MS) ||
+        waited >= JOURNEY_MAX_MS
+      ) {
+        arrive();
+        return;
+      }
+      timers.current.push(window.setTimeout(poll, JOURNEY_POLL_MS));
+    };
+    timers.current.push(window.setTimeout(poll, JOURNEY_POLL_MS));
+  }, [arrive, end]);
 
   const begin = useCallback(() => {
     if (startedRef.current || doneRef.current) return;
@@ -268,8 +415,9 @@ export default function ArrowTour() {
     if (reduced) {
       // No sequencing, no pulse, no auto-scroll: all five words
       // stand beside their bubbles at once until the visitor
-      // dismisses them. The Earth Map word rides the hero's own
-      // "Earth Map" pill — the map's door in the first screen.
+      // dismisses them. The Earth Map word stands at the hero's
+      // own "Earth Map" pill — measured on it (the effect
+      // below), the map's door in the first screen.
       setPhase("static");
       return;
     }
@@ -284,22 +432,23 @@ export default function ArrowTour() {
     }
     setPhase("running");
     setStop(0);
+    journeyRef.current = false;
     const later = (fn: () => void, ms: number) => {
       timers.current.push(window.setTimeout(fn, ms));
     };
     later(() => setStop(1), STOP_MS);
     later(() => setStop(2), STOP_MS * 2);
     later(() => setStop(3), STOP_MS * 3);
-    later(() => {
-      // The fifth stop has farther to go: bring the Earth map
-      // into view first, then let its arrow land on it.
-      document
-        .getElementById("earth-map")
-        ?.scrollIntoView({ behavior: "smooth", block: "start" });
-      setStop(4);
-    }, STOP_MS * 4);
-    later(() => end(), STOP_MS * 5);
-  }, [clearTimers, end]);
+    // The fifth stop, beat one — THE DOOR: the arrow touches
+    // the hero's Earth Map pill itself and the pill breathes
+    // the ring (its geometry is measured by the effect below).
+    // No scrolling yet: first the visitor learns what to tap.
+    later(() => setStop(4), STOP_MS * 4);
+    // Beat two — THE JOURNEY: the tour takes the glide the
+    // pill's own tap takes, and the closing beat names the map
+    // on arrival (journey/arrive above own the rest).
+    later(() => journey(), STOP_MS * 5);
+  }, [clearTimers, end, journey]);
 
   /* First mount: decide what this visitor gets. */
   useEffect(() => {
@@ -362,6 +511,52 @@ export default function ArrowTour() {
     return () => document.removeEventListener("keydown", onKey);
   }, [phase, end]);
 
+  /* A tap ANYWHERE ends the tour — a document listener, because
+   * the tour's own root lives inside the hero: once the Earth
+   * Map glide carries the page down, a tap lands on the map,
+   * far outside the hero, and it must still end the tour (and
+   * stop the glide where it is — end() does that). The tour's
+   * own controls carry data-arrow-tour-ui and are exempt; the
+   * root's own onPointerDown below hears the same taps inside
+   * the hero and end() simply answers once. */
+  useEffect(() => {
+    if (phase !== "running" && phase !== "static") return;
+    const onDown = (e: PointerEvent) => {
+      if ((e.target as HTMLElement).closest("[data-arrow-tour-ui]")) return;
+      end();
+    };
+    document.addEventListener("pointerdown", onDown);
+    return () => document.removeEventListener("pointerdown", onDown);
+  }, [phase, end]);
+
+  /* Measure the Earth Map pill when its moment comes: the door
+   * beat of the animated telling, or the standing label of the
+   * reduced-motion one. Measured on entry, once more as fonts
+   * and the hero cycle settle, and on every resize while the
+   * beat is up. */
+  useEffect(() => {
+    const active = phase === "static" || (phase === "running" && stop === 4);
+    if (!active) return;
+    measurePill();
+    const again = window.setTimeout(measurePill, 400);
+    window.addEventListener("resize", measurePill);
+    return () => {
+      window.clearTimeout(again);
+      window.removeEventListener("resize", measurePill);
+    };
+  }, [phase, stop, measurePill]);
+
+  /* While the closing beat is up, keep its callout on the map
+   * card: if the glide is still settling (or the visitor's
+   * device moves the page), the word follows the card. */
+  useEffect(() => {
+    if (phase !== "running" || stop !== 6) return;
+    trackArrival();
+    const onScroll = () => trackArrival();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [phase, stop, trackArrival]);
+
   /* A tap anywhere that is not one of the tour's own controls
    * ends it. The callouts themselves are pointer-events-none, so
    * a tap aimed at a named bubble lands on the bubble: this
@@ -399,6 +594,7 @@ export default function ArrowTour() {
 
   return (
     <div
+      ref={rootRef}
       role="group"
       aria-label="A short tour: Watch, Read, Listen, Search, and the Earth Map"
       onPointerDown={
@@ -432,13 +628,44 @@ export default function ArrowTour() {
           )
       )}
 
-      {/* Stop 5 — the Earth Map, animated telling: the callout
-          stands directly under the hero bubble row while the
-          scroll carries the visitor down to the map. Placing it
-          on the map card itself would need the card's distant
-          coordinates; the row stays in view through the scroll's
-          first moments, and the word + down-arrow ride it. */}
-      {phase === "running" && stop === 4 && (
+      {/* Stop 5, beat one — THE DOOR (animated telling): the
+          callout rests just above the hero's Earth Map pill,
+          its arrow tip on the pill, and the pill itself
+          breathes the golden ring — the same telling the four
+          bubbles got, at the door a tap would take. The pill is
+          measured, never guessed (see measurePill). Should the
+          pill ever not be found, the beat falls back to the
+          tour's first telling — the word under the bubble row —
+          so the beat is never simply missing. */}
+      {phase === "running" && stop === 4 && pillBox && (
+        <span key="earth-map-door" className="contents">
+          <span
+            aria-hidden="true"
+            data-tour-stop5="door"
+            className="arrow-tour-callout pointer-events-none absolute z-30"
+            style={{
+              top: pillBox.top - MAP_CALLOUT_H - 4,
+              left: pillBox.left + pillBox.width / 2,
+            }}
+          >
+            <span className="flex -translate-x-1/2 flex-col items-center gap-0.5">
+              <span className={WORD_CLASS}>Earth Map</span>
+              <ArrowDown />
+            </span>
+          </span>
+          <span
+            aria-hidden="true"
+            className="teddy-point pointer-events-none absolute z-30 rounded-full"
+            style={{
+              top: pillBox.top,
+              left: pillBox.left,
+              width: pillBox.width,
+              height: pillBox.height,
+            }}
+          />
+        </span>
+      )}
+      {phase === "running" && stop === 4 && !pillBox && (
         <span
           aria-hidden="true"
           className="arrow-tour-callout pointer-events-none absolute right-[50px] top-[52px] z-30 flex flex-col items-center gap-0.5 sm:right-[66px] sm:top-[64px]"
@@ -447,14 +674,52 @@ export default function ArrowTour() {
           <ArrowDown />
         </span>
       )}
+      {/* Stop 5, beat two — THE ARRIVAL: the glide has carried
+          the visitor to the map; the word names the destination
+          where the eye lands, just inside the card's top edge.
+          Rendered through a portal at the document root: the
+          hero section clips its own overflow and the card lives
+          far below it, so the callout is placed by the card's
+          own viewport position (tracked while it shows). */}
+      {phase === "running" &&
+        stop === 6 &&
+        arrivalBox &&
+        createPortal(
+          <span
+            aria-hidden="true"
+            data-tour-stop5="arrival"
+            className="arrow-tour-callout pointer-events-none fixed z-[70] flex flex-col items-center gap-0.5"
+            style={{ top: arrivalBox.top, left: arrivalBox.left }}
+          >
+            <span className={WORD_CLASS}>Earth Map</span>
+            <ArrowDown />
+          </span>,
+          document.body
+        )}
       {/* Stop 5 — the Earth Map, reduced-motion telling: no
-          scrolling, so the word rides the hero's own "Earth Map"
-          pill in the doors nav — the map's door in the first
-          screen — pointing down at the pill itself. The pill's
-          spot in the centered nav shifts with wrapping, so the
-          word stands at the hero's left rim instead: it names
-          the door without pretending to touch it. */}
-      {phase === "static" && (
+          sequencing and no scroll, so the word stands at the
+          pill itself, measured onto the map's door in the first
+          screen (the first build had to leave it at the hero's
+          rim, before the pill could be measured). The rim
+          remains only as the fallback if the pill is ever not
+          found. */}
+      {phase === "static" && pillBox && (
+        <span
+          aria-hidden="true"
+          data-tour-stop5="door"
+          className="pointer-events-none absolute z-30"
+          style={{
+            top: pillBox.top - MAP_CALLOUT_H - 4,
+            left: pillBox.left + pillBox.width / 2,
+          }}
+        >
+          <span className="flex -translate-x-1/2 flex-col items-center gap-0.5">
+            <span className={WORD_CLASS}>Earth Map</span>
+            <ArrowDown />
+          </span>
+        </span>
+      )}
+      {phase === "static" && !pillBox && (
         <span
           aria-hidden="true"
           className="pointer-events-none absolute left-4 top-[300px] z-30 flex items-center gap-1 sm:left-6"
@@ -466,8 +731,9 @@ export default function ArrowTour() {
 
       {/* The way out, always the visitor's: a small ✕ resting
           under the bubble row while the tour is up (it steps
-          aside while the Earth Map stop owns that corner). */}
-      {(phase === "static" || (phase === "running" && stop < 4)) && (
+          aside once the journey begins — by then the hero, and
+          this corner with it, has scrolled away). */}
+      {(phase === "static" || (phase === "running" && stop <= 4)) && (
         <button
           type="button"
           data-arrow-tour-ui=""
