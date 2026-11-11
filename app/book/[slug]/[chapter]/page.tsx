@@ -12,6 +12,7 @@ import { parseVerses, type Verse } from "@/lib/verses";
 import { getCrossRefs, refsForChapter } from "@/lib/crossrefs";
 import { getVideosForChapter } from "@/lib/videos";
 import { getFilmForChapter } from "@/lib/films";
+import { getDayShortForChapter } from "@/lib/day-shorts";
 import { Suspense } from "react";
 import ReaderView from "@/components/ReaderView";
 
@@ -89,6 +90,7 @@ export default async function ReaderPage({
   const crossRefs = refsForChapter(allRefs, book.title, chapterNum);
   const videos = getVideosForChapter(slug, idx);
   const film = getFilmForChapter(slug, idx);
+  const dayShort = getDayShortForChapter(slug, idx);
 
   return (
     <Suspense fallback={<div className="p-8 text-center text-cream-100">Loading chapter…</div>}>
@@ -105,6 +107,7 @@ export default async function ReaderPage({
       crossRefs={crossRefs}
       videos={videos}
       film={film}
+      dayShort={dayShort}
       prevIdx={idx > 0 ? idx - 1 : null}
       nextIdx={idx < chapters.length - 1 ? idx + 1 : null}
     />

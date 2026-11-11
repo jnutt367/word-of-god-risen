@@ -10,6 +10,7 @@ import CrossRefPanel from "@/components/CrossRefPanel";
 import CarvedDivider from "@/components/CarvedDivider";
 import WatchCard from "@/components/WatchCard";
 import FilmCard from "@/components/FilmCard";
+import DayShortCard from "@/components/DayShortCard";
 import ListenButton from "@/components/ListenButton";
 import ListenedMarkButton from "@/components/ListenedMarkButton";
 import AudioReportButton from "@/components/AudioReportButton";
@@ -21,6 +22,7 @@ import { VERSION_STORAGE_KEY } from "@/lib/versions";
 import type { Verse } from "@/lib/verses";
 import type { ChapterVideo } from "@/lib/videos";
 import type { ChapterFilm } from "@/lib/films";
+import type { DayShort } from "@/lib/day-shorts";
 
 interface VersionInfo {
   id: string;
@@ -47,6 +49,7 @@ interface Props {
   crossRefs: Record<number, string[]>;
   videos: ChapterVideo[];
   film: ChapterFilm | null;
+  dayShort: DayShort | null;
   prevIdx: number | null;
   nextIdx: number | null;
 }
@@ -64,6 +67,7 @@ export default function ReaderView({
   crossRefs,
   videos,
   film,
+  dayShort,
   prevIdx,
   nextIdx,
 }: Props) {
@@ -356,6 +360,12 @@ export default function ReaderView({
 
         {/* The chapter's animated film, beside the Listen controls */}
         <FilmCard film={film} />
+
+        {/* The day's Short on its own chapter page (Jason, Nov 10,
+            2026): extra access to the Shorts from inside the app —
+            under the heading, above the chapter text, never in the
+            reading's way. Renders only on a GBM day's own chapter. */}
+        <DayShortCard dayShort={dayShort} />
 
         {/* One quiet line teaching the highlight tap (Nov 8, 2026):
             the feature a reader asked for is only kind if a reader
