@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import ShareAppButton from "@/components/ShareAppButton";
 import { useVideoChoice, VideoChoiceModal } from "@/components/VideoChoice";
@@ -172,6 +173,30 @@ export default function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [farmOpen, setFarmOpen] = useState(false);
   const farmRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+
+  // The emblem + title are the home door — and, on the homepage
+  // itself, the way back to the top. (Jason, Nov 11, 2026: deep in
+  // the books list he tapped the title and nothing happened — a Link
+  // to the page you are already on goes nowhere and does not scroll.
+  // So on "/" the tap is handled here: clear any hash a shared link
+  // arrived with, so a later refresh does not jump back down the
+  // page, then glide to the very top — instantly when the reader
+  // prefers reduced motion. From every other page the Link simply
+  // navigates home, landing at its top as a fresh page does.)
+  // Distinctive marker for verifying the shipped bundle: header-home-top.
+  const goHome = (e: React.MouseEvent) => {
+    setOpen(false);
+    if (pathname !== "/") return;
+    e.preventDefault();
+    if (window.location.hash) {
+      history.replaceState(null, "", window.location.pathname);
+    }
+    const reduce = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    window.scrollTo({ top: 0, behavior: reduce ? "instant" : "smooth" });
+  };
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -198,12 +223,16 @@ export default function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-[60] border-b border-gold-500/15 bg-vineyard-950/90 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-2.5 sm:px-6">
+        {/* Header hierarchy (Jason, Nov 11, 2026): the title is
+            primary — it claims the row's free space first (flex-1)
+            and is the last element to give up room; Share stands
+            second and compresses first; the hamburger is utility. */}
         <Link
           href="/"
-          className="flex min-w-0 items-center gap-2.5"
+          className="flex h-full min-w-0 flex-1 items-center gap-2"
           aria-label="Word of God Risen — home"
-          onClick={() => setOpen(false)}
+          onClick={goHome}
         >
           <Image
             src="/images/truvine-emblem.png"

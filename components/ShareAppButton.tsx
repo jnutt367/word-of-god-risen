@@ -135,9 +135,15 @@ export default function ShareAppButton({
         onClick={share}
         aria-label="Share this app with a friend"
         className={
+          // Quiet ghost register (Jason, Nov 11, 2026): the title is
+          // the header's primary element and Share stands second —
+          // transparent ground, a thin gold edge, sage words. The
+          // compact (phone) dress is deliberately smaller in text and
+          // padding so Share yields its width to the wordmark first;
+          // the ≥44px tap target rides on min-height, not on bulk.
           compact
-            ? "flex min-h-[44px] items-center gap-1 rounded-lg bg-gold-500 px-3 py-2.5 text-sm font-semibold text-vineyard-950 transition-colors hover:bg-gold-400"
-            : "flex min-h-[48px] items-center gap-1.5 rounded-lg bg-gold-500 px-4 py-3 text-sm font-semibold text-vineyard-950 transition-colors hover:bg-gold-400"
+            ? "flex min-h-[44px] items-center gap-1 rounded-lg border border-gold-500/25 px-2.5 py-2 text-[13px] font-medium text-sage-300 transition-colors hover:border-gold-500/50 hover:text-gold-300"
+            : "flex min-h-[48px] items-center gap-1.5 rounded-lg border border-gold-500/25 px-4 py-3 text-sm font-medium text-sage-300 transition-colors hover:border-gold-500/50 hover:text-gold-300"
         }
       >
         <span aria-hidden="true">{copied ? "✓" : "⤴"}</span>
