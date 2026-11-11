@@ -21,9 +21,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
  * the Listen button on a reader's first chapter.
  *
  * The house rules, whole:
- * - FIRST VISIT ONLY, remembered in the visitor's own browser
- *   (wogr_arrow_tour_v1) — no accounts, no server state, and no
- *   heartbeat/analytics beat of any kind. The tour is silent.
+ * - THE AUTO-PLAY IS FIRST VISIT ONLY, remembered in the
+ *   visitor's own browser (wogr_arrow_tour_v1) — no accounts,
+ *   no server state, and no heartbeat/analytics beat of any
+ *   kind. The tour is silent. (The invite pill below is a
+ *   separate, standing thing — see its own bullet.)
  * - IT QUEUES BEHIND TEDDY. The Ask Teddy welcome auto-opens at
  *   most twice for a reader who has never met him (his key:
  *   wogr_teddy_welcome_v2). On a true first visit both would
@@ -50,11 +52,20 @@ import { useCallback, useEffect, useRef, useState } from "react";
  *   that bubble's own job and ends it — the callouts are pure
  *   pointer-events-none decoration and no backdrop ever dims
  *   or blocks the page.
- * - THE REPLAY RIDES TEDDY'S OWN DOOR. The invite pill under
- *   the hero bubbles offers the tour on tap until it has been
- *   seen; after that, the "New here? Teddy can show you" pill
- *   on reader pages re-arms it alongside Teddy's card (see
- *   ListenButton — it clears this flag and comes home).
+ * - THE INVITE PILL STANDS UNTIL IT IS TAPPED AWAY (Jason's
+ *   ruling, later on Nov 11). The auto-play above is once per
+ *   device, but the invite pill under the hero bubbles is a
+ *   standing invitation: it shows while Teddy's welcome still
+ *   has a say, and it is still there after the tour has been
+ *   seen — the quiet way back in. It leaves only when the
+ *   visitor deliberately taps its own ✕, remembered in its own
+ *   note (wogr_arrow_tour_pill_v1), which never marks the tour
+ *   seen and never touches the auto-play. While the tour itself
+ *   runs, the pill steps aside (its corner belongs to the
+ *   tour's own ✕) and returns when the tour ends. The
+ *   "New here? Teddy can show you" pill on reader pages also
+ *   re-arms the tour alongside Teddy's card (see ListenButton
+ *   — it clears the seen flag and comes home).
  * - REDUCED MOTION changes the telling, not the teaching: no
  *   sequencing, no pulse, no auto-scroll — the five words simply
  *   stand beside their bubbles all at once until dismissed.
@@ -62,6 +73,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import {
   ARROW_TOUR_KEY,
+  ARROW_TOUR_PILL_KEY,
   ARROW_TOUR_START_EVENT,
   dispatchArrowTourSeen,
 } from "@/lib/arrow-tour";
@@ -73,7 +85,7 @@ const TEDDY_WELCOME_KEY_V1 = "wogr_teddy_welcome_v1";
  * its chances; Ask Teddy remains the welcome's owner. */
 const TEDDY_WELCOME_MAX_AUTO_OPENS = 2;
 
-type Phase = "idle" | "invite" | "running" | "static";
+type Phase = "idle" | "invite" | "running" | "static" | "rest";
 
 const STOP_MS = 1900;
 const START_DELAY_MS = 900;
@@ -109,6 +121,25 @@ function markTourSeen() {
     /* storage unavailable — the tour simply ends for this visit */
   }
   dispatchArrowTourSeen();
+}
+
+/** The invite pill's own memory — wholly separate from the
+ * tour's seen-note. A dismissed pill stays dismissed; an error
+ * reads as dismissed too, so a broken store can never nag. */
+function pillDismissed(): boolean {
+  try {
+    return localStorage.getItem(ARROW_TOUR_PILL_KEY) === "dismissed";
+  } catch {
+    return true; // storage unavailable — never nag
+  }
+}
+
+function markPillDismissed() {
+  try {
+    localStorage.setItem(ARROW_TOUR_PILL_KEY, "dismissed");
+  } catch {
+    /* storage unavailable — the pill still hides for this visit */
+  }
 }
 
 function welcomeSettled(): boolean {
@@ -201,6 +232,11 @@ const RING_RIGHT: { right: string; smRight: string }[] = [
 export default function ArrowTour() {
   const [phase, setPhase] = useState<Phase>("idle");
   const [stop, setStop] = useState(0);
+  /** The invite pill's dismissal, this visit's rendering truth —
+   * seeded from its own localStorage note on mount and set the
+   * moment its ✕ is tapped. Nothing else reads it: the tour's
+   * seen-note and the auto-play never consult the pill. */
+  const [pillOff, setPillOff] = useState(false);
   const timers = useRef<number[]>([]);
   const startedRef = useRef(false);
   /** Set the moment the tour is definitively over in this mount,
@@ -216,7 +252,9 @@ export default function ArrowTour() {
     if (doneRef.current) return;
     doneRef.current = true;
     clearTimers();
-    setPhase("idle");
+    // The tour rests into its standing invitation: the invite
+    // pill takes the corner back (unless it was tapped away).
+    setPhase(pillDismissed() ? "idle" : "rest");
     markTourSeen();
   }, [clearTimers]);
 
@@ -265,8 +303,13 @@ export default function ArrowTour() {
 
   /* First mount: decide what this visitor gets. */
   useEffect(() => {
+    setPillOff(pillDismissed());
     if (tourSeen()) {
+      // The greeting has had its once on this device. What
+      // remains is the standing invitation: the pill rests in
+      // its corner (the render below) until it is tapped away.
       doneRef.current = true;
+      setPhase("rest");
       return;
     }
     if (!welcomeSettled()) {
@@ -327,6 +370,26 @@ export default function ArrowTour() {
   const endOnPointerDown = (e: React.PointerEvent) => {
     if ((e.target as HTMLElement).closest("[data-arrow-tour-ui]")) return;
     end();
+  };
+
+  /* The invite pill's own two doors. Tapping the pill asks for
+   * the tour — from "invite" (Teddy still to speak) or from
+   * "rest" (the tour already seen on this device): asking
+   * settles the order, and from rest it re-arms the run guards
+   * for one more telling. Tapping the pill's ✕ is a separate,
+   * deliberate act: the pill leaves and is remembered as
+   * dismissed in its own note — the tour's seen-note and the
+   * auto-play are not touched by it. */
+  const startFromPill = () => {
+    doneRef.current = false;
+    startedRef.current = false;
+    setPhase("idle");
+    window.setTimeout(begin, 60);
+  };
+
+  const dismissPill = () => {
+    markPillDismissed();
+    setPillOff(true);
   };
 
   if (phase === "idle") return null;
@@ -416,27 +479,40 @@ export default function ArrowTour() {
         </button>
       )}
 
-      {/* The invite — shown only while Teddy's welcome still has
-          a say with this visitor and the tour is unseen. One tap
-          and the tour runs, even with Teddy still to speak: the
-          visitor asked, and asking settles the order. It
-          unmounts the moment the tour itself ends, because the
-          end marks the tour seen (see end() above). */}
-      {phase === "invite" && (
-        <button
-          type="button"
+      {/* The invite — a standing invitation (Jason's ruling,
+          later on Nov 11). It shows while Teddy's welcome still
+          has a say with this visitor, and it is STILL there
+          after the tour has been seen: the quiet way back in.
+          One tap and the tour runs — from either state, the
+          visitor asked, and asking settles the order. It steps
+          aside while the tour itself is up (this corner belongs
+          to the tour's own ✕ then) and returns when the tour
+          ends. It leaves for good only by its own ✕, remembered
+          in its own note — never merely because the tour ran. */}
+      {(phase === "invite" || phase === "rest") && !pillOff && (
+        <div
           data-arrow-tour-ui=""
-          onClick={() => {
-            setPhase("idle");
-            window.setTimeout(begin, 60);
-          }}
-          className="absolute right-4 top-[52px] z-30 cursor-pointer rounded-full border border-gold-400/60 bg-vineyard-900/90 px-3.5 py-2 text-[13px] font-medium whitespace-nowrap text-cream-100 shadow-lg transition-colors hover:border-gold-300 hover:text-gold-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300 sm:right-6 sm:top-[64px]"
+          className="absolute right-4 top-[52px] z-30 flex items-center gap-1.5 sm:right-6 sm:top-[64px]"
         >
-          <span aria-hidden="true" className="mr-1.5 text-gold-300">
-            ➤
-          </span>
-          New here? Watch · Read · Listen · Search
-        </button>
+          <button
+            type="button"
+            onClick={startFromPill}
+            className="cursor-pointer rounded-full border border-gold-400/60 bg-vineyard-900/90 px-3.5 py-2 text-[13px] font-medium whitespace-nowrap text-cream-100 shadow-lg transition-colors hover:border-gold-300 hover:text-gold-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+          >
+            <span aria-hidden="true" className="mr-1.5 text-gold-300">
+              ➤
+            </span>
+            New here? Watch · Read · Listen · Search
+          </button>
+          <button
+            type="button"
+            onClick={dismissPill}
+            aria-label="Hide the tour invitation"
+            className="grid h-10 w-10 shrink-0 cursor-pointer place-items-center rounded-full border border-gold-400/60 bg-vineyard-900/90 text-sm text-cream-100/80 shadow-lg transition-colors hover:border-gold-300 hover:text-gold-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+          >
+            <span aria-hidden="true">✕</span>
+          </button>
+        </div>
       )}
     </div>
   );

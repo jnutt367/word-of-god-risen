@@ -16,9 +16,17 @@
  *   tour itself when it marks the visitor as having had it, so
  *   anything presenting the tour (today: the tour's own invite)
  *   can stand down in the same tab.
+ * - ARROW_TOUR_PILL_KEY ("wogr_arrow_tour_pill_v1"): the invite
+ *   pill's OWN note, separate from the tour's seen-note. The
+ *   pill is a standing invitation (Jason's ruling, later on
+ *   Nov 11): it stays on the homepage until the visitor taps it
+ *   away with its own ✕, and that dismissal is remembered here
+ *   — it never marks the tour seen and never touches the
+ *   auto-play's once-per-device rule.
  */
 
 export const ARROW_TOUR_KEY = "wogr_arrow_tour_v1";
+export const ARROW_TOUR_PILL_KEY = "wogr_arrow_tour_pill_v1";
 export const ARROW_TOUR_START_EVENT = "wogr:arrow-tour-start";
 export const ARROW_TOUR_SEEN_EVENT = "wogr:arrow-tour-seen";
 
