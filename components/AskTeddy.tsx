@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { TEDDY_FACES, type TeddyFaceKey } from "@/lib/teddy-faces";
+import { askTeddyStartArrowTour } from "@/lib/arrow-tour";
 
 /** Teddy's homepage welcome — the reader's own browser only.
  * v1 (batch #2) was a single "seen" note. v2 gives the welcome ONE
@@ -65,11 +66,15 @@ function writeWelcomeState(state: WelcomeState) {
 /** Any real hello counts as meeting Teddy: she opens his panel
  * herself, taps a quick question or chip, sends a message, or taps
  * "Hear Teddy" on one of his answers. From that moment the welcome
- * never auto-opens again, ever. */
+ * never auto-opens again, ever. Meeting him is also the arrow
+ * tour's cue (Jason, Nov 11, 2026): the homepage tour queues
+ * behind his welcome and takes its turn the moment they have met
+ * — see lib/arrow-tour.ts and components/ArrowTour.tsx. */
 function markTeddyMet() {
   const state = readWelcomeState();
   if (!state || state.met) return;
   writeWelcomeState({ ...state, met: true });
+  askTeddyStartArrowTour();
 }
 
 type TeddyResponse = {
@@ -449,8 +454,12 @@ export default function AskTeddy() {
         onReaderPage ? "bottom-32" : "bottom-5"
       }`}
     >
-      {/* Chat panel */}
+      {/* Chat panel — the open marker below is how the homepage's
+          arrow tour knows Teddy is speaking right now, so it can
+          wait its turn instead of pointing over him (Jason,
+          Nov 11, 2026). */}
       <div
+        data-ask-teddy-open={open ? "true" : undefined}
         className={`askteddy-panel w-[min(92vw,380px)] overflow-hidden rounded-2xl border border-gold-500/40 bg-cream-50 shadow-2xl shadow-black/40 transition-all duration-300 origin-bottom-right ${
           open
             ? "pointer-events-auto scale-100 opacity-100"

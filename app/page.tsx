@@ -18,6 +18,7 @@ import TestimonyBand from "@/components/TestimonyBand";
 import CarvedDivider from "@/components/CarvedDivider";
 import TeddyNote from "@/components/TeddyNote";
 import WalkTheFarm from "@/components/WalkTheFarm";
+import ArrowTour from "@/components/ArrowTour";
 import { BibleMonthBanner, BibleMonthSection } from "@/components/BibleMonth";
 
 export const metadata: Metadata = {
@@ -110,6 +111,16 @@ export default function Home() {
             <span aria-hidden="true">🔍</span>
           </Link>
         </div>
+        {/* The first-visit arrow tour (Jason, Nov 11, 2026):
+            five little gold arrows arrive one at a time and name
+            these very bubbles — Watch, Read, Listen, Search —
+            then the Earth Map below. It renders inside the hero
+            section so its callouts can anchor on this row's own
+            geometry; everything it shows is pointer-events-none
+            decoration plus two small buttons (an ✕ and, while
+            Teddy's welcome still has a say, an invite). See
+            components/ArrowTour.tsx for the whole ruling. */}
+        <ArrowTour />
         {/* Extra bottom room on phones (Jason, Nov 2, 2026):
             the floating Ask Teddy helper (avatar + his name pill)
             rests at the screen's bottom right, and the hero's

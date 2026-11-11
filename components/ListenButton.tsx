@@ -2,9 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import type { Verse } from "@/lib/verses";
 import { getBook } from "@/lib/bible-client";
 import { beatListenStart, beatListenComplete, beatListenEnded, notePlayedSpan } from "@/lib/heartbeat";
+import { ARROW_TOUR_KEY, askTeddyStartArrowTour } from "@/lib/arrow-tour";
 
 interface Props {
   bookSlug: string;
@@ -89,6 +91,7 @@ export default function ListenButton({
   floating = false,
   onEndedChange,
 }: Props) {
+  const router = useRouter();
   const [status, setStatus] = useState<Status>("idle");
   const [canListen, setCanListen] = useState(false);
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
@@ -245,6 +248,21 @@ export default function ListenButton({
     }
     setHelperOpen(false);
     showHelperRef.current?.focus();
+  };
+
+  // The arrow tour's replay (Jason, Nov 11, 2026): Teddy's card
+  // has had its say, and the homepage's five arrows are the other
+  // half of "Teddy can show you" — so the pill's reader is offered
+  // them too. Tapping re-arms the tour (clears its seen-note),
+  // rings its bell, and comes home, where the tour takes its turn.
+  const replayArrowTour = () => {
+    try {
+      localStorage.removeItem(ARROW_TOUR_KEY);
+    } catch {
+      /* storage unavailable — the tour simply won't re-arm */
+    }
+    askTeddyStartArrowTour();
+    router.push("/");
   };
 
   const supported = () =>
@@ -1010,21 +1028,36 @@ export default function ListenButton({
               </button>
             )}
           </div>
-          <button
-            ref={showHelperRef}
-            type="button"
-            onClick={() => setHelperOpen(true)}
-            aria-haspopup="dialog"
-            className="rounded-full border border-[var(--reader-line)] bg-[var(--reader-card)]/95 px-4 py-1.5 text-sm font-medium text-[var(--reader-muted)] shadow-lg transition-colors hover:text-[var(--reader-verse-num)]"
-          >
-            New here? Teddy can show you
-          </button>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+            <button
+              ref={showHelperRef}
+              type="button"
+              onClick={() => setHelperOpen(true)}
+              aria-haspopup="dialog"
+              className="rounded-full border border-[var(--reader-line)] bg-[var(--reader-card)]/95 px-4 py-1.5 text-sm font-medium text-[var(--reader-muted)] shadow-lg transition-colors hover:text-[var(--reader-verse-num)]"
+            >
+              New here? Teddy can show you
+            </button>
+            {/* The arrow tour's replay door (Jason, Nov 11, 2026):
+                a sibling pill beside Teddy's own — the helper card
+                stays his, this one re-arms the homepage's five
+                arrows and comes home to watch them. */}
+            <button
+              type="button"
+              onClick={replayArrowTour}
+              className="rounded-full border border-[var(--reader-line)] bg-[var(--reader-card)]/95 px-4 py-1.5 text-sm font-medium text-[var(--reader-muted)] shadow-lg transition-colors hover:text-[var(--reader-verse-num)]"
+            >
+              See the homepage arrows →
+            </button>
+          </div>
         </div>
       </div>
     )}
 
     {/* Teddy helper — Grandpa Teddy points out the Listen button, once,
-        in plain words. He comes back anytime via "New here?". */}
+        in plain words. He comes back anytime via "New here?". The card
+        also offers the homepage's arrow tour (Jason, Nov 11, 2026):
+        helper card first, then the arrows — see replayArrowTour. */}
     {floating && helperOpen && (
       <div
         role="dialog"
