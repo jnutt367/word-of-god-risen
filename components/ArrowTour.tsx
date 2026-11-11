@@ -78,6 +78,19 @@ import { createPortal } from "react-dom";
  *   "New here? Teddy can show you" pill on reader pages also
  *   re-arms the tour alongside Teddy's card (see ListenButton
  *   — it clears the seen flag and comes home).
+ * - THE GOODBYE LEAVES A DOOR (Jason's ruling, later still on
+ *   Nov 11). A run that COMPLETES its whole course ends on the
+ *   Earth Map — that is where the journey was always going —
+ *   but it does not strand the visitor at the bottom of a long
+ *   page: a small quiet pill, "↑ Back to the books", waits at
+ *   the map a few seconds (the "sendoff" below). Tapping it
+ *   takes the glide back up to the books; untouched, it fades
+ *   on its own; the visitor's own scroll or a tap elsewhere
+ *   retires it. It appears ONLY on a completed run — a tour
+ *   the visitor dismissed (even mid-glide) leaves nothing
+ *   behind, because they chose to leave; they were not
+ *   delivered anywhere. Words and a door, not a second ride:
+ *   the page never scrolls back on its own.
  * - REDUCED MOTION changes the telling, not the teaching: no
  *   sequencing, no pulse, no auto-scroll — the five words simply
  *   stand beside their bubbles all at once until dismissed.
@@ -97,7 +110,7 @@ const TEDDY_WELCOME_KEY_V1 = "wogr_teddy_welcome_v1";
  * its chances; Ask Teddy remains the welcome's owner. */
 const TEDDY_WELCOME_MAX_AUTO_OPENS = 2;
 
-type Phase = "idle" | "invite" | "running" | "static" | "rest";
+type Phase = "idle" | "invite" | "running" | "static" | "rest" | "sendoff";
 
 /** A measured rectangle in hero-section coordinates — the Earth
  * Map pill's own footprint, so the tour can touch the pill
@@ -132,6 +145,11 @@ const HANDOFF_MS = 500;
  * never fire (Teddy auto-opens only on scroll here) before it
  * introduces itself anyway. */
 const GRACE_MS = 12000;
+/** The sendoff's patience: how long the "↑ Back to the books"
+ * door waits at the map before it quietly leaves on its own. */
+const SENDOFF_MS = 6000;
+/** The sendoff's fade — a breath, not a show. */
+const SENDOFF_FADE_MS = 350;
 
 /* The bubble row's geometry, shared by the tour's callouts and
  * the pulse rings below. The row is flex with gap-2 (8px) and
@@ -272,6 +290,11 @@ export default function ArrowTour() {
    * moment its ✕ is tapped. Nothing else reads it: the tour's
    * seen-note and the auto-play never consult the pill. */
   const [pillOff, setPillOff] = useState(false);
+  /** The sendoff door's fade: every way the door leaves — its
+   * own patience running out, the visitor's scroll or tap, or
+   * its own tap as the glide begins — only STARTS the fade;
+   * the effect below finishes it and rests the tour. */
+  const [sendoffFading, setSendoffFading] = useState(false);
   /** The Earth Map pill's measured footprint (hero-section
    * coordinates), taken when its beat arrives — the door beat
    * and the reduced-motion label both stand on it. */
@@ -356,15 +379,36 @@ export default function ArrowTour() {
     setArrivalBox({ top: r.top + 10, left: r.left + 18 });
   }, []);
 
+  /** The tour's goodbye — the sendoff (Jason's ruling, Nov 11,
+   * 2026): a run that completes its whole course ends the way
+   * end() ends — the seen-note written, the timers cleared —
+   * but leaves one small door behind at the map: "↑ Back to
+   * the books" (the sendoff phase, rendered below). The visitor
+   * was DELIVERED to the bottom of a long page; ending there
+   * empty-handed would strand them. The hand-back is words and
+   * a door, never a second ride: the page moves again only if
+   * they tap it. A dismissed tour never reaches here — end()
+   * clears this timer with all the others (even mid-glide,
+   * even during the closing beat), so the door is left only
+   * for a visitor the tour actually delivered. */
+  const finish = useCallback(() => {
+    if (doneRef.current) return;
+    doneRef.current = true;
+    clearTimers();
+    markTourSeen();
+    setSendoffFading(false);
+    setPhase("sendoff");
+  }, [clearTimers]);
+
   /** The closing beat: the glide has settled (or the journey's
    * patience ran out) — name the destination where the eye
-   * lands, hold it a breath, and end. */
+   * lands, hold it a breath, and finish into the sendoff. */
   const arrive = useCallback(() => {
     if (doneRef.current) return;
     trackArrival();
     setStop(6);
-    timers.current.push(window.setTimeout(end, ARRIVAL_MS));
-  }, [end, trackArrival]);
+    timers.current.push(window.setTimeout(finish, ARRIVAL_MS));
+  }, [finish, trackArrival]);
 
   /** Beat two of the Earth Map stop: the journey a real tap on
    * the pill takes. The pill is an anchor to #earth-map and
@@ -557,6 +601,53 @@ export default function ArrowTour() {
     return () => window.removeEventListener("scroll", onScroll);
   }, [phase, stop, trackArrival]);
 
+  /* The sendoff's own watch: while the little door waits at the
+   * map, the visitor's own movement retires it — a real scroll
+   * (past a small threshold, so the page's last settling from
+   * the tour's glide cannot dismiss what it just delivered), a
+   * tap anywhere that is not the door itself, or Escape, like
+   * every other helper in this app. Untouched, it fades on its
+   * own after SENDOFF_MS. Every path only starts the fade. */
+  useEffect(() => {
+    if (phase !== "sendoff") return;
+    const startY = window.scrollY;
+    const fadeTimer = window.setTimeout(
+      () => setSendoffFading(true),
+      SENDOFF_MS
+    );
+    const onScroll = () => {
+      if (Math.abs(window.scrollY - startY) > 24) setSendoffFading(true);
+    };
+    const onDown = (e: PointerEvent) => {
+      if ((e.target as HTMLElement).closest("[data-arrow-tour-ui]")) return;
+      setSendoffFading(true);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSendoffFading(true);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    document.addEventListener("pointerdown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      window.clearTimeout(fadeTimer);
+      window.removeEventListener("scroll", onScroll);
+      document.removeEventListener("pointerdown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [phase]);
+
+  /* The sendoff's fade, finished: once the door has faded, the
+   * tour rests exactly the way end() rests it — the standing
+   * invite pill takes its corner back at the top of the page
+   * (or nothing, if the pill was tapped away for good). */
+  useEffect(() => {
+    if (phase !== "sendoff" || !sendoffFading) return;
+    const t = window.setTimeout(() => {
+      setPhase(pillDismissed() ? "idle" : "rest");
+    }, SENDOFF_FADE_MS);
+    return () => window.clearTimeout(t);
+  }, [phase, sendoffFading]);
+
   /* A tap anywhere that is not one of the tour's own controls
    * ends it. The callouts themselves are pointer-events-none, so
    * a tap aimed at a named bubble lands on the bubble: this
@@ -585,6 +676,29 @@ export default function ArrowTour() {
   const dismissPill = () => {
     markPillDismissed();
     setPillOff(true);
+  };
+
+  /* The sendoff door's one job: take the glide back up to the
+   * books — no behavior of its own, so the page's own CSS glide
+   * carries it (the same ride the Earth Map journey took on the
+   * way down), landing on the section's own scroll margin. The
+   * door retires as the glide begins; the glide itself runs on
+   * without it. The door is a door, not an animation: under
+   * reduced motion it still appears, and its ride becomes an
+   * instant jump instead. */
+  const backToBooks = () => {
+    setSendoffFading(true);
+    const el = document.getElementById("books");
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      try {
+        el.scrollIntoView({ block: "start", behavior: "instant" });
+      } catch {
+        el.scrollIntoView({ block: "start" });
+      }
+      return;
+    }
+    el.scrollIntoView({ block: "start" });
   };
 
   if (phase === "idle") return null;
@@ -790,6 +904,35 @@ export default function ArrowTour() {
           </button>
         </div>
       )}
+
+      {/* The sendoff — the tour's goodbye, left behind at the
+          map only by a run that completed its whole course
+          (see finish above). A small quiet pill fixed at the
+          bottom of the screen — bottom-center, clear of Ask
+          Teddy's corner (bottom-right) — in the invite pill's
+          family but softer: a whisper, below Teddy's panel
+          (z-40 under his z-50), its pointer events its own
+          alone so the map stays tappable around it. Rendered
+          through a portal at the document root, like the
+          arrival callout: the hero section clips its own
+          overflow, and the visitor is far below it by now. */}
+      {phase === "sendoff" &&
+        createPortal(
+          <button
+            type="button"
+            data-arrow-tour-ui=""
+            data-tour-sendoff=""
+            onClick={backToBooks}
+            className={`fixed bottom-4 left-1/2 z-40 -translate-x-1/2 cursor-pointer rounded-full border border-gold-400/40 bg-vineyard-900/90 px-4 py-2 text-[13px] font-medium whitespace-nowrap text-cream-100/85 shadow-lg transition-opacity duration-300 hover:border-gold-300 hover:text-gold-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300 ${
+              sendoffFading
+                ? "pointer-events-none opacity-0"
+                : "opacity-100"
+            }`}
+          >
+            ↑ Back to the books
+          </button>,
+          document.body
+        )}
     </div>
   );
 }
