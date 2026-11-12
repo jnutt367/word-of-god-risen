@@ -2762,8 +2762,9 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
     !chaptersBeforeTodayCountry(CHOSEN_PRAYER_CODE);
   const chosenCandleOn =
     prayerSignsLive && Boolean(chosenGeo) && !chosenEverActive;
-  const prayerHandsTitle = (name: string) =>
-    `${name} — praying hands: the app has been opened here, and no chapter has been read or heard here yet — we are praying the Word will be opened here`;
+  // prayerHandsTitle went with the hands rendering, removed
+  // Nov 12, 2026 (Jason's ruling) — see the removal notes at
+  // the disc, the closer-look panel, and the legend.
   const answeredPlaceTitle = (name: string) =>
     `${name} — a wide, radiant light, raised so the day's other lights stay visible beneath it: prayer answered — the Word was opened here today, after prayer`;
   const chosenPrayerTitle =
@@ -3065,14 +3066,12 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
       ? ` ${answeredPlaces.map((p) => p.name).join(", ")} ${
           answeredPlaces.length === 1 ? "wears" : "wear"
         } a wide, radiant light, raised so the day's other lights stay visible beneath it — a prayer answered: the Word was opened there today, after prayer.`
-      : "") +
-    (knockingCountries.length || knockingSubs.length
-      ? ` Small praying hands rest on ${[...knockingCountries, ...knockingSubs]
-          .map((p) => p.name)
-          .join(
-            ", "
-          )} — places where the app has been opened, and no chapter has been read or heard yet. They are not counts — they mark prayer: we are praying the Word will be opened there.`
       : "");
+  // The praying-hands clause that once closed this aria was
+  // removed Nov 12, 2026 (Jason's ruling): the hands no longer
+  // render — they were blocking the view of the places where
+  // people are actually reading — so the aria no longer
+  // describes a mark that isn't drawn.
 
   // "The Vine Is Growing" (Oct 21, 2026) — the day-by-day record,
   // turned into a growth story on the map's own card: a continuous
@@ -3484,27 +3483,13 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 label={chosenPrayerTitle}
               />
             ) : null}
-            {/* THE PRAYER HANDS (Nov 5, 2026) — the small
-                hands at the heart of every place the
-                record shows knocking: opened, never yet a
-                chapter. Drawn with the candles, under the
-                lights — an invitation, never a ranking. */}
-            {knockingCountries.map((p) => (
-              <PrayerHandsMark
-                key={`hands-${p.code}`}
-                cx={p.cx}
-                cy={p.cy}
-                label={prayerHandsTitle(p.name)}
-              />
-            ))}
-            {knockingSubs.map((p) => (
-              <PrayerHandsMark
-                key={`hands-${p.code}`}
-                cx={p.cx}
-                cy={p.cy}
-                label={prayerHandsTitle(p.name)}
-              />
-            ))}
+            {/* THE PRAYER HANDS, REMOVED FROM THE DISC
+                (Nov 12, 2026 — Jason's ruling): the hands
+                were blocking the view of the places where
+                people are actually reading, so their
+                rendering is off until it is rethought.
+                The knocking record itself still stands —
+                only the drawing is gone. */}
             {/* THE UNSAID DEEP TIER (Oct 30, 2026; re-ruled
                 Nov 4, 2026) — drawn before every other glow,
                 under all the lights: a divided country whose
@@ -4477,21 +4462,13 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                 Ten videos watched in a day
               </span>
             </li>
-            <li className="flex items-center gap-3">
-              <svg
-                viewBox="0 0 26 26"
-                aria-hidden="true"
-                focusable="false"
-                className="h-[26px] w-[26px] shrink-0"
-              >
-                <g transform="translate(13 14.5) scale(0.9)">
-                  <PrayerArchHands cx={0} cy={0} glyphScale={0.55} />
-                </g>
-              </svg>
-              <span className="text-[15px] leading-snug text-[#f6efdb]">
-                Praying for you — a place we're praying will open the Word with us
-              </span>
-            </li>
+            {/* THE PRAYING-HANDS LEGEND ROW, REMOVED
+                (Nov 12, 2026 — Jason's ruling): the hands
+                it explained no longer render on the map —
+                they were blocking the view of the places
+                where people are actually reading — so the
+                row goes with them until the rendering is
+                rethought. */}
             <li className="flex items-center gap-3">
               <svg
                 viewBox="0 0 26 26"
@@ -4834,21 +4811,14 @@ export default function BodyHeartbeat({ fixture }: BodyHeartbeatProps = {}) {
                     />
                   ) : null
                 )}
-                {/* THE PRAYER HANDS, IN THE PANEL (Nov 5,
-                    2026) — the knocking states wear their
-                    hands here too, at the states' own
-                    hearts, under the same live-default
-                    discipline as the disc (the decisions
-                    are day-free: knockingSubs is empty
-                    while browsing). */}
-                {knockingSubs.map((p) => (
-                  <PrayerHandsMarkPanel
-                    key={`us-hands-${p.code}`}
-                    cx={p.cx}
-                    cy={p.cy}
-                    label={prayerHandsTitle(p.name)}
-                  />
-                ))}
+                {/* THE PRAYER HANDS, REMOVED FROM THE
+                    PANEL (Nov 12, 2026 — Jason's ruling):
+                    the hands were blocking the view of the
+                    places where people are actually
+                    reading, so their rendering is off
+                    until it is rethought. The knocking
+                    record itself still stands — only the
+                    drawing is gone. */}
               </g>
             </svg>
             <figcaption className="mt-3 text-center text-sm text-sage-300">
