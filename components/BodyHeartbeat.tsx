@@ -1479,7 +1479,25 @@ function PrayerLightMark({
  *  circle never showed its turn, an arch does, so the
  *  doorway counter-rotates with the hands as one rigid
  *  shape; rotation about the heart moves nothing's
- *  seat). */
+ *  seat).
+ *  (Nov 11, 2026, evening — Jason's grade of the shipped
+ *  mark: the arch's arcs were BLOCKING the places under
+ *  them — Belgium and Michigan named, a small country
+ *  and a mid-size state swallowed by the doorway. His
+ *  fix, applied here: the doorway drawn a third smaller
+ *  and ghostlier, the hands untouched. The arch group
+ *  now scales 0.67 about the mark's heart — footprint
+ *  23 wide × 26 tall becomes 15.4 × 17.4; the crowned
+ *  path itself is unchanged, only its rendering shrinks
+ *  — and carries its own opacity 0.55, so the land shows
+ *  through the arcs (the callers' .hb-prayer breath,
+ *  0.7→1, multiplies over the whole mark as before).
+ *  The local stroke rises 2.6 → 3 so the rendered weight
+ *  lands at ≈2.0: thinner than the crown's 2.6, still a
+ *  doorway's silhouette at map size. The hands keep
+ *  their exact seat, scale, and full presence — the
+ *  sign still reads hands-first; the door now frames
+ *  them instead of covering the neighborhood.) */
 function PrayerArchHands({
   cx,
   cy,
@@ -1493,12 +1511,12 @@ function PrayerArchHands({
 }) {
   return (
     <g transform={rotate ? `rotate(${rotate} ${cx} ${cy})` : undefined}>
-      <g transform={`translate(${cx} ${cy})`}>
+      <g transform={`translate(${cx} ${cy}) scale(0.67)`} opacity="0.55">
         <path
           d="M -9 11 L -9 -3 C -9 -10.5 -5.2 -15 0 -15 C 5.2 -15 9 -10.5 9 -3 L 9 11"
           fill="none"
           stroke="#f6efdb"
-          strokeWidth="2.6"
+          strokeWidth="3"
           strokeLinecap="round"
         />
         <line
@@ -1507,7 +1525,7 @@ function PrayerArchHands({
           x2="11.5"
           y2="11"
           stroke="#f6efdb"
-          strokeWidth="2.6"
+          strokeWidth="3"
           strokeLinecap="round"
         />
       </g>
