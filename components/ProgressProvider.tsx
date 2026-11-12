@@ -6,6 +6,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -26,6 +27,14 @@ import {
   listenedOnPage,
   type MediaMap,
 } from "@/lib/media-progress";
+import {
+  activityKey,
+  loadActivity,
+  saveActivity,
+  isToday,
+  todayOnPage,
+  type ActivityMap,
+} from "@/lib/activity";
 import {
   highlightKey,
   loadHighlights,
@@ -54,6 +63,13 @@ interface ProgressCtx {
   toggleListened: (slug: string, idx: number, title: string) => boolean;
   listenedOnPage: (slug: string) => number[];
   totalListened: number;
+  /** "Today" activity — when a chapter was last read or heard on
+   *  THIS device, so today can be told apart from lifetime marks. */
+  touchReadActivity: (slug: string, idx: number) => void;
+  touchListenedActivity: (slug: string, idx: number) => void;
+  readToday: (slug: string, idx: number) => boolean;
+  listenedToday: (slug: string, idx: number) => boolean;
+  todayOnPage: (slug: string) => { read: number[]; listened: number[] };
   /** Overview videos watched, keyed by YouTube video id. */
   isWatched: (videoId: string) => boolean;
   toggleWatched: (videoId: string, title: string) => boolean;
@@ -93,6 +109,10 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
   const [map, setMap] = useState<ProgressMap>({});
   const [listened, setListened] = useState<MediaMap>({});
   const [watched, setWatched] = useState<MediaMap>({});
+  const [activity, setActivity] = useState<ActivityMap>({});
+  // Mirror of the activity state so the touch callbacks stay stable
+  // (readers call them from mount effects keyed on chapter change).
+  const activityRef = useRef<ActivityMap>({});
   const [highlights, setHighlights] = useState<HighlightStore>({
     verses: {},
     phrases: [],
@@ -102,6 +122,9 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     setMap(loadProgress());
     setListened(loadListened());
     setWatched(loadWatched());
+    const loadedActivity = loadActivity();
+    activityRef.current = loadedActivity;
+    setActivity(loadedActivity);
     setHighlights(loadHighlights());
   }, []);
 
@@ -118,6 +141,12 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
   const persistWatched = useCallback((next: MediaMap) => {
     setWatched(next);
     saveWatched(next);
+  }, []);
+
+  const persistActivity = useCallback((next: ActivityMap) => {
+    activityRef.current = next;
+    setActivity(next);
+    saveActivity(next);
   }, []);
 
   const persistHighlights = useCallback((next: HighlightStore) => {
@@ -170,6 +199,42 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
       return nowListened;
     },
     [listened, persistListened]
+  );
+
+  const touchReadActivity = useCallback(
+    (slug: string, idx: number) => {
+      const key = activityKey(slug, idx);
+      const cur = activityRef.current;
+      persistActivity({
+        ...cur,
+        [key]: { ...cur[key], r: Date.now() },
+      });
+    },
+    [persistActivity]
+  );
+
+  const touchListenedActivity = useCallback(
+    (slug: string, idx: number) => {
+      const key = activityKey(slug, idx);
+      const cur = activityRef.current;
+      persistActivity({
+        ...cur,
+        [key]: { ...cur[key], l: Date.now() },
+      });
+    },
+    [persistActivity]
+  );
+
+  const readToday = useCallback(
+    (slug: string, idx: number) =>
+      isToday(activity[activityKey(slug, idx)]?.r),
+    [activity]
+  );
+
+  const listenedToday = useCallback(
+    (slug: string, idx: number) =>
+      isToday(activity[activityKey(slug, idx)]?.l),
+    [activity]
   );
 
   const getHighlight = useCallback(
@@ -293,6 +358,11 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
       toggleListened,
       listenedOnPage: (slug: string) => listenedOnPage(listened, slug),
       totalListened: Object.keys(listened).length,
+      touchReadActivity,
+      touchListenedActivity,
+      readToday,
+      listenedToday,
+      todayOnPage: (slug: string) => todayOnPage(activity, slug),
       isWatched,
       toggleWatched,
       totalWatched: Object.keys(watched).length,
@@ -317,6 +387,11 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
       isListened,
       toggleListened,
       listened,
+      touchReadActivity,
+      touchListenedActivity,
+      readToday,
+      listenedToday,
+      activity,
       isWatched,
       toggleWatched,
       watched,

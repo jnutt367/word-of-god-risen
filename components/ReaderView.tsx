@@ -101,16 +101,19 @@ export default function ReaderView({
     toggleListened,
     readOnPage,
     totalHighlights,
+    touchReadActivity,
   } = useProgress();
   const read = isRead(slug, chapterIdx);
   const listened = isListened(slug, chapterIdx);
   const router = useRouter();
 
   // Bible Heartbeat: opening a chapter is one anonymous beat (deduped
-  // per session inside lib/heartbeat).
+  // per session inside lib/heartbeat). The same opening is the
+  // reader's own "read today" activity — their device only.
   useEffect(() => {
     beatRead(slug, chapterIdx);
-  }, [slug, chapterIdx]);
+    touchReadActivity(slug, chapterIdx);
+  }, [slug, chapterIdx, touchReadActivity]);
 
   const onToggleRead = () => {
     const readBefore = readOnPage(slug).length;

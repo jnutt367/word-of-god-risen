@@ -13,13 +13,15 @@ interface Props {
 }
 
 export default function ChapterGrid({ slug, chapters, coverImage }: Props) {
-  const { isRead, isListened } = useProgress();
+  const { isRead, isListened, readToday, listenedToday } = useProgress();
 
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {chapters.map((ch, i) => {
         const read = isRead(slug, i);
         const listened = isListened(slug, i);
+        const readT = readToday(slug, i);
+        const listenedT = listenedToday(slug, i);
         return (
           <Link
             key={i}
@@ -46,7 +48,7 @@ export default function ChapterGrid({ slug, chapters, coverImage }: Props) {
                 {ch.text.slice(0, 120)}…
               </p>
             </div>
-            {(read || listened) && (
+            {(read || listened || readT || listenedT) && (
               <span className="absolute right-2 top-2 flex gap-1.5">
                 {read && (
                   <span className="rounded-full bg-vineyard-950/80 px-2.5 py-1 text-[0.7rem] font-semibold text-gold-300 backdrop-blur">
@@ -56,6 +58,16 @@ export default function ChapterGrid({ slug, chapters, coverImage }: Props) {
                 {listened && (
                   <span className="rounded-full bg-vineyard-950/80 px-2.5 py-1 text-[0.7rem] font-semibold text-gold-300 backdrop-blur">
                     🎧 Listened
+                  </span>
+                )}
+                {readT && (
+                  <span className="rounded-full bg-vineyard-950/80 px-2.5 py-1 text-[0.7rem] font-semibold text-gold-300 backdrop-blur">
+                    ☀ Read today
+                  </span>
+                )}
+                {listenedT && (
+                  <span className="rounded-full bg-vineyard-950/80 px-2.5 py-1 text-[0.7rem] font-semibold text-gold-300 backdrop-blur">
+                    ☀ Heard today
                   </span>
                 )}
               </span>

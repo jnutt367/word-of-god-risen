@@ -6,8 +6,11 @@ import type { BookMeta } from "@/data/books";
 import { useProgress } from "@/components/ProgressProvider";
 
 export default function BookCard({ book }: { book: BookMeta }) {
-  const { readOnPage } = useProgress();
+  const { readOnPage, todayOnPage } = useProgress();
   const read = readOnPage(book.slug).length;
+  const today = todayOnPage(book.slug);
+  const readT = today.read.length > 0;
+  const listenedT = today.listened.length > 0;
   const pct =
     book.chapters > 0 ? Math.round((read / book.chapters) * 100) : 0;
 
@@ -42,6 +45,21 @@ export default function BookCard({ book }: { book: BookMeta }) {
         <p className="mt-0.5 text-sm uppercase tracking-[0.12em] text-sage-400">
           {book.chapters} chapters
         </p>
+        {(readT || listenedT) && (
+          <p className="mt-1 text-xs text-sage-400">
+            {readT && (
+              <>
+                <span className="text-gold-300">☀</span> Read today
+              </>
+            )}
+            {readT && listenedT && <> · </>}
+            {listenedT && (
+              <>
+                <span className="text-gold-300">☀</span> Heard today
+              </>
+            )}
+          </p>
+        )}
         {read > 0 && (
           <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-vineyard-800">
             <div

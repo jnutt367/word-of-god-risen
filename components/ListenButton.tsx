@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import type { Verse } from "@/lib/verses";
 import { getBook } from "@/lib/bible-client";
 import { beatListenStart, beatListenComplete, beatListenEnded, notePlayedSpan } from "@/lib/heartbeat";
+import { useProgress } from "@/components/ProgressProvider";
 import { ARROW_TOUR_KEY, askTeddyStartArrowTour } from "@/lib/arrow-tour";
 
 interface Props {
@@ -92,6 +93,7 @@ export default function ListenButton({
   onEndedChange,
 }: Props) {
   const router = useRouter();
+  const { touchListenedActivity } = useProgress();
   const [status, setStatus] = useState<Status>("idle");
   const [canListen, setCanListen] = useState(false);
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
@@ -125,6 +127,30 @@ export default function ListenButton({
   useEffect(() => {
     endedRef.current = onEndedChange;
   }, [onEndedChange]);
+  // The reader's own "heard today" activity (their device only):
+  // the once-attached audio handlers read the touch through a ref,
+  // and each chapter is touched at most once per mount — genuinely
+  // played spans arrive constantly, and the day only needs one mark.
+  const touchListenedRef = useRef(touchListenedActivity);
+  useEffect(() => {
+    touchListenedRef.current = touchListenedActivity;
+  }, [touchListenedActivity]);
+  const listenedTouchedRef = useRef<Set<string>>(new Set());
+  const noteSpan = (
+    slug: string,
+    num: number,
+    start: number,
+    end: number,
+    d: number
+  ) => {
+    notePlayedSpan(slug, num, start, end, d);
+    if (end - start < 0.25) return; // same sliver rule as the heartbeat
+    const key = `${slug}::${num}`;
+    if (!listenedTouchedRef.current.has(key)) {
+      listenedTouchedRef.current.add(key);
+      touchListenedRef.current(slug, num - 1);
+    }
+  };
   const panelRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const ambientRef = useRef<HTMLAudioElement | null>(null);
@@ -182,7 +208,7 @@ export default function ListenButton({
       seg.lastPos = end;
       seg.wall = Date.now() / 1000;
       if (end - seg.start >= 5) {
-        notePlayedSpan(seg.slug, seg.num, seg.start, end, d);
+        noteSpan(seg.slug, seg.num, seg.start, end, d);
         seg.start = end;
       }
     }
@@ -217,7 +243,7 @@ export default function ListenButton({
       end = Math.max(end, Math.min(still.lastPos, d));
       const cap = playedRangeEndFor(still.start);
       if (cap !== null && end > cap + 0.5) end = Math.min(cap, d);
-      notePlayedSpan(still.slug, still.num, still.start, end, d);
+      noteSpan(still.slug, still.num, still.start, end, d);
     }
   };
   const flushRef = useRef(flushSegment);
@@ -526,13 +552,13 @@ export default function ListenButton({
               // Feed long segments as they grow, so a tab closed
               // mid-chapter loses at most a few seconds of listening.
               if (now - seg.start >= 5 && isFinite(d) && d > 0) {
-                notePlayedSpan(slug, num, seg.start, now, d);
+                noteSpan(slug, num, seg.start, now, d);
                 seg.start = now;
               }
             } else {
               // Seek or jump: close at the last sounded position.
               if (isFinite(d) && d > 0) {
-                notePlayedSpan(seg.slug, seg.num, seg.start, seg.lastPos, d);
+                noteSpan(seg.slug, seg.num, seg.start, seg.lastPos, d);
               }
               segRef.current = { slug, num, start: now, lastPos: now, wall };
             }
