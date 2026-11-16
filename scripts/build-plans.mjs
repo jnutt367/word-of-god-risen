@@ -160,12 +160,12 @@ const PLAN_DEFS = [
   {
     id: "enoch-18",
     title: "The Book of Enoch",
-    tagline: "18 days · 2 chapters a day",
+    tagline: "54 days · 2 chapters a day",
     description:
-      "The Watchers, the Son of Man, and the final judgment — the book Jude quoted, complete in eighteen days.",
+      "The Watchers, the Son of Man, and the final judgment — the book Jude quoted, complete in fifty-four days.",
     image: "/images/plan-enoch.jpg",
     books: ["enoch-1"],
-    days: 18,
+    days: 54,
     includeAll: true,
   },
   {
