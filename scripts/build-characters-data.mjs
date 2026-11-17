@@ -405,6 +405,15 @@ const VARIANTS = {
       sub: "The aged apostle, Romans onward",
     },
   ],
+  // Michael's crowned full-length portrait (SETMATCH V2, crowned by Jason
+  // Nov 17, 2026) rides his record as a variant; the card stays the bust.
+  michael: [
+    {
+      image: "/images/characters/michael-full-v1.jpg",
+      label: "Full-length portrait",
+      sub: "Crowned Nov 17, 2026 — in Gabriel's set, on the ready",
+    },
+  ],
 };
 
 // Sheet sections rendered as dossier rows on the person page, in order.

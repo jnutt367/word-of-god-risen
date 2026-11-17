@@ -3929,7 +3929,13 @@ export const CHARACTERS: Character[] = [
     "firstBook": "daniel",
     "firstAppearance": "Daniel 10",
     "relationships": [],
-    "variants": [],
+    "variants": [
+      {
+        "image": "/images/characters/michael-full-v1.jpg",
+        "label": "Full-length portrait",
+        "sub": "Crowned Nov 17, 2026 — in Gabriel's set, on the ready"
+      }
+    ],
     "status": {
       "portrait": "crowned",
       "sheet": "written",
