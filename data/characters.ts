@@ -3854,7 +3854,7 @@ export const CHARACTERS: Character[] = [
     "slug": "michael",
     "name": "Michael",
     "subtitle": "The Archangel · Prince and Guardian",
-    "image": "/images/characters/michael-v3.jpg",
+    "image": "/images/characters/michael-v4.jpg",
     "caption": "",
     "group": "heavenly",
     "unnamed": false,

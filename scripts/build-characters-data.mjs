@@ -485,8 +485,10 @@ function markChapters(facts) {
 // Nov 17, 2026: the square fit-whole re-cuts of the 1:2 portraits shipped
 // under fresh names (-sq / v3) — same-URL replacement left Phanuel and
 // Raguel showing the old cropped files from Jason's desktop cache.
+// Nov 17, 2026 (later): the v3 Michael re-cut was made from a superseded
+// portrait, not the crowned film bust — re-cut from canon as michael-v4.jpg.
 const IMAGE_OVERRIDES = {
-  michael: "michael-v3.jpg",
+  michael: "michael-v4.jpg",
   gabriel: "gabriel-v3.jpg",
   uriel: "uriel-sq.webp",
   raphael: "raphael-sq.webp",
