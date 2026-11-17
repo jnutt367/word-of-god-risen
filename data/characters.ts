@@ -4274,7 +4274,7 @@ export const CHARACTER_GROUPS: { id: CharacterGroup; title: string; blurb: strin
   {
     id: "heavenly",
     title: "The Heavenly Company",
-    blurb: "Gabriel and Michael are named in Scripture, and their faces are shown. Six more are named in the Book of Enoch — Uriel, Raphael, Raguel, Saraqael, Remiel, and Phanuel — and stand here as silhouettes.",
+    blurb: "Gabriel and Michael are named in Scripture, and their faces are shown. More are named in the Book of Enoch — Uriel, Raphael, Raguel, Saraqael, Remiel, and Phanuel stand here as silhouettes — and we will be adding more as we read through it.",
   },
 ];
 

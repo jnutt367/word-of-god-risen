@@ -149,7 +149,7 @@ export default function CharactersPage() {
         <ShelfHeading
           shelf="Shelf 1"
           title="The Heavenly Company"
-          blurb="Gabriel and Michael are named in Scripture, and their faces are shown. Six more are named in the Book of Enoch — Uriel, Raphael, Raguel, Saraqael, Remiel, and Phanuel — and stand here as silhouettes."
+          blurb="Gabriel and Michael are named in Scripture, and their faces are shown. More are named in the Book of Enoch — Uriel, Raphael, Raguel, Saraqael, Remiel, and Phanuel stand here as silhouettes — and we will be adding more as we read through it."
         />
         <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {heavenly.map((c) => (
