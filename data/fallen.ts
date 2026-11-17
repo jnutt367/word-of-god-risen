@@ -33,7 +33,7 @@ export interface FallenChamber {
   status: FallenStatus;
   /** Square card image (fit-whole, figure complete). */
   image: string;
-  /** Tall original, opened by the zoom viewer. */
+  /** Tall original, preserved alongside the square card cut. */
   imageTall: string;
   alt: string;
 }

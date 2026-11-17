@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { FALLEN, FALLEN_STATUS_LINES, type FallenChamber } from "@/data/fallen";
-import { ZoomOverlayButton } from "@/components/ZoomableImage";
+import InlineZoomImage from "@/components/InlineZoomImage";
 
 export const metadata: Metadata = {
   title: "The Fallen · Word of God Risen",
@@ -14,17 +14,13 @@ function ChamberCard({ c }: { c: FallenChamber }) {
   return (
     <article className="group relative overflow-hidden rounded-2xl border border-[#2b2e33] bg-[#0a0b0d]">
       <div className="relative aspect-square w-full overflow-hidden">
-        <img
+        <InlineZoomImage
           src={c.image}
           alt={c.alt}
-          className="h-full w-full object-cover"
-          loading="lazy"
-        />
-        <ZoomOverlayButton
-          src={c.imageTall}
-          alt={c.alt}
           name={c.name}
-          className="absolute right-2 top-2 z-10"
+          frameClassName="aspect-square w-full"
+          imgClassName="h-full w-full object-cover"
+          loading="lazy"
         />
       </div>
       <div className="p-5">
@@ -108,7 +104,7 @@ export default function FallenPage() {
           Two of these portraits are finished and crowned. The rest stand as
           shadow-silhouettes shaped by each one&rsquo;s binding, until his
           portrait is built and crowned and takes its place in his chamber.
-          Tap the magnifier on any chamber to look closer.
+          Use the + button on any chamber to look closer.
         </p>
       </div>
 
