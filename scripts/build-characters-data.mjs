@@ -473,9 +473,21 @@ function markChapters(facts) {
 // showing it (Gabriel healed on re-fetch; Michael did not). A versioned
 // filename is a fresh address no cache can confuse with the old one. The
 // un-versioned file stays in public/ untouched for any deep links.
+// Nov 17, 2026: the square fit-whole re-cuts of the 1:2 portraits shipped
+// under fresh names (-sq / v3) — same-URL replacement left Phanuel and
+// Raguel showing the old cropped files from Jason's desktop cache.
 const IMAGE_OVERRIDES = {
-  michael: "michael-v2.jpg",
-  gabriel: "gabriel-v2.jpg",
+  michael: "michael-v3.jpg",
+  gabriel: "gabriel-v3.jpg",
+  uriel: "uriel-sq.webp",
+  raphael: "raphael-sq.webp",
+  raguel: "raguel-sq.webp",
+  saraqael: "saraqael-sq.webp",
+  remiel: "remiel-sq.webp",
+  phanuel: "phanuel-sq.webp",
+  bartimaeus: "bartimaeus-sq.jpg",
+  herodias: "herodias-sq.jpg",
+  thaddaeus: "thaddaeus-sq.jpg",
 };
 
 function existingPublicImage(slug) {

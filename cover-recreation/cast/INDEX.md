@@ -37,7 +37,7 @@
 | Bartholomew | `bartholomew.jpg` | One of the twelve |
 | Matthew | `matthew.jpg` | His Gospel — book done |
 | James, son of Alphaeus | `james-son-of-alphaeus.jpg` | One of the twelve. NOT James the Lord's brother (Group B) — two different men, two different files |
-| Thaddaeus | `thaddaeus.jpg` | One of the twelve. Also called "Judas son of James" in Luke's list — NOT Jude the Lord's brother (Group B). Keep the files distinct |
+| Thaddaeus | `thaddaeus-sq.jpg` | One of the twelve. Also called "Judas son of James" in Luke's list — NOT Jude the Lord's brother (Group B). Keep the files distinct |
 | Simon the Zealot | `simon-the-zealot.jpg` | One of the twelve |
 | Judas Iscariot | `judas-iscariot.jpg` | The Passion; Acts 1 |
 | John the Baptist | `john-the-baptist.jpg` | The Gospels — his road is behind him |
@@ -45,7 +45,7 @@
 | Mary Magdalene | `mary-magdalene.jpg` | The Resurrection accounts |
 | Joseph of Arimathea | `joseph-of-arimathea.jpg` | The burial — Gospels |
 | Herod Antipas | `herod-antipas.jpg` | The Gospels. NOTE: this is Antipas (the tetrarch), not Herod the Great and not Herod Agrippa — three different men |
-| Herodias | `herodias.jpg` | Mark 6 |
+| Herodias | `herodias-sq.jpg` | Mark 6 |
 | Salome (the dancer) | `salome.jpg` | Mark 6 — Herodias's daughter |
 | Salome, wife of Zebedee | `salome-wife-of-zebedee.jpg` | At the cross and the tomb; mother of James and John |
 | Pontius Pilate | `pontius-pilate.jpg` | The Passion; named in 1 Timothy 6:13 |
@@ -53,7 +53,7 @@
 | Simon of Cyrene | `simon-of-cyrene.jpg` | Carried the cross; father of Rufus (below) |
 | Rufus | `rufus.jpg` | Greeted in Romans 16 — book done |
 | Jairus | `jairus.jpg` | Mark 5 / Luke 8 |
-| Bartimaeus | `bartimaeus.jpg` | Mark 10 |
+| Bartimaeus | `bartimaeus-sq.jpg` | Mark 10 |
 | The Gerasene demoniac | `gerasene-demoniac.jpg` | Mark 5 |
 | The paralytic (lowered through the roof) | `paralytic-roof.jpg` | Mark 2 |
 | The boy with an evil spirit | `boy-evil-spirit.jpg` | Mark 9 |

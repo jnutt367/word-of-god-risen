@@ -13,7 +13,7 @@
   },
   {
     "src": "/home/hatch/workspace/truvine-shorts/mark-full-book/characters/bartimaeus-v2.png",
-    "dest": "/home/hatch/workspace/word-of-god-risen/public/images/characters/bartimaeus.jpg"
+    "dest": "/home/hatch/workspace/word-of-god-risen/public/images/characters/bartimaeus-sq.jpg"
   },
   {
     "src": "/home/hatch/workspace/truvine-shorts/mark-full-book/characters/boy-evil-spirit-v2.png",
@@ -41,7 +41,7 @@
   },
   {
     "src": "/home/hatch/workspace/truvine-shorts/mark-full-book/characters/herodias-v2.png",
-    "dest": "/home/hatch/workspace/word-of-god-risen/public/images/characters/herodias.jpg"
+    "dest": "/home/hatch/workspace/word-of-god-risen/public/images/characters/herodias-sq.jpg"
   },
   {
     "src": "/home/hatch/workspace/truvine-shorts/mark-full-book/characters/jairus-v2.png",
@@ -141,7 +141,7 @@
   },
   {
     "src": "/home/hatch/workspace/truvine-shorts/mark-full-book/characters/thaddaeus-v2.png",
-    "dest": "/home/hatch/workspace/word-of-god-risen/public/images/characters/thaddaeus.jpg"
+    "dest": "/home/hatch/workspace/word-of-god-risen/public/images/characters/thaddaeus-sq.jpg"
   },
   {
     "src": "/home/hatch/workspace/truvine-shorts/mark-full-book/characters/thomas-v2.png",
