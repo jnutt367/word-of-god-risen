@@ -3,7 +3,7 @@ import Link from "next/link";
 import { CHARACTERS, type Character } from "@/data/characters";
 import { BOOKS, bookBySlug, type BookMeta } from "@/data/books";
 import { getBookDoc, castCount } from "@/data/book-docs";
-import { ZoomOverlayButton } from "@/components/ZoomableImage";
+import InlineZoomImage from "@/components/InlineZoomImage";
 
 export const metadata: Metadata = {
   title: "Characters of the Bible · Word of God Risen",
@@ -26,12 +26,14 @@ function CharacterCard({ c }: { c: Character }) {
   return (
     <div className="group relative overflow-hidden rounded-2xl border border-gold-500/15 bg-vineyard-900 transition-transform hover:-translate-y-1 hover:border-gold-500/40">
       <Link href={`/characters/${c.slug}`} className="block">
-        <div className="aspect-square w-full overflow-hidden">
+        <div className="aspect-square w-full">
           {c.image ? (
-            <img
+            <InlineZoomImage
               src={c.image}
               alt={`Portrait of ${c.name}`}
-              className="h-full w-full object-cover transition-transform group-hover:scale-105"
+              name={c.name}
+              frameClassName="aspect-square w-full"
+              imgClassName="h-full w-full object-cover"
               loading="lazy"
             />
           ) : (
@@ -53,14 +55,6 @@ function CharacterCard({ c }: { c: Character }) {
           <p className="mt-1 text-sm text-sage-400">{c.subtitle}</p>
         </div>
       </Link>
-      {c.image ? (
-        <ZoomOverlayButton
-          src={c.image}
-          alt={`Portrait of ${c.name}`}
-          name={c.name}
-          className="absolute right-2 top-2 z-10"
-        />
-      ) : null}
     </div>
   );
 }

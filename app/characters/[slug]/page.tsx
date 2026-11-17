@@ -6,7 +6,7 @@ import { join } from "path";
 import { CHARACTERS, getCharacter } from "@/data/characters";
 import { bookBySlug } from "@/data/books";
 import InlineMd from "@/components/InlineMd";
-import ZoomableImage from "@/components/ZoomableImage";
+import InlineZoomImage from "@/components/InlineZoomImage";
 
 function cardImages(slug: string): { front: string; back: string } | null {
   const front = `/images/cards/${slug}-front.jpg`;
@@ -61,12 +61,11 @@ export default async function CharacterPage({
         <div>
           <div className="overflow-hidden rounded-2xl border border-gold-500/20">
             {c.image ? (
-              <ZoomableImage
+              <InlineZoomImage
                 src={c.image}
                 alt={`Portrait of ${c.name}`}
                 name={c.name}
                 imgClassName="w-full object-cover"
-                hint
               />
             ) : null}
           </div>
@@ -168,12 +167,11 @@ export default async function CharacterPage({
                 key={v.label}
                 className="overflow-hidden rounded-2xl border border-gold-500/20 bg-vineyard-900"
               >
-                <ZoomableImage
+                <InlineZoomImage
                   src={v.image}
                   alt={`${c.name} — ${v.label}`}
                   name={`${c.name} — ${v.label}`}
                   imgClassName="w-full object-cover"
-                  hint
                 />
                 <figcaption className="p-4">
                   <p className="text-sm font-semibold uppercase tracking-wide text-gold-300">
@@ -312,13 +310,12 @@ export default async function CharacterPage({
             <div className="mt-6 grid gap-6 sm:grid-cols-2 sm:gap-8">
               <figure>
                 <div className="overflow-hidden rounded-2xl border border-gold-500/20 shadow-lg shadow-black/30">
-                  <ZoomableImage
+                  <InlineZoomImage
                     src={card.front}
                     alt={`${c.name} Faces of Faith card — front`}
                     name={`${c.name} Faces of Faith card — front`}
                     imgClassName="w-full"
                     loading="lazy"
-                    hint
                   />
                 </div>
                 <figcaption className="mt-2 text-center text-xs uppercase tracking-[0.18em] text-sage-500">
@@ -327,13 +324,12 @@ export default async function CharacterPage({
               </figure>
               <figure>
                 <div className="overflow-hidden rounded-2xl border border-gold-500/20 shadow-lg shadow-black/30">
-                  <ZoomableImage
+                  <InlineZoomImage
                     src={card.back}
                     alt={`${c.name} Faces of Faith card — back`}
                     name={`${c.name} Faces of Faith card — back`}
                     imgClassName="w-full"
                     loading="lazy"
-                    hint
                   />
                 </div>
                 <figcaption className="mt-2 text-center text-xs uppercase tracking-[0.18em] text-sage-500">
