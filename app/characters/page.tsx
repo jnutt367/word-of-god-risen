@@ -149,7 +149,7 @@ export default function CharactersPage() {
         <ShelfHeading
           shelf="Shelf 1"
           title="The Heavenly Company"
-          blurb="Only two angels are named in all of Scripture. One stands in God's presence and announces; the other contends for God's people. Their faces are shown, for Scripture names them."
+          blurb="Gabriel and Michael are named in Scripture, and their faces are shown. Six more are named in the Book of Enoch — Uriel, Raphael, Raguel, Saraqael, Remiel, and Phanuel — and stand here as silhouettes."
         />
         <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {heavenly.map((c) => (

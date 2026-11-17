@@ -39,9 +39,22 @@ const KEY_FIGURES = new Set([
   "jesus", "mary-mother-of-jesus", "mary-magdalene", "john-the-baptist", "pontius-pilate", "paul",
 ]);
 
-// The Heavenly Company — the only two angels Scripture names (added
-// Oct 31, 2026 on Jason's direction: their own category on the app).
-const HEAVENLY = new Set(["gabriel", "michael"]);
+// The Heavenly Company — Gabriel and Michael, the two angels Scripture
+// names (added Oct 31, 2026 on Jason's direction: their own category on
+// the app), joined Nov 17, 2026 by the six more angels 1 Enoch names —
+// the rest of the seven who watch (Enoch 20) and Phanuel of the four
+// presences (Enoch 40). The six carry silhouette portraits for now
+// (Jason's ruling, Nov 17, 2026); their faces are a later crown.
+const HEAVENLY = new Set([
+  "gabriel", "michael",
+  "uriel", "raphael", "raguel", "saraqael", "remiel", "phanuel",
+]);
+
+// Portrait is a provisional SILHOUETTE, not a crowned portrait — the
+// record's status must say so (Jason's ruling, Nov 17, 2026).
+const SILHOUETTE_PORTRAITS = new Set([
+  "uriel", "raphael", "raguel", "saraqael", "remiel", "phanuel",
+]);
 
 // Sheet written, but the portrait is an UNCROWNED candidate — the person
 // stays off the app entirely until Jason crowns the portrait (plan §1).
@@ -65,6 +78,22 @@ const READINGS = {
     { label: "Jude", href: "/book/jude/0" },
     { label: "Revelation 12", href: "/book/revelation/11" },
   ],
+  uriel: [
+    { label: "1 Enoch 20", href: "/book/enoch-1/19" },
+    { label: "1 Enoch 72", href: "/book/enoch-1/71" },
+  ],
+  raphael: [
+    { label: "1 Enoch 10", href: "/book/enoch-1/9" },
+    { label: "1 Enoch 20", href: "/book/enoch-1/19" },
+    { label: "Tobit 12", href: "/book/tobit/11" },
+  ],
+  raguel: [
+    { label: "1 Enoch 18", href: "/book/enoch-1/17" },
+    { label: "1 Enoch 20", href: "/book/enoch-1/19" },
+  ],
+  saraqael: [{ label: "1 Enoch 20", href: "/book/enoch-1/19" }],
+  remiel: [{ label: "1 Enoch 20", href: "/book/enoch-1/19" }],
+  phanuel: [{ label: "1 Enoch 40", href: "/book/enoch-1/39" }],
 };
 
 // Scripture gives no name for these people — the "Unnamed" collection.
@@ -116,6 +145,12 @@ const SUBTITLES = {
   "scribe-greatest-commandment": "\u201cNot Far from the Kingdom\u201d",
   gabriel: "The Messenger \u00b7 Who Stands in God\u2019s Presence",
   michael: "The Archangel \u00b7 Prince and Guardian",
+  uriel: "God Is My Light \u00b7 Over the Luminaries of Heaven",
+  raphael: "God Heals \u00b7 Guide of the Spirits of Men",
+  raguel: "Friend of God \u00b7 Vengeance on the Luminaries",
+  saraqael: "Prince of God \u00b7 Over the Spirits of Men Who Transgress",
+  remiel: "God Raises Up \u00b7 Set Over Those Who Rise",
+  phanuel: "Face of God \u00b7 Set Over Repentance",
   moses: "The Lawgiver \u00b7 Face to Face with God",
   elijah: "The Tishbite \u00b7 Prophet of Fire",
   joseph: "The Carpenter \u00b7 Husband of Mary",
@@ -206,6 +241,17 @@ const BOOKS_BY_SLUG = {
   "centurion-at-cross": ["matthew", "mark", "luke"],
   gabriel: ["daniel", "luke"],
   michael: ["daniel", "jude", "revelation"],
+  // The six Enoch angels (added Nov 17, 2026): filed under the Book of
+  // Enoch, their home book — it stands in the app's own library
+  // (testament "extra", the Lost Books shelf), never merged into the 66.
+  // Raphael is also named in Tobit, which follows Enoch in the app's
+  // book order.
+  uriel: ["enoch-1"],
+  raphael: ["enoch-1", "tobit"],
+  raguel: ["enoch-1"],
+  saraqael: ["enoch-1"],
+  remiel: ["enoch-1"],
+  phanuel: ["enoch-1"],
   paul: [
     "acts", "romans", "corinthians-1", "corinthians-2", "galatians",
     "ephesians", "philippians", "colossians", "thessalonians-1",
@@ -240,6 +286,12 @@ const ROLES = {
   barabbas: ["Opponent"],
   gabriel: ["Angel"],
   michael: ["Angel"],
+  uriel: ["Angel"],
+  raphael: ["Angel"],
+  raguel: ["Angel"],
+  saraqael: ["Angel"],
+  remiel: ["Angel"],
+  phanuel: ["Angel"],
   paul: ["Disciple / Apostle"],
   tertius: ["Narrator / Scribe"],
 };
@@ -257,6 +309,12 @@ for (const s of [
 const ERAS = {
   gabriel: "Heavenly — outside the timeline",
   michael: "Heavenly — outside the timeline",
+  uriel: "Heavenly — outside the timeline",
+  raphael: "Heavenly — outside the timeline",
+  raguel: "Heavenly — outside the timeline",
+  saraqael: "Heavenly — outside the timeline",
+  remiel: "Heavenly — outside the timeline",
+  phanuel: "Heavenly — outside the timeline",
   paul: "The Early Church \u00b7 The Letters",
   tertius: "The Letters",
   timothy: "The Early Church",
@@ -273,6 +331,12 @@ const FIRST_APPEARANCE = {
   tertius: "Romans 16",
   gabriel: "Daniel 8",
   michael: "Daniel 10",
+  uriel: "1 Enoch 20",
+  raphael: "1 Enoch 20",
+  raguel: "1 Enoch 20",
+  saraqael: "1 Enoch 20",
+  remiel: "1 Enoch 20",
+  phanuel: "1 Enoch 40",
   moses: "Exodus 2",
   elijah: "1 Kings 17",
   joseph: "Matthew 1",
@@ -345,7 +409,7 @@ const VARIANTS = {
 
 // Sheet sections rendered as dossier rows on the person page, in order.
 const DOSSIER_SECTIONS = [
-  "Names", "Hometown", "Occupation", "Family", "His Turning",
+  "Names", "In Scripture", "Hometown", "Occupation", "Family", "His Turning",
   "Where He Stands", "Where They Stand", "Tradition",
 ];
 
@@ -452,6 +516,8 @@ for (const file of files) {
   let facts = section(md, "Key Moments in Mark's Gospel");
   if (!facts.length) facts = section(md, "What Mark Reveals About Him");
   if (!facts.length) facts = section(md, "Key Moments in Scripture");
+  // The Enoch angels' sheets carry their record as office (1 Enoch 20/40).
+  if (!facts.length) facts = section(md, "His Office (1 Enoch)");
   const parsedFacts = facts.slice(0, 4).map(cleanFact);
 
   const personality = section(md, "Personality in Scripture").slice(0, 3).map((t) => {
@@ -508,7 +574,11 @@ for (const file of files) {
     firstAppearance: FIRST_APPEARANCE[slug] || "",
     relationships: RELATIONSHIPS[slug] || [],
     variants: VARIANTS[slug] || [],
-    status: { portrait: "crowned", sheet: "written", page: "live" },
+    status: {
+      portrait: SILHOUETTE_PORTRAITS.has(slug) ? "silhouette" : "crowned",
+      sheet: "written",
+      page: "live",
+    },
   });
 }
 
@@ -609,7 +679,7 @@ export const CHARACTER_GROUPS: { id: CharacterGroup; title: string; blurb: strin
   {
     id: "heavenly",
     title: "The Heavenly Company",
-    blurb: "Only two angels are named in all of Scripture. One stands in God's presence and announces; the other contends for God's people. They are of one order — flames of fire, robed like lightning.",
+    blurb: "Gabriel and Michael are named in Scripture, and their faces are shown. Six more are named in the Book of Enoch — Uriel, Raphael, Raguel, Saraqael, Remiel, and Phanuel — and stand here as silhouettes.",
   },
 ];
 

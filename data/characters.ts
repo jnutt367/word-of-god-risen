@@ -3935,6 +3935,323 @@ export const CHARACTERS: Character[] = [
       "sheet": "written",
       "page": "live"
     }
+  },
+  {
+    "slug": "phanuel",
+    "name": "Phanuel",
+    "subtitle": "Face of God · Set Over Repentance",
+    "image": "/images/characters/phanuel.webp",
+    "caption": "The fourth of the four presences before the throne — set over repentance.",
+    "group": "heavenly",
+    "unnamed": false,
+    "facts": [
+      {
+        "text": "The fourth of the four presences before the throne in the Parables: \"Phanuel, who is set over the repentance of those who inherit eternal life\" (1 Enoch 40)",
+        "ref": ""
+      }
+    ],
+    "personality": [],
+    "dossier": [
+      {
+        "label": "Names",
+        "items": [
+          "**Phanuel** — \"Face of God\" — the same name-root as Peniel, where Jacob said he had seen God face to face (Genesis 32:30)"
+        ]
+      }
+    ],
+    "chapters": [],
+    "readings": [
+      {
+        "label": "1 Enoch 40",
+        "href": "/book/enoch-1/39"
+      }
+    ],
+    "roles": [
+      "Angel"
+    ],
+    "era": "Heavenly — outside the timeline",
+    "books": [
+      "enoch-1"
+    ],
+    "firstBook": "enoch-1",
+    "firstAppearance": "1 Enoch 40",
+    "relationships": [],
+    "variants": [],
+    "status": {
+      "portrait": "silhouette",
+      "sheet": "written",
+      "page": "live"
+    }
+  },
+  {
+    "slug": "raguel",
+    "name": "Raguel",
+    "subtitle": "Friend of God · Vengeance on the Luminaries",
+    "image": "/images/characters/raguel.webp",
+    "caption": "One of the seven holy angels who watch — who takes vengeance on the world of the luminaries.",
+    "group": "heavenly",
+    "unnamed": false,
+    "facts": [
+      {
+        "text": "\"Raguel, one of the holy angels who takes vengeance on the world of the luminaries\" (1 Enoch 20)",
+        "ref": ""
+      },
+      {
+        "text": "The angel who judges even the stars that did not come forth at their appointed time (1 Enoch 18)",
+        "ref": ""
+      }
+    ],
+    "personality": [],
+    "dossier": [
+      {
+        "label": "Names",
+        "items": [
+          "**Raguel** — \"Friend of God\""
+        ]
+      }
+    ],
+    "chapters": [],
+    "readings": [
+      {
+        "label": "1 Enoch 18",
+        "href": "/book/enoch-1/17"
+      },
+      {
+        "label": "1 Enoch 20",
+        "href": "/book/enoch-1/19"
+      }
+    ],
+    "roles": [
+      "Angel"
+    ],
+    "era": "Heavenly — outside the timeline",
+    "books": [
+      "enoch-1"
+    ],
+    "firstBook": "enoch-1",
+    "firstAppearance": "1 Enoch 20",
+    "relationships": [],
+    "variants": [],
+    "status": {
+      "portrait": "silhouette",
+      "sheet": "written",
+      "page": "live"
+    }
+  },
+  {
+    "slug": "raphael",
+    "name": "Raphael",
+    "subtitle": "God Heals · Guide of the Spirits of Men",
+    "image": "/images/characters/raphael.webp",
+    "caption": "One of the seven holy angels who watch — the guide of the spirits of men.",
+    "group": "heavenly",
+    "unnamed": false,
+    "facts": [
+      {
+        "text": "\"Raphael, one of the holy angels, who is over the spirits of men\" (1 Enoch 20)",
+        "ref": ""
+      },
+      {
+        "text": "In 1 Enoch 10 it is Raphael whom God sends to bind Azazel hand and foot and cast him into the darkness — and to heal the earth the Watchers had corrupted",
+        "ref": ""
+      }
+    ],
+    "personality": [],
+    "dossier": [
+      {
+        "label": "Names",
+        "items": [
+          "**Raphael** — \"God heals\""
+        ]
+      },
+      {
+        "label": "In Scripture",
+        "items": [
+          "**Tobit** — Raphael travels with Tobias as his guide and healer, and names himself \"one of the seven holy angels\" (Tobit 12:15)"
+        ]
+      }
+    ],
+    "chapters": [],
+    "readings": [
+      {
+        "label": "1 Enoch 10",
+        "href": "/book/enoch-1/9"
+      },
+      {
+        "label": "1 Enoch 20",
+        "href": "/book/enoch-1/19"
+      },
+      {
+        "label": "Tobit 12",
+        "href": "/book/tobit/11"
+      }
+    ],
+    "roles": [
+      "Angel"
+    ],
+    "era": "Heavenly — outside the timeline",
+    "books": [
+      "enoch-1",
+      "tobit"
+    ],
+    "firstBook": "enoch-1",
+    "firstAppearance": "1 Enoch 20",
+    "relationships": [],
+    "variants": [],
+    "status": {
+      "portrait": "silhouette",
+      "sheet": "written",
+      "page": "live"
+    }
+  },
+  {
+    "slug": "remiel",
+    "name": "Remiel",
+    "subtitle": "God Raises Up · Set Over Those Who Rise",
+    "image": "/images/characters/remiel.webp",
+    "caption": "One of the seven holy angels who watch — set over those who rise.",
+    "group": "heavenly",
+    "unnamed": false,
+    "facts": [
+      {
+        "text": "\"Remiel, one of the holy angels, whom God set over those who rise\" (1 Enoch 20) — the angel of the resurrection",
+        "ref": ""
+      }
+    ],
+    "personality": [],
+    "dossier": [
+      {
+        "label": "Names",
+        "items": [
+          "**Remiel** — \"God raises up\" — **debated**; some hear \"thunder of God\" in it instead. Held honestly as debated"
+        ]
+      }
+    ],
+    "chapters": [],
+    "readings": [
+      {
+        "label": "1 Enoch 20",
+        "href": "/book/enoch-1/19"
+      }
+    ],
+    "roles": [
+      "Angel"
+    ],
+    "era": "Heavenly — outside the timeline",
+    "books": [
+      "enoch-1"
+    ],
+    "firstBook": "enoch-1",
+    "firstAppearance": "1 Enoch 20",
+    "relationships": [],
+    "variants": [],
+    "status": {
+      "portrait": "silhouette",
+      "sheet": "written",
+      "page": "live"
+    }
+  },
+  {
+    "slug": "saraqael",
+    "name": "Saraqael",
+    "subtitle": "Prince of God · Over the Spirits of Men Who Transgress",
+    "image": "/images/characters/saraqael.webp",
+    "caption": "One of the seven holy angels who watch — set over the spirits of men who transgress.",
+    "group": "heavenly",
+    "unnamed": false,
+    "facts": [
+      {
+        "text": "\"Saraqael, one of the holy angels, who is set over the spirits of men who transgress\" (1 Enoch 20) — an angel whose very post is a watch over the spirits of sinners",
+        "ref": ""
+      }
+    ],
+    "personality": [],
+    "dossier": [
+      {
+        "label": "Names",
+        "items": [
+          "**Saraqael** — \"Prince of God\" — the meaning is **less certain** than the others; held honestly as such"
+        ]
+      }
+    ],
+    "chapters": [],
+    "readings": [
+      {
+        "label": "1 Enoch 20",
+        "href": "/book/enoch-1/19"
+      }
+    ],
+    "roles": [
+      "Angel"
+    ],
+    "era": "Heavenly — outside the timeline",
+    "books": [
+      "enoch-1"
+    ],
+    "firstBook": "enoch-1",
+    "firstAppearance": "1 Enoch 20",
+    "relationships": [],
+    "variants": [],
+    "status": {
+      "portrait": "silhouette",
+      "sheet": "written",
+      "page": "live"
+    }
+  },
+  {
+    "slug": "uriel",
+    "name": "Uriel",
+    "subtitle": "God Is My Light · Over the Luminaries of Heaven",
+    "image": "/images/characters/uriel.webp",
+    "caption": "One of the seven holy angels who watch — set over the luminaries of heaven.",
+    "group": "heavenly",
+    "unnamed": false,
+    "facts": [
+      {
+        "text": "\"Uriel, one of the holy angels, who is over the world and over Tartarus\" (1 Enoch 20)",
+        "ref": ""
+      },
+      {
+        "text": "In the Luminaries (1 Enoch 72–82) he is the angel who shows Enoch the laws of the sun, the moon, and the stars in their courses",
+        "ref": ""
+      }
+    ],
+    "personality": [],
+    "dossier": [
+      {
+        "label": "Names",
+        "items": [
+          "**Uriel** — \"God is my light\""
+        ]
+      }
+    ],
+    "chapters": [],
+    "readings": [
+      {
+        "label": "1 Enoch 20",
+        "href": "/book/enoch-1/19"
+      },
+      {
+        "label": "1 Enoch 72",
+        "href": "/book/enoch-1/71"
+      }
+    ],
+    "roles": [
+      "Angel"
+    ],
+    "era": "Heavenly — outside the timeline",
+    "books": [
+      "enoch-1"
+    ],
+    "firstBook": "enoch-1",
+    "firstAppearance": "1 Enoch 20",
+    "relationships": [],
+    "variants": [],
+    "status": {
+      "portrait": "silhouette",
+      "sheet": "written",
+      "page": "live"
+    }
   }
 ];
 
@@ -3957,7 +4274,7 @@ export const CHARACTER_GROUPS: { id: CharacterGroup; title: string; blurb: strin
   {
     id: "heavenly",
     title: "The Heavenly Company",
-    blurb: "Only two angels are named in all of Scripture. One stands in God's presence and announces; the other contends for God's people. They are of one order — flames of fire, robed like lightning.",
+    blurb: "Gabriel and Michael are named in Scripture, and their faces are shown. Six more are named in the Book of Enoch — Uriel, Raphael, Raguel, Saraqael, Remiel, and Phanuel — and stand here as silhouettes.",
   },
 ];
 
