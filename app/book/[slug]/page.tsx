@@ -101,6 +101,17 @@ export default async function BookPage({
         </div>
       </div>
 
+      {slug === "enoch-1" && (
+        <p className="mt-6 text-sm">
+          <Link
+            href="/fallen"
+            className="font-medium text-sage-400 underline decoration-gold-500/30 underline-offset-4 hover:text-gold-300"
+          >
+            The Fallen — those who were bound
+          </Link>
+        </p>
+      )}
+
       {book.videoId && (
         <div className="mt-8">
           <h2 className="mb-4 font-display text-xl text-cream-100">
