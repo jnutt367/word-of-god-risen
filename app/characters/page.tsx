@@ -3,6 +3,7 @@ import Link from "next/link";
 import { CHARACTERS, type Character } from "@/data/characters";
 import { BOOKS, bookBySlug, type BookMeta } from "@/data/books";
 import { getBookDoc, castCount } from "@/data/book-docs";
+import { ZoomOverlayButton } from "@/components/ZoomableImage";
 
 export const metadata: Metadata = {
   title: "Characters of the Bible · Word of God Risen",
@@ -23,37 +24,44 @@ const LOST_BOOKS = BOOKS.filter(
 
 function CharacterCard({ c }: { c: Character }) {
   return (
-    <Link
-      href={`/characters/${c.slug}`}
-      className="group overflow-hidden rounded-2xl border border-gold-500/15 bg-vineyard-900 transition-transform hover:-translate-y-1 hover:border-gold-500/40"
-    >
-      <div className="aspect-square w-full overflow-hidden">
-        {c.image ? (
-          <img
-            src={c.image}
-            alt={`Portrait of ${c.name}`}
-            className="h-full w-full object-cover transition-transform group-hover:scale-105"
-            loading="lazy"
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center bg-vineyard-800 text-sage-400">
-            {c.name}
-          </div>
-        )}
-      </div>
-      <div className="p-4">
-        <h3 className="font-display text-lg leading-tight text-cream-50">
-          {c.name}
-          {c.unnamed && (
-            <span className="ml-2 inline-block rounded-full border border-gold-500/40 px-2 py-0.5 align-middle text-[11px] font-semibold uppercase tracking-wide text-gold-300">
-              Unnamed
-            </span>
+    <div className="group relative overflow-hidden rounded-2xl border border-gold-500/15 bg-vineyard-900 transition-transform hover:-translate-y-1 hover:border-gold-500/40">
+      <Link href={`/characters/${c.slug}`} className="block">
+        <div className="aspect-square w-full overflow-hidden">
+          {c.image ? (
+            <img
+              src={c.image}
+              alt={`Portrait of ${c.name}`}
+              className="h-full w-full object-cover transition-transform group-hover:scale-105"
+              loading="lazy"
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center bg-vineyard-800 text-sage-400">
+              {c.name}
+            </div>
           )}
-        </h3>
-        <p className="mt-1 text-sm text-gold-300">{c.roles.join(" · ")}</p>
-        <p className="mt-1 text-sm text-sage-400">{c.subtitle}</p>
-      </div>
-    </Link>
+        </div>
+        <div className="p-4">
+          <h3 className="font-display text-lg leading-tight text-cream-50">
+            {c.name}
+            {c.unnamed && (
+              <span className="ml-2 inline-block rounded-full border border-gold-500/40 px-2 py-0.5 align-middle text-[11px] font-semibold uppercase tracking-wide text-gold-300">
+                Unnamed
+              </span>
+            )}
+          </h3>
+          <p className="mt-1 text-sm text-gold-300">{c.roles.join(" · ")}</p>
+          <p className="mt-1 text-sm text-sage-400">{c.subtitle}</p>
+        </div>
+      </Link>
+      {c.image ? (
+        <ZoomOverlayButton
+          src={c.image}
+          alt={`Portrait of ${c.name}`}
+          name={c.name}
+          className="absolute right-2 top-2 z-10"
+        />
+      ) : null}
+    </div>
   );
 }
 
