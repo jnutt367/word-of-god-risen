@@ -38,7 +38,12 @@ export async function generateMetadata({
       title: `${book.title} · Word of God Risen`,
       description: blurb,
       images: book.image
-        ? [{ url: book.image, alt: `${book.title} cover illustration` }]
+        ? [
+            {
+              url: book.image,
+              alt: book.imageAlt ?? `${book.title} cover illustration`,
+            },
+          ]
         : undefined,
     },
   };
@@ -70,7 +75,7 @@ export default async function BookPage({
           <div className="relative aspect-[21/9] sm:aspect-[28/9]">
             <Image
               src={book.image}
-              alt={`${book.title} cover illustration`}
+              alt={book.imageAlt ?? `${book.title} cover illustration`}
               fill
               sizes="(max-width: 1024px) 100vw, 1024px"
               className="object-cover object-top"

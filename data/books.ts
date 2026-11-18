@@ -3,6 +3,10 @@ export interface BookMeta {
   slug: string; title: string;
   testament: 'old' | 'new' | 'extra';
   description: string; image: string;
+  /** Descriptive alt text for the book's cover where it renders as a
+      meaningful image (book page hero, share cards). Falls back to
+      "<title> cover illustration" when unset. */
+  imageAlt?: string;
   videoId?: string; chapters: number;
   mood?: 'desert' | 'warm';
   /** Hidden from every listing surface (grids, search, next-book) while
@@ -57,7 +61,7 @@ export const BOOKS: BookMeta[] = [
   { slug: 'luke', title: 'Luke', testament: 'new', description: 'For the Son of Man came to seek and to save the lost ... Do to others as you would have them do to you.', image: '/images/cover-luke-field.jpg', videoId: '--URs_Ua24w', mood: 'warm', chapters: 24 },
   { slug: 'john', title: 'John', testament: 'new', description: 'I am the way and the truth and the life. No one comes to the Father except through me.', image: '/images/cover-john-vineyard-v2.jpg', videoId: 'qdNbQKl_B8Q', mood: 'warm', chapters: 21 },
   { slug: 'parables', title: 'Parables of Jesus', testament: 'extra', description: '', image: '/images/cover-parables.jpg', videoId: 'QCF-t91FnQE', mood: 'desert', chapters: 42, hidden: true },
-  { slug: 'enoch-1', title: 'The Book of Enoch', testament: 'extra', description: 'Read the Book of Enoch online — the Watchers, the Son of Man, and the final judgment', image: '/images/cover-enoch-1.jpg', videoId: 'moyHe6xPBrY', mood: 'desert', chapters: 108 },
+  { slug: 'enoch-1', title: 'The Book of Enoch', testament: 'extra', description: 'Read the Book of Enoch online — the Watchers, the Son of Man, and the final judgment', image: '/images/cover-enoch-seven.jpg', imageAlt: 'The Book of Enoch — Enoch the scribe with the seven holy angels who watch, each at his office', videoId: 'moyHe6xPBrY', mood: 'desert', chapters: 108 },
   { slug: 'jasher', title: 'The Book of Jasher', testament: 'extra', description: 'Read the Book of Jasher online free — the ancient record named in Joshua 10:13 and 2 Samuel 1:18', image: '/images/cover-jasher.jpg', videoId: undefined, mood: 'desert', chapters: 91 },
   { slug: 'jubilees', title: 'The Book of Jubilees', testament: 'extra', description: 'Read the Book of Jubilees online — the "Little Genesis," from creation to Moses', image: '/images/cover-jubilees.jpg', videoId: undefined, mood: 'desert', chapters: 50 },
   { slug: 'tobit', title: 'Tobit', testament: 'extra', description: 'Read Tobit online — faithfulness in exile, with an angel beside him', image: '/images/cover-tobit.jpg', videoId: undefined, mood: 'warm', chapters: 14 },
