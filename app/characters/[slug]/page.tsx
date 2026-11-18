@@ -63,7 +63,7 @@ export default async function CharacterPage({
             {c.image ? (
               <InlineZoomImage
                 src={c.image}
-                alt={`Portrait of ${c.name}`}
+                alt={c.imageAlt ?? `Portrait of ${c.name}`}
                 name={c.name}
                 imgClassName="w-full object-cover"
               />

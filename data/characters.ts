@@ -26,6 +26,8 @@ export interface Character {
   name: string;
   subtitle: string;
   image: string | null;
+  /** Descriptive portrait alt, where set (falls back to "Portrait of <name>"). */
+  imageAlt?: string;
   caption: string;
   /** Legacy grouping (sort order only — the layout is book-first now). */
   group: CharacterGroup;
@@ -4202,7 +4204,8 @@ export const CHARACTERS: Character[] = [
     "slug": "uriel",
     "name": "Uriel",
     "subtitle": "God Is My Light · Over the Luminaries of Heaven",
-    "image": "/images/characters/uriel-sq.webp",
+    "image": "/images/characters/uriel-v1.jpg",
+    "imageAlt": "Uriel, one of the seven holy angels who watch, set over the luminaries of heaven — the sun, the moon, and the stars in their courses",
     "caption": "One of the seven holy angels who watch — set over the luminaries of heaven.",
     "group": "heavenly",
     "unnamed": false,
@@ -4248,7 +4251,7 @@ export const CHARACTERS: Character[] = [
     "relationships": [],
     "variants": [],
     "status": {
-      "portrait": "silhouette",
+      "portrait": "crowned",
       "sheet": "written",
       "page": "live"
     }
@@ -4274,7 +4277,7 @@ export const CHARACTER_GROUPS: { id: CharacterGroup; title: string; blurb: strin
   {
     id: "heavenly",
     title: "The Heavenly Company",
-    blurb: "Gabriel and Michael are named in Scripture, and their faces are shown. More are named in the Book of Enoch — Uriel, Raphael, Raguel, Saraqael, Remiel, and Phanuel stand here as silhouettes — and we will be adding more as we read through it.",
+    blurb: "Gabriel and Michael are named in Scripture, and their faces are shown. Uriel is named in the Book of Enoch, and his face is shown too. More are named in the Book of Enoch — Raphael, Raguel, Saraqael, Remiel, and Phanuel stand here as silhouettes — and we will be adding more as we read through it.",
   },
 ];
 

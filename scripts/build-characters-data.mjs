@@ -43,8 +43,9 @@ const KEY_FIGURES = new Set([
 // names (added Oct 31, 2026 on Jason's direction: their own category on
 // the app), joined Nov 17, 2026 by the six more angels 1 Enoch names —
 // the rest of the seven who watch (Enoch 20) and Phanuel of the four
-// presences (Enoch 40). The six carry silhouette portraits for now
-// (Jason's ruling, Nov 17, 2026); their faces are a later crown.
+// presences (Enoch 40). The six carried silhouette portraits first
+// (Jason's ruling, Nov 17, 2026); their faces are crowned one at a time —
+// Uriel's face was crowned Nov 18, 2026, and five silhouettes remain.
 const HEAVENLY = new Set([
   "gabriel", "michael",
   "uriel", "raphael", "raguel", "saraqael", "remiel", "phanuel",
@@ -53,8 +54,15 @@ const HEAVENLY = new Set([
 // Portrait is a provisional SILHOUETTE, not a crowned portrait — the
 // record's status must say so (Jason's ruling, Nov 17, 2026).
 const SILHOUETTE_PORTRAITS = new Set([
-  "uriel", "raphael", "raguel", "saraqael", "remiel", "phanuel",
+  "raphael", "raguel", "saraqael", "remiel", "phanuel",
 ]);
+
+// Descriptive portrait alt text where "Portrait of <name>" is not enough
+// (accessibility law: meaningful images get descriptive alt). Uriel's alt
+// names him and his office (Nov 18, 2026 install of his crowned portrait).
+const IMAGE_ALT = {
+  uriel: "Uriel, one of the seven holy angels who watch, set over the luminaries of heaven — the sun, the moon, and the stars in their courses",
+};
 
 // Sheet written, but the portrait is an UNCROWNED candidate — the person
 // stays off the app entirely until Jason crowns the portrait (plan §1).
@@ -489,10 +497,15 @@ function markChapters(facts) {
 // portrait with a mild polished lightning charge in hair and torso — as
 // Gabriel's canon; card and hero are the square fit-whole re-cut of the new
 // canon gabriel.png, v4 (fresh name: same-URL replacement loses to cache).
+// Nov 18, 2026 (Uriel): Jason crowned the MIX portrait — the Elder Teacher
+// face wearing the Dark Sage's hair length — as Uriel's canon; card and
+// hero are the square fit-whole cut of the crowned MIX, v1 (fresh name per
+// the cache law). The Nov 17 silhouette (uriel-sq.webp) stays in public/
+// untouched for any deep links.
 const IMAGE_OVERRIDES = {
   michael: "michael-v5.jpg",
   gabriel: "gabriel-v4.jpg",
-  uriel: "uriel-sq.webp",
+  uriel: "uriel-v1.jpg",
   raphael: "raphael-sq.webp",
   raguel: "raguel-sq.webp",
   saraqael: "saraqael-sq.webp",
@@ -584,6 +597,7 @@ for (const file of files) {
     name: override.name || name,
     subtitle: override.subtitle || SUBTITLES[slug] || "",
     image: img,
+    ...(IMAGE_ALT[slug] ? { imageAlt: IMAGE_ALT[slug] } : {}),
     caption: override.caption || caption,
     group,
     unnamed: UNNAMED.has(slug),
@@ -654,6 +668,8 @@ export interface Character {
   name: string;
   subtitle: string;
   image: string | null;
+  /** Descriptive portrait alt, where set (falls back to "Portrait of <name>"). */
+  imageAlt?: string;
   caption: string;
   /** Legacy grouping (sort order only — the layout is book-first now). */
   group: CharacterGroup;
@@ -704,7 +720,7 @@ export const CHARACTER_GROUPS: { id: CharacterGroup; title: string; blurb: strin
   {
     id: "heavenly",
     title: "The Heavenly Company",
-    blurb: "Gabriel and Michael are named in Scripture, and their faces are shown. More are named in the Book of Enoch — Uriel, Raphael, Raguel, Saraqael, Remiel, and Phanuel stand here as silhouettes — and we will be adding more as we read through it.",
+    blurb: "Gabriel and Michael are named in Scripture, and their faces are shown. Uriel is named in the Book of Enoch, and his face is shown too. More are named in the Book of Enoch — Raphael, Raguel, Saraqael, Remiel, and Phanuel stand here as silhouettes — and we will be adding more as we read through it.",
   },
 ];
 

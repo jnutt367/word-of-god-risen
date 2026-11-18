@@ -30,7 +30,7 @@ function CharacterCard({ c }: { c: Character }) {
           {c.image ? (
             <InlineZoomImage
               src={c.image}
-              alt={`Portrait of ${c.name}`}
+              alt={c.imageAlt ?? `Portrait of ${c.name}`}
               name={c.name}
               frameClassName="aspect-square w-full"
               imgClassName="h-full w-full object-cover"
@@ -151,7 +151,7 @@ export default function CharactersPage() {
         <ShelfHeading
           shelf="Shelf 1"
           title="The Heavenly Company"
-          blurb="Gabriel and Michael are named in Scripture, and their faces are shown. More are named in the Book of Enoch — Uriel, Raphael, Raguel, Saraqael, Remiel, and Phanuel stand here as silhouettes — and we will be adding more as we read through it."
+          blurb="Gabriel and Michael are named in Scripture, and their faces are shown. Uriel is named in the Book of Enoch, and his face is shown too. More are named in the Book of Enoch — Raphael, Raguel, Saraqael, Remiel, and Phanuel stand here as silhouettes — and we will be adding more as we read through it."
         />
         <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {heavenly.map((c) => (

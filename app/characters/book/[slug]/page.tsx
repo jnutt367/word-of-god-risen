@@ -34,7 +34,7 @@ function PersonCard({ c }: { c: Character }) {
         {c.image ? (
           <img
             src={c.image}
-            alt={`Portrait of ${c.name}`}
+            alt={c.imageAlt ?? `Portrait of ${c.name}`}
             className="h-full w-full object-cover transition-transform group-hover:scale-105"
             loading="lazy"
           />
