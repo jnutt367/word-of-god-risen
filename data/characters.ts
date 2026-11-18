@@ -4044,7 +4044,8 @@ export const CHARACTERS: Character[] = [
     "slug": "raphael",
     "name": "Raphael",
     "subtitle": "God Heals · Guide of the Spirits of Men",
-    "image": "/images/characters/raphael-sq.webp",
+    "image": "/images/characters/raphael-v1.jpg",
+    "imageAlt": "Raphael, one of the seven holy angels who watch, the guide of the spirits of men, who bound Azazel in Dudael and heals the earth",
     "caption": "One of the seven holy angels who watch — the guide of the spirits of men.",
     "group": "heavenly",
     "unnamed": false,
@@ -4101,7 +4102,7 @@ export const CHARACTERS: Character[] = [
     "relationships": [],
     "variants": [],
     "status": {
-      "portrait": "silhouette",
+      "portrait": "crowned",
       "sheet": "written",
       "page": "live"
     }
@@ -4277,7 +4278,7 @@ export const CHARACTER_GROUPS: { id: CharacterGroup; title: string; blurb: strin
   {
     id: "heavenly",
     title: "The Heavenly Company",
-    blurb: "Gabriel and Michael are named in Scripture, and their faces are shown. Uriel is named in the Book of Enoch, and his face is shown too. More are named in the Book of Enoch — Raphael, Raguel, Saraqael, Remiel, and Phanuel stand here as silhouettes — and we will be adding more as we read through it.",
+    blurb: "Gabriel and Michael are named in Scripture, and their faces are shown. Uriel and Raphael are named in the Book of Enoch, and their faces are shown too. More are named in the Book of Enoch — Raguel, Saraqael, Remiel, and Phanuel stand here as silhouettes — and we will be adding more as we read through it.",
   },
 ];
 
