@@ -45,8 +45,8 @@ const KEY_FIGURES = new Set([
 // the rest of the seven who watch (Enoch 20) and Phanuel of the four
 // presences (Enoch 40). The six carried silhouette portraits first
 // (Jason's ruling, Nov 17, 2026); their faces are crowned one at a time —
-// Uriel's, Raphael's, Raguel's, and Saraqael's faces were crowned
-// Nov 18, 2026, and two silhouettes remain.
+// Uriel's, Raphael's, Raguel's, Saraqael's, and Remiel's faces were
+// crowned Nov 18, 2026, and one silhouette remains.
 const HEAVENLY = new Set([
   "gabriel", "michael",
   "uriel", "raphael", "raguel", "saraqael", "remiel", "phanuel",
@@ -55,18 +55,19 @@ const HEAVENLY = new Set([
 // Portrait is a provisional SILHOUETTE, not a crowned portrait — the
 // record's status must say so (Jason's ruling, Nov 17, 2026).
 const SILHOUETTE_PORTRAITS = new Set([
-  "remiel", "phanuel",
+  "phanuel",
 ]);
 
 // Descriptive portrait alt text where "Portrait of <name>" is not enough
 // (accessibility law: meaningful images get descriptive alt). Uriel's,
-// Raphael's, Raguel's, and Saraqael's alts name them and their offices
-// (Nov 18, 2026 installs of their crowned portraits).
+// Raphael's, Raguel's, Saraqael's, and Remiel's alts name them and their
+// offices (Nov 18, 2026 installs of their crowned portraits).
 const IMAGE_ALT = {
   uriel: "Uriel, one of the seven holy angels who watch, set over the luminaries of heaven — the sun, the moon, and the stars in their courses",
   raphael: "Raphael, one of the seven holy angels who watch, the guide of the spirits of men, who bound Azazel in Dudael and heals the earth",
   raguel: "Raguel, one of the seven holy angels who watch, who takes vengeance on the world of the luminaries and is set over the courses of the luminaries",
   saraqael: "Saraqael, one of the seven holy angels who watch, set over the spirits of men who sin in the spirit",
+  remiel: "Remiel, one of the seven holy angels who watch, set over those who rise",
 };
 
 // Sheet written, but the portrait is an UNCROWNED candidate — the person
@@ -526,6 +527,15 @@ function markChapters(facts) {
 // square fit-whole cut of the crowned B-corrected portrait, v1 (fresh name
 // per the cache law). The Nov 17 silhouette (saraqael-sq.webp) stays in
 // public/ untouched for any deep links.
+// Nov 18, 2026 (Remiel): Jason crowned Candidate F, the Raiser — the
+// forward face in the Raiser's moment, deep steel-blue eyes with a
+// contained golden core, and the lightning streaks restored in the
+// auburn hair at his ruling (Candidate E had sunk the hair light inside
+// the waves; he chose the streak register) — wearing the seamless
+// column robe; card and hero are the square fit-whole cut of the
+// crowned F portrait, v1 (fresh name per the cache law). The Nov 17
+// silhouette (remiel-sq.webp) stays in public/ untouched for any deep
+// links.
 const IMAGE_OVERRIDES = {
   michael: "michael-v5.jpg",
   gabriel: "gabriel-v4.jpg",
@@ -533,7 +543,7 @@ const IMAGE_OVERRIDES = {
   raphael: "raphael-v1.jpg",
   raguel: "raguel-v1.jpg",
   saraqael: "saraqael-v1.jpg",
-  remiel: "remiel-sq.webp",
+  remiel: "remiel-v1.jpg",
   phanuel: "phanuel-sq.webp",
   bartimaeus: "bartimaeus-sq.jpg",
   herodias: "herodias-sq.jpg",
@@ -744,7 +754,7 @@ export const CHARACTER_GROUPS: { id: CharacterGroup; title: string; blurb: strin
   {
     id: "heavenly",
     title: "The Heavenly Company",
-    blurb: "Gabriel and Michael are named in Scripture, and their faces are shown. Uriel, Raphael, Raguel, and Saraqael are named in the Book of Enoch, and their faces are shown too. More are named in the Book of Enoch — Remiel and Phanuel stand here as silhouettes — and we will be adding more as we read through it.",
+    blurb: "Gabriel and Michael are named in Scripture, and their faces are shown. Uriel, Raphael, Raguel, Saraqael, and Remiel are named in the Book of Enoch, and their faces are shown too. More are named in the Book of Enoch — Phanuel stands here as a silhouette — and we will be adding more as we read through it.",
   },
 ];
 

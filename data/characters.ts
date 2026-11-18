@@ -4112,7 +4112,8 @@ export const CHARACTERS: Character[] = [
     "slug": "remiel",
     "name": "Remiel",
     "subtitle": "God Raises Up · Set Over Those Who Rise",
-    "image": "/images/characters/remiel-sq.webp",
+    "image": "/images/characters/remiel-v1.jpg",
+    "imageAlt": "Remiel, one of the seven holy angels who watch, set over those who rise",
     "caption": "One of the seven holy angels who watch — set over those who rise.",
     "group": "heavenly",
     "unnamed": false,
@@ -4150,7 +4151,7 @@ export const CHARACTERS: Character[] = [
     "relationships": [],
     "variants": [],
     "status": {
-      "portrait": "silhouette",
+      "portrait": "crowned",
       "sheet": "written",
       "page": "live"
     }
@@ -4280,7 +4281,7 @@ export const CHARACTER_GROUPS: { id: CharacterGroup; title: string; blurb: strin
   {
     id: "heavenly",
     title: "The Heavenly Company",
-    blurb: "Gabriel and Michael are named in Scripture, and their faces are shown. Uriel, Raphael, Raguel, and Saraqael are named in the Book of Enoch, and their faces are shown too. More are named in the Book of Enoch — Remiel and Phanuel stand here as silhouettes — and we will be adding more as we read through it.",
+    blurb: "Gabriel and Michael are named in Scripture, and their faces are shown. Uriel, Raphael, Raguel, Saraqael, and Remiel are named in the Book of Enoch, and their faces are shown too. More are named in the Book of Enoch — Phanuel stands here as a silhouette — and we will be adding more as we read through it.",
   },
 ];
 
