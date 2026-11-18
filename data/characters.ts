@@ -4159,7 +4159,8 @@ export const CHARACTERS: Character[] = [
     "slug": "saraqael",
     "name": "Saraqael",
     "subtitle": "Prince of God · Over the Spirits of Men Who Transgress",
-    "image": "/images/characters/saraqael-sq.webp",
+    "image": "/images/characters/saraqael-v1.jpg",
+    "imageAlt": "Saraqael, one of the seven holy angels who watch, set over the spirits of men who sin in the spirit",
     "caption": "One of the seven holy angels who watch — set over the spirits of men who transgress.",
     "group": "heavenly",
     "unnamed": false,
@@ -4197,7 +4198,7 @@ export const CHARACTERS: Character[] = [
     "relationships": [],
     "variants": [],
     "status": {
-      "portrait": "silhouette",
+      "portrait": "crowned",
       "sheet": "written",
       "page": "live"
     }
@@ -4279,7 +4280,7 @@ export const CHARACTER_GROUPS: { id: CharacterGroup; title: string; blurb: strin
   {
     id: "heavenly",
     title: "The Heavenly Company",
-    blurb: "Gabriel and Michael are named in Scripture, and their faces are shown. Uriel, Raphael, and Raguel are named in the Book of Enoch, and their faces are shown too. More are named in the Book of Enoch — Saraqael, Remiel, and Phanuel stand here as silhouettes — and we will be adding more as we read through it.",
+    blurb: "Gabriel and Michael are named in Scripture, and their faces are shown. Uriel, Raphael, Raguel, and Saraqael are named in the Book of Enoch, and their faces are shown too. More are named in the Book of Enoch — Remiel and Phanuel stand here as silhouettes — and we will be adding more as we read through it.",
   },
 ];
 
