@@ -25,10 +25,14 @@ import snapshot from "@/data/shorts-snapshot.json";
  * nothing at all.
  *
  * The journey: Days 1–16 walk the Gospel of Mark, chapters 1–16;
- * Days 17–30 walk 1 Corinthians, chapters 1–14. Every door opens
- * its chapter right here in the app — /book/<slug>/<chapter-1>,
- * the reader's zero-based chapter pattern, the same one the
- * hero's own doors use (/book/mark/0 is Mark chapter 1).
+ * Days 17–30 walk Acts, chapters 1–14 (Jason's ruling, Nov 17,
+ * 2026 — the back half switched from 1 Corinthians to Acts).
+ * Acts 15–28 finishes in December, after this dressing takes
+ * itself down. Every door opens its chapter right here in the
+ * app — /book/<slug>/<chapter-1>, the reader's zero-based
+ * chapter pattern, the same one the hero's own doors use
+ * (/book/mark/0 is Mark chapter 1; /book/acts/0 is Acts 1,
+ * Day 17's door).
  *
  * Under the doors, the section also carries the days' Shorts —
  * "Watch the journey so far" (Jason, Nov 9, 2026) — paired with
@@ -48,10 +52,10 @@ const DAYS: BibleMonthDay[] = Array.from({ length: 30 }, (_, i) => {
   const day = i + 1;
   const inMark = day <= 16;
   const chapter = inMark ? day : day - 16;
-  const slug = inMark ? "mark" : "corinthians-1";
+  const slug = inMark ? "mark" : "acts";
   return {
     day,
-    book: inMark ? "Mark" : "1 Corinthians",
+    book: inMark ? "Mark" : "Acts",
     slug,
     chapter,
     href: `/book/${slug}/${chapter - 1}`,
@@ -96,7 +100,10 @@ const JOURNEY_WATCH: JourneyWatchEntry[] = [
   { label: "Day 13", id: "uaaJAAjNxPo" },
   { label: "Day 14", id: "DJ5OKn1yPQo" },
   { label: "Day 15", id: "VYikIt80Cus" },
-  // Day 16 joins here the night it publishes — not before.
+  // Days 16 and 17 join here the nights they publish — not before.
+  // (Day 17's film, Acts 1, is built; its tile waits for its
+  // publish night like every day's, while its chapter door above
+  // already opens Acts 1.)
 ];
 
 /** Titles from the checked-in snapshot — the shelf's own fallback
@@ -284,7 +291,8 @@ export function BibleMonthSection() {
         day this month — one chapter a day. Come read and listen along.
       </p>
       <p className="mt-3 text-center text-sm text-sage-300">
-        Days 1–16 walk through Mark · Days 17–30 through 1 Corinthians
+        Days 1–16 walk through Mark · Days 17–30 through Acts 1–14 ·
+        Acts 15–28 in December
       </p>
       <div className="mt-6 grid grid-cols-5 gap-2 sm:grid-cols-6 lg:grid-cols-10">
         {DAYS.map((d) => {
@@ -316,7 +324,7 @@ export function BibleMonthSection() {
                   isToday ? "text-vineyard-950" : "text-cream-100"
                 }`}
               >
-                {d.book === "Mark" ? `Mark ${d.chapter}` : `1 Cor ${d.chapter}`}
+                {d.book === "Mark" ? `Mark ${d.chapter}` : `Acts ${d.chapter}`}
               </span>
               {isToday && (
                 <span className="block text-[11px] font-semibold text-vineyard-900">
