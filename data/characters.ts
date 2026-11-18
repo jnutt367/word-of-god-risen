@@ -3854,7 +3854,7 @@ export const CHARACTERS: Character[] = [
     "slug": "michael",
     "name": "Michael",
     "subtitle": "The Archangel · Prince and Guardian",
-    "image": "/images/characters/michael-v4.jpg",
+    "image": "/images/characters/michael-v5.jpg",
     "caption": "",
     "group": "heavenly",
     "unnamed": false,
@@ -3929,13 +3929,7 @@ export const CHARACTERS: Character[] = [
     "firstBook": "daniel",
     "firstAppearance": "Daniel 10",
     "relationships": [],
-    "variants": [
-      {
-        "image": "/images/characters/michael-full-v1.jpg",
-        "label": "Full-length portrait",
-        "sub": "Crowned Nov 17, 2026 — in Gabriel's set, on the ready"
-      }
-    ],
+    "variants": [],
     "status": {
       "portrait": "crowned",
       "sheet": "written",

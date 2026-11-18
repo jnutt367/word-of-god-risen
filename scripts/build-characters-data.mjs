@@ -405,15 +405,10 @@ const VARIANTS = {
       sub: "The aged apostle, Romans onward",
     },
   ],
-  // Michael's crowned full-length portrait (SETMATCH V2, crowned by Jason
-  // Nov 17, 2026) rides his record as a variant; the card stays the bust.
-  michael: [
-    {
-      image: "/images/characters/michael-full-v1.jpg",
-      label: "Full-length portrait",
-      sub: "Crowned Nov 17, 2026 — in Gabriel's set, on the ready",
-    },
-  ],
+  // Michael has NO variants: his crowned full-length portrait (SETMATCH V2)
+  // IS his portrait of record (Jason, Nov 17, 2026: "That is ours") — it
+  // rides as his main image below, not as a variant. The film bust is not
+  // Michael's portrait and appears nowhere on his pages.
 };
 
 // Sheet sections rendered as dossier rows on the person page, in order.
@@ -486,9 +481,12 @@ function markChapters(facts) {
 // under fresh names (-sq / v3) — same-URL replacement left Phanuel and
 // Raguel showing the old cropped files from Jason's desktop cache.
 // Nov 17, 2026 (later): the v3 Michael re-cut was made from a superseded
-// portrait, not the crowned film bust — re-cut from canon as michael-v4.jpg.
+// portrait, not the crowned film bust — re-cut from canon under a fresh name.
+// Nov 17, 2026 (final): Jason ruled the full-length SETMATCH V2 is Michael's
+// only portrait ("That is ours"); the bust (v4) comes off entirely — card and
+// hero are the square fit-whole re-cut of michael-FULL-LENGTH.png, v5.
 const IMAGE_OVERRIDES = {
-  michael: "michael-v4.jpg",
+  michael: "michael-v5.jpg",
   gabriel: "gabriel-v3.jpg",
   uriel: "uriel-sq.webp",
   raphael: "raphael-sq.webp",
