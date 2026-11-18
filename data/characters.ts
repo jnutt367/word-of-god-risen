@@ -3989,7 +3989,8 @@ export const CHARACTERS: Character[] = [
     "slug": "raguel",
     "name": "Raguel",
     "subtitle": "Friend of God · Vengeance on the Luminaries",
-    "image": "/images/characters/raguel-sq.webp",
+    "image": "/images/characters/raguel-v1.jpg",
+    "imageAlt": "Raguel, one of the seven holy angels who watch, who takes vengeance on the world of the luminaries and is set over the courses of the luminaries",
     "caption": "One of the seven holy angels who watch — who takes vengeance on the world of the luminaries.",
     "group": "heavenly",
     "unnamed": false,
@@ -4035,7 +4036,7 @@ export const CHARACTERS: Character[] = [
     "relationships": [],
     "variants": [],
     "status": {
-      "portrait": "silhouette",
+      "portrait": "crowned",
       "sheet": "written",
       "page": "live"
     }
@@ -4278,7 +4279,7 @@ export const CHARACTER_GROUPS: { id: CharacterGroup; title: string; blurb: strin
   {
     id: "heavenly",
     title: "The Heavenly Company",
-    blurb: "Gabriel and Michael are named in Scripture, and their faces are shown. Uriel and Raphael are named in the Book of Enoch, and their faces are shown too. More are named in the Book of Enoch — Raguel, Saraqael, Remiel, and Phanuel stand here as silhouettes — and we will be adding more as we read through it.",
+    blurb: "Gabriel and Michael are named in Scripture, and their faces are shown. Uriel, Raphael, and Raguel are named in the Book of Enoch, and their faces are shown too. More are named in the Book of Enoch — Saraqael, Remiel, and Phanuel stand here as silhouettes — and we will be adding more as we read through it.",
   },
 ];
 
