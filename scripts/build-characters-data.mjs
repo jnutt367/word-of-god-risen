@@ -485,9 +485,13 @@ function markChapters(facts) {
 // Nov 17, 2026 (final): Jason ruled the full-length SETMATCH V2 is Michael's
 // only portrait ("That is ours"); the bust (v4) comes off entirely — card and
 // hero are the square fit-whole re-cut of michael-FULL-LENGTH.png, v5.
+// Nov 17, 2026 (Gabriel): Jason crowned the lightning upgrade — the ATHLETIC
+// portrait with a mild polished lightning charge in hair and torso — as
+// Gabriel's canon; card and hero are the square fit-whole re-cut of the new
+// canon gabriel.png, v4 (fresh name: same-URL replacement loses to cache).
 const IMAGE_OVERRIDES = {
   michael: "michael-v5.jpg",
-  gabriel: "gabriel-v3.jpg",
+  gabriel: "gabriel-v4.jpg",
   uriel: "uriel-sq.webp",
   raphael: "raphael-sq.webp",
   raguel: "raguel-sq.webp",

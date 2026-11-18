@@ -3774,7 +3774,7 @@ export const CHARACTERS: Character[] = [
     "slug": "gabriel",
     "name": "Gabriel",
     "subtitle": "The Messenger · Who Stands in God’s Presence",
-    "image": "/images/characters/gabriel-v3.jpg",
+    "image": "/images/characters/gabriel-v4.jpg",
     "caption": "",
     "group": "heavenly",
     "unnamed": false,
