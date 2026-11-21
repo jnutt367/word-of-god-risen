@@ -101,10 +101,7 @@ const JOURNEY_WATCH: JourneyWatchEntry[] = [
   { label: "Day 14", id: "DJ5OKn1yPQo" },
   { label: "Day 15", id: "VYikIt80Cus" },
   { label: "Day 16", id: "Uz1tL3aYcnE" },
-  // Day 17 joins here the night it publishes — not before.
-  // (Day 17's film, Acts 1, is built; its tile waits for its
-  // publish night like every day's, while its chapter door above
-  // already opens Acts 1.)
+  { label: "Day 17", id: "w7JAqE4fe9Y" },
 ];
 
 /** Titles from the checked-in snapshot — the shelf's own fallback
