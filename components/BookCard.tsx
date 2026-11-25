@@ -16,6 +16,7 @@ export default function BookCard({ book }: { book: BookMeta }) {
 
   return (
     <Link
+      data-reveal
       href={`/book/${book.slug}`}
       className="group overflow-hidden rounded-xl border border-gold-500/15 bg-vineyard-900 transition-all hover:-translate-y-1 hover:border-gold-500/40 hover:shadow-[0_16px_40px_rgba(0,0,0,0.45)] motion-reduce:transition-none motion-reduce:hover:-translate-y-0"
     >

@@ -9,6 +9,7 @@ import AskTeddy from "@/components/AskTeddy";
 import AppOpenBeat from "@/components/AppOpenBeat";
 import GrandmaReset from "@/components/GrandmaReset";
 import RegisterSW from "@/components/RegisterSW";
+import MotionReveal from "@/components/MotionReveal";
 import { ProgressProvider } from "@/components/ProgressProvider";
 import { PlanProvider } from "@/components/PlanProvider";
 
@@ -133,6 +134,7 @@ export default function RootLayout({
         <Analytics />
         <SpeedInsights />
         <RegisterSW />
+        <MotionReveal />
       </body>
     </html>
   );

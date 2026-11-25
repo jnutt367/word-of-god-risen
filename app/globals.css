@@ -341,3 +341,40 @@ html[data-video-open] .watch-bubble-glow {
     animation: none;
   }
 }
+
+/* ---------- Motion layer: entrance + scroll reveal ----------
+ * Professional, quiet motion for sections and cards. SAFETY BY
+ * CONSTRUCTION: elements carrying [data-reveal] are fully visible by
+ * default. They only start hidden once the MotionReveal component
+ * has confirmed (a) JavaScript is running, (b) IntersectionObserver
+ * exists, and (c) the reader has NOT asked for reduced motion — at
+ * which point it adds the `motion` class to <html>. If any of those
+ * checks fail, this layer simply never engages and the page is
+ * exactly as it was. Only opacity/transform animate (no layout). */
+html.motion [data-reveal] {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+}
+html.motion [data-reveal].in {
+  opacity: 1;
+  transform: none;
+}
+/* Reduced motion is a hard gate: even if the class somehow lands,
+ * the reader gets a completely static page. */
+@media (prefers-reduced-motion: reduce) {
+  html.motion [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+/* Print never waits for a scroll reveal. */
+@media print {
+  html.motion [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}

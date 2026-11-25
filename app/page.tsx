@@ -247,6 +247,7 @@ export default function Home() {
           above), so this film begins only after the complete
           hero — never sharing the scenes' screen. */}
       <section
+        data-reveal
         aria-label="Welcome to the Farm — the welcome film and the first doors"
         className="mx-auto max-w-4xl px-4 pt-8 sm:px-6 sm:pt-10"
       >
@@ -347,7 +348,7 @@ export default function Home() {
       </div>
 
       {/* Widgets */}
-      <div className="mx-auto max-w-4xl space-y-5 px-4 py-10 sm:px-6">
+      <div data-reveal className="mx-auto max-w-4xl space-y-5 px-4 py-10 sm:px-6">
         <VerseOfDay />
         <PlanContinue />
         <HighlightsCard />
@@ -384,7 +385,7 @@ export default function Home() {
           the vineyard painting.) */}
 
       {/* Book grid */}
-      <section id="books" className="mx-auto max-w-6xl scroll-mt-20 px-4 pb-20 sm:px-6">
+      <section data-reveal id="books" className="mx-auto max-w-6xl scroll-mt-20 px-4 pb-20 sm:px-6">
         {/* The Carved Divider (Jason, crowned Oct 27, 2026): the
             Temple-language pomegranate band replaces the plain
             vine-divider above the book grid. Pure decoration. */}
