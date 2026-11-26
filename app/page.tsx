@@ -54,7 +54,12 @@ export default function Home() {
           screen and the film begins beneath it. Below md nothing
           changes: the phone layout stands exactly as graded. */}
       <section className="relative overflow-hidden md:flex md:min-h-[calc(100svh_-_65px)] md:flex-col">
-        <div className="absolute inset-0">
+        {/* data-hero-enter: the motion layer's one-time load-in
+            fade for the picture only (see app/globals.css). It
+            wraps the cycle + scrim and nothing else — the
+            headline and every word live outside it and never
+            fade or move. */}
+        <div data-hero-enter className="absolute inset-0">
           {/* The cycling hero (Jason, crowned Oct 31, 2026): the
               three-crosses banner stood here from the beginning,
               but this app is all about the risen Jesus — so the
