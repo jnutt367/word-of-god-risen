@@ -385,6 +385,33 @@ html.motion [data-reveal].in {
 html.motion [data-hero-enter] {
   animation: hero-enter 0.9s ease-out both;
 }
+/* Header entrance (Nov 25, 2026 — Jason's ask): on page load the
+ * site header slides down into place once (translateY(-100%) → 0,
+ * 0.65s, ease-out), composing with the hero picture's fade as one
+ * entrance. One-shot keyframes on the <header> itself; the layout
+ * persists across client-side navigations, so it runs once per
+ * full page load and never re-triggers. Fill mode is `backwards`
+ * (not `both`) on purpose: the from-frame holds while the
+ * animation runs, and the moment it ends the header returns to
+ * its natural styles — NO residual transform is left on the bar,
+ * so its sticky positioning and stacking stay exactly as built.
+ * Descendants are unaffected: the farm and share dropdowns are
+ * `absolute` inside `relative` wrappers (they resolve against
+ * those wrappers, never the header), and the video-choice modal
+ * portals to <body>, outside the header entirely. Same gate as
+ * the rest of the layer: no `html.motion`, no slide — the bar is
+ * simply there — and reduced motion gets it static, below. */
+@keyframes header-enter {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+html.motion [data-header-enter] {
+  animation: header-enter 0.65s ease-out backwards;
+}
 /* Reduced motion is a hard gate: even if the class somehow lands,
  * the reader gets a completely static page. */
 @media (prefers-reduced-motion: reduce) {
@@ -396,6 +423,9 @@ html.motion [data-hero-enter] {
   html.motion [data-hero-enter] {
     animation: none;
   }
+  html.motion [data-header-enter] {
+    animation: none;
+  }
 }
 /* Print never waits for a scroll reveal. */
 @media print {
@@ -404,6 +434,9 @@ html.motion [data-hero-enter] {
     transform: none;
   }
   html.motion [data-hero-enter] {
+    animation: none;
+  }
+  html.motion [data-header-enter] {
     animation: none;
   }
 }

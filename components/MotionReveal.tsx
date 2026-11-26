@@ -16,6 +16,16 @@ import { useEffect } from "react";
  *
  * A MutationObserver picks up `data-reveal` elements added later by
  * client-side navigation or dynamic content.
+ *
+ * Trigger timing (retuned Nov 25, 2026): threshold 0 with a 240px
+ * bottom rootMargin, so an element starts its fade-rise while it is
+ * still below the viewport and is settled — or nearly — by the
+ * time the reader's scroll actually arrives. The earlier settings
+ * (threshold 0.1, rootMargin −4% bottom) fired late, and on a very
+ * tall element 10% of its height is hundreds of pixels: the book
+ * grid's first row stayed blank while its wrapper's threshold was
+ * still out of reach. Threshold 0 removes that tall-element
+ * penalty everywhere; the generous margin removes the wait.
  */
 export default function MotionReveal() {
   useEffect(() => {
@@ -35,7 +45,7 @@ export default function MotionReveal() {
           }
         }
       },
-      { threshold: 0.1, rootMargin: "0px 0px -4% 0px" },
+      { threshold: 0, rootMargin: "0px 0px 240px 0px" },
     );
 
     const watch = (scope: ParentNode) => {

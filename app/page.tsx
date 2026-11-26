@@ -389,8 +389,14 @@ export default function Home() {
           their testimony" — and the developer book's own cover keeps
           the vineyard painting.) */}
 
-      {/* Book grid */}
-      <section data-reveal id="books" className="mx-auto max-w-6xl scroll-mt-20 px-4 pb-20 sm:px-6">
+      {/* Book grid — this section deliberately carries NO
+          data-reveal of its own (Nov 25, 2026): as a reveal
+          wrapper it held the whole grid at opacity 0 until 10% of
+          its very tall height entered the viewport, so the first
+          card row arrived late and readers met a blank stretch.
+          The divider and headings stand visible; every BookCard
+          below reveals on its own schedule. */}
+      <section id="books" className="mx-auto max-w-6xl scroll-mt-20 px-4 pb-20 sm:px-6">
         {/* The Carved Divider (Jason, crowned Oct 27, 2026): the
             Temple-language pomegranate band replaces the plain
             vine-divider above the book grid. Pure decoration. */}

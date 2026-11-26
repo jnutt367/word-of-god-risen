@@ -224,7 +224,10 @@ export default function SiteHeader() {
   }, [farmOpen]);
 
   return (
-    <header className="sticky top-0 z-[60] border-b border-gold-500/15 bg-vineyard-950/90 backdrop-blur">
+    <header
+      data-header-enter
+      className="sticky top-0 z-[60] border-b border-gold-500/15 bg-vineyard-950/90 backdrop-blur"
+    >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-2.5 sm:px-6">
         {/* Header hierarchy (Jason, Nov 11, 2026): the title is
             primary — it claims the row's free space first (flex-1)
