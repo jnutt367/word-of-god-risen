@@ -107,6 +107,7 @@ const JOURNEY_WATCH: JourneyWatchEntry[] = [
   { label: "Day 20", id: "mqqCg3zjxYs" },
   { label: "Day 21", id: "RA6v1dT-RxU" },
   { label: "Day 22", id: "3v336XEwJqg" },
+  { label: "Day 23", id: "o5TvvKVZHYA" },
 ];
 
 /** Titles from the checked-in snapshot — the shelf's own fallback
