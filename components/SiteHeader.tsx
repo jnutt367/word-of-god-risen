@@ -35,8 +35,14 @@ const NAV_SECTIONS = [
   },
 ];
 
-// Flat list for desktop nav
-const NAV = NAV_SECTIONS.flatMap((s) => s.items);
+// Flat list for desktop nav. "Home" is not in it: on the desktop
+// bar the emblem + title at the left IS the home door, and the
+// duplicate link's width is part of what starved that title (see
+// the header-row note below). The mobile panel keeps its own Home
+// door from NAV_SECTIONS, untouched.
+const NAV = NAV_SECTIONS.flatMap((s) => s.items).filter(
+  (item) => item.label !== "Home"
+);
 
 // "More from the farm" (born "Visit the Farm"; renamed Nov 11, 2026 in
 // the name-tag audit — a first-timer couldn't tell "Visit the Farm" was
@@ -228,7 +234,19 @@ export default function SiteHeader() {
       data-header-enter
       className="sticky top-0 z-[60] border-b border-gold-500/15 bg-vineyard-950/90 backdrop-blur"
     >
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-2.5 sm:px-6">
+      {/* Header row width + the desktop breakpoint (Nov 27, 2026):
+          the stocked desktop nav — ten doors, the farm menu, and
+          Share — has a min-content as wide as this row itself, so
+          at every width from lg up the flex-1 title link was
+          crushed to 0px: no emblem, no wordmark, no home door on
+          wider screens (measured live: home link width 0 at both
+          1280 and 1920, while the phone bar was healthy). The row
+          is wider now (88rem), the desktop cluster rides at xl
+          instead of lg, and its links carry slimmer padding — at
+          xl the title stands full-size beside every door, and
+          below xl the bar is the phone bar (title, Share, Menu),
+          where the title has always had room. */}
+      <div className="mx-auto flex h-16 max-w-[88rem] items-center justify-between px-2.5 sm:px-4">
         {/* Header hierarchy (Jason, Nov 11, 2026): the title is
             primary — it claims the row's free space first (flex-1)
             and is the last element to give up room; Share stands
@@ -253,14 +271,14 @@ export default function SiteHeader() {
 
         {/* Desktop: the Bible's own nav stays first and primary, then
             one door out to the rest of the farm. */}
-        <div className="hidden items-center gap-1 lg:flex">
+        <div className="hidden items-center gap-1 xl:flex">
           <nav aria-label="Main">
-            <ul className="flex items-center gap-1 sm:gap-2">
+            <ul className="flex items-center gap-1">
               {NAV.map((item) => (
                 <li key={item.label}>
                   <Link
                     href={item.href}
-                    className="block rounded-lg px-3 py-3 text-sm font-medium text-sage-300 transition-colors hover:bg-vineyard-800 hover:text-gold-300"
+                    className="block rounded-lg px-1.5 py-3 text-[13px] font-medium text-sage-300 transition-colors hover:bg-vineyard-800 hover:text-gold-300"
                   >
                     {item.label}
                   </Link>
@@ -276,7 +294,7 @@ export default function SiteHeader() {
               aria-haspopup="true"
               aria-controls="farm-menu"
               onClick={() => setFarmOpen((v) => !v)}
-              className="flex min-h-[48px] items-center gap-1.5 rounded-lg px-3 py-3 text-sm font-semibold text-gold-300 transition-colors hover:bg-vineyard-800 hover:text-gold-400"
+              className="flex min-h-[48px] items-center gap-1.5 rounded-lg px-2 py-3 text-sm font-semibold text-gold-300 transition-colors hover:bg-vineyard-800 hover:text-gold-400"
             >
               More from the farm
               <span aria-hidden="true" className="text-xs">
@@ -326,7 +344,7 @@ export default function SiteHeader() {
         </div>
 
         {/* Mobile share — the same door, sized for the phone bar */}
-        <div className="ml-auto lg:hidden">
+        <div className="ml-auto xl:hidden">
           <ShareAppButton compact />
         </div>
 
@@ -338,7 +356,7 @@ export default function SiteHeader() {
             title still leads this row; the tag only serves it. */}
         <button
           type="button"
-          className="flex min-h-[48px] items-center gap-1.5 rounded-lg px-3 py-3 text-cream-100 hover:bg-vineyard-800 lg:hidden"
+          className="flex min-h-[48px] items-center gap-1.5 rounded-lg px-3 py-3 text-cream-100 hover:bg-vineyard-800 xl:hidden"
           aria-expanded={open}
           aria-controls="mobile-nav"
           aria-label={open ? "Close menu" : "Open menu"}
@@ -365,7 +383,7 @@ export default function SiteHeader() {
         <nav
           id="mobile-nav"
           aria-label="Mobile"
-          className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-gold-500/15 bg-vineyard-950/95 px-4 pb-32 pt-2 backdrop-blur lg:hidden"
+          className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-gold-500/15 bg-vineyard-950/95 px-4 pb-32 pt-2 backdrop-blur xl:hidden"
         >
           <div className="flex items-center gap-2.5 px-3 pb-2 pt-1">
             <Image
